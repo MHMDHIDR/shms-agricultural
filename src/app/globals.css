@@ -80,3 +80,277 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .maceta-central {
+    position: relative;
+    top: 30px;
+    width: 120px;
+    height: 100px;
+    border: 4px solid #665a48;
+    background-color: #c27664;
+    border-bottom-left-radius: 15% 40%;
+    border-bottom-right-radius: 15% 40%;
+  }
+  .maceta-central-top {
+    position: relative;
+    top: -4px;
+    width: 140px;
+    height: 30px;
+    right: 15px;
+    border: 4px solid #665a48;
+    background-color: #c27664;
+    border-radius: 10px;
+  }
+  .cactus-cero {
+    position: relative;
+    top: -250px;
+    left: -60px;
+    width: 250px;
+    height: 250px;
+    background-color: #9cff2e;
+    border-radius: 50%;
+    border: 4px solid #367e18;
+  }
+  .interno-cactus {
+    position: absolute;
+    top: -4px;
+    left: 70px;
+    width: 100px;
+    height: 250px;
+    background-color: transparent;
+    border-radius: 50%;
+    border-top-left-radius: ;
+    border: 4px solid #367e18;
+  }
+  .pinchos-cactus-cero {
+    position: absolute;
+    top: -4px;
+    left: 70px;
+    width: 100px;
+    height: 250px;
+    background-color: transparent;
+    border-radius: 50%;
+    border-top-left-radius: ;
+    border: 4px solid #367e18;
+  }
+  .cactus-pincho {
+    position: absolute;
+    top: 125px;
+    left: -20px;
+    width: 20px;
+    height: 4px;
+    background-color: #367e18;
+  }
+  .ext1 {
+    top: 37px;
+    left: 7px;
+    transform: rotate(36deg);
+  }
+  .ext2 {
+    top: -9px;
+    left: 70px;
+    transform: rotate(72deg);
+  }
+  .ext3 {
+    top: -10px;
+    left: 155px;
+    transform: rotate(108deg);
+  }
+  .ext4 {
+    top: 45px;
+    left: 225px;
+    transform: rotate(144deg);
+  }
+  .ext5 {
+    top: 130px;
+    left: 250px;
+    transform: rotate(180deg);
+  }
+  .ext6 {
+    top: 220px;
+    left: 210px;
+    transform: rotate(216deg);
+  }
+  .ext7 {
+    top: 260px;
+    left: 140px;
+    transform: rotate(252deg);
+  }
+  .ext8 {
+    top: 250px;
+    left: 65px;
+    transform: rotate(288deg);
+  }
+  .inter9 {
+    top: 200px;
+    left: 0px;
+    transform: rotate(324deg);
+  }
+  .inter0 {
+    top: 125px;
+    left: -22px;
+    transform: rotate(360deg);
+  }
+  .inter1 {
+    width: 30px;
+    top: 55px;
+    left: 65px;
+    transform: rotate(3deg);
+  }
+  .inter2 {
+    width: 30px;
+    top: 30px;
+    left: 145px;
+    transform: rotate(-5deg);
+  }
+  .inter3 {
+    width: 30px;
+    top: 120px;
+    left: 55px;
+    transform: rotate(0deg);
+  }
+  .inter4 {
+    width: 30px;
+    top: 170px;
+    left: 60px;
+    transform: rotate(-5deg);
+  }
+  .inter5 {
+    width: 30px;
+    top: 220px;
+    left: 75px;
+    transform: rotate(-3deg);
+  }
+  .inter6 {
+    width: 30px;
+    top: 195px;
+    left: 152px;
+    transform: rotate(3deg);
+  }
+  .inter7 {
+    width: 30px;
+    top: 150px;
+    left: 160px;
+    transform: rotate(5deg);
+  }
+  .inter8 {
+    width: 30px;
+    top: 80px;
+    left: 160px;
+    transform: rotate(-5deg);
+  }
+  .cactus-izq {
+    position: relative;
+    top: -280px;
+    left: 15px;
+    width: 80px;
+    height: 235px;
+    background: #9cff2e;
+    border: 4px solid #367e18;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+  }
+  .cactus-part1 {
+    position: relative;
+    top: 90px;
+    left: -108px;
+    width: 100px;
+    height: 50px;
+    background-color: #9cff2e;
+    border: 4px solid #367e18;
+    border-bottom-left-radius: 30px;
+  }
+  .cactus-part2 {
+    position: relative;
+    top: -58px;
+    left: -108px;
+    width: 50px;
+    height: 90px;
+    background-color: #9cff2e;
+    border: 4px solid #367e18;
+    border-bottom: #9cff2e;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+  }
+  .pincho-base {
+    position: relative;
+    top: -90px;
+    left: -22px;
+    width: 20px;
+    height: 4px;
+    background-color: #367e18;
+  }
+  .base1 {
+    top: -162px;
+    left: 0px;
+    transform: rotate(45deg);
+  }
+  .base2 {
+    top: -160px;
+    left: 65px;
+    transform: rotate(130deg);
+  }
+  .base3 {
+    top: -85px;
+    left: 83px;
+  }
+  .base4 {
+    top: -20px;
+    left: 83px;
+  }
+  .base5 {
+    left: 83px;
+    top: 45px;
+  }
+  .base6 {
+    top: 15px;
+  }
+  .base7 {
+    top: 60px;
+    left: 40px;
+    transform: rotate(90deg);
+  }
+  .base8 {
+    top: 35px;
+    left: -20px;
+    transform: rotate(-25deg);
+  }
+  .base9 {
+    top: 70px;
+  }
+  .base10 {
+    top: -4px;
+    left: -14px;
+    transform: rotate(35deg);
+  }
+  .base11 {
+    top: 15px;
+    left: 54px;
+  }
+
+  /* ===================== Keyframes Go Here ===================== */
+  @keyframes valanceocuerda {
+    0% {
+      transform: translateX(-150px) rotate(-15deg);
+    }
+    50% {
+      transform: translateX(-170px) rotate(15deg);
+    }
+    100% {
+      transform: translateX(-150px) rotate(-15deg);
+    }
+  }
+  @keyframes valanceo {
+    0% {
+      transform: rotate(-15deg) translateX(calc(50% - 330px)) translateY(-80px);
+    }
+    50% {
+      transform: rotate(15deg) translateX(calc(50% - 460px)) translateY(35px);
+    }
+    100% {
+      transform: rotate(-15deg) translateX(calc(50% - 330px)) translateY(-80px);
+    }
+  }
+  /* ===================== Keyframes Go Here ===================== */
+}
