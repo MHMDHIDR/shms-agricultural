@@ -12,9 +12,9 @@ export const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
-  title: 'حصاد السودان',
+  title: 'شمس | للخدمات الزراعية',
   description:
-    'Sudan Harvests is an agriculture platform for Sudanese farming investors and farmers.'
+    'Shms Agricultural is an Agriculture Platform for Sudanese Farming Investors and Farmers.'
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
