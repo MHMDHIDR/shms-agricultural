@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise'
 
-const { MYSQL_HOST, MYSQL_NAME, MYSQL_USER, MYSQL_PASSWORD } = process.env
+const { MYSQL_HOST, MYSQL_NAME, MYSQL_USER, MYSQL_PASSWORD, MYSQL_URL } = process.env
 const CONNECTION_OPTIONS = {
   host: MYSQL_HOST,
   database: MYSQL_NAME,
@@ -11,7 +11,7 @@ const CONNECTION_OPTIONS = {
 
 export async function connectDB(query: string, data: any[] | undefined = []) {
   try {
-    const connection = await mysql.createConnection(CONNECTION_OPTIONS)
+    const connection = await mysql.createConnection(MYSQL_URL! ?? CONNECTION_OPTIONS)
     console.log('✅ Connected to MySQL')
 
     const [rows] = data.length
