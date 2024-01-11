@@ -1,4 +1,6 @@
+import { Button } from '@/components/ui/button'
 import { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'الصفحة غير موجودة! - شمس | للخدمات الزراعية',
@@ -84,8 +86,11 @@ export default function Home() {
       <div className='absolute top-8 w-4 h-5 left-1/2 bg-slate-400 rounded-bl-[50%_100%] rounded-br-[50%_100%]  border-4 border-black -translate-x-16 -rotate-45'></div>
       <div className='absolute top-5 w-4 h-5 left-1/2 bg-slate-400 rounded-full border-2 border-black -translate-x-1/2 -rotate-12'></div>
       <div className='absolute top-5 w-4 h-5 left-1/2 bg-slate-400 rounded-full border-yellow-600 -translate-x-1/2 -rotate-12'></div>
-      <div className='absolute top-32 left-1/2 w-80 h-52 bg-gray-100 border-[1rem]  border-yellow-600 rounded-3xl outline-4 outline-yellow-900 text-red-700 text-3xl text-center flex items-center justify-center animate-[valanceo_5s] repeat-infinite'>
-        الصفحة غير موجودة
+      <div className='absolute top-32 left-1/2 w-80 h-52 bg-gray-100 border-[1rem]  border-yellow-600 rounded-3xl outline-4 outline-yellow-900 text-red-700 text-3xl text-center flex flex-col gap-y-6 items-center justify-center animate-[valanceo_5s] repeat-infinite'>
+        <span>الصفحة غير موجودة</span>
+        <Button className='bg-green-600 hover:bg-green-700'>
+          <Link href='/'>العودة للصفحة الرئيسية</Link>
+        </Button>
       </div>
     </main>
   )
