@@ -20,7 +20,7 @@ export async function connectDB(query: string, data: any[] | undefined = []) {
 
     connection.end()
     return rows
-  } catch (err) {
-    throw new Error('Error connecting to database')
+  } catch (error: any) {
+    throw new Error('Error connecting to database => ' + error.message)
   }
 }
