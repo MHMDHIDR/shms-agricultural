@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { UserButton, auth } from '@clerk/nextjs'
-import { ShoppingBag, Sun } from 'lucide-react'
-import { Button } from '../ui/button'
+import { Sun } from 'lucide-react'
 import { ModeToggle } from './ModeToggle'
 
 export default function Nav() {
@@ -9,7 +8,7 @@ export default function Nav() {
 
   return (
     <header className='bg-background text-foreground p-6'>
-      <nav className='max-w-6xl py-6 m-auto'>
+      <nav className='max-w-6xl pb-6 m-auto'>
         <ul className='flex justify-between items-center'>
           <li>
             <Link className='font-bold' href={'/'}>
@@ -19,11 +18,6 @@ export default function Nav() {
           <div className='flex items-center gap-8'>
             <li>
               <ModeToggle />
-            </li>
-            <li>
-              <Button size={'icon'} variant='outline'>
-                <ShoppingBag strokeWidth={'1.5px'} className='text-foreground text-lg ' />
-              </Button>
             </li>
             <li>
               {!userId && (
@@ -38,8 +32,7 @@ export default function Nav() {
               )}
 
               {userId && (
-                <Link href='profile' className='mr-4'>
-                  {/* {user?.firstName ? user.firstName : 'حسابي'} */}
+                <Link href='profile'>
                   <UserButton afterSignOutUrl='/' />
                 </Link>
               )}
