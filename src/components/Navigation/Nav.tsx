@@ -1,10 +1,12 @@
 import Link from 'next/link'
-import { UserButton } from '@clerk/nextjs'
+import { UserButton, auth } from '@clerk/nextjs'
 import { ShoppingBag, Sun } from 'lucide-react'
 import { Button } from '../ui/button'
 import { ModeToggle } from './ModeToggle'
 
 export default function Nav() {
+  const { userId } = auth()
+
   return (
     <header className='bg-background text-foreground p-6'>
       <nav className='max-w-6xl py-6 m-auto'>
@@ -24,7 +26,24 @@ export default function Nav() {
               </Button>
             </li>
             <li>
-              <UserButton afterSignOutUrl='/' />
+              {!userId && (
+                <>
+                  <Link href='signup' className='inline-block mr-3'>
+                    انشاء حساب
+                  </Link>
+                  <Link href='signin' className='inline-block'>
+                    تسجيل الدخول
+                  </Link>
+                </>
+              )}
+              {userId && (
+                <Link href='profile' className='mr-4'>
+                  حسابي
+                </Link>
+              )}
+              <div className='ml-auto'>
+                <UserButton afterSignOutUrl='/' />
+              </div>
             </li>
           </div>
         </ul>

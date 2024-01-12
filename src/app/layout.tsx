@@ -28,7 +28,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           fontSans.variable
         )}
       >
-        <ClerkProvider>
+        <ClerkProvider
+          appearance={{
+            elements: { footer: 'hidden' },
+            layout: {
+              logoPlacement: 'inside',
+              logoImageUrl: './favicon.svg',
+              socialButtonsVariant: 'iconButton',
+              socialButtonsPlacement: 'bottom'
+            }
+          }}
+        >
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
             <Toaster />
             <Nav />
