@@ -63,7 +63,7 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className='border p-5 rounded max-w-lg container text-right'>
+    <section className='border p-5 rounded max-w-lg container text-right'>
       <h1 className='text-2xl mb-4'>تسجيل</h1>
       {!pendingVerification && (
         <form onSubmit={handleSubmit} className='space-y-4 md:space-y-6'>
@@ -160,7 +160,7 @@ const RegisterPage = () => {
           </form>
         </div>
       )}
-    </div>
+    </section>
   )
 }
 

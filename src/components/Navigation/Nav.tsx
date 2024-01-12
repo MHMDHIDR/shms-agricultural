@@ -36,14 +36,13 @@ export default function Nav() {
                   </Link>
                 </>
               )}
+
               {userId && (
                 <Link href='profile' className='mr-4'>
-                  حسابي
+                  {/* {user?.firstName ? user.firstName : 'حسابي'} */}
+                  <UserButton afterSignOutUrl='/' />
                 </Link>
               )}
-              <div className='ml-auto'>
-                <UserButton afterSignOutUrl='/' />
-              </div>
             </li>
           </div>
         </ul>
