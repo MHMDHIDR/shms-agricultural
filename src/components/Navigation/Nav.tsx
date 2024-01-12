@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { UserButton } from '@clerk/nextjs'
 import { ShoppingBag, Sun } from 'lucide-react'
 import { Button } from '../ui/button'
 import { ModeToggle } from './ModeToggle'
@@ -22,7 +23,9 @@ export default function Nav() {
                 <ShoppingBag strokeWidth={'1.5px'} className='text-foreground text-lg ' />
               </Button>
             </li>
-            <li>بروفايل المستخدم</li>
+            <li>
+              <UserButton afterSignOutUrl='/' />
+            </li>
           </div>
         </ul>
       </nav>

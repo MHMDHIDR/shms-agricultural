@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { Cairo as FontSans } from 'next/font/google'
-import './globals.css'
+import { ClerkProvider } from '@clerk/nextjs'
+import { cn } from '@/lib/utils'
 import Toaster from '@/components/Toaster'
 import Nav from '@/components/Navigation/Nav'
 import { ThemeProvider } from '@/components/ThemeProvider'
-import { cn } from '@/lib/utils'
+import './globals.css'
 
 export const fontSans = FontSans({
   subsets: ['arabic'],
@@ -27,11 +28,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           fontSans.variable
         )}
       >
-        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          <Toaster />
-          <Nav />
-          {children}
-        </ThemeProvider>
+        <ClerkProvider>
+          <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+            <Toaster />
+            <Nav />
+            {children}
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   )
