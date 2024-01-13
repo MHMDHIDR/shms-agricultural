@@ -1,7 +1,7 @@
 {
   "name": "shms-agricultural",
   "description": "For SHMS Agriculture Platform for Sudanese Farming Investors and Farmers.",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "private": true,
   "scripts": {
     "dev": "next dev",
