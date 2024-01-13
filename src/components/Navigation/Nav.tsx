@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useAuth } from '@clerk/nextjs'
 import Link from 'next/link'
 import {
@@ -17,6 +18,7 @@ import { ModeToggle } from './ModeToggle'
 
 export default function Nav() {
   const { userId } = useAuth()
+  const [open, setOpen] = useState(false)
 
   // عناصر القائمة
   const MenuItems: { title: string; href: string; description: string }[] = [
@@ -56,11 +58,61 @@ export default function Nav() {
   ]
 
   return (
-    <header className='bg-background text-foreground py-6 rtl container'>
+    <header className='bg-background text-foreground py-0 md:py-6 rtl container'>
       <NavigationMenu className='md:flex max-w-full justify-end w-full'>
-        <NavigationMenuList className='min-w-[100vw] justify-end'>
+        {/* Nav toggler */}
+        <input
+          className={`absolute opacity-0 z-10 left-0 cursor-pointer top-3.5 w-10 h-10`}
+          type='checkbox'
+          aria-label='Navigation Menu'
+          title='Navigation Menu'
+          id='menuToggler'
+          onChange={() => setOpen(prev => !prev)}
+        />
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          className='absolute left-0 top-3.5 w-10 h-10 md:hidden transition-colors stroke-gray-800 dark:stroke-white'
+          viewBox='0 0 24 24'
+        >
+          <path
+            className={`${
+              open ? 'rotate-45' : 'rotate-0'
+            } origin-left transition-transform ease-in-out duration-300 stroke-green-600`}
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeWidth='1'
+            d='M4 6h16M4'
+          />
+          <path
+            className={`${
+              open ? 'opacity-0 -translate-x-full' : 'opacity-100 translate-x-0'
+            } transition ease-in-out duration-300 stroke-green-600`}
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeWidth='1'
+            d='M4 12h16M4'
+          />
+          <path
+            className={`${
+              open ? '-rotate-45 -translate-x-1' : 'rotate-0'
+            } origin-center transition-transform ease-in-out duration-300 stroke-green-600`}
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeWidth='1'
+            d='M4 18h16'
+          />
+        </svg>
+
+        <NavigationMenuList
+          className={`min-w-[100vw] justify-end flex-col md:flex-row flex-wrap transition-all duration-200 pointer-events-none md:translate-y-0 md:pointer-events-auto
+          ${
+            open
+              ? 'opacity-100 translate-y-0 pointer-events-auto'
+              : ' -translate-y-full opacity-0 md:opacity-100'
+          }`}
+        >
           {/* تحويل الثيم الحالي */}
-          <NavigationMenuItem className='mr-auto'>
+          <NavigationMenuItem className='md:mr-auto'>
             <ModeToggle className='mr-auto' />
           </NavigationMenuItem>
 
@@ -122,9 +174,9 @@ export default function Nav() {
           </NavigationMenuItem>
 
           {/* شعار الموقع */}
-          <NavigationMenuItem>
+          <NavigationMenuItem className='hidden md:list-item'>
             <Link className='font-bold' href={'/'}>
-              <Sun className='text-[#FDB813] ml-10' />
+              <Sun className='text-[#FDB813] md:ml-10' />
             </Link>
           </NavigationMenuItem>
         </NavigationMenuList>

@@ -9,8 +9,8 @@ export function ModeToggle({ className }: { className?: string }) {
     <div
       className={`scale-[.35] overflow-hidden${className ? ` ${className}` : ''}`}
       aria-controls='checkbox'
-      aria-label={`Toggle theme to ${theme === 'dark' ? 'light' : 'dark'}`}
-      title={`حول الثيم الى ثيــم ${theme === 'dark' ? 'فاتح' : 'داكن'}`}
+      aria-label={`Toggle theme`}
+      title={`حول الثيم`}
       role='button'
     >
       <label htmlFor='toggleTheme'>

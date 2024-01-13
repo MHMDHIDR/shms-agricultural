@@ -434,6 +434,7 @@
     transform: translateX(50%);
   }
 
+  /* ===================== Toggle Theme STARTS Here ===================== */
   #toggleTheme:checked + .toggle {
     background: linear-gradient(to bottom, #036daf, #003d63);
   }
@@ -486,8 +487,9 @@
     transform: rotate(10deg);
     top: 20%;
   }
+  /* ===================== Toggle Theme END Here ===================== */
 
-  /* ===================== Keyframes Go Here ===================== */
+  /* ===================== Keyframes STARTS Here ===================== */
   @keyframes valanceocuerda {
     0% {
       transform: translateX(-150px) rotate(-15deg);
@@ -510,7 +512,7 @@
       transform: rotate(-15deg) translateX(calc(50% - 330px)) translateY(-80px);
     }
   }
-  /* ===================== Keyframes Go Here ===================== */
+  /* ===================== Keyframes ENDS Here ===================== */
 }
 
 /* Sign in Hide Clerk Logo */
