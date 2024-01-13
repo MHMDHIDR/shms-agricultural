@@ -1,6 +1,5 @@
 'use client'
 
-import * as React from 'react'
 import { useTheme } from 'next-themes'
 
 export function ModeToggle({ className }: { className?: string }) {
@@ -10,7 +9,8 @@ export function ModeToggle({ className }: { className?: string }) {
     <div
       className={`scale-[.35] overflow-hidden${className ? ` ${className}` : ''}`}
       aria-controls='checkbox'
-      aria-label='Toggle theme'
+      aria-label={`Toggle theme to ${theme === 'dark' ? 'light' : 'dark'}`}
+      title={`حول الثيم الى ثيــم ${theme === 'dark' ? 'فاتح' : 'داكن'}`}
       role='button'
     >
       <label htmlFor='toggleTheme'>
