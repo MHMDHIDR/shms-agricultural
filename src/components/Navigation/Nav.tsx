@@ -104,10 +104,10 @@ export default function Nav() {
         </svg>
 
         <NavigationMenuList
-          className={`fixed h-screen w-screen min-w-[100vw] justify-end flex-col flex-wrap transition-all duration-200 pointer-events-none
+          className={`fixed h-screen w-screen min-w-[100vw] items-start md:items-center justify-end flex-col flex-wrap transition-all duration-200 pointer-events-none
           md:static md:h-fit md:w-fit md:translate-y-0 md:pointer-events-auto md:flex-row ${
             open
-              ? 'opacity-100 translate-y-0 pointer-events-auto bg-white justify-center'
+              ? 'opacity-100 translate-y-0 pointer-events-auto bg-white dark:bg-black justify-center'
               : '-translate-y-full opacity-0 md:opacity-100'
           }`}
         >
@@ -152,11 +152,11 @@ export default function Nav() {
                       className='flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-2 no-underline outline-none focus:shadow-md'
                       href='/'
                     >
-                      <h1 className='mb-2 text-lg font-medium'>
+                      <h1 className='my-auto text-lg font-medium'>
                         <Sun className='text-[#FDB813] inline-block ml-2' />
                         شمس الزراعية
                       </h1>
-                      <p className='text-sm leading-tight text-muted-foreground'>
+                      <p className='my-auto text-sm leading-tight text-muted-foreground'>
                         للخدمات الزراعية والإستثمارية
                       </p>
                     </a>

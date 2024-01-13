@@ -7,7 +7,9 @@ export function ModeToggle({ className }: { className?: string }) {
 
   return (
     <div
-      className={`scale-[.35] overflow-hidden${className ? ` ${className}` : ''}`}
+      className={`scale-[.35] -ml-10 md:ml-0 overflow-hidden${
+        className ? ` ${className}` : ''
+      }`}
       aria-controls='checkbox'
       aria-label={`Toggle theme`}
       title={`حول الثيم`}
