@@ -137,7 +137,7 @@ export default function Nav() {
                     {userId && (
                       <NavigationListItem className='cursor-pointer w-1/2'>
                         <SignOutButton signOutCallback={() => signOut()}>
-                          <div className='flex gap-2 items-center justify-center min-w-max'>
+                          <div className='flex gap-2 md:gap-1 items-center justify-center min-w-max'>
                             <LogOut className='text-[#FDB813]' />
                             <span className='hidden md:inline-block'>تسجيل الخروج</span>
                           </div>
