@@ -62,7 +62,7 @@ export default function Nav() {
       <NavigationMenu className='md:flex max-w-full justify-end w-full'>
         {/* Nav toggler */}
         <input
-          className={`absolute opacity-0 z-10 left-0 cursor-pointer top-3.5 w-10 h-10`}
+          className={`absolute opacity-0 left-0 cursor-pointer top-3.5 w-10 h-10 z-20`}
           type='checkbox'
           aria-label='Navigation Menu'
           title='Navigation Menu'
@@ -71,7 +71,7 @@ export default function Nav() {
         />
         <svg
           xmlns='http://www.w3.org/2000/svg'
-          className='absolute left-0 top-3.5 w-10 h-10 md:hidden transition-colors stroke-gray-800 dark:stroke-white'
+          className={`absolute left-0 top-3.5 w-10 h-10 md:hidden transition-colors stroke-gray-800 dark:stroke-white z-10`}
           viewBox='0 0 24 24'
         >
           <path
@@ -104,16 +104,16 @@ export default function Nav() {
         </svg>
 
         <NavigationMenuList
-          className={`min-w-[100vw] justify-end flex-col md:flex-row flex-wrap transition-all duration-200 pointer-events-none md:translate-y-0 md:pointer-events-auto
-          ${
+          className={`fixed h-screen w-screen min-w-[100vw] justify-end flex-col flex-wrap transition-all duration-200 pointer-events-none
+          md:static md:h-fit md:w-fit md:translate-y-0 md:pointer-events-auto md:flex-row ${
             open
-              ? 'opacity-100 translate-y-0 pointer-events-auto'
-              : ' -translate-y-full opacity-0 md:opacity-100'
+              ? 'opacity-100 translate-y-0 pointer-events-auto bg-white justify-center'
+              : '-translate-y-full opacity-0 md:opacity-100'
           }`}
         >
           {/* تحويل الثيم الحالي */}
           <NavigationMenuItem className='md:mr-auto'>
-            <ModeToggle className='mr-auto' />
+            <ModeToggle />
           </NavigationMenuItem>
 
           {/* جدول الموسم الزراعي */}
