@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useAuth } from '@clerk/nextjs'
+import { SignOutButton, useClerk, useAuth } from '@clerk/nextjs'
 import Link from 'next/link'
 import {
   NavigationMenu,
@@ -13,11 +13,12 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu'
-import { Sun } from 'lucide-react'
+import { Sun, LogOut } from 'lucide-react'
 import { ModeToggle } from './ModeToggle'
 
 export default function Nav() {
   const { userId } = useAuth()
+  const { signOut } = useClerk()
   const [open, setOpen] = useState(false)
 
   // عناصر القائمة
@@ -166,9 +167,28 @@ export default function Nav() {
                   href='/introduction'
                   title='المقدمة'
                 ></NavigationListItem>
-                <NavigationListItem href={userId ? `/profile` : `/signin`} title='حسابي'>
-                  {userId ? `حسابي` : `تسجيل الدخول`}
-                </NavigationListItem>
+                <NavigationMenuLink asChild>
+                  <div className={userId ? `flex items-center justify-between` : ``}>
+                    <NavigationListItem
+                      className='w-1/2 text-center'
+                      href={userId ? `/profile` : `/signin`}
+                      title={userId ? `حسابي` : `تسجيل الدخول`}
+                    ></NavigationListItem>
+                    {userId && (
+                      <NavigationListItem className='cursor-pointer w-1/2'>
+                        <SignOutButton
+                          children={
+                            <div className='flex gap-2 items-center justify-center'>
+                              <LogOut className='text-[#FDB813]' />
+                              <span className='hidden md:inline-block'>تسجيل الخروج</span>
+                            </div>
+                          }
+                          signOutCallback={() => signOut()}
+                        />
+                      </NavigationListItem>
+                    )}
+                  </div>
+                </NavigationMenuLink>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>

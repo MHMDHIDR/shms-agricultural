@@ -516,6 +516,7 @@
 }
 
 /* Sign in Hide Clerk Logo */
-.cl-internal-b3fm6y {
+.cl-internal-b3fm6y,
+.cl-internal-hegiim {
   @apply hidden;
 }
