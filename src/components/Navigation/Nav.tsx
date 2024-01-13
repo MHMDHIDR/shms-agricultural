@@ -104,7 +104,7 @@ export default function Nav() {
         </svg>
 
         <NavigationMenuList
-          className={`fixed h-screen w-screen min-w-[100vw] items-start md:items-center justify-end flex-col flex-wrap transition-all duration-200 pointer-events-none
+          className={`fixed left-0 h-screen w-screen min-w-[100vw] items-start md:items-center justify-end flex-col flex-wrap transition-all duration-200 pointer-events-none
           md:static md:h-fit md:w-fit md:translate-y-0 md:pointer-events-auto md:flex-row ${
             open
               ? 'opacity-100 translate-y-0 pointer-events-auto bg-white dark:bg-black justify-center'
