@@ -11,7 +11,7 @@ export function MenuToggler({
     <>
       {/* Nav toggler */}
       <input
-        className={`absolute opacity-0 left-0 cursor-pointer top-3.5 w-10 h-10 z-20`}
+        className={`absolute md:pointer-events-none opacity-0 left-0 cursor-pointer top-3.5 w-10 h-10 z-20`}
         type='checkbox'
         aria-label='Navigation Menu'
         title='Navigation Menu'
