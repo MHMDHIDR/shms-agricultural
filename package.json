@@ -1,6 +1,6 @@
 {
   "name": "shms-agricultural",
-  "description": "For SHMS Agriculture Platform for Sudanese Farming Investors and Farmers.",
+  "description": "شمــس | منصة الخدمات الزراعية للمستثمرين والمزارعين السودانيين",
   "version": "0.1.5",
   "private": true,
   "scripts": {
@@ -17,6 +17,7 @@
     "axios": "^1.6.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "framer-motion": "^10.18.0",
     "lucide-react": "^0.309.0",
     "mysql2": "^3.7.0",
     "next": "14.0.4",
