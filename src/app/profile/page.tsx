@@ -1,9 +1,7 @@
-import { UserProfile } from '@clerk/nextjs'
-
 export default function ProfilePage() {
   return (
     <section className='container mx-auto'>
-      <UserProfile />
+      <h1>صفحة بروفايل المستخدم</h1>
     </section>
   )
 }

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { SignOutButton, useClerk, useAuth } from '@clerk/nextjs'
 import Link from 'next/link'
 import {
   NavigationMenu,
@@ -16,10 +15,10 @@ import {
 import { Sun, LogOut } from 'lucide-react'
 import { ModeToggle } from './ModeToggle'
 import { MenuToggler } from './MenuToggler'
+import useAuth from '@/hooks/useAuth'
 
 export default function Nav() {
   const { userId } = useAuth()
-  const { signOut } = useClerk()
   const [isOpen, setIsOpen] = useState(false)
 
   // عناصر القائمة
@@ -136,12 +135,13 @@ export default function Nav() {
                     ></NavigationListItem>
                     {userId && (
                       <NavigationListItem className='cursor-pointer w-1/2'>
-                        <SignOutButton signOutCallback={() => signOut()}>
-                          <div className='flex gap-2 md:gap-1 items-center justify-center min-w-max'>
-                            <LogOut className='text-[#FDB813]' />
-                            <span className='hidden md:inline-block'>تسجيل الخروج</span>
-                          </div>
-                        </SignOutButton>
+                        <button
+                          className='flex gap-2 md:gap-1 items-center justify-center min-w-max'
+                          // onClick={signOut()}
+                        >
+                          <LogOut className='text-[#FDB813]' />
+                          <span className='hidden md:inline-block'>تسجيل الخروج</span>
+                        </button>
                       </NavigationListItem>
                     )}
                   </div>

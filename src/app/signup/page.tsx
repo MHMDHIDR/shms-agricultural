@@ -1,9 +1,7 @@
-import { SignUp } from '@clerk/nextjs'
-
 export default function SignUpPage() {
   return (
     <div className='flex justify-center py-24'>
-      <SignUp />
+      <h1> صفحة تسجيل حساب جديد</h1>
     </div>
   )
 }

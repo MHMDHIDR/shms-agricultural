@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
+import { getServerSession } from 'next-auth'
 import { Cairo as FontSans } from 'next/font/google'
-import { ClerkProvider } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 import Toaster from '@/components/Toaster'
 import Nav from '@/components/Navigation/Nav'
-import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemeProvider } from '@/providers/ThemeProvider'
+import SessionProvider from '@/providers/SessionProvider'
 import './globals.css'
 
 export const fontSans = FontSans({
@@ -17,7 +18,9 @@ export const metadata: Metadata = {
   description: 'شمــس | منصة الخدمات الزراعية للمستثمرين والمزارعين السودانيين'
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const session = await getServerSession()
+
   return (
     <html lang='ar'>
       <head />
@@ -27,23 +30,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           fontSans.variable
         )}
       >
-        <ClerkProvider
-          appearance={{
-            elements: { footer: 'hidden' },
-            layout: {
-              logoPlacement: 'inside',
-              logoImageUrl: './favicon.svg',
-              socialButtonsVariant: 'iconButton',
-              socialButtonsPlacement: 'bottom'
-            }
-          }}
-        >
+        <SessionProvider session={session}>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
             <Toaster />
             <Nav />
             {children}
           </ThemeProvider>
-        </ClerkProvider>
+        </SessionProvider>
       </body>
     </html>
   )
