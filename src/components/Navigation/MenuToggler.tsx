@@ -11,7 +11,7 @@ export function MenuToggler({
     <>
       {/* Nav toggler */}
       <input
-        className={`absolute md:pointer-events-none opacity-0 left-0 cursor-pointer top-3.5 w-10 h-10 z-20`}
+        className={`absolute md:pointer-events-none opacity-0 right-0 cursor-pointer top-3.5 w-10 h-10 z-20`}
         type='checkbox'
         aria-label='Navigation Menu'
         title='Navigation Menu'
@@ -20,7 +20,7 @@ export function MenuToggler({
       />
       <svg
         xmlns='http://www.w3.org/2000/svg'
-        className={`absolute left-0 top-3.5 w-10 h-10 md:hidden transition-colors stroke-gray-800 dark:stroke-white z-10`}
+        className={`absolute right-0 top-3.5 w-10 h-10 md:hidden transition-colors stroke-gray-800 dark:stroke-white z-10`}
         viewBox='0 0 24 24'
       >
         <path
