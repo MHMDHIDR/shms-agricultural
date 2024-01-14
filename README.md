@@ -1,36 +1,13 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Shams Agricultural Platform (شمــس)
 
-## Getting Started
+مرحبا بكم في شمس، منصة الاستثمار الزراعي المصممة لتعزيز الاستثمار الزراعي بين المستثمرين. تقدم شركة شمس مشاريع زراعية متنوعة تهدف إلى توفير فرص فريدة للمستثمرين في مجال الزراعة. استكشف منصتنا لاكتشاف مشاريعنا الحالية والمستقبلية، وميزاتنا الحصرية، ونماذج الاستثمار، والأسئلة الشائعة، ومقالات المدونة الثاقبة.
 
-First, run the development server:
+## البداية
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+لتبدأ رحلتك مع شمس، قم بزيارة صفحة [المقدمة](https://shmsagricultural.com/introduction) للحصول على نظرة عامة حول خدماتنا. سواء كنت زائرًا جديدًا أو مستخدمًا مسجلاً، يمكنك الوصول إلى حسابك واستكشاف جدول الموسم الزراعي لدينا ومعرفة المزيد عن مهمة شمس ورؤيتها. إذا كنت مستعداً للاستثمار أو مهتماً بالاستثمارات الزراعية، فإن شمس هي بوابتك إلى تجربة مثمرة.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## تواصل معنا
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+انضم إلى مجتمع شمس وابق على اطلاع بأحدث الاستثمارات الزراعية. لا تتردد في استكشاف [موقعنا الإلكتروني](https://shmsagricultural.com) ومتابعتنا على [مدونتنا](https://shmsagricultural.com/blog) للحصول على رؤى قيمة. بالنسبة للإجراءات المتعلقة بالحساب، قم بتسجيل الدخول أو الاشتراك [هنا](https://shmsagricultural.com/signin). إذا كان لديك أي أسئلة أو كنت بحاجة إلى المساعدة، فلا تتردد في التواصل معنا. شمس – تنمية النمو ورعاية الاستثمارات. 🌱
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Cairo, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+مع تحيات فريق شمس

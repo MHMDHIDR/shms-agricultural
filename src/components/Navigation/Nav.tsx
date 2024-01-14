@@ -53,7 +53,7 @@ export default function Nav() {
     },
     {
       title: 'المدونة',
-      href: '/about/blog',
+      href: '/blog',
       description:
         'مدونة شمس الزراعية تحتوي على مقالات ونصائح مهمة في مشارعنا زراعية...أقرأ المزيد'
     }
