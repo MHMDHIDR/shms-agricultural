@@ -81,7 +81,7 @@ export default function Nav() {
           className={`fixed left-0 h-screen w-screen min-w-[100vw] items-end md:items-center justify-end flex-col flex-wrap gap-x-3 transition-all duration-200 pointer-events-none
           md:static md:h-fit md:w-fit md:translate-y-0 md:pointer-events-auto md:flex-row ${
             isOpen
-              ? 'opacity-100 translate-y-0 pointer-events-auto bg-white dark:bg-black justify-start pt-14'
+              ? 'opacity-100 translate-y-0 pointer-events-auto bg-white dark:bg-black justify-start pt-14 md:pt-0'
               : '-translate-y-full opacity-0 md:opacity-100'
           }`}
         >
