@@ -34,7 +34,7 @@ export function MenuToggler({
         />
         <path
           className={`${
-            isOpen ? 'opacity-0 -translate-x-full' : 'opacity-100 translate-x-0'
+            isOpen ? 'opacity-0 translate-x-full' : 'opacity-100 translate-x-0'
           } transition ease-in-out duration-300 stroke-green-600`}
           strokeLinecap='round'
           strokeLinejoin='round'

@@ -81,7 +81,7 @@ export default function Nav() {
           className={`fixed left-0 h-screen w-screen min-w-[100vw] items-end md:items-center justify-end flex-col flex-wrap gap-x-3 transition-all duration-200 pointer-events-none
           md:static md:h-fit md:w-fit md:translate-y-0 md:pointer-events-auto md:flex-row ${
             isOpen
-              ? 'opacity-100 translate-y-0 pointer-events-auto bg-white dark:bg-black justify-center'
+              ? 'opacity-100 translate-y-0 pointer-events-auto bg-white dark:bg-black justify-start pt-14'
               : '-translate-y-full opacity-0 md:opacity-100'
           }`}
         >
@@ -102,7 +102,7 @@ export default function Nav() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>عن شمــس</NavigationMenuTrigger>
             <NavigationMenuContent className='rtl'>
-              <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] right-0'>
+              <ul className='grid min-w-screen w-dvw gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] right-0'>
                 {MenuItems.map(component => (
                   <NavigationListItem
                     key={component.title}
@@ -119,7 +119,7 @@ export default function Nav() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>البداية هنا</NavigationMenuTrigger>
             <NavigationMenuContent className='rtl'>
-              <ul className='grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
+              <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
                 <li className='row-span-3'>
                   <NavigationMenuLink asChild>
                     <a
