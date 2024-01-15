@@ -512,5 +512,13 @@
       transform: rotate(-15deg) translateX(calc(50% - 330px)) translateY(-80px);
     }
   }
+  @keyframes slideDown {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
   /* ===================== Keyframes ENDS Here ===================== */
 }

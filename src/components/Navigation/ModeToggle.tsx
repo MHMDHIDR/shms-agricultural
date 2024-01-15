@@ -7,7 +7,7 @@ export function ModeToggle({ className }: { className?: string }) {
 
   return (
     <div
-      className={`scale-[.35] -ml-10 md:ml-0 overflow-hidden${
+      className={`scale-[.35] ml-4 lg:ml-10 overflow-hidden${
         className ? ` ${className}` : ''
       }`}
       aria-controls='checkbox'

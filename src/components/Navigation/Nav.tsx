@@ -16,10 +16,12 @@ import { Sun, LogOut } from 'lucide-react'
 import { ModeToggle } from './ModeToggle'
 import { MenuToggler } from './MenuToggler'
 import useAuth from '@/hooks/useAuth'
+import useEventListener from '@/hooks/useEventListener'
 
 export default function Nav() {
   const { userId } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
+  const [sticky, setSticky] = useState(false)
 
   // عناصر القائمة
   const MenuItems: { title: string; href: string; description: string }[] = [
@@ -58,13 +60,25 @@ export default function Nav() {
     }
   ]
 
+  const isSticky = () => {
+    const scrollTop = window.scrollY
+    scrollTop > 200 ? setSticky(true) : setSticky(false)
+  }
+  useEventListener('scroll', isSticky)
+
   return (
-    <header className='bg-background text-foreground py-0 md:py-6 rtl container'>
+    <header
+      className={`container text-foreground py-0 md:py-6 rtl top-0 left-0 z-50 h-auto w-full ${
+        sticky
+          ? 'fixed animate-slidedown border-b md:py-2 border-white border-opacity-20 bg-grey bg-opacity-80 backdrop-blur backdrop-filter'
+          : 'absolute'
+      }`}
+    >
       <NavigationMenu className='md:flex max-w-full justify-end w-full'>
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />
 
         <NavigationMenuList
-          className={`fixed left-0 h-screen w-screen min-w-[100vw] items-end md:items-center justify-end flex-col flex-wrap transition-all duration-200 pointer-events-none
+          className={`fixed left-0 h-screen w-screen min-w-[100vw] items-end md:items-center justify-end flex-col flex-wrap gap-x-3 transition-all duration-200 pointer-events-none
           md:static md:h-fit md:w-fit md:translate-y-0 md:pointer-events-auto md:flex-row ${
             isOpen
               ? 'opacity-100 translate-y-0 pointer-events-auto bg-white dark:bg-black justify-center'
