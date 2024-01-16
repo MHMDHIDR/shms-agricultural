@@ -15,8 +15,11 @@ const handler = NextAuth({
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        userEmailOrTel: { label: 'Email or Phone Number', type: 'text' },
-        userPassword: { label: 'Password', type: 'password' }
+        fullname: { label: 'Full Name of the User', type: 'text' },
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
+        phone: { label: 'Users Phone Number', type: 'tel' },
+        doc: { label: 'Authentication User Document', type: 'text' }
       },
       async authorize(credentials, _req) {
         try {
