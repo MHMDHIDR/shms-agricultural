@@ -19,7 +19,7 @@ const ForgotPasswordPage = ({
 }: {
   params: { resetToken: string }
 }) => {
-  const HEADING = 'إنشاء كلمة المرور جديدة'
+  const HEADING = 'إنشاء كلمة مرور جديدة'
 
   const [password, setPassword] = useState('')
   const [passError, setPassError] = useState('')
