@@ -40,10 +40,13 @@ export async function POST(req: Request) {
         )
       } else if (user.shms_user_account_status === 'active') {
         const userResetPasswordToken = randomUUID()
-        const userCanResetPasswordUntil = Date.now() + 3600000 // 1 hour from now
+        const userCanResetPasswordUntil = new Date(Date.now() + 3600000).toISOString()
 
         await connectDB(
-          `UPDATE users SET shms_user_reset_token = ?, shms_user_reset_token_expires = ? WHERE shms_id = ?`,
+          `UPDATE users
+            SET shms_user_reset_token = ?,
+                shms_user_reset_token_expires = ?
+            WHERE shms_id = ?;`,
           [userResetPasswordToken, userCanResetPasswordUntil, user.shms_id]
         )
 
@@ -57,6 +60,7 @@ export async function POST(req: Request) {
           msg: customEmail({ buttonLink })
         }
 
+        // try to send the email
         try {
           const { accepted, rejected } = await email(emailData)
 

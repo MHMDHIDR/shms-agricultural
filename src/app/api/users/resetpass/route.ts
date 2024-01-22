@@ -2,17 +2,17 @@ import { connectDB } from '../../utils/db'
 import { genSalt, hash } from 'bcryptjs'
 import email, { customEmail } from '../../utils/email'
 import type { UserProps } from '@/types'
-import { ADMIN_EMAIL } from '@/data/constants'
+import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 
 export async function POST(req: Request) {
   const body = await req.json()
-  const { userPassword, token } = body
+  const { password: userNewPassword, resetToken } = body
 
   try {
     // Check for user
     const user = (
-      (await connectDB(`SELECT * FROM users WHERE shms_user_reset_password_token = ?`, [
-        token
+      (await connectDB(`SELECT * FROM users WHERE shms_user_reset_token = ?`, [
+        resetToken
       ])) as UserProps[]
     )[0]
 
@@ -34,13 +34,17 @@ export async function POST(req: Request) {
           message: `عفواً, رابط إعادة تعيين كلمة المرور منتهي الصلاحية, يرجى إعادة طلب إعادة تعيين كلمة المرور`
         })
       )
-    } else if (JSON.parse(token) === user.shms_user_reset_token) {
+    } else if (resetToken === user.shms_user_reset_token) {
       // Hash new password
       const salt = await genSalt(10)
-      const hashedPassword = await hash(userPassword, salt)
+      const hashedPassword = await hash(userNewPassword, salt)
 
       await connectDB(
-        `UPDATE users SET shms_password = ?, shms_user_reset_token = ?, shms_user_reset_token_expires = ? WHERE shms_id = ?`,
+        `UPDATE users
+            SET shms_password = ?,
+                shms_user_reset_token = ?,
+                shms_user_reset_token_expires = ?
+            WHERE shms_id = ?;`,
         [hashedPassword, null, null, user.shms_id]
       )
 
@@ -51,15 +55,28 @@ export async function POST(req: Request) {
         subject: 'تم إعادة تعيين كلمة المرور بنجاح | شمس للخدمات الزراعية',
         msg: customEmail({
           title: `تم إعادة تعيين كلمة المرور بنجاح`,
-          msg: `عزيزي ${user.shms_fullname}،,
+          msg: `عزيزي ${user.shms_fullname}،
+            <br />
             تم إعادة تعيين كلمة المرور الخاصة بك بنجاح، يمكنك الآن تسجيل الدخول باستخدام كلمة المرور الجديدة.
+
+            <br />
+            <a href="${APP_URL}/auth/signin"
+              style="background: #008f1f;text-decoration: none !important;font-weight:700;margin-top:35px;color:#fff;font-size:14px;padding:10px 64px;display:inline-block;border-radius: 50px;"
+              target="_blank">
+              تسجيل الدخول
+            </a>
+            
             <br /><br />
-            إذا لم تقم بإجراء هذا الإجراء، فيرجى الاتصال بنا على الفور
-            شكراً لك،
+            إذا لم تقم بعمل هذا الإجراء، فيرجى الاتصال بنا على الفور على البريد الإلكتروني التالي: ${ADMIN_EMAIL}
+            <br /><br />
+
+            شكراً لك.
+            <br /><br />
             <small>لا حاجة للرد على هذا البريد الإلكتروني.</small>`
         })
       }
 
+      // try to send the email
       try {
         const { accepted, rejected } = await email(emailData)
 
@@ -91,7 +108,7 @@ export async function POST(req: Request) {
 
       return new Response(
         JSON.stringify({
-          message: `Your Password Has Been Reset Successfully, Redirecting You To Login Page...`,
+          message: `تم إعادة كلمة المرور، وتم إرسال بريد الكتروني لتأكيد تغيير كلمة المرور الجديدة بنجاح جاري تحويلك إلى صفحة تسجيل الدخول ...`,
           newPassSet: 1
         })
       )
@@ -106,10 +123,8 @@ export async function POST(req: Request) {
     }
   } catch (error) {
     return new Response(
-      JSON.stringify({
-        message: `Ooops!, Server Error!: ${error}`,
-        newPassSet: 0
-      })
+      JSON.stringify({ message: `Ooops!, Server Error!: ${error}`, newPassSet: 0 }),
+      { status: 500 }
     )
   }
 }

@@ -78,7 +78,7 @@ export async function POST(request: any) {
 
     return new Response(fileUrl, { status: 200 })
   } catch (error: any) {
-    console.log(error)
+    console.error(error)
     return new Response(error.message, { status: 500 })
   }
 }

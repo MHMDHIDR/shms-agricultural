@@ -23,7 +23,8 @@ const ForgotPasswordPage = ({
 
   const [password, setPassword] = useState('')
   const [passError, setPassError] = useState('')
-  const [isSubmittingForm, setIsSubmittingForm] = useState<boolean | 'completed'>(false)
+  const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
+  const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
   const { replace } = useRouter()
 
@@ -55,28 +56,28 @@ const ForgotPasswordPage = ({
         resetFormErrors()
         setIsSubmittingForm(true)
 
-        const resetPass = await axios.post(`${API_URL}/users/resetpass`, { password })
+        const resetPass = await axios.post(`${API_URL}/users/resetpass`, {
+          password,
+          resetToken
+        })
         //getting response from backend
-        const { data } = resetPass
+        const { data }: { data: UserProps } = resetPass
 
         // make sure to view the response from the data
         data.newPassSet === 1
-          ? toast(
-              'تم إعادة كلمة المرور، وتم إرسال بريد الكتروني لتأكيد تغيير كلمة المرور الجديدة بنجاح',
-              {
-                icon: <Success />,
-                position: 'bottom-center',
-                className: 'text-right select-none rtl',
-                duration: DEFAULT_DURATION,
-                style: {
-                  backgroundColor: '#F0FAF0',
-                  color: '#367E18',
-                  border: '1px solid #367E18',
-                  gap: '1.5rem',
-                  textAlign: 'justify'
-                }
+          ? toast(data.message, {
+              icon: <Success />,
+              position: 'bottom-center',
+              className: 'text-right select-none rtl',
+              duration: DEFAULT_DURATION,
+              style: {
+                backgroundColor: '#F0FAF0',
+                color: '#367E18',
+                border: '1px solid #367E18',
+                gap: '1.5rem',
+                textAlign: 'justify'
               }
-            )
+            })
           : toast('حدث خطأ ما، الرجاء المحاولة مرة أخرى', {
               icon: <Error />,
               position: 'bottom-center',
@@ -91,9 +92,12 @@ const ForgotPasswordPage = ({
               }
             })
 
-        // setTimeout(() => replace(`/`), DEFAULT_DURATION)
+        setTimeout(() => replace(`/auth/signin`), DEFAULT_DURATION)
       } catch (error: any) {
-        const message: UserProps['message'] = error?.response.data.message ?? 'حدث خطأ ما'
+        const message: UserProps['message'] =
+          error?.response.data.newPassSet === 0
+            ? 'عفواً! حدث خطأ ما حاول مرة أخرى'
+            : error?.response.data.message
         //handle error, show notification using Shadcn notifcation
         toast(message, {
           icon: <Error className='w-6 h-6 ml-3' />,
@@ -107,14 +111,13 @@ const ForgotPasswordPage = ({
             textAlign: 'justify'
           }
         })
-        console.error('Error', error)
       } finally {
-        setIsSubmittingForm('completed')
+        setIsDoneSubmitting(true)
       }
     }
   }
 
-  return validateUUID(resetToken) ? null : (
+  return !validateUUID(resetToken) ? null : (
     <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24'>
       <CardWrapper
         heading={HEADING}
@@ -153,15 +156,20 @@ const ForgotPasswordPage = ({
             <div className='md:w-2/3'>
               <Button
                 type='submit'
-                disabled={isSubmittingForm === 'completed'}
+                disabled={isDoneSubmitting}
                 className={`shadow w-full bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold ${
-                  isSubmittingForm === 'completed' ? 'cursor-not-allowed opacity-50' : ''
+                  isDoneSubmitting ? 'cursor-not-allowed opacity-50' : ''
                 }`}
               >
-                {isSubmittingForm === 'completed' ? (
+                {isSubmittingForm ? (
                   <>
                     <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
                     جاري الإرسال
+                  </>
+                ) : isDoneSubmitting ? (
+                  <>
+                    <Success />
+                    تم إستعادة كلمة المرور
                   </>
                 ) : (
                   'استعادة كلمة المرور'

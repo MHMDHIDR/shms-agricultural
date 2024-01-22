@@ -150,7 +150,9 @@ export const customEmail: customEmailProps = ({
                     <tr>
                         <td style="text-align:center;">
                             <p style="font-size:14px; color:rgba(69, 80, 86, 0.75); line-height:18px; margin:0 0 0;">
-                              &copy; <strong>${APP_URL?.split('//')[1]}</strong>
+                              &copy; <strong>${
+                                APP_URL?.split('//')[1]
+                              }</strong> ${new Date().getFullYear()}. جميع الحقوق محفوظة.
                               ${
                                 buttonLink
                                   ? `<br><small>ملاحظة: هذا الرابط سيتنهي خلال ساعة واحدة</small>`
