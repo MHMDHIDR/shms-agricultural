@@ -48,6 +48,7 @@ export async function POST(req: Request) {
         JSON.stringify({
           loggedIn: 1,
           fullname: user.shms_fullname,
+          shms_email: user.shms_email,
           message: 'Successfully Logged In'
         })
       )

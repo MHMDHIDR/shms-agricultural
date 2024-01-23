@@ -74,11 +74,6 @@ export default function Nav() {
                : '-translate-y-full opacity-0 md:opacity-100'
            }`}
         >
-          {/* تحويل الثيم الحالي */}
-          <NavigationMenuItem className='md:mr-auto'>
-            <ModeToggle />
-          </NavigationMenuItem>
-
           {/* عن شمس */}
           <NavigationMenuItem>
             <NavigationMenuTrigger>عن شمس</NavigationMenuTrigger>
