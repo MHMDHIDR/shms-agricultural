@@ -19,9 +19,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ModeToggle } from '@/components/navigation/ModeToggle'
+import { useTheme } from 'next-themes'
 
 export default function ProfilePage() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
+  const { theme } = useTheme()
 
   const HEADING = (
     <p className='flex text-center max-w-lg items-center justify-center rtl'>
@@ -40,9 +42,6 @@ export default function ProfilePage() {
       >
         <div className='flex flex-col items-center justify-center'>
           <div>
-            <span className='text-center inline-block w-full mb-10'>
-              {session?.token?.user.fullname ?? ''}
-            </span>
             <p className='text-center max-w-lg items-center justify-center rtl'>
               لا يوجد لديك مشاريع حالياً
             </p>
@@ -68,23 +67,25 @@ export default function ProfilePage() {
                 <Card>
                   <CardHeader>
                     <CardTitle dir='rtl'>
-                      الاسم : {session?.token?.user.fullname ?? ''}{' '}
+                      الاسم : {session?.token?.user.fullname ?? ''}
                     </CardTitle>
                     <CardDescription dir='rtl'>تحديث البيانات الشخصية</CardDescription>
                   </CardHeader>
                   <CardContent className='space-y-2'>
                     <div dir='rtl' className='space-y-1'>
-                      <Label htmlFor='name'> البريد الالكتروني </Label>
+                      <Label htmlFor='email'>البريد الالكتروني</Label>
                       <Input
-                        id='name'
+                        id='email'
                         defaultValue={session?.token?.user.shms_email ?? ''}
                       />
                     </div>
                   </CardContent>
-                  <div>
-                    <CardTitle dir='rtl'>تغيير الى الوضع الداكن</CardTitle>
-                    <ModeToggle />
-                  </div>
+                  <CardContent className='-space-y-4'>
+                    <Label>
+                      تغيير الى الوضع {theme === 'dark' ? 'الفاتح' : 'الداكن'}
+                    </Label>
+                    <ModeToggle className='-mr-16 max-w-fit' />
+                  </CardContent>
                   <CardFooter>
                     <Button>حفظ التغييرات</Button>
                   </CardFooter>
@@ -104,12 +105,12 @@ export default function ProfilePage() {
                       <Input id='current' type='password' />
                     </div>
                     <div className='space-y-1'>
-                      <Label htmlFor='new'> كلمة المرور الجديدة </Label>
-                      <Input id='new' type='password' />
+                      <Label htmlFor='password'>كلمة المرور الجديدة</Label>
+                      <Input id='password' type='password' />
                     </div>
                     <div className='space-y-1'>
-                      <Label htmlFor='new'> تأكيد كلمة المرور </Label>
-                      <Input id='new' type='password' />
+                      <Label htmlFor='comfirm_password'>تأكيد كلمة المرور</Label>
+                      <Input id='comfirm_password' type='password' />
                     </div>
                   </CardContent>
                   <CardFooter>
