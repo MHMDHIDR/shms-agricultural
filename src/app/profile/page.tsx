@@ -38,7 +38,7 @@ export default function ProfilePage() {
         heading={HEADING}
         backButtonLabel='الذهاب للصفحة الرئيسية'
         backButtonHref='/'
-        className='md:w-[50rem] mt-[15rem] mx-auto'
+        className='md:w-[50rem] mt-[10rem] mx-auto'
       >
         <div className='flex flex-col items-center justify-center'>
           <div>
