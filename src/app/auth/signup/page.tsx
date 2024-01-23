@@ -246,7 +246,7 @@ const SignupPage = () => {
     <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24'>
       <CardWrapper
         headerLabel='إنضم إلينا'
-        backButtonLabel='هل لديك حساب بالفعل؟'
+        backButtonLabel='لديك حساب بالفعل؟ تسجيل الدخول'
         backButtonHref='/auth/signin'
       >
         <form
@@ -521,15 +521,6 @@ const SignupPage = () => {
                 'تسجيل'
               )}
             </Button>
-          </div>
-
-          <div className='w-full flex justify-between my-4'>
-            <Link
-              href='/auth/signin'
-              className='text-gray-500 transition-colors hover:text-gray-700 text-sm'
-            >
-              لديك حساب؟ سجل دخولك
-            </Link>
           </div>
         </form>
       </CardWrapper>

@@ -147,7 +147,7 @@ const SigninPage = () => {
     <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24'>
       <CardWrapper
         headerLabel='مرحبا بك'
-        backButtonLabel='لست مشترك معنا؟'
+        backButtonLabel='إنشاء حساب جديد'
         backButtonHref='/auth/signup'
         className='md:w-[50rem]'
       >
@@ -203,12 +203,6 @@ const SigninPage = () => {
               className='text-gray-500 transition-colors hover:text-gray-700'
             >
               نسيت كلمة المرور؟
-            </Link>
-            <Link
-              href='/auth/signup'
-              className='text-gray-500 transition-colors hover:text-gray-700'
-            >
-              تسجيل حساب جديد
             </Link>
           </div>
 
