@@ -87,3 +87,9 @@ export type emailProps = {
   message: string
   mailSent?: number
 }
+
+export type MenuItemsProps = {
+  title: string
+  href: string
+  description: string
+}[]

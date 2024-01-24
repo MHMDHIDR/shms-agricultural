@@ -20,6 +20,7 @@ import { MenuToggler } from './MenuToggler'
 import { cn } from '@/lib/utils'
 import useEventListener from '@/hooks/useEventListener'
 import { APP_URL } from '@/data/constants'
+import { MenuItemsProps } from '@/types'
 
 export default function Nav() {
   const { status, data: session } = useSession()
@@ -31,7 +32,7 @@ export default function Nav() {
   const [onMobileScreen, setOnMobileScreen] = useState(false)
 
   // عناصر القائمة
-  const MenuItems: { title: string; href: string; description: string }[] = [
+  const MenuItems: MenuItemsProps = [
     {
       title: 'تحضير',
       href: '/preparation',
@@ -71,7 +72,7 @@ export default function Nav() {
           : 'absolute min-w-full'
       }`}
     >
-      <NavigationMenu className='md:flex max-w-full justify-end w-full'>
+      <NavigationMenu className='md:flex max-w-full justify-start w-full'>
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />
         {/* شعار الموقع */}
         <Link href={'/'}>
@@ -89,7 +90,7 @@ export default function Nav() {
             className={`fixed left-0 h-screen w-screen min-w-[100vw] items-end md:items-center justify-end flex-col-reverse flex-wrap gap-x-3 transition-all duration-200 pointer-events-none
            md:static md:h-fit md:w-fit md:translate-y-0 md:pointer-events-auto md:flex-row ${
              isOpen
-               ? 'opacity-100 translate-y-0 pointer-events-auto bg-white dark:bg-black justify-start pt-14 md:pt-0'
+               ? 'opacity-100 translate-y-0 pointer-events-auto bg-white dark:bg-black justify-end pt-14 md:pt-0'
                : '-translate-y-full opacity-0 md:opacity-100'
            }`}
           >
@@ -173,21 +174,9 @@ export default function Nav() {
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
-
-            {/* شعار الموقع */}
-            <Link href={'/'}>
-              <Image
-                src='/logo-slogan.svg'
-                priority={true}
-                width={150}
-                height={50}
-                alt='شمس الزراعية'
-                className={`rounded-full ${sticky ? 'w-20 h-20' : 'w-24 h-24'}`}
-              />
-            </Link>
           </NavigationMenuList>
         ) : (
-          <MobileNavigation />
+          <MobileNavigation isOpen={isOpen} MenuItems={MenuItems} />
         )}
       </NavigationMenu>
     </header>
