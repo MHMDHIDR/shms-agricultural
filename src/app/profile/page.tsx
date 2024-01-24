@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Info } from 'lucide-react'
-import { UserLoggedInProps } from '@/types'
+import type { UserLoggedInProps } from '@/types'
 
 import {
   Card,
@@ -26,10 +26,12 @@ export default function ProfilePage() {
   const { theme } = useTheme()
 
   const HEADING = (
-    <p className='flex text-center max-w-lg items-center justify-center rtl'>
-      <Info className='w-16 h-16 text-blue-300' />
-      مرحبا بك في مشاريع شمس للخدمات الزراعية
-    </p>
+    <div className='flex text-center max-w-lg items-center justify-center rtl leading-relaxed'>
+      <Info className='w-16 h-16 text-blue-300 ml-2' />
+      مرحبا بك في مشاريع
+      <br />
+      شمس للخدمات الزراعية
+    </div>
   )
 
   return (
@@ -57,7 +59,7 @@ export default function ProfilePage() {
             <Link href='/projects'>الذهاب إلـــى المشاريع</Link>
           </Button>
 
-          <div dir='rtl' style={{ margin: 20 }} className='md:flex md:items-center mb-6'>
+          <div dir='rtl' className='md:flex md:items-center my-6 md:my-10'>
             <Tabs dir='rtl' defaultValue='account' className='w-[400px]'>
               <TabsList className='grid w-full grid-cols-2'>
                 <TabsTrigger value='account'>الحساب</TabsTrigger>
@@ -81,7 +83,8 @@ export default function ProfilePage() {
                     </div>
                   </CardContent>
                   <CardContent className='-space-y-4'>
-                    <Label>
+                    {/* suppressHydrationWarning is important to prevent server hydration warning */}
+                    <Label suppressHydrationWarning>
                       تغيير الى الوضع {theme === 'dark' ? 'الفاتح' : 'الداكن'}
                     </Label>
                     <ModeToggle className='-mr-16 max-w-fit' />
