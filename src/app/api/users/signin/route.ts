@@ -1,5 +1,4 @@
 import { connectDB } from '@/app/api/utils/db'
-import { compare } from 'bcryptjs'
 import type { UserProps } from '@/types'
 import { ComparePasswords } from '../../utils/compare-password'
 

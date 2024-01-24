@@ -109,6 +109,8 @@ const SigninPage = () => {
             }
           })
 
+          setIsDoneSubmitting(true)
+
           //redirect to the home page if sign in successfully
           setTimeout(() => replace(redirectUrl ?? `/profile`), DEFAULT_DURATION / 2)
         }

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 interface BackButtonProps {
   href: string
   target?: string
-  label: string
+  label: string | React.ReactNode
 }
 
 export const BackButton = ({ href, target, label }: BackButtonProps) => {

@@ -56,11 +56,12 @@ export default function Nav() {
   }
   useEventListener('scroll', isSticky)
 
+  const WINDOW_WIDTH = typeof window !== 'undefined' ? window.innerWidth : 0
   const MOBILE_SCREEN = 768
 
   useEffect(() => {
-    setOnMobileScreen(window.innerWidth < MOBILE_SCREEN)
-  }, [typeof window !== 'undefined' && window.innerWidth < MOBILE_SCREEN])
+    setOnMobileScreen(WINDOW_WIDTH < MOBILE_SCREEN)
+  }, [WINDOW_WIDTH])
 
   return (
     <header
