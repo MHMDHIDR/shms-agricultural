@@ -73,6 +73,17 @@ export default function Nav() {
     >
       <NavigationMenu className='md:flex max-w-full justify-end w-full'>
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />
+        {/* شعار الموقع */}
+        <Link href={'/'}>
+          <Image
+            src='/logo-slogan.svg'
+            priority={true}
+            width={150}
+            height={50}
+            alt='شمس الزراعية'
+            className={`rounded-full ${sticky ? 'w-20 h-20' : 'w-24 h-24'}`}
+          />
+        </Link>
         {!onMobileScreen ? (
           <NavigationMenuList
             className={`fixed left-0 h-screen w-screen min-w-[100vw] items-end md:items-center justify-end flex-col-reverse flex-wrap gap-x-3 transition-all duration-200 pointer-events-none
@@ -164,18 +175,16 @@ export default function Nav() {
             </NavigationMenuItem>
 
             {/* شعار الموقع */}
-            <NavigationMenuItem className='hidden md:list-item'>
-              <Link className='font-bold' href={'/'}>
-                <Image
-                  src='/logo-slogan.svg'
-                  priority={true}
-                  width={150}
-                  height={50}
-                  alt='شمس الزراعية'
-                  className={`rounded-full ${sticky ? 'w-20 h-20' : 'w-24 h-24'}`}
-                />
-              </Link>
-            </NavigationMenuItem>
+            <Link href={'/'}>
+              <Image
+                src='/logo-slogan.svg'
+                priority={true}
+                width={150}
+                height={50}
+                alt='شمس الزراعية'
+                className={`rounded-full ${sticky ? 'w-20 h-20' : 'w-24 h-24'}`}
+              />
+            </Link>
           </NavigationMenuList>
         ) : (
           <MobileNavigation />

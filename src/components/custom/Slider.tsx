@@ -29,8 +29,8 @@ export default function CarouselDApiDemo({ images }: { images: string[] }) {
       <Carousel
         setApi={setApi}
         opts={{ loop: true }}
-        plugins={[Autoplay({ delay: 5000 })]}
-        className='min-w-full max-w-xs max-h-72 md:max-h-96 lg:max-h-[50rem] xl:max-h-svh overflow-y-clip'
+        plugins={[Autoplay({ delay: 3000 })]}
+        className='min-w-full max-w-xs max-h-72 md:max-h-96 lg:max-h-[35rem] overflow-y-clip'
       >
         <CarouselContent /*overlay={<Overlay className='opacity-20' />}*/>
           {images.map((image, index) => (
