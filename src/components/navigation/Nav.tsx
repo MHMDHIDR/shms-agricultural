@@ -87,22 +87,6 @@ export default function Nav() {
               <NavigationMenuTrigger>عن شمس</NavigationMenuTrigger>
               <NavigationMenuContent className='rtl'>
                 <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
-                  <li className='row-span-3'>
-                    <NavigationMenuLink asChild>
-                      <a
-                        className='flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-2 no-underline outline-none focus:shadow-md'
-                        href='/'
-                      >
-                        <h1 className='my-auto text-lg font-medium'>
-                          <Sun className='text-[#FDB813] inline-block ml-2' />
-                          شمس الزراعية
-                        </h1>
-                        <p className='my-auto text-sm leading-tight text-muted-foreground'>
-                          للخدمات الزراعية والإستثمارية
-                        </p>
-                      </a>
-                    </NavigationMenuLink>
-                  </li>
                   <NavigationListItem href='/about' title='عن شمس'></NavigationListItem>
                   <NavigationListItem
                     href='/contact'
@@ -116,9 +100,9 @@ export default function Nav() {
                         title={isAuth ? session?.user?.name ?? 'حسابي' : `تسجيل الدخول`}
                       ></NavigationListItem>
                       {isAuth && (
-                        <NavigationListItem className='cursor-pointer w-1/2'>
+                        <NavigationListItem className='cursor-pointer w-full'>
                           <button
-                            className='flex gap-2 md:gap-1 items-center justify-center min-w-max'
+                            className='flex gap-2 md:gap-1 items-center justify-center min-w-fit'
                             onClick={async () =>
                               await signOut({
                                 redirect: true,
@@ -127,7 +111,9 @@ export default function Nav() {
                             }
                           >
                             <LogOut className='text-[#FDB813]' />
-                            <span className='hidden md:inline-block'>تسجيل الخروج</span>
+                            <span className='hidden md:inline-block min-w-fit'>
+                              تسجيل الخروج
+                            </span>
                           </button>
                         </NavigationListItem>
                       )}
