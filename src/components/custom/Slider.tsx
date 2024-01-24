@@ -30,13 +30,13 @@ export default function CarouselDApiDemo({ images }: { images: string[] }) {
         setApi={setApi}
         opts={{ loop: true }}
         plugins={[Autoplay({ delay: 5000 })]}
-        className='min-w-full max-w-xs'
+        className='min-w-full max-w-xs max-h-72 md:max-h-96 lg:max-h-[50rem] xl:max-h-svh overflow-y-clip'
       >
         <CarouselContent /*overlay={<Overlay className='opacity-20' />}*/>
           {images.map((image, index) => (
             <CarouselItem key={index}>
               <Card>
-                <CardContent className='flex items-center justify-center w-screen min-w-[100svh] h-1/4 sm:h-1/2 md:h-[35rem] max-h-max p-0'>
+                <CardContent className='flex items-center justify-center w-screen min-w-[100svh] p-0'>
                   <Image
                     src={image}
                     alt={`Slide ${index + 1}`}
