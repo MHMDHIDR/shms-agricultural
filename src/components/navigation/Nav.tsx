@@ -15,7 +15,7 @@ import {
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu'
 import MobileNavigation from './MobileNavigation'
-import { Sun, LogOut } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import { MenuToggler } from './MenuToggler'
 import { cn } from '@/lib/utils'
 import useEventListener from '@/hooks/useEventListener'
