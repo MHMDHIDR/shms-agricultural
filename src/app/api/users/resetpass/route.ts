@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         })
       )
     } else if (
-      Number(user.shms_user_reset_token_expires) < Date.now() &&
+      new Date() >= new Date(user.shms_user_reset_token_expires!) &&
       !isRenewingPassword
     ) {
       return new Response(
@@ -79,6 +79,7 @@ export async function POST(req: Request) {
             <br />
             <a href="${APP_URL}/auth/signin"
               style="background: #008f1f;text-decoration: none !important;font-weight:700;margin-top:35px;color:#fff;font-size:14px;padding:10px 64px;display:inline-block;border-radius: 50px;"
+              class="cta__button"
               target="_blank">
               تسجيل الدخول
             </a>
@@ -168,6 +169,7 @@ export async function POST(req: Request) {
 
             <br />
             <a href="${APP_URL}/auth/signin"
+              class="cta__button"
               style="background: #008f1f;text-decoration: none !important;font-weight:700;margin-top:35px;color:#fff;font-size:14px;padding:10px 64px;display:inline-block;border-radius: 50px;"
               target="_blank">
               تسجيل الدخول

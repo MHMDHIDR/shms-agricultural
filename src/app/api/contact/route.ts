@@ -1,16 +1,14 @@
 import email, { customEmail } from '@/app/api/utils/email'
 import { ADMIN_EMAIL } from '@/data/constants'
 
-export default async function POST(req: Request) {
+export async function POST(req: Request) {
   const body = await req.json()
   const { emailOrPhone, address, message } = body
 
-  if (emailOrPhone === '' || address === '' || message === '') {
+  if (!emailOrPhone || !address || !message) {
     return new Response(
       JSON.stringify({ message: 'يجب تعبئة جميع الحقول', mailSent: 0 }),
-      {
-        status: 400
-      }
+      { status: 400 }
     )
   }
 
@@ -23,16 +21,17 @@ export default async function POST(req: Request) {
       msg: customEmail({
         title: `رسالة جديدة من شمس للخدمات الزراعية ${address}`,
         msg: `عزيزي ${ADMIN_EMAIL}،
-            <br />
-            <pre>
+        <br />
+          <pre>
             ${message}
-            </pre>
-            <br /><br />
-            شكراً لك.`
+          </pre>
+        <br /><br />
+        شكراً لك.`
       })
     }
 
     const { accepted, rejected } = await email(emailData)
+
     if (accepted.length > 0) {
       return new Response(
         JSON.stringify({
@@ -51,10 +50,7 @@ export default async function POST(req: Request) {
   } catch (error) {
     console.error(error)
     return new Response(
-      JSON.stringify({
-        message: `عفواً، حدث خطأ غير متوقع`,
-        mailSent: 0
-      })
+      JSON.stringify({ message: `عفواً، حدث خطأ غير متوقع`, mailSent: 0 })
     )
   }
 }

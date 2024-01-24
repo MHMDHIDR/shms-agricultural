@@ -6,18 +6,20 @@ import type { UserProps } from '@/types'
 
 export async function PUT(req: Request) {
   const body = await req.json()
-  const { userId } = body
+  const { tokenId } = body
 
-  if (!userId) throw new Error('User ID is required')
+  if (!tokenId) throw new Error('Token ID is required')
 
   try {
     // Check if user exists
-    const userExists = (
-      (await connectDB(`SELECT * FROM users WHERE shms_id = ?`, [userId])) as UserProps[]
+    const user = (
+      (await connectDB(`SELECT * FROM users WHERE shms_user_reset_token = ?`, [
+        tokenId
+      ])) as UserProps[]
     )[0]
 
     // If user does not exist
-    if (!userExists) {
+    if (!user) {
       return new Response(
         JSON.stringify({ userAdded: 0, message: 'عفواً لم يتم العثور على الحساب!' }),
         { status: 404 }
@@ -25,15 +27,15 @@ export async function PUT(req: Request) {
     }
 
     // If user exists but already activated
-    if (Number(userExists.shms_user_reset_token_expires) >= Date.now()) {
+    if (user && new Date() >= new Date(user.shms_user_reset_token_expires!)) {
       return new Response(
-        JSON.stringify({ userAdded: 0, message: 'الرمز المرسل غير صالح' }),
+        JSON.stringify({ userAdded: 0, message: 'انتهت صلاحية رابط تفعيل الحساب!' }),
         { status: 400 }
       )
     } else if (
-      userExists.shms_user_reset_token_expires === null &&
-      (userExists.shms_user_account_status === 'active' ||
-        userExists.shms_user_account_status === 'block')
+      user.shms_user_reset_token_expires === null &&
+      (user.shms_user_account_status === 'active' ||
+        user.shms_user_account_status === 'block')
     ) {
       return new Response(
         JSON.stringify({ userAdded: 0, message: 'الحساب مفعل سابقاً' }),
@@ -43,11 +45,11 @@ export async function PUT(req: Request) {
       // activate user
       const activateUser = (await connectDB(
         `UPDATE users
-            SET shms_user_account_status = ?, 
-            SET shms_user_reset_token = NULL, 
+          SET shms_user_account_status = ?, 
+            shms_user_reset_token = NULL, 
             shms_user_reset_token_expires = NULL
-            WHERE shms_id = ?`,
-        ['active', userId]
+            WHERE shms_user_reset_token = ?`,
+        ['active', tokenId]
       )) as ResultSetHeader
 
       const { affectedRows: isActivated } = activateUser as ResultSetHeader
@@ -58,12 +60,12 @@ export async function PUT(req: Request) {
 
         const emailData = {
           from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
-          to: userExists?.shms_email,
+          to: user?.shms_email,
           subject: 'تم تفعيل حسابك بنجاح | شمس للخدمات الزراعية',
           msg: customEmail({
             title: 'مرحباً بك في شمس للخدمات الزراعية',
             msg: `
-            <h1 style="font-weight:bold">مرحباً ${userExists?.shms_fullname},</h1>
+            <h1 style="font-weight:bold">مرحباً ${user?.shms_fullname},</h1>
             <p>
              شكراً لتسجيلك في شمس للخدمات الزراعي،
              تم تفعيل حسابك بنجاح، يمكنك الآن تسجيل الدخول إلى حسابك من خلال الرابط أدناه:

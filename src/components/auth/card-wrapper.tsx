@@ -9,7 +9,7 @@ interface CardWrapperProps {
   children: React.ReactNode
   heading?: string | React.ReactNode
   headerLabel?: string
-  backButtonLabel: string
+  backButtonLabel: string | React.ReactNode
   backButtonHref: string
   backButtonTarget?: string
   className?: string

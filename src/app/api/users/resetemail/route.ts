@@ -4,9 +4,9 @@ import email, { customEmail } from '@/app/api/utils/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'
 
-export async function POST(req: Request) {
+export async function PUT(req: Request) {
   const body = await req.json()
-  const { userEmail } = body
+  const { userEmail, oldEmail, fullname } = body
 
   try {
     const user = (
@@ -15,18 +15,23 @@ export async function POST(req: Request) {
       ])) as UserProps[]
     )[0]
 
-    if (!user) {
-      return new Response(
-        JSON.stringify({ resetEmail: 0, message: `عفواً, لا يوجد مستخدم بهذا الحساب` })
-      )
-    } else if (user.shms_user_account_status === 'block') {
+    if (user && user.shms_email === userEmail) {
       return new Response(
         JSON.stringify({
           resetEmail: 0,
-          message: `عفواً, حسابك محظور, يرجى التواصل مع الإدارة لإعادة تفعيل حسابك`
-        })
+          message: `عفواً, البريد الالكتروني الجديد مطابق للبريد الالكتروني القديم، يرجى إستخدام بريد الكتروني آخر`
+        }),
+        { status: 400 }
       )
-    } else if (userEmail === user.shms_email) {
+    } else if (user) {
+      return new Response(
+        JSON.stringify({
+          resetEmail: 0,
+          message: `عفواً, البريد الالكتروني مستخدم من قبل، يرجى إستخدام بريد الكتروني آخر`
+        }),
+        { status: 400 }
+      )
+    } else {
       const userResetPasswordToken = randomUUID()
       const userCanResetPasswordUntil = new Date(Date.now() + 3600000).toISOString() // 1 hour from signup time
 
@@ -36,29 +41,29 @@ export async function POST(req: Request) {
             shms_user_account_status = ?,
             shms_user_reset_token = ?,
             shms_user_reset_token_expires = ?
-            WHERE shms_id = ?;`,
+          WHERE shms_email = ?;`,
         [
           userEmail,
           'pending',
           userResetPasswordToken,
           userCanResetPasswordUntil,
-          user.shms_id
+          oldEmail
         ]
       )
 
       //send the user an email with a link to reset his/her password
       const emailData = {
         from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
-        to: user.shms_email,
+        to: userEmail,
         subject: 'تأكيد البريد الالكتروني الجديد | شمس للخدمات الزراعية',
         msg: customEmail({
           title: `تأكيد البريد الالكتروني الجديد`,
-          msg: `عزيزي ${user.shms_fullname}،
-            <br />
-            تم تغيير البريد الاكتروني الخاص بك بنجاح، يرجى الضعط على تأكيد البريد الالكتروني في الزر أدناه لتفعيل تسجيل الدخول باستخدام البريد الاكتروني الجديد.
+          msg: `عزيزي ${fullname ?? 'المستخدم'}،
+            <br /><br />
+            تم تغيير البريد الاكتروني الخاص بك بنجاح، يرجى الضغط على تفعيل البريد الالكتروني في الزر أدناه لتفعيل تسجيل الدخول باستخدام البريد الاكتروني الجديد.
 
-            <br />
-            <a href="${APP_URL}/auth/activate"
+            <a href="${APP_URL}/auth/activate/${userResetPasswordToken}"
+              class="cta__button"
               style="background: #008f1f;text-decoration: none !important;font-weight:700;margin-top:35px;color:#fff;font-size:14px;padding:10px 64px;display:inline-block;border-radius: 50px;"
               target="_blank">
               تفعيل البريد الالكتروني الجديد
@@ -98,7 +103,7 @@ export async function POST(req: Request) {
       } catch (error) {
         return new Response(
           JSON.stringify({
-            message: `Ooops!, something went wrong!: ${error} `,
+            message: `عفواً, لم يتم إرسال رسالة تأكيد تغيير كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة`,
             resetEmail: 0
           })
         )
@@ -106,22 +111,18 @@ export async function POST(req: Request) {
 
       return new Response(
         JSON.stringify({
-          message: `تم إرسال بريد الكتروني لتأكيد البريد الالكتروني الجديد، الرجاء إتباع التعليمات في البريد الالكتروني المرسل لكم في البريد الالكتروني الجديد...`,
+          message: `تم إرسال بريد الكتروني لتأكيد البريد الالكتروني الجديد، الرجاء إتباع التعليمات في البريد الالكتروني المرسل لكم في البريد الالكتروني الجديد`,
           resetEmail: 1
         })
       )
-    } else {
-      return new Response(
-        JSON.stringify({
-          resetEmail: 0,
-          message: `عفواً, حدث خطأ غير متوقع، لا يمكن تغيير البريد الالكتروني - يرجى التواصل مع الإدارة`
-        }),
-        { status: 400 }
-      )
     }
   } catch (error) {
+    console.error(error)
     return new Response(
-      JSON.stringify({ message: `Ooops!, Server Error!: ${error}`, resetEmail: 0 }),
+      JSON.stringify({
+        resetEmail: 0,
+        message: `عفواً, حدث خطأ غير متوقع، لا يمكن تغيير البريد الالكتروني - يرجى التواصل مع الإدارة`
+      }),
       { status: 500 }
     )
   }

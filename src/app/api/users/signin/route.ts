@@ -25,14 +25,16 @@ export async function POST(req: Request) {
     )[0]
 
     if (!user) {
-      return new Response(JSON.stringify({ loggedIn: 0, message: 'User not found' }))
+      return new Response(
+        JSON.stringify({ loggedIn: 0, message: 'لم يتم العثور على المستخدم' })
+      )
     }
 
     if (user.shms_user_account_status === 'block') {
       return new Response(
         JSON.stringify({
           loggedIn: 0,
-          message: 'Your Account Has Been Blocked, Please Contact The Admin'
+          message: 'حسابك محظور، يرجى التواصل مع الإدارة'
         }),
         { status: 403 }
       )
@@ -40,7 +42,8 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           loggedIn: 0,
-          message: 'Your Account Is Pending, Please Activate Your Account First'
+          message:
+            'حسابك غير مفعل بعد، يرجى تفعيل حسابك عن طريق الرابط المرسل إلى بريدك الإلكتروني'
         }),
         { status: 403 }
       )
@@ -50,7 +53,7 @@ export async function POST(req: Request) {
           loggedIn: 1,
           fullname: user.shms_fullname,
           shms_email: user.shms_email,
-          message: 'Successfully Logged In'
+          message: 'تم تسجيل الدخول بنجاح'
         })
       )
     } else {

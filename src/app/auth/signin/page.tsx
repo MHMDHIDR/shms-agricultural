@@ -95,12 +95,11 @@ const SigninPage = () => {
             }
           })
         } else {
-          // data.loggedIn === 1
           toast('تم تسجيل دخولك بنجاح', {
             icon: <Success />,
             position: 'bottom-center',
             className: 'text-right select-none rtl',
-            duration: DEFAULT_DURATION,
+            duration: DEFAULT_DURATION / 3,
             style: {
               backgroundColor: '#F0FAF0',
               color: '#367E18',
@@ -111,7 +110,7 @@ const SigninPage = () => {
           })
 
           //redirect to the home page if sign in successfully
-          setTimeout(() => replace(redirectUrl ?? `/profile`), DEFAULT_DURATION)
+          setTimeout(() => replace(redirectUrl ?? `/profile`), DEFAULT_DURATION / 2)
         }
       } catch (error: any) {
         const message: UserProps['message'] =
@@ -130,8 +129,6 @@ const SigninPage = () => {
           }
         })
         console.error('Error', error)
-      } finally {
-        setIsDoneSubmitting(true)
       }
     }
   }

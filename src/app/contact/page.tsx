@@ -28,6 +28,8 @@ const Contact = () => {
   const [message, setMessage] = useState('')
 
   const [emailOrPhoneError, setEmailOrPhoneError] = useState('')
+  const [addressError, setAddressError] = useState('')
+  const [messageError, setMessageError] = useState('')
 
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
@@ -58,36 +60,40 @@ const Contact = () => {
     if (emailOrPhone === '') {
       resetFormErrors()
       setEmailOrPhoneError('الرجاء التأكد من إدخال رقم الهاتف أو البريد الالكتروني')
+    } else if (address === '') {
+      resetFormErrors()
+      setAddressError('الرجاء التأكد من إدخال العنوان')
+    } else if (message === '') {
+      resetFormErrors()
+      setMessageError('الرجاء التأكد من إدخال الرسالة')
     } else {
       try {
         resetFormErrors()
         setIsSubmittingForm(true)
 
-        const sentMail: { data: emailProps } = await axios.post(
-          `${API_URL}/users/contact`,
-          { emailOrPhone, address, message }
-        )
+        const sentMail: { data: emailProps } = await axios.post(`${API_URL}/contact`, {
+          emailOrPhone,
+          address,
+          message
+        })
         //getting response from backend
         const { data: sentMailData } = sentMail
 
         // make sure to view the response from the data
         sentMailData.mailSent === 1 &&
-          toast(
-            'تم إرسال بريد الكتروني لتأكيد التسجيل ، الرجاء إتباع التعليمات في البريد لتفعيل حسابك 👍🏼',
-            {
-              icon: <Info className='text-blue-300' />,
-              position: 'bottom-center',
-              className: 'text-right select-none rtl',
-              duration: DEFAULT_DURATION,
-              style: {
-                backgroundColor: '#F0FAF0',
-                color: '#367E18',
-                border: '1px solid #367E18',
-                gap: '1.5rem',
-                textAlign: 'justify'
-              }
+          toast(sentMailData.message, {
+            icon: <Info className='text-blue-300' />,
+            position: 'bottom-center',
+            className: 'text-right select-none rtl',
+            duration: DEFAULT_DURATION,
+            style: {
+              backgroundColor: '#F0FAF0',
+              color: '#367E18',
+              border: '1px solid #367E18',
+              gap: '1.5rem',
+              textAlign: 'justify'
             }
-          )
+          })
 
         setTimeout(() => replace(`/`), DEFAULT_DURATION)
       } catch (error: any) {
@@ -118,7 +124,11 @@ const Contact = () => {
       <CardWrapper
         heading='تواصل معنا'
         headerLabel=''
-        backButtonLabel='أو على بريدنا الالكتروني: info@shmsagricultural.com'
+        backButtonLabel={
+          <span className='underline-hover'>
+            أو على بريدنا الالكتروني: <strong>info@shmsagricultural.com</strong>
+          </span>
+        }
         backButtonHref='mailto:info@shmsagricultural.com'
         backButtonTarget='_blank'
         className='w-full md:max-w-2xl rtl'
@@ -136,7 +146,7 @@ const Contact = () => {
             </div>
             <div className='md:w-2/3'>
               <input
-                className='bg-gray-200 dark:bg-gray-800 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300  appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                 onBlur={e => blurEmailOrPhone(e.target.value)}
                 onChange={e => setEmailOrPhone(e.target.value)}
                 id='inline-email'
@@ -146,6 +156,7 @@ const Contact = () => {
             </div>
           </div>
 
+          {addressError && <FormMessage error>{addressError}</FormMessage>}
           <div className='md:flex md:items-center mb-6'>
             <div className='md:w-1/3'>
               <label
@@ -167,6 +178,7 @@ const Contact = () => {
             </div>
           </div>
 
+          {messageError && <FormMessage error>{messageError}</FormMessage>}
           <div className='md:flex md:items-center mb-6'>
             <div className='md:w-1/3'>
               <label
@@ -216,40 +228,39 @@ const Contact = () => {
             </Button>
           </div>
 
-          <div style={{ margin: 20, justifyContent: 'center', alignItems: 'center' }}>
-            <div className='flex justify-center items-center gap-x-10'>
-              <Link
-                className='hover:-translate-y-1 transition-transform'
-                href='https://facebook.com'
-                target='_blank'
-              >
-                <FacebookIcon />
-              </Link>
+          {/* Social Icons */}
+          <div className='flex justify-center items-center gap-x-10 my-12'>
+            <Link
+              className='hover:-translate-y-1 transition-transform'
+              href='https://facebook.com'
+              target='_blank'
+            >
+              <FacebookIcon />
+            </Link>
 
-              <Link
-                className='hover:-translate-y-1 transition-transform'
-                href='https://instagram.com'
-                target='_blank'
-              >
-                <InstagramIcon />
-              </Link>
+            <Link
+              className='hover:-translate-y-1 transition-transform'
+              href='https://instagram.com'
+              target='_blank'
+            >
+              <InstagramIcon />
+            </Link>
 
-              <Link
-                className='hover:-translate-y-1 transition-transform'
-                href='https://youtube.com'
-                target='_blank'
-              >
-                <YouTubeIcon />
-              </Link>
+            <Link
+              className='hover:-translate-y-1 transition-transform'
+              href='https://youtube.com'
+              target='_blank'
+            >
+              <YouTubeIcon />
+            </Link>
 
-              <Link
-                className='hover:-translate-y-1 transition-transform'
-                href='https://twitter.com'
-                target='_blank'
-              >
-                <TwitterIcon />
-              </Link>
-            </div>
+            <Link
+              className='hover:-translate-y-1 transition-transform'
+              href='https://twitter.com'
+              target='_blank'
+            >
+              <TwitterIcon />
+            </Link>
           </div>
         </form>
       </CardWrapper>

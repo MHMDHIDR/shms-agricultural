@@ -14,9 +14,9 @@ import { Info } from 'lucide-react'
 import type { UserProps } from '@/types'
 
 export default function ActivateAccount({
-  params: { userId }
+  params: { tokenId }
 }: {
-  params: { userId: string }
+  params: { tokenId: string }
 }) {
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isAccountActivated, setIsAccountActivated] = useState(false)
@@ -27,9 +27,9 @@ export default function ActivateAccount({
 
     try {
       setIsSubmittingForm(true)
-      const activateUser: { data: UserProps } = await axios.post(
+      const activateUser: { data: UserProps } = await axios.put(
         API_URL + `/users/activate`,
-        { userId }
+        { tokenId }
       )
       const { userActivated } = activateUser.data
 
@@ -83,7 +83,7 @@ export default function ActivateAccount({
     </p>
   )
 
-  return !validateUUID(userId) ? null : (
+  return !validateUUID(tokenId) ? null : (
     <section>
       <CardWrapper
         heading={HEADING}

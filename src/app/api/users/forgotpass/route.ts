@@ -30,7 +30,7 @@ export async function POST(req: Request) {
           }),
           { status: 403 }
         )
-      } else if (Number(user.shms_user_reset_token_expires) > Date.now()) {
+      } else if (new Date() < new Date(user.shms_user_reset_token_expires!)) {
         return new Response(
           JSON.stringify({
             forgotPassSent: 0,
