@@ -1,6 +1,7 @@
-import { connectDB } from '../../utils/db'
+import { connectDB } from '@/app/api/utils/db'
 import { compare } from 'bcryptjs'
 import type { UserProps } from '@/types'
+import { ComparePasswords } from '../../utils/compare-password'
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
         }),
         { status: 403 }
       )
-    } else if (user && (await compare(password, user.shms_password!))) {
+    } else if (user && (await ComparePasswords(user.shms_password ?? '', password))) {
       return new Response(
         JSON.stringify({
           loggedIn: 1,

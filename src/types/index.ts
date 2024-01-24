@@ -29,6 +29,8 @@ export type UserProps = {
   forgotPassSent?: number
   // When user reset password, this is set to 1
   newPassSet?: number
+  // When user changes their email, this is set to 1
+  resetEmail?: number
 }
 
 export type UserLoggedInProps =
@@ -78,3 +80,10 @@ export type customEmailProps = (props: {
   buttonLabel?: string
   logoSrc?: string
 }) => string
+
+export type emailProps = {
+  emailOrPhone: string
+  address: string
+  message: string
+  mailSent?: number
+}

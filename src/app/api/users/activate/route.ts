@@ -1,11 +1,10 @@
-import { connectDB } from '../../utils/db'
+import { connectDB } from '@/app/api/utils/db'
 import { ResultSetHeader } from 'mysql2/promise'
-import type { NextRequest } from 'next/server'
-import email, { customEmail } from '../../utils/email'
-import type { UserProps } from '@/types'
+import email, { customEmail } from '@/app/api/utils/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
+import type { UserProps } from '@/types'
 
-export async function POST(req: NextRequest) {
+export async function PUT(req: Request) {
   const body = await req.json()
   const { userId } = body
 
@@ -43,7 +42,11 @@ export async function POST(req: NextRequest) {
     } else {
       // activate user
       const activateUser = (await connectDB(
-        `UPDATE users SET shms_user_account_status = ?, shms_user_reset_token_expires = NULL WHERE shms_id = ?`,
+        `UPDATE users
+            SET shms_user_account_status = ?, 
+            SET shms_user_reset_token = NULL, 
+            shms_user_reset_token_expires = NULL
+            WHERE shms_id = ?`,
         ['active', userId]
       )) as ResultSetHeader
 
@@ -77,7 +80,7 @@ export async function POST(req: NextRequest) {
           return new Response(
             JSON.stringify({
               userActivated: 1,
-              message: 'User Successfully Registered You Can Login 👍🏼'
+              message: `تم إرسال بريد الكتروني لتأكيد تفعيل حساب المستخدم، يمكنك تسجيل الدخول بنجاح 👍🏼`
             }),
             { status: 201 }
           )
@@ -85,7 +88,7 @@ export async function POST(req: NextRequest) {
           return new Response(
             JSON.stringify({
               userActivated: 0,
-              message: 'User Not Added!, Please Try Again Later'
+              message: `عفواً، لم يتم إرسال بريد الكتروني لتأكيد تفعيل حساب المستخدم!`
             }),
             { status: 500 }
           )
@@ -97,7 +100,7 @@ export async function POST(req: NextRequest) {
     return new Response(
       JSON.stringify({
         userActivated: 0,
-        message: 'User was not activated, Please Try Again Later'
+        message: `عفواً، لم يتم تفعيل حساب المستخدم بنجاح!`
       }),
       { status: 500 }
     )

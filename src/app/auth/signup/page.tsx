@@ -19,7 +19,7 @@ import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
-import { Error } from '@/components/icons/Status'
+import { Error, Success } from '@/components/icons/Status'
 import FormMessage from '@/components/custom/FormMessage'
 import SelectCountry from '@/components/custom/SelectCountry'
 
@@ -40,6 +40,7 @@ const SignupPage = () => {
   const [phone, setPhone] = useState('')
   const [file, setFile] = useState<File[]>([])
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
+  const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
   const { replace } = useRouter()
 
@@ -223,7 +224,7 @@ const SignupPage = () => {
         })
         console.error('Error', error)
       } finally {
-        setIsSubmittingForm(false)
+        setIsDoneSubmitting(true)
       }
     }
   }
@@ -508,14 +509,21 @@ const SignupPage = () => {
           {/* Submit Button */}
           <div className='md:flex md:items-center'>
             <Button
-              disabled={isSubmittingForm}
+              disabled={isDoneSubmitting}
               type='submit'
-              className='shadow w-full bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold'
+              className={`shadow w-full bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold${
+                isDoneSubmitting ? ' cursor-not-allowed opacity-50' : ''
+              }`}
             >
               {isSubmittingForm ? (
                 <>
                   <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
                   جاري التسجيل ...
+                </>
+              ) : isDoneSubmitting ? (
+                <>
+                  <Success />
+                  تم التسجيل يرجى تفعيل حسابك
                 </>
               ) : (
                 'تسجيل'
