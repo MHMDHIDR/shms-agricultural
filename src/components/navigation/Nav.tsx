@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { signOut, useSession } from 'next-auth/react'
+import { SessionContextValue, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import {
   NavigationMenu,
@@ -19,11 +19,14 @@ import { MenuToggler } from './MenuToggler'
 import { cn } from '@/lib/utils'
 import useEventListener from '@/hooks/useEventListener'
 import { APP_URL } from '@/data/constants'
-import { MenuItemsProps } from '@/types'
 import { ShmsIcon } from '../icons/Socials'
+import type { MenuItemsProps, UserLoggedInProps } from '@/types'
 
 export default function Nav() {
-  const { status, data: session } = useSession()
+  const {
+    status,
+    data: session
+  }: { status: SessionContextValue['status']; data: UserLoggedInProps } = useSession()
 
   const isAuth = status === 'authenticated' ? true : false
 
@@ -104,8 +107,15 @@ export default function Nav() {
                       <NavigationListItem
                         className={isAuth ? `w-1/2 text-center` : `w-full`}
                         href={isAuth ? `/profile` : `/auth/signin`}
-                        title={isAuth ? session?.user?.name ?? 'حسابي' : `تسجيل الدخول`}
+                        title={isAuth ? 'حسابي' : `تسجيل الدخول`}
                       ></NavigationListItem>
+                      {session?.token?.user.shms_user_account_type === 'admin' ? (
+                        <NavigationListItem
+                          className={`w-1/2 text-center`}
+                          href={`/dashboard`}
+                          title={`لوحة التحكم`}
+                        ></NavigationListItem>
+                      ) : null}
                       {isAuth && (
                         <NavigationListItem
                           className='cursor-pointer w-full'
