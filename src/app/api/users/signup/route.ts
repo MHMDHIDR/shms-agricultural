@@ -12,6 +12,7 @@ export async function POST(req: Request) {
     userFullName,
     nationality,
     dateOfBirth,
+    address,
     email: newUserEmail,
     phone,
     password,
@@ -51,13 +52,14 @@ export async function POST(req: Request) {
 
     // create new user
     const newUser = await connectDB(
-      `INSERT INTO users (shms_id, shms_fullname, shms_nationality, shms_date_of_birth, shms_email, shms_phone, shms_password, shms_doc, shms_user_account_status, shms_user_reset_token_expires)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO users (shms_id, shms_fullname, shms_nationality, shms_date_of_birth, shms_address, shms_email, shms_phone, shms_password, shms_doc, shms_user_account_status, shms_user_reset_token_expires)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         userId,
         userFullName,
         nationality,
         dateOfBirth,
+        address,
         newUserEmail,
         phone,
         hashedPassword,

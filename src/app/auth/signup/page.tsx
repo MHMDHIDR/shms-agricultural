@@ -22,6 +22,7 @@ import { Input } from '@/components/ui/input'
 import { Error, Success } from '@/components/icons/Status'
 import FormMessage from '@/components/custom/FormMessage'
 import SelectCountry from '@/components/custom/SelectCountry'
+import Layout from '@/components/custom/Layout'
 
 const SignupPage = () => {
   // Form States
@@ -34,6 +35,7 @@ const SignupPage = () => {
   const [email, setEmail] = useState('')
   const [nationality, setNationality] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
+  const [address, setAddress] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [acceptedTerm, setAcceptedTerm] = useState(false)
@@ -52,6 +54,7 @@ const SignupPage = () => {
   const [fullNameError, setFullNameError] = useState('')
   const [nationlityError, setNationlityError] = useState('')
   const [dateOfBirthError, setDateOfBirthError] = useState('')
+  const [addressError, setAddressError] = useState('')
   const [emailError, setEmailError] = useState('')
   const [phoneError, setPhoneError] = useState('')
   const [passError, setPassError] = useState('')
@@ -64,6 +67,14 @@ const SignupPage = () => {
       setEmailError('الرجاء التأكد من صحة البريد الالكتروني')
     } else {
       setEmailError('')
+    }
+  }
+
+  const blurAddress = () => {
+    if (!address) {
+      setAddressError('الرجاء التأكد من إدخال العنوان')
+    } else {
+      setAddressError('')
     }
   }
 
@@ -148,6 +159,9 @@ const SignupPage = () => {
     } else if (dateOfBirth === '') {
       resetFormErrors()
       setDateOfBirthError('الرجاء التأكد من إدخال تاريخ الميلاد')
+    } else if (address === '') {
+      resetFormErrors()
+      setAddressError('الرجاء التأكد من إدخال العنوان')
     } else if (!validateEmail(email)) {
       resetFormErrors()
       setEmailError('الرجاء التأكد من صحة البريد الالكتروني')
@@ -178,6 +192,7 @@ const SignupPage = () => {
             userFullName,
             nationality,
             dateOfBirth,
+            address,
             email,
             phone,
             password,
@@ -236,6 +251,7 @@ const SignupPage = () => {
     setFullNameError('')
     setNationlityError('')
     setDateOfBirthError('')
+    setAddressError('')
     setEmailError('')
     setPassError('')
     setPhoneError('')
@@ -244,295 +260,319 @@ const SignupPage = () => {
   }
 
   return (
-    <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24'>
-      <CardWrapper
-        headerLabel='إنضم إلينا'
-        backButtonLabel='لديك حساب بالفعل؟ تسجيل الدخول'
-        backButtonHref='/auth/signin'
-      >
-        <form
-          className='w-full max-w-fit md:m-5'
-          dir='rtl'
-          onSubmit={e => handelSignupForm(e)}
+    <Layout>
+      <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24'>
+        <CardWrapper
+          headerLabel='إنضم إلينا'
+          backButtonLabel='لديك حساب بالفعل؟ تسجيل الدخول'
+          backButtonHref='/auth/signin'
         >
-          {fullNameError && <FormMessage error>{fullNameError}</FormMessage>}
-          <div className='mb-6'>
-            <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
-              <div>
+          <form
+            className='w-full max-w-fit md:m-5'
+            dir='rtl'
+            onSubmit={e => handelSignupForm(e)}
+          >
+            {fullNameError && <FormMessage error>{fullNameError}</FormMessage>}
+            <div className='mb-6'>
+              <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
+                <div>
+                  <label
+                    htmlFor='firstName'
+                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                  >
+                    الاسم الاول
+                  </label>
+                  <input
+                    id='firstName'
+                    type='text'
+                    onChange={e => setFName(e.target.value)}
+                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    placeholder='محمد'
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor='secondName'
+                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                  >
+                    الاسم الثاني
+                  </label>
+                  <input
+                    id='secondName'
+                    onChange={e => setSName(e.target.value)}
+                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    type='text'
+                    placeholder='عبدالرحيم'
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor='thirdName'
+                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                  >
+                    الاسم الثالث
+                  </label>
+                  <input
+                    id='thirdName'
+                    onChange={e => setTName(e.target.value)}
+                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    type='text'
+                    placeholder='محمد'
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor='lastName'
+                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                  >
+                    الاسم الاخير
+                  </label>
+                  <input
+                    id='lastName'
+                    onChange={e => setFoName(e.target.value)}
+                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    type='text'
+                    placeholder='مكي'
+                  />
+                </div>
+              </div>
+              <div className='md:w-1/3'></div>
+            </div>
+
+            {nationlityError && <FormMessage error>{nationlityError}</FormMessage>}
+            <div className='md:flex md:items-center mb-6'>
+              <div className='md:w-1/3'>
                 <label
-                  htmlFor='firstName'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                  htmlFor='nationality'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
-                  الاسم الاول
+                  الجنسية
                 </label>
-                <input
-                  id='firstName'
-                  type='text'
-                  onChange={e => setFName(e.target.value)}
+              </div>
+              <div className='md:w-2/3'>
+                <SelectCountry
+                  nationality={nationality}
+                  setNationality={setNationality}
+                  placeholder='إختر الجنسية ...'
                   className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
-                  placeholder='محمد'
                 />
               </div>
-              <div>
+            </div>
+
+            {dateOfBirthError && <FormMessage error>{dateOfBirthError}</FormMessage>}
+            <div className='md:flex md:items-center mb-6'>
+              <div className='md:w-1/3'>
                 <label
-                  htmlFor='secondName'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                  htmlFor='dateOfBirth'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
-                  الاسم الثاني
+                  تاريخ الميلاد
                 </label>
-                <input
-                  id='secondName'
-                  onChange={e => setSName(e.target.value)}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
-                  type='text'
-                  placeholder='عبدالرحيم'
-                />
               </div>
-              <div>
-                <label
-                  htmlFor='thirdName'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
-                >
-                  الاسم الثالث
-                </label>
+              <div className='md:w-2/3'>
                 <input
-                  id='thirdName'
-                  onChange={e => setTName(e.target.value)}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
-                  type='text'
-                  placeholder='محمد'
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor='lastName'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
-                >
-                  الاسم الاخير
-                </label>
-                <input
-                  id='lastName'
-                  onChange={e => setFoName(e.target.value)}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
-                  type='text'
-                  placeholder='مكي'
+                  id='dateOfBirth'
+                  onChange={e => setDateOfBirth(e.target.value)}
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
+                  type='date'
+                  min='1990-01-01'
+                  max={
+                    // todays date - 18 years
+                    new Date(
+                      new Date().getFullYear() - 18,
+                      new Date().getMonth(),
+                      new Date().getDate()
+                    )
+                      .toISOString()
+                      .split('T')[0]
+                  }
                 />
               </div>
             </div>
-            <div className='md:w-1/3'></div>
-          </div>
 
-          {nationlityError && <FormMessage error>{nationlityError}</FormMessage>}
-          <div className='md:flex md:items-center mb-6'>
-            <div className='md:w-1/3'>
+            {addressError && <FormMessage error>{addressError}</FormMessage>}
+            <div className='md:flex md:items-center mb-6'>
+              <div className='md:w-1/3'>
+                <label
+                  htmlFor='address'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                >
+                  العنوان
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <input
+                  id='address'
+                  onBlur={blurAddress}
+                  onChange={e => setAddress(e.target.value)}
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='text'
+                  placeholder='العــــنوان ...'
+                />
+              </div>
+            </div>
+
+            {emailError && <FormMessage error>{emailError}</FormMessage>}
+            <div className='md:flex md:items-center mb-6'>
+              <div className='md:w-1/3'>
+                <label
+                  htmlFor='email'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                >
+                  البريد الالكتروني
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <input
+                  id='email'
+                  onBlur={e => blurEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='email'
+                  placeholder='example@gmail.com'
+                />
+              </div>
+            </div>
+
+            {phoneError && <FormMessage error>{phoneError}</FormMessage>}
+            <div className='md:flex md:items-center mb-6'>
+              <div className='md:w-1/3'>
+                <label
+                  htmlFor='phone'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                >
+                  رقم الهاتف
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <input
+                  id='phone'
+                  onBlur={e => blurPhone(e.target.value)}
+                  onChange={e => setPhone(e.target.value)}
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  dir='rtl'
+                  type='tel'
+                  placeholder='55123456'
+                />
+              </div>
+            </div>
+
+            {passError && <FormMessage error>{passError}</FormMessage>}
+            <div className='md:flex md:items-center mb-6'>
+              <div className='md:w-1/3'>
+                <label
+                  htmlFor='password'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                >
+                  كلمة المرور
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <input
+                  id='password'
+                  onChange={handlePasswordChange}
+                  onBlur={blurPassword}
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='password'
+                  placeholder='******'
+                />
+              </div>
+            </div>
+
+            {passConfirmError && <FormMessage error>{passConfirmError}</FormMessage>}
+            <div className='md:flex md:items-center mb-6'>
+              <div className='md:w-1/3'>
+                <label
+                  htmlFor='confirmPassword'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                >
+                  التأكد من كلمة المرور
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <input
+                  id='confirmPassword'
+                  onChange={handleConfirmPasswordChange}
+                  onBlur={blurConfrimPassword}
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='password'
+                  placeholder='******'
+                />
+              </div>
+            </div>
+
+            {fileError && <FormMessage error>{fileError}</FormMessage>}
+            <div className='md:flex md:items-center mb-6'>
+              <div className='md:w-1/3'>
+                <label
+                  htmlFor='document'
+                  className='block cursor-pointer text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                >
+                  صورة المستند الرسمي
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <Input
+                  id='document'
+                  type='file'
+                  aria-label='file'
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 cursor-pointer'
+                  onChange={handleFileChange}
+                />
+              </div>
+            </div>
+
+            {acceptedTermError && <FormMessage error>{acceptedTermError}</FormMessage>}
+            <div className='md:flex flex-col gap-2 w-full mb-6 items-start'>
               <label
-                htmlFor='nationality'
-                className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                htmlFor='accept_termsAndPrivacy'
+                className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 cursor-pointer'
               >
-                الجنسية
+                <Checkbox
+                  id='accept_termsAndPrivacy'
+                  className='ml-2'
+                  onCheckedChange={(isChecked: boolean) => setAcceptedTerm(isChecked)}
+                />
+                أوافق على &nbsp;
+                <Link href='/terms' className='font-bold underline-hover'>
+                  بنود الاستخدام
+                </Link>
+                &nbsp; و &nbsp;
+                <Link href='/privacy' className='font-bold underline-hover'>
+                  سياسة الخصوصية
+                </Link>
               </label>
+              <div className='md:w-1/3'></div>
             </div>
-            <div className='md:w-2/3'>
-              <SelectCountry
-                nationality={nationality}
-                setNationality={setNationality}
-                placeholder='إختر الجنسية ...'
-                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
-              />
-            </div>
-          </div>
 
-          {dateOfBirthError && <FormMessage error>{dateOfBirthError}</FormMessage>}
-          <div className='md:flex md:items-center mb-6'>
-            <div className='md:w-1/3'>
-              <label
-                htmlFor='dateOfBirth'
-                className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+            {/* Submit Button */}
+            <div className='md:flex md:items-center'>
+              <Button
+                disabled={isDoneSubmitting}
+                type='submit'
+                className={`shadow w-full bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold${
+                  isDoneSubmitting ? ' cursor-not-allowed opacity-50' : ''
+                }`}
               >
-                تاريخ الميلاد
-              </label>
+                {isSubmittingForm ? (
+                  <>
+                    <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
+                    جاري التسجيل ...
+                  </>
+                ) : isDoneSubmitting ? (
+                  <>
+                    <Success />
+                    تم التسجيل يرجى تفعيل حسابك
+                  </>
+                ) : (
+                  'تسجيل'
+                )}
+              </Button>
             </div>
-            <div className='md:w-2/3'>
-              <input
-                id='dateOfBirth'
-                onChange={e => setDateOfBirth(e.target.value)}
-                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
-                type='date'
-                min='1990-01-01'
-                max={
-                  // todays date - 18 years
-                  new Date(
-                    new Date().getFullYear() - 18,
-                    new Date().getMonth(),
-                    new Date().getDate()
-                  )
-                    .toISOString()
-                    .split('T')[0]
-                }
-              />
-            </div>
-          </div>
-
-          {emailError && <FormMessage error>{emailError}</FormMessage>}
-          <div className='md:flex md:items-center mb-6'>
-            <div className='md:w-1/3'>
-              <label
-                htmlFor='email'
-                className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
-              >
-                البريد الالكتروني
-              </label>
-            </div>
-            <div className='md:w-2/3'>
-              <input
-                id='email'
-                onBlur={e => blurEmail(e.target.value)}
-                onChange={e => setEmail(e.target.value)}
-                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
-                type='email'
-                placeholder='example@gmail.com'
-              />
-            </div>
-          </div>
-
-          {phoneError && <FormMessage error>{phoneError}</FormMessage>}
-          <div className='md:flex md:items-center mb-6'>
-            <div className='md:w-1/3'>
-              <label
-                htmlFor='phone'
-                className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
-              >
-                رقم الهاتف
-              </label>
-            </div>
-            <div className='md:w-2/3'>
-              <input
-                id='phone'
-                onBlur={e => blurPhone(e.target.value)}
-                onChange={e => setPhone(e.target.value)}
-                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
-                dir='rtl'
-                type='tel'
-                placeholder='55123456'
-              />
-            </div>
-          </div>
-
-          {passError && <FormMessage error>{passError}</FormMessage>}
-          <div className='md:flex md:items-center mb-6'>
-            <div className='md:w-1/3'>
-              <label
-                htmlFor='password'
-                className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
-              >
-                كلمة المرور
-              </label>
-            </div>
-            <div className='md:w-2/3'>
-              <input
-                id='password'
-                onChange={handlePasswordChange}
-                onBlur={blurPassword}
-                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
-                type='password'
-                placeholder='******'
-              />
-            </div>
-          </div>
-
-          {passConfirmError && <FormMessage error>{passConfirmError}</FormMessage>}
-          <div className='md:flex md:items-center mb-6'>
-            <div className='md:w-1/3'>
-              <label
-                htmlFor='confirmPassword'
-                className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
-              >
-                التأكد من كلمة المرور
-              </label>
-            </div>
-            <div className='md:w-2/3'>
-              <input
-                id='confirmPassword'
-                onChange={handleConfirmPasswordChange}
-                onBlur={blurConfrimPassword}
-                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
-                type='password'
-                placeholder='******'
-              />
-            </div>
-          </div>
-
-          {fileError && <FormMessage error>{fileError}</FormMessage>}
-          <div className='md:flex md:items-center mb-6'>
-            <div className='md:w-1/3'>
-              <label
-                htmlFor='document'
-                className='block cursor-pointer text-gray-500 font-bold md:text-right mb-1 md:mb-0'
-              >
-                صورة المستند الرسمي
-              </label>
-            </div>
-            <div className='md:w-2/3'>
-              <Input
-                id='document'
-                type='file'
-                aria-label='file'
-                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 cursor-pointer'
-                onChange={handleFileChange}
-              />
-            </div>
-          </div>
-
-          {acceptedTermError && <FormMessage error>{acceptedTermError}</FormMessage>}
-          <div className='md:flex flex-col gap-2 w-full mb-6 items-start'>
-            <label
-              htmlFor='accept_termsAndPrivacy'
-              className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 cursor-pointer'
-            >
-              <Checkbox
-                id='accept_termsAndPrivacy'
-                className='ml-2'
-                onCheckedChange={(isChecked: boolean) => setAcceptedTerm(isChecked)}
-              />
-              أوافق على &nbsp;
-              <Link href='/terms' className='font-bold underline-hover'>
-                بنود الاستخدام
-              </Link>
-              &nbsp; و &nbsp;
-              <Link href='/privacy' className='font-bold underline-hover'>
-                سياسة الخصوصية
-              </Link>
-            </label>
-            <div className='md:w-1/3'></div>
-          </div>
-
-          {/* Submit Button */}
-          <div className='md:flex md:items-center'>
-            <Button
-              disabled={isDoneSubmitting}
-              type='submit'
-              className={`shadow w-full bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold${
-                isDoneSubmitting ? ' cursor-not-allowed opacity-50' : ''
-              }`}
-            >
-              {isSubmittingForm ? (
-                <>
-                  <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
-                  جاري التسجيل ...
-                </>
-              ) : isDoneSubmitting ? (
-                <>
-                  <Success />
-                  تم التسجيل يرجى تفعيل حسابك
-                </>
-              ) : (
-                'تسجيل'
-              )}
-            </Button>
-          </div>
-        </form>
-      </CardWrapper>
-    </section>
+          </form>
+        </CardWrapper>
+      </section>
+    </Layout>
   )
 }
 

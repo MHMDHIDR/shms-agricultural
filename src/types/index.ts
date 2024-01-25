@@ -11,6 +11,7 @@ export type UserProps = {
   shms_email: string
   shms_password?: string
   shms_phone?: string
+  shms_address?: string
   shms_doc?: string
   shms_created_at?: string
   shms_user_account_type?: 'admin' | 'user'
