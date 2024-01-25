@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils'
 import useEventListener from '@/hooks/useEventListener'
 import { APP_URL } from '@/data/constants'
 import { MenuItemsProps } from '@/types'
+import { ShmsIcon } from '../icons/Socials'
 
 export default function Nav() {
   const { status, data: session } = useSession()
@@ -66,7 +67,7 @@ export default function Nav() {
 
   return (
     <header
-      className={`container py-2 rtl h-auto w-full top-0 left-0 bg-gray-100 dark:bg-gray-800 z-[100] ${
+      className={`container py-2 rtl h-auto w-full top-0 left-0 bg-gray-100 dark:bg-gray-900 z-[100] ${
         sticky
           ? 'fixed w-screen min-w-full animate-slidedown border-b md:py-0 border-white border-opacity-20 dark:bg-opacity-30 bg-opacity-70 backdrop-blur backdrop-filter'
           : 'absolute min-w-full'
@@ -76,14 +77,7 @@ export default function Nav() {
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />
         {/* شعار الموقع */}
         <Link href={'/'} onClick={() => setIsOpen(false)}>
-          <Image
-            src='/logo-slogan.svg'
-            priority={true}
-            width={150}
-            height={50}
-            alt='شمس الزراعية'
-            className={`rounded-full ${sticky ? 'w-20 h-20' : 'w-24 h-24'}`}
-          />
+          <ShmsIcon className={sticky ? 'w-20 h-20' : 'w-24 h-24 ml-10'} />
         </Link>
         {onMobileScreen ? (
           <MobileNavigation setIsOpen={setIsOpen} isOpen={isOpen} MenuItems={MenuItems} />
