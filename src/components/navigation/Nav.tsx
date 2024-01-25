@@ -72,7 +72,7 @@ export default function Nav() {
           : 'absolute min-w-full'
       }`}
     >
-      <NavigationMenu className='md:flex max-w-full justify-start w-full'>
+      <NavigationMenu className='md:flex max-w-full justify-start items-center w-full rtl'>
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />
         {/* شعار الموقع */}
         <Link href={'/'}>
@@ -85,7 +85,9 @@ export default function Nav() {
             className={`rounded-full ${sticky ? 'w-20 h-20' : 'w-24 h-24'}`}
           />
         </Link>
-        {!onMobileScreen ? (
+        {onMobileScreen ? (
+          <MobileNavigation isOpen={isOpen} MenuItems={MenuItems} />
+        ) : (
           <NavigationMenuList
             className={`fixed left-0 h-screen w-screen min-w-[100vw] items-end md:items-center justify-end flex-col-reverse flex-wrap gap-x-3 transition-all duration-200 pointer-events-none
            md:static md:h-fit md:w-fit md:translate-y-0 md:pointer-events-auto md:flex-row ${
@@ -175,8 +177,6 @@ export default function Nav() {
               </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
-        ) : (
-          <MobileNavigation isOpen={isOpen} MenuItems={MenuItems} />
         )}
       </NavigationMenu>
     </header>

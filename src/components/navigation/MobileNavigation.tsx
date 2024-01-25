@@ -10,23 +10,25 @@ import { APP_URL } from '@/data/constants'
 import { LogOut } from 'lucide-react'
 import Link from 'next/link'
 import { MenuItemsProps } from '@/types'
+import { cn } from '@/lib/utils'
 
 export default function MobileNavigation({
   isOpen,
-  MenuItems
+  MenuItems,
+  className
 }: {
   isOpen: boolean
   MenuItems: MenuItemsProps
+  className?: string
 }) {
   const { status, data: session } = useSession()
-
   const isAuth = status === 'authenticated' ? true : false
 
   return (
     <Accordion
       type='single'
       collapsible
-      className={`w-full rtl ${isOpen ? 'block' : 'hidden'}`}
+      className={cn(`w-full transition rtl ${isOpen ? 'block' : 'hidden'}`, className)}
     >
       <AccordionItem value='item-1'>
         <AccordionTrigger>عن شمس</AccordionTrigger>
