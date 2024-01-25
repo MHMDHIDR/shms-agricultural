@@ -1,17 +1,24 @@
 'use cleint'
 
+import { cn } from '@/lib/utils'
+
 export function MenuToggler({
   setIsOpen,
-  isOpen
+  isOpen,
+  position = 'left'
 }: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
   isOpen: boolean
+  position?: string
 }) {
   return (
     <>
       {/* Nav toggler */}
       <input
-        className={`absolute left-0 top-6 md:pointer-events-none opacity-0 cursor-pointer w-10 h-10 z-20`}
+        className={cn(
+          `absolute left-0 top-6 md:pointer-events-none opacity-0 cursor-pointer w-10 h-10 z-20`,
+          position
+        )}
         type='checkbox'
         aria-label='Navigation Menu'
         title='Navigation Menu'
@@ -20,7 +27,10 @@ export function MenuToggler({
       />
       <svg
         xmlns='http://www.w3.org/2000/svg'
-        className={`absolute left-0 top-6 w-10 h-10 md:hidden transition-colors stroke-gray-800 dark:stroke-white z-10`}
+        className={cn(
+          `absolute left-0 top-6 w-10 h-10 md:hidden transition-colors stroke-gray-800 dark:stroke-white z-10`,
+          position
+        )}
         viewBox='0 0 24 24'
       >
         <path

@@ -75,7 +75,7 @@ export default function Nav() {
       <NavigationMenu className='md:flex max-w-full justify-start items-center w-full rtl'>
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />
         {/* شعار الموقع */}
-        <Link href={'/'}>
+        <Link href={'/'} onClick={() => setIsOpen(false)}>
           <Image
             src='/logo-slogan.svg'
             priority={true}
@@ -86,7 +86,7 @@ export default function Nav() {
           />
         </Link>
         {onMobileScreen ? (
-          <MobileNavigation isOpen={isOpen} MenuItems={MenuItems} />
+          <MobileNavigation setIsOpen={setIsOpen} isOpen={isOpen} MenuItems={MenuItems} />
         ) : (
           <NavigationMenuList
             className={`fixed left-0 h-screen w-screen min-w-[100vw] items-end md:items-center justify-end flex-col-reverse flex-wrap gap-x-3 transition-all duration-200 pointer-events-none

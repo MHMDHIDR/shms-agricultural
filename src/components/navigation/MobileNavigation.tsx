@@ -14,10 +14,12 @@ import { cn } from '@/lib/utils'
 
 export default function MobileNavigation({
   isOpen,
+  setIsOpen,
   MenuItems,
   className
 }: {
   isOpen: boolean
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
   MenuItems: MenuItemsProps
   className?: string
 }) {
@@ -34,14 +36,23 @@ export default function MobileNavigation({
         <AccordionTrigger>عن شمس</AccordionTrigger>
         <AccordionContent>
           <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
-            <NavigationListItem href='/about' title='عن شمس'></NavigationListItem>
-            <NavigationListItem href='/contact' title='تواصل معنا'></NavigationListItem>
+            <NavigationListItem
+              href='/about'
+              title='عن شمس'
+              onClick={() => setIsOpen(open => !open)}
+            ></NavigationListItem>
+            <NavigationListItem
+              href='/contact'
+              title='تواصل معنا'
+              onClick={() => setIsOpen(open => !open)}
+            ></NavigationListItem>
             <NavigationMenuLink asChild>
               <div className={isAuth ? `flex items-center justify-between` : ``}>
                 <NavigationListItem
                   className={isAuth ? `w-1/2 text-center` : `w-full`}
                   href={isAuth ? `/profile` : `/auth/signin`}
                   title={isAuth ? session?.user?.name ?? 'حسابي' : `تسجيل الدخول`}
+                  onClick={() => setIsOpen(open => !open)}
                 ></NavigationListItem>
                 {isAuth && (
                   <NavigationListItem className='cursor-pointer w-full'>
@@ -68,7 +79,7 @@ export default function MobileNavigation({
       </AccordionItem>
       <AccordionItem value='item-2'>
         <AccordionTrigger isDropDown={false}>
-          <Link href='/projects' legacyBehavior passHref>
+          <Link href='/projects' onClick={() => setIsOpen(open => !open)} passHref>
             المشاريع الزراعية
           </Link>
         </AccordionTrigger>
