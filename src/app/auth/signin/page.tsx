@@ -14,6 +14,7 @@ import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Button } from '@/components/ui/button'
 import { Error, Success } from '@/components/icons/Status'
 import FormMessage from '@/components/custom/FormMessage'
+import { getAuth } from '@/lib/auth'
 
 const SigninPage = () => {
   // Form States
@@ -95,6 +96,12 @@ const SigninPage = () => {
             }
           })
         } else {
+          // check is auth from useSession
+          const { userType, loading } = await getAuth()
+          loading ? setIsDoneSubmitting(false) : setIsDoneSubmitting(true)
+
+          const REDIRECT_TO = redirectUrl ?? userType === 'admin' ? '/dashboard' : '/'
+
           toast('تم تسجيل دخولك بنجاح', {
             icon: <Success />,
             position: 'bottom-center',
@@ -108,11 +115,8 @@ const SigninPage = () => {
               textAlign: 'justify'
             }
           })
-
-          setIsDoneSubmitting(true)
-
           //redirect to the home page if sign in successfully
-          setTimeout(() => replace(redirectUrl ?? `/profile`), DEFAULT_DURATION / 2)
+          setTimeout(() => replace(REDIRECT_TO), DEFAULT_DURATION / 2)
         }
       } catch (error: any) {
         const message: UserProps['message'] =

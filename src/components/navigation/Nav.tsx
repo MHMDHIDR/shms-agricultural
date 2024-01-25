@@ -107,16 +107,16 @@ export default function Nav() {
                         title={isAuth ? session?.user?.name ?? 'حسابي' : `تسجيل الدخول`}
                       ></NavigationListItem>
                       {isAuth && (
-                        <NavigationListItem className='cursor-pointer w-full'>
-                          <button
-                            className='flex gap-2 md:gap-1 items-center justify-center min-w-fit'
-                            onClick={async () =>
-                              await signOut({
-                                redirect: true,
-                                callbackUrl: APP_URL ?? '/'
-                              })
-                            }
-                          >
+                        <NavigationListItem
+                          className='cursor-pointer w-full'
+                          onClick={async () =>
+                            await signOut({
+                              redirect: true,
+                              callbackUrl: APP_URL ?? '/'
+                            })
+                          }
+                        >
+                          <button className='flex gap-2 md:gap-1 items-center justify-center min-w-fit'>
                             <LogOut className='text-[#FDB813]' />
                             <span className='hidden md:inline-block min-w-fit'>
                               تسجيل الخروج
