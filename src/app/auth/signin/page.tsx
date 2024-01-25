@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { DEFAULT_DURATION } from '@/data/constants'
+import { getAuth } from '@/lib/actions/auth'
 import { validatePasswordStrength } from '@/lib/utils'
 import type { UserProps } from '@/types'
 
@@ -14,7 +15,6 @@ import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Button } from '@/components/ui/button'
 import { Error, Success } from '@/components/icons/Status'
 import FormMessage from '@/components/custom/FormMessage'
-import { getAuth } from '@/lib/auth'
 
 const SigninPage = () => {
   // Form States

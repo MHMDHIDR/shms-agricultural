@@ -1,14 +1,11 @@
 import { Button } from '@/components/ui/button'
+import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
-  title: 'الصفحة غير موجودة! - شمس | للخدمات الزراعية',
-  description:
-    'Shms Agricultural is an Agriculture Platform for Sudanese Farming Investors and Farmers.'
-}
+export const metadata: Metadata = { title: APP_TITLE, description: APP_DESCRIPTION }
 
-export default function Home() {
+export default function NotFound() {
   return (
     <main className='fixed inset-0 z-[10000] select-none pointer-events-auto'>
       <div className='w-full h-3/4 bg-yellow-300'></div>
