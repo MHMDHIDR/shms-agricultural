@@ -80,7 +80,7 @@ export default function MobileNavigation({
       <AccordionItem value='item-2'>
         <AccordionTrigger isDropDown={false}>
           <Link href='/projects' onClick={() => setIsOpen(open => !open)} passHref>
-            المشاريع الزراعية
+            المشاريع الاستثمارية
           </Link>
         </AccordionTrigger>
       </AccordionItem>

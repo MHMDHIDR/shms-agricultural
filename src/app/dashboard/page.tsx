@@ -12,13 +12,13 @@ export default function DashboardPage() {
         <Tabs style={{ width: '100%' }} defaultValue='view' className='w-[400px] mt-10'>
           <TabsList className='grid w-full grid-cols-3 space-x-4'>
             <TabsTrigger style={{ borderWidth: 1, borderColor: 'gray' }} value='view'>
-              المشاريع
-            </TabsTrigger>
-            <TabsTrigger style={{ borderWidth: 1, borderColor: 'gray' }} value='view'>
               الاحصائيات
             </TabsTrigger>
             <TabsTrigger style={{ borderWidth: 1, borderColor: 'gray' }} value='actions'>
-              العمليات
+              المستثمرين
+            </TabsTrigger>
+            <TabsTrigger style={{ borderWidth: 1, borderColor: 'gray' }} value='users'>
+              المستخدمين
             </TabsTrigger>
           </TabsList>
 

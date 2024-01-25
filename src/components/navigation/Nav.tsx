@@ -130,13 +130,13 @@ export default function Nav() {
               </NavigationMenuContent>
             </NavigationMenuItem>
 
-            {/* المشاريع الزراعية */}
+            {/* المشاريع الاستثمارية */}
             <NavigationMenuItem>
               <Link href='/projects' legacyBehavior passHref>
                 <NavigationMenuLink
                   className={cn(navigationMenuTriggerStyle(), `pr-6 md:pr-4`)}
                 >
-                  المشاريع الزراعية
+                  المشاريع الاستثمارية
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
