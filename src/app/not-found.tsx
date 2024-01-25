@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: APP_TITLE, description: APP_DESCRIPTI
 
 export default function NotFound() {
   return (
-    <main className='fixed inset-0 z-[10000] select-none pointer-events-auto'>
+    <section className='fixed inset-0 z-[10000] select-none pointer-events-auto min-h-svh h-screen'>
       <div className='w-full h-3/4 bg-yellow-300'></div>
       <div className='flex justify-evenly relative w-full h-1/3 bg-yellow-400'>
         <div className='maceta-central left-[5.65rem]'>
@@ -89,6 +89,6 @@ export default function NotFound() {
           <Link href='/'>العودة للصفحة الرئيسية</Link>
         </Button>
       </div>
-    </main>
+    </section>
   )
 }

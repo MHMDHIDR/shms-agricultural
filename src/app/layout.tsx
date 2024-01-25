@@ -1,7 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { Cairo as FontSans } from 'next/font/google'
 import { cn } from '@/lib/utils'
-import Nav from '@/components/navigation/Nav'
 import { Toaster } from '@/components/ui/sonner'
 import SessionProvider from '@/providers/SessionProvider'
 import { ThemeProvider } from '@/providers/ThemeProvider'
@@ -27,7 +26,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       >
         <SessionProvider session={session}>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-            <Nav />
             <main className='mt-20'>{children}</main>
             <Toaster />
           </ThemeProvider>

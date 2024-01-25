@@ -1,3 +1,4 @@
+import Layout from '@/components/custom/Layout'
 import Slider from '@/components/custom/Slider'
 
 export default function Home() {
@@ -16,11 +17,11 @@ export default function Home() {
   ]
 
   return (
-    <>
+    <Layout>
       <Slider images={images} />
       <section className='flex min-h-screen flex-col items-center justify-between p-24'>
         <h1>مرحباً بكم في شمــس</h1>
       </section>
-    </>
+    </Layout>
   )
 }

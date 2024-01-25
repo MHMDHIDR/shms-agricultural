@@ -30,6 +30,7 @@ import axios from 'axios'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import FormMessage from '@/components/custom/FormMessage'
 import { revalidatePath } from 'next/cache'
+import Layout from '@/components/custom/Layout'
 
 export default function ProfilePage() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -261,7 +262,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <section>
+    <Layout>
       <CardWrapper
         heading={HEADING}
         backButtonLabel='الذهاب للصفحة الرئيسية'
@@ -423,6 +424,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </CardWrapper>
-    </section>
+    </Layout>
   )
 }
