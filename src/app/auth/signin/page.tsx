@@ -96,6 +96,7 @@ const SigninPage = () => {
               textAlign: 'justify'
             }
           })
+          setIsSubmittingForm(false)
         } else {
           // check is auth from useSession
           const { userType, loading } = await getAuth()
