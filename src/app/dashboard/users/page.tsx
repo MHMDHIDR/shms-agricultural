@@ -15,76 +15,60 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { TabsContent } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
+import axios from 'axios'
+import { API_URL, APP_LOGO } from '@/data/constants'
+import type { UserProps } from '@/types'
+import { arabicDate } from '@/lib/utils'
+import Confirm from '@/components/custom/Confirm'
+import Modal from '@/components/custom/Modal'
 
-const invoices = [
-  {
-    name: 'محمد عبدالرحيم محمد مكي',
-    date: '23/01/2024',
-    phone: '33553790',
-    email: 'mohamedabdo2381998@gmail.com',
-    status: 'نشط',
-    stocks: '5'
-  },
-  {
-    name: 'محمد حيدر الطاهر',
-    date: '23/01/2024',
-    phone: '66827303',
-    email: 'mhmdhaider227@gmail.com',
-    status: 'نشط',
-    stocks: '10'
-  },
-  {
-    name: 'محمد بشير عوض الكريم',
-    date: '23/01/2024',
-    phone: '6863638',
-    email: 'beshoo33@gmail.com',
-    status: 'نشط',
-    stocks: '50'
-  }
-]
+export default async function Users() {
+  const { data: users }: { data: UserProps[] } = await axios.get(`${API_URL}/users/all`)
 
-export default function Users() {
   return (
     <TabsContent dir='rtl' value='users'>
       <div style={{ width: '100%', display: 'flex' }}>
         <Card style={{ width: '100%' }} className='w-full md:w-[300px]'>
           <CardHeader dir='rtl'>
-            <CardTitle> المستثمرين </CardTitle>
-            <CardDescription>30</CardDescription>
+            <CardTitle> المستخدمين </CardTitle>
+            <CardDescription>{users.length ?? 0}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Table className='min-w-full divide-y divide-gray-200'>
+            <Table className='min-w-full divide-y divide-gray-200 text-center'>
               <TableHeader>
                 <TableRow>
-                  <TableHead style={{ textAlign: 'center' }}>الاسم</TableHead>
-                  <TableHead style={{ textAlign: 'center' }}>تاريخ التسجيل</TableHead>
-                  <TableHead style={{ textAlign: 'center' }}>رقم الهاتف</TableHead>
-                  <TableHead style={{ textAlign: 'center' }}>البريد الالكتروني</TableHead>
-                  <TableHead style={{ textAlign: 'center' }}>حالة المستخدم</TableHead>
-                  <TableHead style={{ textAlign: 'center' }}>عدد الاسهم</TableHead>
-                  <TableHead style={{ textAlign: 'center' }}>الاجراء</TableHead>
+                  <TableHead>الاسم</TableHead>
+                  <TableHead>تاريخ التسجيل</TableHead>
+                  <TableHead>رقم الهاتف</TableHead>
+                  <TableHead>البريد الالكتروني</TableHead>
+                  <TableHead>حالة المستخدم</TableHead>
+                  <TableHead>عدد الاسهم</TableHead>
+                  <TableHead>الاجراء</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {invoices.map(invoice => (
-                  <TableRow key={invoice.name}>
-                    <TableCell style={{ textAlign: 'center' }}>{invoice.name}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{invoice.date}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{invoice.phone}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{invoice.email}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      {invoice.status}
+                {users.map(user => (
+                  <TableRow key={user.shms_id}>
+                    <TableCell className='min-w-32'>{user.shms_fullname}</TableCell>
+                    <TableCell className='min-w-32'>
+                      {arabicDate(user.shms_created_at ?? '')}
                     </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      {invoice.stocks}
+                    <TableCell className='min-w-32'>{user.shms_phone}</TableCell>
+                    <TableCell className='min-w-32'>{user.shms_email}</TableCell>
+                    <TableCell className='min-w-32'>
+                      {user.shms_user_account_status === 'active' ? 'نشط' : 'غير نشط'}
                     </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      {' '}
-                      <Button style={{ backgroundColor: 'red', margin: 1 }}>
-                        حذف
-                      </Button>{' '}
-                      <Button style={{ margin: 1 }}>تعديل</Button>{' '}
+                    <TableCell className='min-w-32'>
+                      {user.shms_user_stocks ?? 'لم يتم شراء أسهم بعد'}
+                    </TableCell>
+                    <TableCell className='min-w-56 flex gap-x-2'>
+                      <Confirm className='bg-red-500 hover:bg-red-600'>حذف</Confirm>
+                      <Modal
+                        title={`صورة المستند ل ${user.shms_fullname}`}
+                        document={user.shms_doc ?? APP_LOGO}
+                      >
+                        عرض المستند
+                      </Modal>
                     </TableCell>
                   </TableRow>
                 ))}

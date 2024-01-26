@@ -11,7 +11,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { TabsContent } from '@/components/ui/tabs'
-import { Textarea } from '@/components/ui/textarea'
 
 export default function Projects() {
   return (
@@ -115,7 +114,11 @@ export default function Projects() {
 
           <div className='space-y-1'>
             <Label htmlFor='new'> وصف المشروع </Label>
-            <Textarea placeholder='...' />
+            <textarea
+              className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
+              placeholder='أدخل وصف المشروع'
+              rows={5}
+            />
           </div>
         </CardContent>
         <CardFooter>

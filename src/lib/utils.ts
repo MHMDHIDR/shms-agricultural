@@ -61,3 +61,19 @@ export const validateEmail = (email: string) => {
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     )
 }
+
+/**
+ *  Method That Formats Date to Locale Date String
+ * @param date  - date string to be formatted (e.g. 2021-08-01T12:00:00.000Z)
+ * @returns   - formatted date string (e.g. Sunday, 1 August 2021, 13:00:00)
+ */
+export const arabicDate = (date: string) =>
+  new Date(date).toLocaleDateString('ar-EG', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+  })

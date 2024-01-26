@@ -3,6 +3,8 @@ export const APP_TITLE = 'شمس | للخدمات الزراعية'
 export const APP_DESCRIPTION =
   'شمــس | منصة الخدمات الزراعية للمستثمرين والمزارعين السودانيين'
 
+export const APP_LOGO = 'https://shmsagricultural.com/logo-slogan.png'
+
 export const ITEMS_PER_PAGE = 5
 
 /**
