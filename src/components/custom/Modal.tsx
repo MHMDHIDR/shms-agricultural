@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import { DownloadIcon } from '@radix-ui/react-icons'
+import { saveAs } from 'file-saver'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -48,15 +51,15 @@ export default function Modal({
             height={350}
             className='rounded-lg w-full max-h-72 object-contain'
           />
-          {/* a Button to Download the Document Image */}
+
           <Button
             type='button'
             size='sm'
             className='px-3 w-32 md:w-full'
-            // onClick={() => window.open(document, '_blank')}
+            onClick={() => saveAs(document, `${title}.jpg`)}
           >
             <span className='sr-only'>تحميل مستند {title}</span>
-            <span className='w-full hidden md:inline-block'>تحميل</span>
+            <span className='w-full hidden md:inline-block'>تحميل المستند</span>
             <DownloadIcon className='h-4 w-4' />
           </Button>
         </div>

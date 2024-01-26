@@ -49,16 +49,16 @@ export default async function Users() {
               <TableBody>
                 {users.map(user => (
                   <TableRow key={user.shms_id}>
-                    <TableCell className='min-w-32'>{user.shms_fullname}</TableCell>
-                    <TableCell className='min-w-32'>
+                    <TableCell className='min-w-40'>{user.shms_fullname}</TableCell>
+                    <TableCell className='min-w-40'>
                       {arabicDate(user.shms_created_at ?? '')}
                     </TableCell>
-                    <TableCell className='min-w-32'>{user.shms_phone}</TableCell>
-                    <TableCell className='min-w-32'>{user.shms_email}</TableCell>
-                    <TableCell className='min-w-32'>
+                    <TableCell className='min-w-40'>{user.shms_phone}</TableCell>
+                    <TableCell className='min-w-40'>{user.shms_email}</TableCell>
+                    <TableCell className='min-w-40'>
                       {user.shms_user_account_status === 'active' ? 'نشط' : 'غير نشط'}
                     </TableCell>
-                    <TableCell className='min-w-32'>
+                    <TableCell className='min-w-40'>
                       {user.shms_user_stocks ?? 'لم يتم شراء أسهم بعد'}
                     </TableCell>
                     <TableCell className='min-w-56 flex gap-x-2'>

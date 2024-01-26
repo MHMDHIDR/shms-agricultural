@@ -14,7 +14,7 @@ import {
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu'
 import MobileNavigation from './MobileNavigation'
-import { LogOut } from 'lucide-react'
+import { LogOut, LogIn } from 'lucide-react'
 import { MenuToggler } from './MenuToggler'
 import { cn } from '@/lib/utils'
 import useEventListener from '@/hooks/useEventListener'
@@ -112,7 +112,10 @@ export default function Nav() {
             <div className='flex items-center gap-x-4'>
               {!isAuth ? (
                 <Link className={`w-full`} href={`/auth/signin`}>
-                  تسجيل الدخول
+                  <Button className='cursor-pointer w-full flex gap-x-2'>
+                    تسجيل الدخول
+                    <LogIn className='text-[#FDB813] dark:text-[#ffd87e]' />
+                  </Button>
                 </Link>
               ) : (
                 <NavigationMenuItem>
@@ -134,6 +137,7 @@ export default function Nav() {
                         href='/contact'
                         title='تواصل معنا'
                       ></NavigationListItem>
+
                       <Button
                         className='cursor-pointer w-full flex gap-x-2'
                         onClick={async () => {

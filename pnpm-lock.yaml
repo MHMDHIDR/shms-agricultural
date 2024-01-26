@@ -83,6 +83,9 @@ dependencies:
   embla-carousel-react:
     specifier: 8.0.0-rc20
     version: 8.0.0-rc20(react@18.2.0)
+  file-saver:
+    specifier: ^2.0.5
+    version: 2.0.5
   framer-motion:
     specifier: ^11.0.2
     version: 11.0.2(react-dom@18.2.0)(react@18.2.0)
@@ -142,6 +145,9 @@ devDependencies:
   '@types/bcryptjs':
     specifier: ^2.4.6
     version: 2.4.6
+  '@types/file-saver':
+    specifier: ^2.0.7
+    version: 2.0.7
   '@types/formidable':
     specifier: ^3.4.5
     version: 3.4.5
@@ -2649,6 +2655,10 @@ packages:
     resolution: {integrity: sha512-9xlo6R2qDs5uixm0bcIqCeMCE6HiQsIyel9KQySStiyqNl2tnj2mP3DX1Nf56MD6KMenNNlBBsy3LJ7gUEQPXQ==}
     dev: true
 
+  /@types/file-saver@2.0.7:
+    resolution: {integrity: sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==}
+    dev: true
+
   /@types/formidable@3.4.5:
     resolution: {integrity: sha512-s7YPsNVfnsng5L8sKnG/Gbb2tiwwJTY1conOkJzTMRvJAlLFW1nEua+ADsJQu8N1c0oTHx9+d5nqg10WuT9gHQ==}
     dependencies:
@@ -3822,6 +3832,10 @@ packages:
     dependencies:
       flat-cache: 3.2.0
     dev: true
+
+  /file-saver@2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
+    dev: false
 
   /fill-range@7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}

@@ -50,13 +50,9 @@ async function uploadFileToS3(
  * @returns {Promise<string>} - The signed URL
  */
 async function getSignedFileUrl(key: string, bucket: string, expiresIn: number) {
-  const command = new GetObjectCommand({
-    Bucket: bucket,
-    Key: key
-  })
+  const command = new GetObjectCommand({ Bucket: bucket, Key: key })
 
-  const url = await getSignedUrl(s3Client, command, { expiresIn })
-  return url
+  return await getSignedUrl(s3Client, command, { expiresIn })
 }
 
 export async function POST(request: any) {
@@ -74,7 +70,10 @@ export async function POST(request: any) {
       file,
       fullname ?? 'unknown'
     )
-    const fileUrl = await getSignedFileUrl(key, AWS_BUCKET_NAME!, 3600)
+
+    const fileUrl =
+      `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}` ??
+      (await getSignedFileUrl(key, AWS_BUCKET_NAME!, 3600))
 
     return new Response(fileUrl, { status: 200 })
   } catch (error: any) {

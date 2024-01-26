@@ -159,9 +159,9 @@ const SignupPage = () => {
     } else if (dateOfBirth === '') {
       resetFormErrors()
       setDateOfBirthError('الرجاء التأكد من إدخال تاريخ الميلاد')
-    } else if (address === '') {
+    } else if (address.length < 10) {
       resetFormErrors()
-      setAddressError('الرجاء التأكد من إدخال العنوان')
+      setAddressError('الرجاء التأكد من إدخال العنوان بشكل صحيح')
     } else if (!validateEmail(email)) {
       resetFormErrors()
       setEmailError('الرجاء التأكد من صحة البريد الالكتروني')
@@ -223,11 +223,10 @@ const SignupPage = () => {
 
         setTimeout(() => replace(`/`), DEFAULT_DURATION)
       } catch (error: any) {
-        alert(error)
+        console.error('Error', JSON.stringify(error))
 
-        //const message: UserProps['message'] = error?.response.data.message ?? 'حدث خطأ ما'
         //handle error, show notification using Shadcn notifcation
-        toast(error, {
+        toast(JSON.stringify(error ?? 'حدث خطأ ما'), {
           // message: old var
           icon: <Error className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
@@ -346,13 +345,11 @@ const SignupPage = () => {
                     id='thirdName'
                     onChange={e => setTName(e.target.value)}
                     onFocus={() =>
-                      // hide placeholder on focus
                       ((
                         document.getElementById('thirdName') as HTMLInputElement
                       ).placeholder = '')
                     }
                     onBlur={() =>
-                      // show placeholder on blur
                       ((
                         document.getElementById('thirdName') as HTMLInputElement
                       ).placeholder = 'محمد')
@@ -373,13 +370,11 @@ const SignupPage = () => {
                     id='lastName'
                     onChange={e => setFoName(e.target.value)}
                     onFocus={() =>
-                      // hide placeholder on focus
                       ((
                         document.getElementById('lastName') as HTMLInputElement
                       ).placeholder = '')
                     }
                     onBlur={() =>
-                      // show placeholder on blur
                       ((
                         document.getElementById('lastName') as HTMLInputElement
                       ).placeholder = 'مكي')
@@ -431,7 +426,6 @@ const SignupPage = () => {
                   onChange={e => setDateOfBirth(e.target.value)}
                   className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
                   type='date'
-                  min='1990-01-01'
                   max={
                     // todays date - 18 years
                     new Date(
@@ -460,8 +454,18 @@ const SignupPage = () => {
               <div className='md:w-2/3'>
                 <input
                   id='address'
-                  onBlur={blurAddress}
                   onChange={e => setAddress(e.target.value)}
+                  onBlur={() => {
+                    blurAddress()
+                    ;(
+                      document.getElementById('address') as HTMLInputElement
+                    ).placeholder = 'العــــنوان ...'
+                  }}
+                  onFocus={() =>
+                    ((
+                      document.getElementById('address') as HTMLInputElement
+                    ).placeholder = '')
+                  }
                   className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                   type='text'
                   placeholder='العــــنوان ...'
@@ -483,8 +487,16 @@ const SignupPage = () => {
               <div className='md:w-2/3'>
                 <input
                   id='email'
-                  onBlur={e => blurEmail(e.target.value)}
+                  onBlur={e => {
+                    blurEmail(e.target.value)
+                    ;(document.getElementById('email') as HTMLInputElement).placeholder =
+                      'example@gmail.com'
+                  }}
                   onChange={e => setEmail(e.target.value)}
+                  onFocus={() =>
+                    ((document.getElementById('email') as HTMLInputElement).placeholder =
+                      '')
+                  }
                   className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                   type='email'
                   placeholder='example@gmail.com'
@@ -506,8 +518,16 @@ const SignupPage = () => {
               <div className='md:w-2/3'>
                 <input
                   id='phone'
-                  onBlur={e => blurPhone(e.target.value)}
+                  onBlur={e => {
+                    blurPhone(e.target.value)
+                    ;(document.getElementById('phone') as HTMLInputElement).placeholder =
+                      '55123456'
+                  }}
                   onChange={e => setPhone(e.target.value)}
+                  onFocus={() =>
+                    ((document.getElementById('phone') as HTMLInputElement).placeholder =
+                      '')
+                  }
                   className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                   dir='rtl'
                   type='tel'
