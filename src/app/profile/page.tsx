@@ -271,7 +271,7 @@ export default function ProfilePage() {
         <div className='flex flex-col items-center justify-center'>
           <Button
             asChild
-            className='shadow mt-14 w-96 min-w-56 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold'
+            className='shadow w-96 min-w-56 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold'
           >
             <Link href='/projects'>الذهاب إلـــى المشاريع</Link>
           </Button>

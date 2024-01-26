@@ -6,7 +6,6 @@ import {
 } from '@/components/ui/accordion'
 import { NavigationListItem } from '../ui/navigation-menu'
 import { signOut, useSession } from 'next-auth/react'
-import { APP_URL } from '@/data/constants'
 import { LogOut } from 'lucide-react'
 import Link from 'next/link'
 import { MenuItemsProps } from '@/types'
@@ -86,7 +85,7 @@ export default function MobileNavigation({
           </Link>
         ) : null}
         <Link
-          className={isAuth ? `w-1/2 text-center` : `w-full`}
+          className={`py-2 ${isAuth ? `w-1/2 text-center` : `w-full`}`}
           href={isAuth ? `/profile` : `/auth/signin`}
         >
           {isAuth ? 'حسابي' : `تسجيل الدخول`}
@@ -95,11 +94,11 @@ export default function MobileNavigation({
           <Button
             className='flex gap-2 md:gap-1 items-center justify-center'
             onClick={async () =>
-              await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
+              await signOut({ redirect: true, callbackUrl: '/auth/signin' })
             }
           >
             <LogOut className='text-[#FDB813]' />
-            <span className='inline-block md:hidden'>تسجيل الخروج</span>
+            <span className='inline-block md:hidden'>تسجيل XXX</span>
           </Button>
         )}
       </div>

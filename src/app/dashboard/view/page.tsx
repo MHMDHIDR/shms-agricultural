@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -78,7 +77,6 @@ export default function DashboardView() {
           </CardHeader>
           <CardContent>
             <Table className='min-w-full divide-y divide-gray-200'>
-              <TableCaption>A list of your recent invoices.</TableCaption>
               <TableHeader>
                 <TableRow>
                   <TableHead style={{ textAlign: 'center' }}>الاسم</TableHead>

@@ -1,32 +1,37 @@
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import DashboardView from './view/page'
-import DashboardActions from './actions/page'
-
+import DashboardStocks from './stocks/page'
 import Users from './users/page'
+import Projects from './projects/page'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Layout from '@/components/custom/Layout'
 
 export default function DashboardPage() {
   return (
     <Layout>
       <main className='flex min-h-screen flex-col items-center justify-between p-4 sm:p-8 md:p-16 lg:p-24'>
-        <Tabs style={{ width: '100%' }} defaultValue='view' className='w-[400px] mt-10'>
-          <TabsList className='grid w-full grid-cols-3 space-x-4'>
-            <TabsTrigger style={{ borderWidth: 1, borderColor: 'gray' }} value='view'>
-              الاحصائيات
+        <Tabs defaultValue='view' className='w-full mt-16'>
+          <TabsList className='grid w-full grid-cols-2 sm:grid-cols-4 gap-2 space-x-4 mb-10 md:mb-0'>
+            <TabsTrigger className='border border-gray-300' value='view'>
+              احصائيات
             </TabsTrigger>
-            <TabsTrigger style={{ borderWidth: 1, borderColor: 'gray' }} value='actions'>
-              المستثمرين
+            <TabsTrigger className='border border-gray-300' value='stocks'>
+              الأسهم
             </TabsTrigger>
-            <TabsTrigger style={{ borderWidth: 1, borderColor: 'gray' }} value='users'>
-              المستخدمين
+            <TabsTrigger className='border border-gray-300' value='users'>
+              جدول المستخدمين
+            </TabsTrigger>
+            <TabsTrigger className='border border-gray-300' value='projects'>
+              المشاريع
             </TabsTrigger>
           </TabsList>
 
           <DashboardView />
 
-          <DashboardActions />
+          <DashboardStocks />
 
           <Users />
+
+          <Projects />
         </Tabs>
       </main>
     </Layout>

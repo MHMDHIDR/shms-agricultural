@@ -18,7 +18,6 @@ import { LogOut } from 'lucide-react'
 import { MenuToggler } from './MenuToggler'
 import { cn } from '@/lib/utils'
 import useEventListener from '@/hooks/useEventListener'
-import { APP_URL } from '@/data/constants'
 import { ShmsIcon } from '../icons/Socials'
 import { getAuth } from '@/lib/actions/auth'
 import { Button } from '../ui/button'
@@ -113,7 +112,7 @@ export default function Nav() {
                 <Button
                   className='cursor-pointer w-full'
                   onClick={async () =>
-                    await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
+                    await signOut({ redirect: true, callbackUrl: '/auth/signin' })
                   }
                 >
                   <div className='flex gap-2 md:gap-1 items-center justify-center min-w-fit'>
