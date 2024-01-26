@@ -64,7 +64,7 @@ export default async function Users() {
                     <TableCell className='min-w-56 flex gap-x-2'>
                       <Confirm className='bg-red-500 hover:bg-red-600'>حذف</Confirm>
                       <Modal
-                        title={`صورة المستند ل ${user.shms_fullname}`}
+                        title={`صورة المستند لــ ${user.shms_fullname}`}
                         document={user.shms_doc ?? APP_LOGO}
                       >
                         عرض المستند

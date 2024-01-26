@@ -1,5 +1,3 @@
-'use client'
-
 import Image from 'next/image'
 import { DownloadIcon } from '@radix-ui/react-icons'
 
@@ -37,19 +35,19 @@ export default function Modal({
       </DialogTrigger>
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className='text-green-600 text-center select-none font-bold'>
+            {title}
+          </DialogTitle>
           <DialogDescription>{description ?? ''}</DialogDescription>
         </DialogHeader>
-        <div className='flex flex-col items-center space-x-2'>
-          <div className='grid flex-1 gap-2'>
-            <Image
-              src={document ?? APP_LOGO}
-              alt={description ?? title}
-              width={350}
-              height={350}
-              className='rounded-lg w-full'
-            />
-          </div>
+        <div className='flex flex-col items-center gap-y-6'>
+          <Image
+            src={document ?? APP_LOGO}
+            alt={description ?? title}
+            width={350}
+            height={350}
+            className='rounded-lg w-full max-h-72 object-contain'
+          />
           {/* a Button to Download the Document Image */}
           <Button
             type='button'
