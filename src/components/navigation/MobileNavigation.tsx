@@ -98,7 +98,7 @@ export default function MobileNavigation({
             }
           >
             <LogOut className='text-[#FDB813]' />
-            <span className='inline-block md:hidden'>تسجيل XXX</span>
+            <span className='inline-block md:hidden'>تسجيل الخروج</span>
           </Button>
         )}
       </div>
