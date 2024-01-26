@@ -223,9 +223,12 @@ const SignupPage = () => {
 
         setTimeout(() => replace(`/`), DEFAULT_DURATION)
       } catch (error: any) {
-        const message: UserProps['message'] = error?.response.data.message ?? 'حدث خطأ ما'
+        alert(error)
+
+        //const message: UserProps['message'] = error?.response.data.message ?? 'حدث خطأ ما'
         //handle error, show notification using Shadcn notifcation
-        toast(message, {
+        toast(error, {
+          // message: old var
           icon: <Error className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
           className: 'text-right select-none rtl',
