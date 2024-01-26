@@ -21,6 +21,7 @@ import useEventListener from '@/hooks/useEventListener'
 import { APP_URL } from '@/data/constants'
 import { ShmsIcon } from '../icons/Socials'
 import type { MenuItemsProps, UserLoggedInProps } from '@/types'
+import { getAuth } from '@/lib/actions/auth'
 
 export default function Nav() {
   const {
@@ -33,6 +34,7 @@ export default function Nav() {
   const [isOpen, setIsOpen] = useState(false)
   const [sticky, setSticky] = useState(false)
   const [onMobileScreen, setOnMobileScreen] = useState(false)
+  const [isUserAdmin, setIsUserAdmin] = useState(false)
 
   // عناصر القائمة
   const MenuItems: MenuItemsProps = [
@@ -62,6 +64,15 @@ export default function Nav() {
 
   const WINDOW_WIDTH = typeof window !== 'undefined' ? window.innerWidth : 0
   const MOBILE_SCREEN = 768
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const { userType, loading } = await getAuth()
+      if (loading) return
+      setIsUserAdmin(userType === 'admin')
+    }
+    getUserData()
+  }, [])
 
   useEffect(() => {
     setOnMobileScreen(WINDOW_WIDTH < MOBILE_SCREEN)
