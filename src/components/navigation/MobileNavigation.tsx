@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { MenuItemsProps } from '@/types'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
+import { useRouter } from 'next/navigation'
 
 export default function MobileNavigation({
   isOpen,
@@ -93,9 +94,10 @@ export default function MobileNavigation({
         {isAuth && (
           <Button
             className='flex gap-2 md:gap-1 items-center justify-center'
-            onClick={async () =>
-              await signOut({ redirect: true, callbackUrl: '/auth/signin' })
-            }
+            onClick={async () => {
+              await signOut()
+              useRouter().push('/auth/signin')
+            }}
           >
             <LogOut className='text-[#FDB813]' />
             <span className='inline-block md:hidden'>تسجيل الخروج</span>

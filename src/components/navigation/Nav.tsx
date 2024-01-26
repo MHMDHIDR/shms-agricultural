@@ -22,6 +22,7 @@ import { ShmsIcon } from '../icons/Socials'
 import { getAuth } from '@/lib/actions/auth'
 import { Button } from '../ui/button'
 import type { MenuItemsProps, UserLoggedInProps } from '@/types'
+import { useRouter } from 'next/navigation'
 
 export default function Nav() {
   const { status }: { status: SessionContextValue['status']; data: UserLoggedInProps } =
@@ -111,9 +112,10 @@ export default function Nav() {
               {isAuth && (
                 <Button
                   className='cursor-pointer w-full'
-                  onClick={async () =>
-                    await signOut({ redirect: true, callbackUrl: '/auth/signin' })
-                  }
+                  onClick={async () => {
+                    await signOut()
+                    useRouter().push('/auth/signin')
+                  }}
                 >
                   <div className='flex gap-2 md:gap-1 items-center justify-center min-w-fit'>
                     <LogOut className='text-[#FDB813]' />
