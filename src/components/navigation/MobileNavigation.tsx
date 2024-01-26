@@ -97,7 +97,7 @@ export default function MobileNavigation({
           <Button
             className='flex gap-2 md:gap-1 items-center justify-center'
             onClick={async () => {
-              await signOut()
+              await signOut({ redirect: false })
               push('/auth/signin')
             }}
           >

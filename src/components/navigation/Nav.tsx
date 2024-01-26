@@ -110,31 +110,48 @@ export default function Nav() {
           >
             {/* تسجيل الدخول */}
             <div className='flex items-center gap-x-4'>
-              {isAuth && (
-                <Button
-                  className='cursor-pointer w-full'
-                  onClick={async () => {
-                    await signOut()
-                    push('/auth/signin')
-                  }}
-                >
-                  <div className='flex gap-2 md:gap-1 items-center justify-center min-w-fit'>
-                    <LogOut className='text-[#FDB813]' />
-                    <span className='hidden md:inline-block min-w-fit'>تسجيل الخروج</span>
-                  </div>
-                </Button>
-              )}
-              <Link
-                className={isAuth ? `w-1/2 text-center` : `w-full`}
-                href={isAuth ? `/profile` : `/auth/signin`}
-              >
-                {isAuth ? 'حسابي' : `تسجيل الدخول`}
-              </Link>
-              {isUserAdmin ? (
-                <Link className={`w-full text-center`} href={`/dashboard`}>
-                  لوحة التحكم
+              {!isAuth ? (
+                <Link className={`w-full`} href={`/auth/signin`}>
+                  تسجيل الدخول
                 </Link>
-              ) : null}
+              ) : (
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>حسابي</NavigationMenuTrigger>
+                  <NavigationMenuContent className='rtl'>
+                    <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
+                      <NavigationListItem
+                        href='/profile'
+                        title='الملف الشخصي'
+                      ></NavigationListItem>
+                      {isUserAdmin ? (
+                        <NavigationListItem
+                          className={`w-full`}
+                          href='/dashboard'
+                          title='لوحة التحكم'
+                        ></NavigationListItem>
+                      ) : null}
+                      <NavigationListItem
+                        href='/contact'
+                        title='تواصل معنا'
+                      ></NavigationListItem>
+                      <NavigationListItem>
+                        <Button
+                          className='cursor-pointer w-full flex gap-x-2'
+                          onClick={async () => {
+                            await signOut({ redirect: false })
+                            push('/auth/signin')
+                          }}
+                        >
+                          <LogOut className='text-[#FDB813]' />
+                          <span className='hidden md:inline-block min-w-fit'>
+                            تسجيل الخروج
+                          </span>
+                        </Button>
+                      </NavigationListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              )}
             </div>
 
             {/* عن شمس */}

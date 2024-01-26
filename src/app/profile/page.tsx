@@ -184,13 +184,13 @@ export default function ProfilePage() {
     // don't refresh the page
     e.preventDefault()
 
-    if (email === '') {
+    if (email === '' && email === currentEmail) {
       setEmailError('الرجاء إدخال بريد الكتروني جديد')
       return
-    } else if (!validateEmail(email)) {
+    } else if (!validateEmail(email) && email === currentEmail) {
       setEmailError('الرجاء إدخال بريد الكتروني صحيح')
       return
-    } else {
+    } else if (validateEmail(email) && email !== currentEmail) {
       try {
         resetFormErrors()
         setIsSubmittingEmailForm(true)
