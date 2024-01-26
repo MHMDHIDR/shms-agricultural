@@ -29,7 +29,7 @@ export default function Nav() {
     useSession()
 
   const isAuth = status === 'authenticated' ? true : false
-  const { replace } = useRouter()
+  const { push } = useRouter()
 
   const [isOpen, setIsOpen] = useState(false)
   const [sticky, setSticky] = useState(false)
@@ -115,7 +115,7 @@ export default function Nav() {
                   className='cursor-pointer w-full'
                   onClick={async () => {
                     await signOut()
-                    replace('/auth/signin')
+                    push('/auth/signin')
                   }}
                 >
                   <div className='flex gap-2 md:gap-1 items-center justify-center min-w-fit'>
