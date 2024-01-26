@@ -79,7 +79,7 @@ export default function Nav() {
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />
         {/* شعار الموقع */}
         <Link href={'/'} onClick={() => setIsOpen(false)}>
-          <ShmsIcon className={sticky ? 'w-20 h-20' : 'w-24 h-24 ml-10'} />
+          <ShmsIcon className={`ml-10 ${sticky ? 'w-20 h-20' : 'w-24 h-24'}`} />
         </Link>
         {onMobileScreen ? (
           <MobileNavigation setIsOpen={setIsOpen} isOpen={isOpen} MenuItems={MenuItems} />
