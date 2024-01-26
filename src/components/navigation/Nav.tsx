@@ -29,7 +29,7 @@ export default function Nav() {
     useSession()
 
   const isAuth = status === 'authenticated' ? true : false
-  const { push } = useRouter()
+  const { replace } = useRouter()
 
   const [isOpen, setIsOpen] = useState(false)
   const [sticky, setSticky] = useState(false)
@@ -134,20 +134,18 @@ export default function Nav() {
                         href='/contact'
                         title='تواصل معنا'
                       ></NavigationListItem>
-                      <NavigationListItem>
-                        <Button
-                          className='cursor-pointer w-full flex gap-x-2'
-                          onClick={async () => {
-                            await signOut({ redirect: false })
-                            push('/auth/signin')
-                          }}
-                        >
-                          <LogOut className='text-[#FDB813]' />
-                          <span className='hidden md:inline-block min-w-fit'>
-                            تسجيل الخروج
-                          </span>
-                        </Button>
-                      </NavigationListItem>
+                      <Button
+                        className='cursor-pointer w-full flex gap-x-2'
+                        onClick={async () => {
+                          await signOut({ redirect: false })
+                          replace('/auth/signin')
+                        }}
+                      >
+                        <LogOut className='text-[#FDB813] dark:text-[#ffd87e]' />
+                        <span className='hidden md:inline-block min-w-fit text-white dark:text-black'>
+                          تسجيل الخروج
+                        </span>
+                      </Button>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>

@@ -29,7 +29,7 @@ export default function MobileNavigation({
   const { status } = useSession()
   const isAuth = status === 'authenticated' ? true : false
 
-  const { push } = useRouter()
+  const { replace } = useRouter()
 
   return (
     <Accordion
@@ -98,11 +98,13 @@ export default function MobileNavigation({
             className='flex gap-2 md:gap-1 items-center justify-center'
             onClick={async () => {
               await signOut({ redirect: false })
-              push('/auth/signin')
+              replace('/auth/signin')
             }}
           >
-            <LogOut className='text-[#FDB813]' />
-            <span className='inline-block md:hidden'>تسجيل الخروج</span>
+            <LogOut className='text-[#FDB813] dark:text-[#ffd87e]' />
+            <span className='inline-block md:hidden text-white dark:text-black'>
+              تسجيل الخروج
+            </span>
           </Button>
         )}
       </div>
