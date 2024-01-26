@@ -7,6 +7,8 @@ export const APP_LOGO = 'https://shmsagricultural.com/logo-slogan.png'
 
 export const ITEMS_PER_PAGE = 5
 
+export const FILE_UPLOAD_IMG_SIZE = 122
+
 /**
  * @description الوفت الافتراضي لإخفاء رسالة التنبيه بعد ظهورها = 5 ثواني
  */

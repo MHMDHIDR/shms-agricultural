@@ -86,7 +86,7 @@ export default function Nav() {
           : 'absolute min-w-full'
       }`}
     >
-      <NavigationMenu className='md:flex max-w-full justify-start items-center w-full rtl'>
+      <NavigationMenu className='items-center justify-start w-full max-w-full md:flex rtl'>
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />
         {/* شعار الموقع */}
         <Link href={'/'} onClick={() => setIsOpen(false)}>
@@ -112,7 +112,7 @@ export default function Nav() {
             <div className='flex items-center gap-x-4'>
               {!isAuth ? (
                 <Link className={`w-full`} href={`/auth/signin`}>
-                  <Button className='cursor-pointer w-full flex gap-x-2'>
+                  <Button className='flex w-full cursor-pointer gap-x-2'>
                     تسجيل الدخول
                     <LogIn className='text-[#FDB813] dark:text-[#ffd87e]' />
                   </Button>
@@ -139,14 +139,14 @@ export default function Nav() {
                       ></NavigationListItem>
 
                       <Button
-                        className='cursor-pointer w-full flex gap-x-2'
+                        className='flex w-full cursor-pointer gap-x-2'
                         onClick={async () => {
                           await signOut({ redirect: false })
                           replace('/auth/signin')
                         }}
                       >
                         <LogOut className='text-[#FDB813] dark:text-[#ffd87e]' />
-                        <span className='hidden md:inline-block min-w-fit text-white dark:text-black'>
+                        <span className='hidden text-white md:inline-block min-w-fit dark:text-black'>
                           تسجيل الخروج
                         </span>
                       </Button>

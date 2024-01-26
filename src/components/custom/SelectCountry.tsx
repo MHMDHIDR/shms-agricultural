@@ -39,12 +39,12 @@ export default function SelectCountry({
           {nationality
             ? countryNames.find(countryName => countryName.label === nationality)?.label
             : placeholder}
-          <CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+          <CaretSortIcon className='w-4 h-4 ml-2 opacity-50 shrink-0' />
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-full p-0 rtl'>
         <Command>
-          <CommandInput placeholder='إبحث عن الجنسية' className='h-9 px-4' />
+          <CommandInput placeholder='إبحث عن الجنسية' className='px-4 h-9' />
           <CommandEmpty>عفواً لم يتم العثور على البلد</CommandEmpty>
           <CommandGroup>
             {countryNames.map(countryName => (

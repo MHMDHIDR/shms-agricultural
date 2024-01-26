@@ -1,5 +1,5 @@
 'use client'
-import * as React from 'react'
+
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -11,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { TabsContent } from '@/components/ui/tabs'
+import FileUpload from '@/components/custom/FileUpload'
 
 export default function Projects() {
   return (
@@ -20,9 +21,18 @@ export default function Projects() {
           <CardTitle>اضافة مشروع جديد</CardTitle>
         </CardHeader>
         <CardContent className='space-y-2'>
-          <div className='space-y-1'>
-            <Label htmlFor='current'> صور المشروع </Label>
-            <div>مكان رفع الصور</div>
+          <div className='grid grid-cols-2 grid-rows-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+            <FileUpload
+              data={{
+                defaultImg: [
+                  {
+                    docImgDisplayName: 'Tree',
+                    docImgDisplayPath: 'https://source.unsplash.com/random?tree'
+                  }
+                ],
+                imgName: 'Agricultural Project View'
+              }}
+            />
           </div>
           <div className='space-y-1'>
             <Label htmlFor='current'> اسم المشروع </Label>
@@ -39,7 +49,7 @@ export default function Projects() {
               <input
                 id='dateOfStart'
                 //onChange={e => setDateOfBirth(e.target.value)}
-                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
+                className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 type='date'
                 min='1990-01-01'
                 max={
@@ -62,7 +72,7 @@ export default function Projects() {
               <input
                 id='dateOfEnd'
                 //onChange={e => setDateOfBirth(e.target.value)}
-                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
+                className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 type='date'
                 min='1990-01-01'
                 max={
@@ -85,7 +95,7 @@ export default function Projects() {
               <input
                 id='dateOfEnd'
                 //onChange={e => setDateOfBirth(e.target.value)}
-                className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
+                className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 type='date'
                 min='1990-01-01'
                 max={
@@ -115,7 +125,7 @@ export default function Projects() {
           <div className='space-y-1'>
             <Label htmlFor='new'> وصف المشروع </Label>
             <textarea
-              className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
+              className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
               placeholder='أدخل وصف المشروع'
               rows={5}
             />

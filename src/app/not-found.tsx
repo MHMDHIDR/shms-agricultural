@@ -8,8 +8,8 @@ export const metadata: Metadata = { title: APP_TITLE, description: APP_DESCRIPTI
 export default function NotFound() {
   return (
     <section className='fixed inset-0 z-[10000] select-none pointer-events-auto min-h-svh h-screen'>
-      <div className='w-full h-3/4 bg-yellow-300'></div>
-      <div className='flex justify-evenly relative w-full h-1/3 bg-yellow-400'>
+      <div className='w-full bg-yellow-300 h-3/4'></div>
+      <div className='relative flex w-full bg-yellow-400 justify-evenly h-1/3'>
         <div className='maceta-central left-[5.65rem]'>
           <div className='maceta-central-top'></div>
           <div className='cactus-izq'>
@@ -81,8 +81,8 @@ export default function NotFound() {
       <div className='absolute top-8 left-1/2 w-0 h-0 border-b-[5rem] border-b-slate-500 border-l-[6.3rem] border-l-transparent border-r-[6.3rem] border-r-transparent -translate-x-36 -rotate-[15deg] animate-[valanceocuerda_5s] repeat-infinite'></div>
       <div className='absolute top-10 left-1/2 w-0 h-0 border-b-[5rem] border-b-yellow-200 border-l-[6.3rem] border-l-transparent border-r-[6.3rem] border-r-transparent -translate-x-36 -rotate-[15deg] animate-[valanceocuerda_5s] repeat-infinite'></div>
       <div className='absolute top-8 w-4 h-5 left-1/2 bg-slate-400 rounded-bl-[50%_100%] rounded-br-[50%_100%]  border-4 border-black -translate-x-16 -rotate-45'></div>
-      <div className='absolute top-5 w-4 h-5 left-1/2 bg-slate-400 rounded-full border-2 border-black -translate-x-1/2 -rotate-12'></div>
-      <div className='absolute top-5 w-4 h-5 left-1/2 bg-slate-400 rounded-full border-yellow-600 -translate-x-1/2 -rotate-12'></div>
+      <div className='absolute w-4 h-5 border-2 border-black rounded-full top-5 left-1/2 bg-slate-400 -translate-x-1/2 -rotate-12'></div>
+      <div className='absolute w-4 h-5 border-yellow-600 rounded-full top-5 left-1/2 bg-slate-400 -translate-x-1/2 -rotate-12'></div>
       <div className='absolute top-32 left-1/2 w-80 h-52 bg-gray-100 border-[1rem]  border-yellow-600 rounded-3xl outline-4 outline-yellow-900 text-red-700 text-3xl text-center flex flex-col gap-y-6 items-center justify-center animate-[valanceo_5s] repeat-infinite'>
         <span>الصفحة غير موجودة</span>
         <Button className='bg-green-600 hover:bg-green-700'>

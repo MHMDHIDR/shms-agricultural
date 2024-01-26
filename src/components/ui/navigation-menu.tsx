@@ -129,7 +129,7 @@ const NavigationListItem = forwardRef<ElementRef<'a'>, ComponentPropsWithoutRef<
             {...props}
           >
             <div className='text-sm font-medium leading-none'>{title}</div>
-            <p className='line-clamp-2 text-sm leading-snug text-muted-foreground'>
+            <p className='text-sm leading-snug line-clamp-2 text-muted-foreground'>
               {children}
             </p>
           </a>

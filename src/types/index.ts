@@ -45,7 +45,21 @@ export type UserLoggedInProps =
 
 export type FileUploadProps = {
   file: File[]
-  onFileAdd: (e: { target: { files: any } }) => void
+  fileURLs: string[]
+  setFileURLs(fileURLs: string[]): void
+  onFileAdd?: (e: { target: { files: any } }) => void
+  onFileRemove(fileUrl: string, fileName: string): void
+}
+
+export type FileUploadComponentProps = {
+  data: {
+    foodId?: string
+    imgName: string
+    defaultImg: DocImgsProps[]
+  }
+  ignoreRequired?: boolean
+  ignoreDelete?: boolean | undefined
+  id?: string
 }
 
 export type fileRequestProps = NextApiRequest & {
@@ -54,8 +68,8 @@ export type fileRequestProps = NextApiRequest & {
 }
 
 export type DocImgsProps = {
-  docImgDisplayPath: string
   docImgDisplayName: string
+  docImgDisplayPath: string
 }
 
 export type uploadurlDataProps = {

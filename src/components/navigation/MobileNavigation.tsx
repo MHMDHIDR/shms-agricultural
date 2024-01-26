@@ -81,7 +81,7 @@ export default function MobileNavigation({
         </AccordionContent>
       </AccordionItem>
       {/* تسجيل الدخول */}
-      <div className='flex items-center gap-x-4 pt-2'>
+      <div className='flex items-center pt-2 gap-x-4'>
         {isUserAdmin ? (
           <Link className={`w-full text-center`} href={`/dashboard`}>
             لوحة التحكم
@@ -95,14 +95,14 @@ export default function MobileNavigation({
         </Link>
         {isAuth && (
           <Button
-            className='flex gap-2 md:gap-1 items-center justify-center'
+            className='flex items-center justify-center gap-2 md:gap-1'
             onClick={async () => {
               await signOut({ redirect: false })
               replace('/auth/signin')
             }}
           >
             <LogOut className='text-[#FDB813] dark:text-[#ffd87e]' />
-            <span className='inline-block md:hidden text-white dark:text-black'>
+            <span className='inline-block text-white md:hidden dark:text-black'>
               تسجيل الخروج
             </span>
           </Button>

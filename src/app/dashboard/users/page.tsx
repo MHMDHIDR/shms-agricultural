@@ -34,7 +34,7 @@ export default async function Users() {
             <CardDescription>{users.length ?? 0}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Table className='min-w-full divide-y divide-gray-200 text-center'>
+            <Table className='min-w-full text-center divide-y divide-gray-200'>
               <TableHeader>
                 <TableRow>
                   <TableHead>الاسم</TableHead>
@@ -61,7 +61,7 @@ export default async function Users() {
                     <TableCell className='min-w-40'>
                       {user.shms_user_stocks ?? 'لم يتم شراء أسهم بعد'}
                     </TableCell>
-                    <TableCell className='min-w-56 flex gap-x-2'>
+                    <TableCell className='flex min-w-56 gap-x-2'>
                       <Confirm className='bg-red-500 hover:bg-red-600'>حذف</Confirm>
                       <Modal
                         title={`صورة المستند لــ ${user.shms_fullname}`}

@@ -115,16 +115,16 @@ const ForgotPasswordPage = () => {
           className='md:w-[50rem]'
         >
           <form
-            className='w-full min-w-max container'
+            className='container w-full min-w-max'
             dir='rtl'
             onSubmit={e => handelResetForm(e)}
           >
             {emailError && <FormMessage error>{emailError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='email'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   البريد الالكتروني
                 </label>
@@ -133,7 +133,7 @@ const ForgotPasswordPage = () => {
                 <input
                   id='email'
                   onChange={e => setEmail(e.target.value)}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='email'
                   placeholder='example@gmail.com'
                 />
@@ -146,11 +146,11 @@ const ForgotPasswordPage = () => {
                 <Button
                   type='submit'
                   disabled={isSubmittingForm}
-                  className='shadow w-full bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold'
+                  className='w-full font-bold text-white bg-purple-500 shadow hover:bg-purple-400 focus:shadow-outline focus:outline-none'
                 >
                   {isSubmittingForm ? (
                     <>
-                      <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
+                      <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
                       جاري الإرسال
                     </>
                   ) : (

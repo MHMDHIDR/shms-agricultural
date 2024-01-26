@@ -68,7 +68,7 @@ export default function ActivateAccount({
   }
 
   const HEADING = (
-    <p className='flex flex-wrap text-center max-w-lg items-center justify-center gap-x-3 leading-loose select-none rtl'>
+    <p className='flex flex-wrap items-center justify-center max-w-lg leading-loose text-center select-none gap-x-3 rtl'>
       {isAccountActivated ? (
         <>
           <Success className='w-16 h-16' />
@@ -106,7 +106,7 @@ export default function ActivateAccount({
               >
                 {isSubmittingForm ? (
                   <>
-                    <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
+                    <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
                     جاري تفعيل الحساب ...
                   </>
                 ) : (
@@ -116,7 +116,7 @@ export default function ActivateAccount({
             ) : (
               <Button
                 asChild
-                className='shadow mt-14 w-96 min-w-56 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold'
+                className='font-bold text-white bg-purple-500 shadow mt-14 w-96 min-w-56 hover:bg-purple-400 focus:shadow-outline focus:outline-none'
               >
                 <Link href='/auth/signin'>تسجيل الدخــــول</Link>
               </Button>

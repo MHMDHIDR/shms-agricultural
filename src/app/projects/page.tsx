@@ -29,7 +29,7 @@ const projects = [
 export default function Projects() {
   return (
     <Layout>
-      <main className='flex min-h-screen flex-col items-center justify-between p-24'>
+      <main className='flex flex-col items-center justify-between min-h-screen p-24'>
         <h1 className='text-3xl'>المشاريع الاستثمارية </h1>
 
         {projects.map((project, index) => (

@@ -9,11 +9,11 @@ export const Header = ({ label, heading }: HeaderProps) => {
   const isSigninPage = usePathname().includes('signin')
 
   return (
-    <div className='w-full flex flex-col gap-y-4 items-center justify-center'>
+    <div className='flex flex-col items-center justify-center w-full gap-y-4'>
       <h1 className={`text-2xl font-bold`}>
         {heading ?? (isSigninPage ? 'تسجيل الدخول' : 'انشاء حساب')}
       </h1>
-      <p className='text-muted-foreground text-sm'>{label}</p>
+      <p className='text-sm text-muted-foreground'>{label}</p>
     </div>
   )
 }

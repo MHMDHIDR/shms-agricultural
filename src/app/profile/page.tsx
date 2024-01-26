@@ -271,14 +271,14 @@ export default function ProfilePage() {
         <div className='flex flex-col items-center justify-center'>
           <Button
             asChild
-            className='shadow w-96 min-w-56 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold'
+            className='font-bold text-white bg-purple-500 shadow w-96 min-w-56 hover:bg-purple-400 focus:shadow-outline focus:outline-none'
           >
             <Link href='/projects'>الذهاب إلـــى المشاريع</Link>
           </Button>
 
-          <div dir='rtl' className='md:flex md:items-center my-6 md:my-10'>
+          <div dir='rtl' className='my-6 md:flex md:items-center md:my-10'>
             <Tabs dir='rtl' defaultValue='account' className='w-[400px]'>
-              <TabsList className='grid w-full grid-cols-2'>
+              <TabsList className='w-full grid grid-cols-2'>
                 <TabsTrigger value='account'>الحساب</TabsTrigger>
                 <TabsTrigger value='password'>كلمة المرور</TabsTrigger>
               </TabsList>
@@ -318,7 +318,7 @@ export default function ProfilePage() {
                       >
                         {isSubmittingEmailForm ? (
                           <>
-                            <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
+                            <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
                             جاري حفظ التغييرات
                           </>
                         ) : (
@@ -399,7 +399,7 @@ export default function ProfilePage() {
                       >
                         {isSubmittingPasswordForm ? (
                           <>
-                            <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
+                            <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
                             جاري حفظ التغييرات
                           </>
                         ) : (

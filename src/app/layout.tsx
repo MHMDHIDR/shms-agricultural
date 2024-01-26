@@ -2,8 +2,9 @@ import { getServerSession } from 'next-auth'
 import { Cairo as FontSans } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/sonner'
-import SessionProvider from '@/providers/SessionProvider'
-import { ThemeProvider } from '@/providers/ThemeProvider'
+import SessionProvider from '@/providers/Session'
+import { ThemeProvider } from '@/providers/Theme'
+import { FileUploadProvider } from '@/providers/FileUpload'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import type { Metadata } from 'next'
 import './globals.css'
@@ -79,8 +80,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       >
         <SessionProvider session={session}>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-            <main className='mt-20'>{children}</main>
-            <Toaster />
+            <FileUploadProvider>
+              <main className='mt-20'>{children}</main>
+              <Toaster />
+            </FileUploadProvider>
           </ThemeProvider>
         </SessionProvider>
       </body>

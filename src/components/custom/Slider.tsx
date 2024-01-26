@@ -40,7 +40,7 @@ export default function CarouselDApiDemo({ images }: { images: string[] }) {
                   src={image}
                   priority={true}
                   alt={`Slide ${index + 1}`}
-                  className='w-full h-full object-cover'
+                  className='object-cover w-full h-full'
                   width={'1024'}
                   height={'850'}
                 />

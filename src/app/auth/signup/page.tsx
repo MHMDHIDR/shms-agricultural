@@ -276,11 +276,11 @@ const SignupPage = () => {
           >
             {fullNameError && <FormMessage error>{fullNameError}</FormMessage>}
             <div className='mb-6'>
-              <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
+              <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
                 <div>
                   <label
                     htmlFor='firstName'
-                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
                   >
                     الاسم الاول
                     <span className='text-red-500'>*</span>
@@ -301,14 +301,14 @@ const SignupPage = () => {
                         document.getElementById('firstName') as HTMLInputElement
                       ).placeholder = 'محمد')
                     }
-                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     placeholder='محمد'
                   />
                 </div>
                 <div>
                   <label
                     htmlFor='secondName'
-                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
                   >
                     الاسم الثاني
                     <span className='text-red-500'>*</span>
@@ -328,7 +328,7 @@ const SignupPage = () => {
                         document.getElementById('secondName') as HTMLInputElement
                       ).placeholder = 'عبد الرحيم')
                     }
-                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='عبد الرحيم'
                   />
@@ -336,7 +336,7 @@ const SignupPage = () => {
                 <div>
                   <label
                     htmlFor='thirdName'
-                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
                   >
                     الاسم الثالث
                     <span className='text-red-500'>*</span>
@@ -354,7 +354,7 @@ const SignupPage = () => {
                         document.getElementById('thirdName') as HTMLInputElement
                       ).placeholder = 'محمد')
                     }
-                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='محمد'
                   />
@@ -362,7 +362,7 @@ const SignupPage = () => {
                 <div>
                   <label
                     htmlFor='lastName'
-                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
                   >
                     الاسم الاخير
                   </label>
@@ -379,7 +379,7 @@ const SignupPage = () => {
                         document.getElementById('lastName') as HTMLInputElement
                       ).placeholder = 'مكي')
                     }
-                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='مكي'
                   />
@@ -389,11 +389,11 @@ const SignupPage = () => {
             </div>
 
             {nationlityError && <FormMessage error>{nationlityError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='nationality'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   الجنسية
                   <span className='text-red-500'>*</span>
@@ -404,17 +404,17 @@ const SignupPage = () => {
                   nationality={nationality}
                   setNationality={setNationality}
                   placeholder='إختر الجنسية ...'
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 />
               </div>
             </div>
 
             {dateOfBirthError && <FormMessage error>{dateOfBirthError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='dateOfBirth'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   تاريخ الميلاد
                   <span className='text-red-500'>*</span>
@@ -424,7 +424,7 @@ const SignupPage = () => {
                 <input
                   id='dateOfBirth'
                   onChange={e => setDateOfBirth(e.target.value)}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
+                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
                   max={
                     // todays date - 18 years
@@ -441,11 +441,11 @@ const SignupPage = () => {
             </div>
 
             {addressError && <FormMessage error>{addressError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='address'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   العنوان
                   <span className='text-red-500'>*</span>
@@ -466,7 +466,7 @@ const SignupPage = () => {
                       document.getElementById('address') as HTMLInputElement
                     ).placeholder = '')
                   }
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='text'
                   placeholder='العــــنوان ...'
                 />
@@ -474,11 +474,11 @@ const SignupPage = () => {
             </div>
 
             {emailError && <FormMessage error>{emailError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='email'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   البريد الالكتروني
                   <span className='text-red-500'>*</span>
@@ -497,7 +497,7 @@ const SignupPage = () => {
                     ((document.getElementById('email') as HTMLInputElement).placeholder =
                       '')
                   }
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='email'
                   placeholder='example@gmail.com'
                 />
@@ -505,11 +505,11 @@ const SignupPage = () => {
             </div>
 
             {phoneError && <FormMessage error>{phoneError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='phone'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   رقم الهاتف
                   <span className='text-red-500'>*</span>
@@ -528,7 +528,7 @@ const SignupPage = () => {
                     ((document.getElementById('phone') as HTMLInputElement).placeholder =
                       '')
                   }
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   dir='rtl'
                   type='tel'
                   placeholder='55123456'
@@ -537,11 +537,11 @@ const SignupPage = () => {
             </div>
 
             {passError && <FormMessage error>{passError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='password'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   كلمة المرور
                   <span className='text-red-500'>*</span>
@@ -552,7 +552,7 @@ const SignupPage = () => {
                   id='password'
                   onChange={handlePasswordChange}
                   onBlur={blurPassword}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='password'
                   placeholder='******'
                 />
@@ -560,11 +560,11 @@ const SignupPage = () => {
             </div>
 
             {passConfirmError && <FormMessage error>{passConfirmError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='confirmPassword'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   التأكد من كلمة المرور
                   <span className='text-red-500'>*</span>
@@ -575,7 +575,7 @@ const SignupPage = () => {
                   id='confirmPassword'
                   onChange={handleConfirmPasswordChange}
                   onBlur={blurConfrimPassword}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='password'
                   placeholder='******'
                 />
@@ -583,11 +583,11 @@ const SignupPage = () => {
             </div>
 
             {fileError && <FormMessage error>{fileError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='document'
-                  className='block cursor-pointer text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
                 >
                   صورة المستند الرسمي
                   <span className='text-red-500'>*</span>
@@ -598,17 +598,17 @@ const SignupPage = () => {
                   id='document'
                   type='file'
                   aria-label='file'
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 cursor-pointer'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded cursor-pointer dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   onChange={handleFileChange}
                 />
               </div>
             </div>
 
             {acceptedTermError && <FormMessage error>{acceptedTermError}</FormMessage>}
-            <div className='md:flex flex-col gap-2 w-full mb-6 items-start'>
+            <div className='flex-col items-start w-full gap-2 mb-6 md:flex'>
               <label
                 htmlFor='accept_termsAndPrivacy'
-                className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 cursor-pointer'
+                className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
               >
                 <Checkbox
                   id='accept_termsAndPrivacy'
@@ -638,7 +638,7 @@ const SignupPage = () => {
               >
                 {isSubmittingForm ? (
                   <>
-                    <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
+                    <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
                     جاري التسجيل ...
                   </>
                 ) : isDoneSubmitting ? (

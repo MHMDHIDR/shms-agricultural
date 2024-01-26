@@ -8,9 +8,9 @@ import Layout from '@/components/custom/Layout'
 export default function DashboardPage() {
   return (
     <Layout>
-      <main className='flex min-h-screen flex-col items-center justify-between p-4 sm:p-8 md:p-16 lg:p-24'>
+      <main className='flex flex-col items-center justify-between min-h-screen p-4 sm:p-8 md:p-16 lg:p-24'>
         <Tabs defaultValue='view' className='w-full mt-16'>
-          <TabsList className='grid w-full grid-cols-2 sm:grid-cols-4 gap-2 space-x-4 mb-10 md:mb-0'>
+          <TabsList className='grid w-full grid-cols-2 gap-2 mb-10 space-x-4 sm:grid-cols-4 md:mb-0'>
             <TabsTrigger className='border border-gray-300' value='view'>
               احصائيات
             </TabsTrigger>

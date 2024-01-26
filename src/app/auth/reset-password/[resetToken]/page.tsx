@@ -128,16 +128,16 @@ const ForgotPasswordPage = ({
           className='md:w-[50rem]'
         >
           <form
-            className='w-full min-w-max container'
+            className='container w-full min-w-max'
             dir='rtl'
             onSubmit={e => handelResetForm(e)}
           >
             {passError && <FormMessage error>{passError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='password'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   كلمة المرور
                 </label>
@@ -146,7 +146,7 @@ const ForgotPasswordPage = ({
                 <input
                   id='password'
                   onChange={handlePasswordChange}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='password'
                   placeholder='******'
                 />
@@ -165,7 +165,7 @@ const ForgotPasswordPage = ({
                 >
                   {isSubmittingForm ? (
                     <>
-                      <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
+                      <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
                       جاري الإرسال
                     </>
                   ) : isDoneSubmitting ? (

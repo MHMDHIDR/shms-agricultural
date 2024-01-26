@@ -38,7 +38,7 @@ export default function Modal({
       </DialogTrigger>
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
-          <DialogTitle className='text-green-600 text-center select-none font-bold'>
+          <DialogTitle className='font-bold text-center text-green-600 select-none'>
             {title}
           </DialogTitle>
           <DialogDescription>{description ?? ''}</DialogDescription>
@@ -49,21 +49,21 @@ export default function Modal({
             alt={description ?? title}
             width={350}
             height={350}
-            className='rounded-lg w-full max-h-72 object-contain'
+            className='object-contain w-full rounded-lg max-h-72'
           />
 
           <Button
             type='button'
             size='sm'
-            className='px-3 w-32 md:w-full'
+            className='w-32 px-3 md:w-full'
             onClick={() => saveAs(document, `${title}.jpg`)}
           >
             <span className='sr-only'>تحميل مستند {title}</span>
-            <span className='w-full hidden md:inline-block'>تحميل المستند</span>
-            <DownloadIcon className='h-4 w-4' />
+            <span className='hidden w-full md:inline-block'>تحميل المستند</span>
+            <DownloadIcon className='w-4 h-4' />
           </Button>
         </div>
-        <DialogFooter className='sm:justify-start mx-auto'>
+        <DialogFooter className='mx-auto sm:justify-start'>
           <DialogClose asChild>
             <Button type='button' variant='outline'>
               غلق
