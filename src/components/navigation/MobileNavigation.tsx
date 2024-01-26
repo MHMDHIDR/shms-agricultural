@@ -29,6 +29,8 @@ export default function MobileNavigation({
   const { status } = useSession()
   const isAuth = status === 'authenticated' ? true : false
 
+  const { replace } = useRouter()
+
   return (
     <Accordion
       type='single'
@@ -96,7 +98,7 @@ export default function MobileNavigation({
             className='flex gap-2 md:gap-1 items-center justify-center'
             onClick={async () => {
               await signOut()
-              useRouter().push('/auth/signin')
+              replace('/auth/signin')
             }}
           >
             <LogOut className='text-[#FDB813]' />
