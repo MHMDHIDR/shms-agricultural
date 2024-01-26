@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { CardWrapper } from '@/components/auth/card-wrapper'
-import { Info } from 'lucide-react'
 import { Error, Success } from '@/components/icons/Status'
 import type { UserLoggedInProps, UserProps } from '@/types'
 

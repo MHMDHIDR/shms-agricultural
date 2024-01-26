@@ -24,10 +24,8 @@ import type { MenuItemsProps, UserLoggedInProps } from '@/types'
 import { getAuth } from '@/lib/actions/auth'
 
 export default function Nav() {
-  const {
-    status,
-    data: session
-  }: { status: SessionContextValue['status']; data: UserLoggedInProps } = useSession()
+  const { status }: { status: SessionContextValue['status']; data: UserLoggedInProps } =
+    useSession()
 
   const isAuth = status === 'authenticated' ? true : false
 
@@ -120,7 +118,7 @@ export default function Nav() {
                         href={isAuth ? `/profile` : `/auth/signin`}
                         title={isAuth ? 'حسابي' : `تسجيل الدخول`}
                       ></NavigationListItem>
-                      {session?.token?.user.shms_user_account_type === 'admin' ? (
+                      {isUserAdmin ? (
                         <NavigationListItem
                           className={`w-1/2 text-center`}
                           href={`/dashboard`}
