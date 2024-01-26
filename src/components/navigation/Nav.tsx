@@ -20,8 +20,9 @@ import { cn } from '@/lib/utils'
 import useEventListener from '@/hooks/useEventListener'
 import { APP_URL } from '@/data/constants'
 import { ShmsIcon } from '../icons/Socials'
-import type { MenuItemsProps, UserLoggedInProps } from '@/types'
 import { getAuth } from '@/lib/actions/auth'
+import { Button } from '../ui/button'
+import type { MenuItemsProps, UserLoggedInProps } from '@/types'
 
 export default function Nav() {
   const { status }: { status: SessionContextValue['status']; data: UserLoggedInProps } =
@@ -91,7 +92,12 @@ export default function Nav() {
           <ShmsIcon className={`ml-10 ${sticky ? 'w-20 h-20' : 'w-24 h-24'}`} />
         </Link>
         {onMobileScreen ? (
-          <MobileNavigation setIsOpen={setIsOpen} isOpen={isOpen} MenuItems={MenuItems} />
+          <MobileNavigation
+            setIsOpen={setIsOpen}
+            isOpen={isOpen}
+            MenuItems={MenuItems}
+            isUserAdmin={isUserAdmin}
+          />
         ) : (
           <NavigationMenuList
             className={`fixed left-0 h-screen w-screen min-w-[100vw] items-end md:items-center justify-end flex-col-reverse flex-wrap gap-x-3 transition-all duration-200 pointer-events-none
@@ -101,50 +107,44 @@ export default function Nav() {
                : '-translate-y-full opacity-0 md:opacity-100'
            }`}
           >
+            {/* تسجيل الدخول */}
+            <div className='flex items-center gap-x-4'>
+              {isAuth && (
+                <Button
+                  className='cursor-pointer w-full'
+                  onClick={async () =>
+                    await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
+                  }
+                >
+                  <div className='flex gap-2 md:gap-1 items-center justify-center min-w-fit'>
+                    <LogOut className='text-[#FDB813]' />
+                    <span className='hidden md:inline-block min-w-fit'>تسجيل الخروج</span>
+                  </div>
+                </Button>
+              )}
+              <Link
+                className={isAuth ? `w-1/2 text-center` : `w-full`}
+                href={isAuth ? `/profile` : `/auth/signin`}
+              >
+                {isAuth ? 'حسابي' : `تسجيل الدخول`}
+              </Link>
+              {isUserAdmin ? (
+                <Link className={`w-full text-center`} href={`/dashboard`}>
+                  لوحة التحكم
+                </Link>
+              ) : null}
+            </div>
+
             {/* عن شمس */}
             <NavigationMenuItem>
               <NavigationMenuTrigger>عن شمس</NavigationMenuTrigger>
               <NavigationMenuContent className='rtl'>
                 <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
-                  <NavigationListItem href='/about' title='عن شمس'></NavigationListItem>
+                  <NavigationListItem href='/about' title='من نحن'></NavigationListItem>
                   <NavigationListItem
                     href='/contact'
                     title='تواصل معنا'
                   ></NavigationListItem>
-                  <NavigationMenuLink asChild>
-                    <div className={isAuth ? `flex items-center justify-between` : ``}>
-                      <NavigationListItem
-                        className={isAuth ? `w-1/2 text-center` : `w-full`}
-                        href={isAuth ? `/profile` : `/auth/signin`}
-                        title={isAuth ? 'حسابي' : `تسجيل الدخول`}
-                      ></NavigationListItem>
-                      {isUserAdmin ? (
-                        <NavigationListItem
-                          className={`w-1/2 text-center`}
-                          href={`/dashboard`}
-                          title={`لوحة التحكم`}
-                        ></NavigationListItem>
-                      ) : null}
-                      {isAuth && (
-                        <NavigationListItem
-                          className='cursor-pointer w-full'
-                          onClick={async () =>
-                            await signOut({
-                              redirect: true,
-                              callbackUrl: APP_URL ?? '/'
-                            })
-                          }
-                        >
-                          <button className='flex gap-2 md:gap-1 items-center justify-center min-w-fit'>
-                            <LogOut className='text-[#FDB813]' />
-                            <span className='hidden md:inline-block min-w-fit'>
-                              تسجيل الخروج
-                            </span>
-                          </button>
-                        </NavigationListItem>
-                      )}
-                    </div>
-                  </NavigationMenuLink>
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
