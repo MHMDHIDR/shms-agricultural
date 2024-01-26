@@ -31,26 +31,26 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import FormMessage from '@/components/custom/FormMessage'
 import { revalidatePath } from 'next/cache'
 import Layout from '@/components/custom/Layout'
+import { getAuth } from '@/lib/actions/auth'
 
 export default function ProfilePage() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
   const { theme } = useTheme()
 
-  const HEADING = (
-    <div className='flex text-center max-w-lg items-center justify-center rtl leading-relaxed'>
-      <Info className='w-16 h-16 text-blue-300 ml-2' />
-      مرحبا بك في مشاريع
-      <br />
-      شمس للخدمات الزراعية
-    </div>
-  )
-
   const [fullname, setFullname] = useState('')
   const [currentEmail, setCurrentEmail] = useState('')
 
   useEffect(() => {
-    setFullname(session?.token?.user.fullname ?? '')
     setCurrentEmail(session?.token?.user.shms_email ?? '')
+
+    const getUserData = async () => {
+      const { userName, loading } = await getAuth()
+      if (loading) return
+
+      setFullname(userName ?? session?.token?.user.fullname ?? '')
+    }
+
+    getUserData()
   }, [session])
 
   const [email, setEmail] = useState('')
@@ -264,21 +264,12 @@ export default function ProfilePage() {
   return (
     <Layout>
       <CardWrapper
-        heading={HEADING}
+        heading={''}
         backButtonLabel='الذهاب للصفحة الرئيسية'
         backButtonHref='/'
         className='md:w-[50rem] mt-[10rem] mx-auto'
       >
         <div className='flex flex-col items-center justify-center'>
-          <div>
-            <p className='text-center max-w-lg items-center justify-center rtl'>
-              لا يوجد لديك مشاريع حالياً
-            </p>
-            <p className='text-center max-w-lg items-center justify-center rtl'>
-              يمكنك الاستثمار في مشروع جديد من خلال الضغط على الزر أدناه
-            </p>
-          </div>
-
           <Button
             asChild
             className='shadow mt-14 w-96 min-w-56 bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold'

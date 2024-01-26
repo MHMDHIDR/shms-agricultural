@@ -11,10 +11,12 @@ import type { UserLoggedInProps } from '@/types'
 export const getAuth = async (): Promise<{
   isAuth: boolean
   userType: string
+  userName?: string
   loading: boolean
 }> => {
   let isAuth = false
   let userType = ''
+  let userName = ''
   let loading = true
 
   try {
@@ -23,6 +25,7 @@ export const getAuth = async (): Promise<{
     if (user) {
       isAuth = user?.token?.user.loggedIn ? true : false
       userType = user?.token?.user.shms_user_account_type ?? 'user'
+      userName = user?.token?.user.shms_fullname ?? ''
     }
     loading = false
   } catch (error) {
@@ -30,5 +33,5 @@ export const getAuth = async (): Promise<{
     throw new Error('Error getting user session')
   }
 
-  return { isAuth, userType, loading }
+  return { isAuth, userType, userName, loading }
 }
