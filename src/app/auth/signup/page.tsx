@@ -150,7 +150,7 @@ const SignupPage = () => {
     e.preventDefault()
 
     // check if the form is valid
-    if (fName === '' || sName === '' || tName === '' || foName === '') {
+    if (fName === '' || sName === '' || tName === '') {
       resetFormErrors()
       setFullNameError('الرجاء التأكد من إدخال الاسم بشكل صحيح')
     } else if (nationality === '') {
@@ -284,11 +284,24 @@ const SignupPage = () => {
                     className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
                   >
                     الاسم الاول
+                    <span className='text-red-500'>*</span>
                   </label>
                   <input
                     id='firstName'
                     type='text'
                     onChange={e => setFName(e.target.value)}
+                    onFocus={() =>
+                      // hide placeholder on focus
+                      ((
+                        document.getElementById('firstName') as HTMLInputElement
+                      ).placeholder = '')
+                    }
+                    onBlur={() =>
+                      // show placeholder on blur
+                      ((
+                        document.getElementById('firstName') as HTMLInputElement
+                      ).placeholder = 'محمد')
+                    }
                     className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                     placeholder='محمد'
                   />
@@ -299,13 +312,26 @@ const SignupPage = () => {
                     className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
                   >
                     الاسم الثاني
+                    <span className='text-red-500'>*</span>
                   </label>
                   <input
                     id='secondName'
                     onChange={e => setSName(e.target.value)}
+                    onFocus={() =>
+                      // hide placeholder on focus
+                      ((
+                        document.getElementById('secondName') as HTMLInputElement
+                      ).placeholder = '')
+                    }
+                    onBlur={() =>
+                      // show placeholder on blur
+                      ((
+                        document.getElementById('secondName') as HTMLInputElement
+                      ).placeholder = 'عبد الرحيم')
+                    }
                     className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
-                    placeholder='عبدالرحيم'
+                    placeholder='عبد الرحيم'
                   />
                 </div>
                 <div>
@@ -314,10 +340,23 @@ const SignupPage = () => {
                     className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
                   >
                     الاسم الثالث
+                    <span className='text-red-500'>*</span>
                   </label>
                   <input
                     id='thirdName'
                     onChange={e => setTName(e.target.value)}
+                    onFocus={() =>
+                      // hide placeholder on focus
+                      ((
+                        document.getElementById('thirdName') as HTMLInputElement
+                      ).placeholder = '')
+                    }
+                    onBlur={() =>
+                      // show placeholder on blur
+                      ((
+                        document.getElementById('thirdName') as HTMLInputElement
+                      ).placeholder = 'محمد')
+                    }
                     className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='محمد'
@@ -333,6 +372,18 @@ const SignupPage = () => {
                   <input
                     id='lastName'
                     onChange={e => setFoName(e.target.value)}
+                    onFocus={() =>
+                      // hide placeholder on focus
+                      ((
+                        document.getElementById('lastName') as HTMLInputElement
+                      ).placeholder = '')
+                    }
+                    onBlur={() =>
+                      // show placeholder on blur
+                      ((
+                        document.getElementById('lastName') as HTMLInputElement
+                      ).placeholder = 'مكي')
+                    }
                     className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='مكي'
@@ -350,6 +401,7 @@ const SignupPage = () => {
                   className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   الجنسية
+                  <span className='text-red-500'>*</span>
                 </label>
               </div>
               <div className='md:w-2/3'>
@@ -370,6 +422,7 @@ const SignupPage = () => {
                   className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   تاريخ الميلاد
+                  <span className='text-red-500'>*</span>
                 </label>
               </div>
               <div className='md:w-2/3'>
@@ -401,6 +454,7 @@ const SignupPage = () => {
                   className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   العنوان
+                  <span className='text-red-500'>*</span>
                 </label>
               </div>
               <div className='md:w-2/3'>
@@ -423,6 +477,7 @@ const SignupPage = () => {
                   className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   البريد الالكتروني
+                  <span className='text-red-500'>*</span>
                 </label>
               </div>
               <div className='md:w-2/3'>
@@ -445,6 +500,7 @@ const SignupPage = () => {
                   className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   رقم الهاتف
+                  <span className='text-red-500'>*</span>
                 </label>
               </div>
               <div className='md:w-2/3'>
@@ -468,6 +524,7 @@ const SignupPage = () => {
                   className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   كلمة المرور
+                  <span className='text-red-500'>*</span>
                 </label>
               </div>
               <div className='md:w-2/3'>
@@ -490,6 +547,7 @@ const SignupPage = () => {
                   className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   التأكد من كلمة المرور
+                  <span className='text-red-500'>*</span>
                 </label>
               </div>
               <div className='md:w-2/3'>
@@ -512,6 +570,7 @@ const SignupPage = () => {
                   className='block cursor-pointer text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   صورة المستند الرسمي
+                  <span className='text-red-500'>*</span>
                 </label>
               </div>
               <div className='md:w-2/3'>
