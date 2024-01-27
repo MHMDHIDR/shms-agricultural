@@ -1,5 +1,8 @@
+import axios from 'axios'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { API_URL } from '@/data/constants'
+import type { DocImgsProps, FileUploadProps, uploadurlDataProps } from '@/types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -77,3 +80,45 @@ export const arabicDate = (date: string) =>
     minute: 'numeric',
     second: 'numeric'
   })
+
+/**
+ * a function to upload files to S3 bucket
+ * and returns projectImages object (array)
+ */
+
+export const uploadS3 = async (file: FileUploadProps['file']) => {
+  if (file.length === 0) return { projectImages: [] }
+
+  const fileFormData = new FormData()
+
+  const fileData = JSON.stringify(
+    file.map((file: { name: string; type: string }) => {
+      return { key: file?.name, type: file?.type }
+    })
+  )
+
+  const { data }: uploadurlDataProps = await axios.get(
+    `${API_URL}/uploadurl?file=${fileData}`
+  )
+
+  async function uploadToS3(url: string) {
+    await axios.post(url, fileFormData)
+  }
+
+  data.map(({ fields, url }: any, idx: number) => {
+    Object.entries({ ...fields, file: file[idx] }).forEach(([key, value]) => {
+      fileFormData.set(key, value as string)
+    })
+    return uploadToS3(url)
+  })
+
+  const projectImages: DocImgsProps[] = data.map(({ fields, url }) => {
+    const urlSplit = (n: number) => url.split('/')[n]
+    return {
+      docImgDisplayName: fields.key,
+      docImgDisplayPath: `${urlSplit(0)}//${fields.bucket}.${urlSplit(2)}/${fields.key}`
+    }
+  })
+
+  return { projectImages }
+}

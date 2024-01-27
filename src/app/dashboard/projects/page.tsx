@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { toast } from 'sonner'
 import { Info } from 'lucide-react'
+import { FileUploadContext } from '@/providers/FileUpload'
 import {
   Card,
   CardContent,
@@ -22,6 +23,7 @@ import FormMessage from '@/components/custom/FormMessage'
 import { Error, Success } from '@/components/icons/Status'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import type { ProjectProps } from '@/types'
+import { uploadS3 } from '@/lib/utils'
 
 export default function Projects() {
   const [projectName, setProjectName] = useState('')
@@ -44,6 +46,8 @@ export default function Projects() {
   const [stockPriceError, setStockPriceError] = useState('')
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
+
+  const { file } = useContext(FileUploadContext)
 
   const { replace } = useRouter()
 
@@ -85,6 +89,13 @@ export default function Projects() {
         resetFormErrors()
         setIsSubmittingForm(true)
 
+        const formData = new FormData()
+        const { projectImages } = await uploadS3(file)
+        formData.append(
+          'projectImages',
+          JSON.stringify(projectImages.length > 0 ? projectImages : [])
+        )
+
         const addProject: { data: ProjectProps } = await axios.post(
           `${API_URL}/projects/add`,
           {
@@ -95,7 +106,8 @@ export default function Projects() {
             shms_project_invest_date: projectInvestEndDate,
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
-            shms_project_description: projectDescription
+            shms_project_description: projectDescription,
+            ...formData
           }
         )
         //getting response from backend
