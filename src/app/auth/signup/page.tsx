@@ -223,8 +223,6 @@ const SignupPage = () => {
 
         setTimeout(() => replace(`/`), DEFAULT_DURATION)
       } catch (error: any) {
-        console.error('Error', JSON.stringify(error))
-
         //handle error, show notification using Shadcn notifcation
         toast(JSON.stringify(error ?? 'حدث خطأ ما'), {
           // message: old var
@@ -605,7 +603,7 @@ const SignupPage = () => {
             </div>
 
             {acceptedTermError && <FormMessage error>{acceptedTermError}</FormMessage>}
-            <div className='flex-col items-start w-full mb-6 gap-2 md:flex'>
+            <div className='flex-col items-start w-full gap-2 mb-6 md:flex'>
               <label
                 htmlFor='accept_termsAndPrivacy'
                 className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { toast } from 'sonner'
@@ -21,7 +22,6 @@ import FormMessage from '@/components/custom/FormMessage'
 import { Error, Success } from '@/components/icons/Status'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import type { ProjectProps } from '@/types'
-import { useRouter } from 'next/navigation'
 
 export default function Projects() {
   const [projectName, setProjectName] = useState('')
