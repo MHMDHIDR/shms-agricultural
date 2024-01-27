@@ -97,6 +97,14 @@ export type DocImgsProps = {
   docImgDisplayPath: string
 }
 
+export type uploadFileToS3Props = {
+  file: Buffer
+  multiple: boolean
+  fileObject: File
+  fullname?: string
+  projectId?: string | undefined
+}
+
 export type uploadurlDataProps = {
   data: {
     map(arg0: ({ fields, url }: any, idx: number) => Promise<void>): unknown

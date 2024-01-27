@@ -1,6 +1,7 @@
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
 import { randomUUID } from 'crypto'
+import type { uploadFileToS3Props } from '@/types'
 
 const { AWS_ACCESS_ID, AWS_SECRET, AWS_BUCKET_NAME, AWS_REGION } = process.env
 
@@ -21,18 +22,19 @@ const s3Client = new S3Client(s3ClientConfig)
  * @param fullname  - The fullname of the user
  * @returns {Promise<string>} - The key of the file in S3
  */
-async function uploadFileToS3(
-  file: Buffer,
-  multiple: boolean,
-  fileObject: File,
-  fullname?: string
-): Promise<string> {
+async function uploadFileToS3({
+  file,
+  multiple,
+  fileObject,
+  fullname,
+  projectId
+}: uploadFileToS3Props): Promise<string> {
   const { name, type } = fileObject
   // a Unique key (name) for the file
   const key = `${randomUUID()}-${fullname}-${name}`
   const params = {
     Bucket: AWS_BUCKET_NAME,
-    Key: multiple ? `projects/` + key : key,
+    Key: multiple ? `${projectId}/projects/${key}` : key,
     Body: file,
     ContentType: type
   }
@@ -63,16 +65,14 @@ export async function POST(request: any) {
     const file: File = formData.get('file')
     const fullname: string = formData.get('fullname')
 
-    console.log({ file, multiple })
-
     if (!file) return new Response('No file found', { status: 400 })
 
-    const key = await uploadFileToS3(
-      Buffer.from(await file.arrayBuffer()),
+    const key = await uploadFileToS3({
+      file: Buffer.from(await file.arrayBuffer()),
       multiple,
-      file,
-      fullname ?? 'user-document'
-    )
+      fileObject: file,
+      fullname: fullname ?? 'user-document'
+    })
 
     const fileUrl =
       `https://${

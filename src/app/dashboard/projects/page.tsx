@@ -92,7 +92,7 @@ export default function Projects() {
 
         // upload the project images to s3
         const formData = new FormData()
-        formData.append('file', file[0]!) // add the first image to test the upload
+        formData.append('file', JSON.stringify(file)) // add the first image to test the upload
         formData.append('multiple', 'true')
         const { data: shms_project_images } = await axios.post(
           `${API_URL}/uploadurl`,
