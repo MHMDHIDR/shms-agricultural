@@ -13,7 +13,7 @@ export type UserProps = {
   shms_phone?: string
   shms_address?: string
   shms_doc?: string
-  shms_user_stocks?: number
+  shms_user_stocks?: ProjectProps[]
   shms_created_at?: string
   shms_user_account_type?: 'admin' | 'user'
   shms_user_account_status?: 'active' | 'block' | 'pending'
@@ -33,6 +33,29 @@ export type UserProps = {
   newPassSet?: number
   // When user changes their email, this is set to 1
   resetEmail?: number
+}
+
+export type ProjectProps = {
+  shms_project_id: string
+  shms_project_images: string
+  shms_project_name: string
+  shms_project_location: string
+  shms_project_start_date: Date
+  shms_project_end_date: Date
+  shms_project_invest_date: Date
+  shms_project_available_stocks: number
+  shms_project_stock_price: number
+  shms_project_stock_profits: number
+  shms_project_description: string
+  shms_project_status: 'active' | 'pending'
+  // When project is added, this is set to 1
+  projectAdded?: number
+  // When project is updated, this is set to 1
+  projectUpdated?: number
+  // When project is deleted, this is set to 1
+  projectDeleted?: number
+  // When a project action happens
+  message?: string
 }
 
 export type UserLoggedInProps =
@@ -109,25 +132,3 @@ export type MenuItemsProps = {
   href: string
   description: string
 }[]
-
-export type ProjectProps = {
-  shms_id: string
-  shms_project_images: string
-  shms_project_name: string
-  shms_project_location: string
-  shms_project_start_date: Date
-  shms_project_end_date: Date
-  shms_project_invest_date: Date
-  shms_project_stock_price: number
-  shms_project_stock_profits: number
-  shms_project_description: string
-  shms_project_status: 'active' | 'pending'
-  // When project is added, this is set to 1
-  projectAdded?: number
-  // When project is updated, this is set to 1
-  projectUpdated?: number
-  // When project is deleted, this is set to 1
-  projectDeleted?: number
-  // When a project action happens
-  message?: string
-}

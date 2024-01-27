@@ -34,7 +34,7 @@ const FileUpload = ({
               alt={`Agricultural Project View`}
               height={FILE_UPLOAD_IMG_SIZE}
               width={FILE_UPLOAD_IMG_SIZE}
-              className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
+              className='object-cover w-32 h-32 p-1 border border-gray-400 min-h-fit dark:border-gray-300 rounded-xl'
             />
           </div>
         ) : //if there's image in Preview (fileURLs)
@@ -50,7 +50,7 @@ const FileUpload = ({
                 alt={data?.imgName ?? `Agricultural Project View`}
                 height={FILE_UPLOAD_IMG_SIZE}
                 width={FILE_UPLOAD_IMG_SIZE}
-                className={`object-cover p-1 border border-gray-400 max-w-[7rem] w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl`}
+                className={`object-cover p-1 border border-gray-400 max-w-[7rem] w-32 min-h-fit h-32 dark:border-gray-300 rounded-xl`}
               />
               <button
                 type='button'
@@ -77,9 +77,9 @@ const FileUpload = ({
                   alt={docImgDisplayName || `Agricultural Project View`}
                   height={FILE_UPLOAD_IMG_SIZE}
                   width={FILE_UPLOAD_IMG_SIZE}
-                  className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
+                  className='object-cover w-32 h-32 p-1 border border-gray-400 min-h-fit dark:border-gray-300 rounded-xl'
                 />
-                {hasImgs && !ignoreDelete && (
+                {fileURLs.length > 0 && hasImgs && !ignoreDelete && (
                   <button
                     type='button'
                     id='deleteImg'
@@ -98,7 +98,7 @@ const FileUpload = ({
       {/* Label and Input */}
       <Label
         htmlFor='projectImg'
-        className={`grid col-span-full place-items-center justify-center gap-5 p-3 overflow-y-auto border border-gray-200 hover:bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-700 hover:dark:bg-gray-600 transition-colors duration-300`}
+        className={`grid col-span-full h-fit place-items-center justify-center gap-5 p-3 overflow-y-auto border border-gray-200 hover:bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-700 hover:dark:bg-gray-600 transition-colors duration-300`}
       >
         {/* Getting the id from: { params }: { params: { id: string } } */}
         {id && (

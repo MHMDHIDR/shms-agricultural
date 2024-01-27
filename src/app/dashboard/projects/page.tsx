@@ -163,19 +163,19 @@ export default function Projects() {
             <CardTitle>اضافة مشروع جديد</CardTitle>
           </CardHeader>
           <CardContent className='space-y-2'>
-            {/* <div className='grid grid-cols-2 grid-rows-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
-            <FileUpload
-              data={{
-                defaultImg: [
-                  {
-                    docImgDisplayName: 'Tree',
-                    docImgDisplayPath: 'https://source.unsplash.com/random?tree'
-                  } 
-                ],
-                imgName: 'Agricultural Project View'
-              }}
-            />
-          </div> */}
+            <div className='grid grid-cols-2 grid-rows-3 gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+              <FileUpload
+                data={{
+                  defaultImg: [
+                    {
+                      docImgDisplayName: 'Tree',
+                      docImgDisplayPath: 'https://source.unsplash.com/random?tree'
+                    }
+                  ],
+                  imgName: 'Agricultural Project View'
+                }}
+              />
+            </div>
             {projectNameError && <FormMessage error>{projectNameError}</FormMessage>}
             <div className='space-y-1'>
               <Label htmlFor='projectName'> اسم المشروع </Label>
