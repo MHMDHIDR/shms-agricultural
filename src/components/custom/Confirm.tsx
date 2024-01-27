@@ -13,10 +13,12 @@ import { cn } from '@/lib/utils'
 
 export default function Confirm({
   message,
+  onClick,
   className,
   children
 }: {
   message?: string
+  onClick: () => void
   className?: string
   children: string | React.ReactNode
 }) {
@@ -43,7 +45,7 @@ export default function Confirm({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>إلغاء</AlertDialogCancel>
-          <AlertDialogAction>متابعة</AlertDialogAction>
+          <AlertDialogAction onClick={onClick}>متابعة</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

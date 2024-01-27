@@ -33,6 +33,8 @@ export type UserProps = {
   newPassSet?: number
   // When user changes their email, this is set to 1
   resetEmail?: number
+  // When user is delete, this is set to 1
+  userDeleted?: number
 }
 
 export type ProjectProps = {
