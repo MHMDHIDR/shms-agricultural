@@ -88,20 +88,25 @@ export default function Projects() {
         resetFormErrors()
         setIsSubmittingForm(true)
 
-        console.log('file --->', file)
-
-        // upload the project images to s3
+        // create a new form data with files data
         const formData = new FormData()
-        formData.append('file', JSON.stringify(file)) // add the first image to test the upload
         formData.append('multiple', 'true')
-        const { data: shms_project_images } = await axios.post(
-          `${API_URL}/uploadurl`,
-          formData
-        )
 
+        file.forEach((singleFile, index) => formData.append(`file[${index}]`, singleFile))
+        // upload the project images to s3
+        const {
+          data: shms_project_images,
+          shms_project_id
+        }: {
+          data: ProjectProps['shms_project_images']
+          shms_project_id: ProjectProps['shms_project_id']
+        } = await axios.post(`${API_URL}/uploadurl`, formData)
+
+        // upload the project data to the database
         const addProject: { data: ProjectProps } = await axios.post(
           `${API_URL}/projects/add`,
           {
+            shms_project_id,
             shms_project_name: projectName,
             shms_project_location: projectLocation,
             shms_project_start_date: projectStartDate,

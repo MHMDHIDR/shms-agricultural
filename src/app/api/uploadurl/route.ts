@@ -34,7 +34,7 @@ async function uploadFileToS3({
   const key = `${randomUUID()}-${fullname}-${name}`
   const params = {
     Bucket: AWS_BUCKET_NAME,
-    Key: multiple ? `${projectId}/projects/${key}` : key,
+    Key: multiple ? `projects/${projectId ? `${projectId}/${key}` : key}` : key,
     Body: file,
     ContentType: type
   }
@@ -61,30 +61,81 @@ async function getSignedFileUrl(key: string, bucket: string, expiresIn: number) 
 export async function POST(request: any) {
   try {
     const formData = await request.formData()
-    const multiple: boolean = JSON.parse(formData.get('multiple') ?? 'false')
-    const file: File = formData.get('file')
     const fullname: string = formData.get('fullname')
+    const multiple: boolean = JSON.parse(formData.get('multiple') ?? 'false')
+    const projectId: string = randomUUID()
 
-    if (!file) return new Response('No file found', { status: 400 })
+    // Extract files dynamically based on their dynamic names
+    const files: File[] = []
+    let index = 0
+    while (formData.has(`file[${index}]`)) {
+      files.push(formData.get(`file[${index}]`))
+      index++
+    }
 
-    const key = await uploadFileToS3({
-      file: Buffer.from(await file.arrayBuffer()),
-      multiple,
-      fileObject: file,
-      fullname: fullname ?? 'user-document'
-    })
+    if (!files || files.length === 0) {
+      return new Response('No file found', { status: 400 })
+    }
 
-    const fileUrl =
-      `https://${
-        multiple ? `projects/` + AWS_BUCKET_NAME : AWS_BUCKET_NAME
-      }.s3.${AWS_REGION}.amazonaws.com/${key}` ??
-      (await getSignedFileUrl(
-        key,
-        multiple ? `projects/` + AWS_BUCKET_NAME : AWS_BUCKET_NAME!,
-        3600
-      ))
+    // if single file
+    if (!multiple) {
+      const file: File = files[0] ?? formData.get('file')
+      if (!file) return new Response('No file found', { status: 400 })
 
-    return new Response(fileUrl, { status: 200 })
+      const key = await uploadFileToS3({
+        file: Buffer.from(await file.arrayBuffer()),
+        multiple,
+        fileObject: file,
+        fullname: fullname ?? 'user-document'
+      })
+
+      const fileUrl =
+        `https://${
+          multiple ? `projects/` + AWS_BUCKET_NAME : AWS_BUCKET_NAME
+        }.s3.${AWS_REGION}.amazonaws.com/${key}` ??
+        (await getSignedFileUrl(
+          key,
+          multiple ? `projects/` + AWS_BUCKET_NAME : AWS_BUCKET_NAME!,
+          3600
+        ))
+
+      return new Response(fileUrl, { status: 200 })
+    } else {
+      const fileURLs: string[] = []
+      const fileKeys: string[] = []
+
+      for (const file of files) {
+        const key = await uploadFileToS3({
+          file: Buffer.from(await file.arrayBuffer()),
+          multiple,
+          fileObject: file,
+          fullname: fullname ?? 'user-document',
+          projectId
+        })
+
+        const fileUrl =
+          `https://${
+            multiple ? `projects/${projectId}` + AWS_BUCKET_NAME : AWS_BUCKET_NAME
+          }.s3.${AWS_REGION}.amazonaws.com/${key}` ??
+          (await getSignedFileUrl(
+            key,
+            multiple ? `projects/${projectId}` + AWS_BUCKET_NAME : AWS_BUCKET_NAME!,
+            3600
+          ))
+
+        fileURLs.push(fileUrl)
+        fileKeys.push(key)
+      }
+
+      return new Response(
+        JSON.stringify({
+          shms_project_id: projectId,
+          shms_project_images: fileURLs,
+          fileKeys
+        }),
+        { status: 200 }
+      )
+    }
   } catch (error: any) {
     console.error(error)
     return new Response(error.message, { status: 500 })
