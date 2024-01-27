@@ -1,7 +1,7 @@
 'use client'
 
 import { useContext, useState } from 'react'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { toast } from 'sonner'
@@ -23,7 +23,6 @@ import FormMessage from '@/components/custom/FormMessage'
 import { Error, Success } from '@/components/icons/Status'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import type { ProjectProps } from '@/types'
-import { uploadS3 } from '@/lib/utils'
 
 export default function Projects() {
   const [projectName, setProjectName] = useState('')
@@ -49,7 +48,7 @@ export default function Projects() {
 
   const { file } = useContext(FileUploadContext)
 
-  const { replace } = useRouter()
+  // const { replace } = useRouter()
 
   const handelAddProject = async (e: {
     target: any
@@ -89,11 +88,15 @@ export default function Projects() {
         resetFormErrors()
         setIsSubmittingForm(true)
 
+        console.log('file --->', file)
+
+        // upload the project images to s3
         const formData = new FormData()
-        const { projectImages } = await uploadS3(file)
-        formData.append(
-          'projectImages',
-          JSON.stringify(projectImages.length > 0 ? projectImages : [])
+        formData.append('file', file[0]!) // add the first image to test the upload
+        formData.append('multiple', 'true')
+        const { data: shms_project_images } = await axios.post(
+          `${API_URL}/uploadurl`,
+          formData
         )
 
         const addProject: { data: ProjectProps } = await axios.post(
@@ -107,7 +110,7 @@ export default function Projects() {
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
             shms_project_description: projectDescription,
-            ...formData
+            shms_project_images
           }
         )
         //getting response from backend
@@ -130,7 +133,7 @@ export default function Projects() {
           })
 
         setIsDoneSubmitting(true)
-        setTimeout(() => replace(`/dashboard`), DEFAULT_DURATION)
+        // setTimeout(() => replace(`/dashboard`), DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(JSON.stringify(error ?? 'حدث خطأ ما'), {
@@ -261,6 +264,8 @@ export default function Projects() {
               <Input
                 id='stockPrice'
                 type='number'
+                inputMode='numeric'
+                min={0}
                 onChange={e => setStockPrice(parseFloat(e.target.value))}
               />
             </div>
@@ -271,6 +276,8 @@ export default function Projects() {
               <Input
                 id='stockProfits'
                 type='number'
+                inputMode='numeric'
+                min={0}
                 onChange={e => setStockProfits(parseFloat(e.target.value))}
               />
             </div>
@@ -304,7 +311,7 @@ export default function Projects() {
                 </>
               ) : isDoneSubmitting ? (
                 <>
-                  <Success />
+                  <Success className='ml-2' />
                   تم إضافة المشروع بنجاح
                 </>
               ) : (

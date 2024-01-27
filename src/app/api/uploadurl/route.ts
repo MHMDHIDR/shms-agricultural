@@ -23,15 +23,16 @@ const s3Client = new S3Client(s3ClientConfig)
  */
 async function uploadFileToS3(
   file: Buffer,
+  multiple: boolean,
   fileObject: File,
-  fullname: string
+  fullname?: string
 ): Promise<string> {
   const { name, type } = fileObject
   // a Unique key (name) for the file
   const key = `${randomUUID()}-${fullname}-${name}`
   const params = {
     Bucket: AWS_BUCKET_NAME,
-    Key: key,
+    Key: multiple ? `projects/` + key : key,
     Body: file,
     ContentType: type
   }
@@ -58,22 +59,30 @@ async function getSignedFileUrl(key: string, bucket: string, expiresIn: number) 
 export async function POST(request: any) {
   try {
     const formData = await request.formData()
+    const multiple: boolean = JSON.parse(formData.get('multiple') ?? 'false')
     const file: File = formData.get('file')
     const fullname: string = formData.get('fullname')
 
-    if (!file) {
-      return new Response('No file found', { status: 400 })
-    }
+    console.log({ file, multiple })
+
+    if (!file) return new Response('No file found', { status: 400 })
 
     const key = await uploadFileToS3(
       Buffer.from(await file.arrayBuffer()),
+      multiple,
       file,
-      fullname ?? 'unknown'
+      fullname ?? 'user-document'
     )
 
     const fileUrl =
-      `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}` ??
-      (await getSignedFileUrl(key, AWS_BUCKET_NAME!, 3600))
+      `https://${
+        multiple ? `projects/` + AWS_BUCKET_NAME : AWS_BUCKET_NAME
+      }.s3.${AWS_REGION}.amazonaws.com/${key}` ??
+      (await getSignedFileUrl(
+        key,
+        multiple ? `projects/` + AWS_BUCKET_NAME : AWS_BUCKET_NAME!,
+        3600
+      ))
 
     return new Response(fileUrl, { status: 200 })
   } catch (error: any) {

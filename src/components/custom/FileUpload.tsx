@@ -107,7 +107,7 @@ const FileUpload = ({
           </p>
         )}
 
-        <Button>
+        <Button className='pointer-events-none'>
           تم إختيار
           <span className='px-4 text-lg font-bold text-white'>{file.length ?? 0}</span>
           {file.length > 1 ? 'صور' : 'صورة'}

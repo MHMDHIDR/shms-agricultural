@@ -674,4 +674,11 @@
   ::-webkit-scrollbar-thumb {
     @apply rounded-lg;
   }
+
+  /* hide input number increment buttons */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
