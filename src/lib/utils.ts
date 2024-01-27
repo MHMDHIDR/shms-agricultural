@@ -82,3 +82,18 @@ export const arabicDate = (date: string) =>
     minute: 'numeric',
     second: 'numeric'
   })
+
+/**
+ * Method to scroll to a top the top of the page
+ * @param scrollY - the scrollY position to scroll to
+ * @returns void
+ */
+export const scrollToView = (scrollY: number | undefined = 500) =>
+  setTimeout(
+    () =>
+      window.scrollTo({
+        top: scrollY ?? (document.querySelector(`#hero`) as HTMLElement)?.offsetHeight,
+        behavior: 'smooth'
+      }),
+    100
+  )

@@ -1,7 +1,7 @@
 'use client'
 
 import { useContext, useState } from 'react'
-// import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { toast } from 'sonner'
@@ -37,6 +37,7 @@ export default function Projects() {
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
   // Form Errors
+  const [projectImagesError, setImagesNameError] = useState('')
   const [projectNameError, setProjectNameError] = useState('')
   const [projectLocationError, setProjectLocationError] = useState('')
   const [projectStartDateError, setProjectStartDateError] = useState('')
@@ -48,7 +49,7 @@ export default function Projects() {
 
   const { file } = useContext(FileUploadContext)
 
-  // const { replace } = useRouter()
+  const { replace } = useRouter()
 
   const handelAddProject = async (e: {
     target: any
@@ -59,7 +60,10 @@ export default function Projects() {
     e.preventDefault()
 
     // check if the form is valid
-    if (projectName === '') {
+    if (file.length === 0) {
+      resetFormErrors()
+      setImagesNameError('الرجاء التأكد من رفع صور المشروع')
+    } else if (projectName === '') {
       resetFormErrors()
       setProjectNameError('الرجاء التأكد من كتابة اسم المشروع')
     } else if (projectLocation === '') {
@@ -95,11 +99,9 @@ export default function Projects() {
         file.forEach((singleFile, index) => formData.append(`file[${index}]`, singleFile))
         // upload the project images to s3
         const {
-          data: shms_project_images,
-          shms_project_id
+          data: { shms_project_id, shms_project_images }
         }: {
-          data: ProjectProps['shms_project_images']
-          shms_project_id: ProjectProps['shms_project_id']
+          data: ProjectProps
         } = await axios.post(`${API_URL}/uploadurl`, formData)
 
         // upload the project data to the database
@@ -138,7 +140,7 @@ export default function Projects() {
           })
 
         setIsDoneSubmitting(true)
-        // setTimeout(() => replace(`/dashboard`), DEFAULT_DURATION)
+        setTimeout(() => replace(`/dashboard`), DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(JSON.stringify(error ?? 'حدث خطأ ما'), {
@@ -194,9 +196,11 @@ export default function Projects() {
                   ],
                   imgName: 'Agricultural Project View'
                 }}
+                ignoreRequired
               />
             </div>
-            {projectNameError && <FormMessage error>{projectNameError}</FormMessage>}
+            {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}
+
             <div className='space-y-1'>
               <Label htmlFor='projectName'> اسم المشروع </Label>
               <Input
@@ -205,10 +209,8 @@ export default function Projects() {
                 onChange={e => setProjectName(e.target.value)}
               />
             </div>
+            {projectNameError && <FormMessage error>{projectNameError}</FormMessage>}
 
-            {projectLocationError && (
-              <FormMessage error>{projectLocationError}</FormMessage>
-            )}
             <div className='space-y-1'>
               <Label htmlFor='projectLocation'> منطقة المشروع </Label>
               <Input
@@ -217,10 +219,10 @@ export default function Projects() {
                 onChange={e => setProjectLocation(e.target.value)}
               />
             </div>
-
-            {projectStartDateError && (
-              <FormMessage error>{projectStartDateError}</FormMessage>
+            {projectLocationError && (
+              <FormMessage error>{projectLocationError}</FormMessage>
             )}
+
             <div className='space-y-1'>
               <Label htmlFor='projectStartDate'> تاريخ بداية المشروع </Label>
               <div className='md:w-3/3'>
@@ -232,10 +234,10 @@ export default function Projects() {
                 />
               </div>
             </div>
-
-            {projectEndDateError && (
-              <FormMessage error>{projectEndDateError}</FormMessage>
+            {projectStartDateError && (
+              <FormMessage error>{projectStartDateError}</FormMessage>
             )}
+
             <div className='space-y-1'>
               <Label htmlFor='projectEndDate'> تاريخ نهاية المشروع </Label>
               <div className='md:w-3/3'>
@@ -247,10 +249,10 @@ export default function Projects() {
                 />
               </div>
             </div>
-
-            {projectInvestEndDateError && (
-              <FormMessage error>{projectInvestEndDateError}</FormMessage>
+            {projectEndDateError && (
+              <FormMessage error>{projectEndDateError}</FormMessage>
             )}
+
             <div className='space-y-1'>
               <Label htmlFor='projectInvestEndDate'> اخر موعد للمساهمة </Label>
               <div className='md:w-3/3'>
@@ -262,8 +264,10 @@ export default function Projects() {
                 />
               </div>
             </div>
+            {projectInvestEndDateError && (
+              <FormMessage error>{projectInvestEndDateError}</FormMessage>
+            )}
 
-            {stockPriceError && <FormMessage error>{stockPriceError}</FormMessage>}
             <div className='space-y-1'>
               <Label htmlFor='stockPrice'> قيمة السهم الواحد </Label>
               <Input
@@ -274,8 +278,8 @@ export default function Projects() {
                 onChange={e => setStockPrice(parseFloat(e.target.value))}
               />
             </div>
+            {stockPriceError && <FormMessage error>{stockPriceError}</FormMessage>}
 
-            {stockProfitsError && <FormMessage error>{stockProfitsError}</FormMessage>}
             <div className='space-y-1'>
               <Label htmlFor='stockProfits'> ارباح السهم الواحد </Label>
               <Input
@@ -286,10 +290,8 @@ export default function Projects() {
                 onChange={e => setStockProfits(parseFloat(e.target.value))}
               />
             </div>
+            {stockProfitsError && <FormMessage error>{stockProfitsError}</FormMessage>}
 
-            {projectDescriptionError && (
-              <FormMessage error>{projectDescriptionError}</FormMessage>
-            )}
             <div className='space-y-1'>
               <Label htmlFor='projectDescription'> وصف المشروع </Label>
               <textarea
@@ -300,6 +302,9 @@ export default function Projects() {
                 rows={5}
               />
             </div>
+            {projectDescriptionError && (
+              <FormMessage error>{projectDescriptionError}</FormMessage>
+            )}
           </CardContent>
           <CardFooter>
             <Button
