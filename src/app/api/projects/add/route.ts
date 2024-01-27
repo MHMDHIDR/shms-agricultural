@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   try {
     // add project to DB
     const newProject = await connectDB(
-      `INSERT INTO projects (shms_id,
+      `INSERT INTO projects (shms_project_id,
                           shms_project_images,
                           shms_project_name,
                           shms_project_location,
