@@ -109,3 +109,25 @@ export type MenuItemsProps = {
   href: string
   description: string
 }[]
+
+export type ProjectProps = {
+  shms_id: string
+  shms_project_images: string
+  shms_project_name: string
+  shms_project_location: string
+  shms_project_start_date: Date
+  shms_project_end_date: Date
+  shms_project_invest_date: Date
+  shms_project_stock_price: number
+  shms_project_stock_profits: number
+  shms_project_description: string
+  shms_project_status: 'active' | 'pending'
+  // When project is added, this is set to 1
+  projectAdded?: number
+  // When project is updated, this is set to 1
+  projectUpdated?: number
+  // When project is deleted, this is set to 1
+  projectDeleted?: number
+  // When a project action happens
+  message?: string
+}

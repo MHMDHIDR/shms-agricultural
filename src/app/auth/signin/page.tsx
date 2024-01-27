@@ -124,7 +124,7 @@ const SigninPage = () => {
         const message: UserProps['message'] =
           error?.response?.data?.message ?? 'حدث خطأ ما'
         //handle error, show notification using Shadcn notifcation
-        toast(message, {
+        toast(message ?? JSON.stringify(error), {
           icon: <Error className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
           className: 'text-right select-none rtl',

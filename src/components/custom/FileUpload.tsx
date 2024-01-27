@@ -68,7 +68,7 @@ const FileUpload = ({
               idx: number
             ) => (
               <div
-                className={`flex items-center gap-y-3 max-h-44 h-44 place-content-center`}
+                className={`flex flex-col items-center gap-y-3 max-h-44 h-44 place-content-center`}
                 key={data.foodId! + idx}
               >
                 <Image
