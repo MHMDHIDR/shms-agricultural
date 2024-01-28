@@ -47,9 +47,9 @@ export default function Projects() {
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
 
-  const { file } = useContext(FileUploadContext)
+  const { file, setFileURLs, setFile } = useContext(FileUploadContext)
 
-  const { replace } = useRouter()
+  const { push } = useRouter()
 
   const handelAddProject = async (e: {
     target: any
@@ -140,7 +140,8 @@ export default function Projects() {
           })
 
         setIsDoneSubmitting(true)
-        setTimeout(() => replace(`/dashboard`), DEFAULT_DURATION)
+        resetFormFields()
+        setTimeout(() => push(`/dashboard`), DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
@@ -175,6 +176,22 @@ export default function Projects() {
     setStockPriceError('')
     setStockProfitsError('')
     setProjectDescriptionError('')
+  }
+
+  /**
+   * Reset all form fields
+   */
+  function resetFormFields() {
+    setProjectName('')
+    setProjectLocation('')
+    setProjectStartDate(undefined)
+    setProjectEndDate(undefined)
+    setProjectInvestEndDate(undefined)
+    setStockPrice(undefined)
+    setStockProfits(undefined)
+    setProjectDescription('')
+    setFile!([])
+    setFileURLs([])
   }
 
   return (

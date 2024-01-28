@@ -71,6 +71,7 @@ export type UserLoggedInProps =
 export type FileUploadProps = {
   file: File[]
   fileURLs: string[]
+  setFile?: (file: File[]) => void
   setFileURLs(fileURLs: string[]): void
   onFileAdd?: (e: { target: { files: any } }) => void
   onFileRemove(fileUrl: string, fileName: string): void

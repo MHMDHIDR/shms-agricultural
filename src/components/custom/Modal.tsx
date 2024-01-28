@@ -57,6 +57,7 @@ export default function Modal({
             size='sm'
             className='w-32 px-3 md:w-full'
             onClick={() => saveAs(document, `${title}.jpg`)}
+            variant={'pressable'}
           >
             <span className='sr-only'>تحميل مستند {title}</span>
             <span className='hidden w-full md:inline-block'>تحميل المستند</span>

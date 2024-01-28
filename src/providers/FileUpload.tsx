@@ -34,6 +34,7 @@ export const FileUploadProvider = ({ children }: { children: React.ReactNode }) 
       value={{
         file,
         fileURLs,
+        setFile,
         setFileURLs,
         onFileAdd,
         onFileRemove
