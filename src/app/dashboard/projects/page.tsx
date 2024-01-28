@@ -207,8 +207,8 @@ export default function Projects() {
                 data={{
                   defaultImg: [
                     {
-                      docImgDisplayName: 'Tree',
-                      docImgDisplayPath: 'https://source.unsplash.com/random?tree'
+                      imgDisplayName: 'Tree',
+                      imgDisplayPath: 'https://source.unsplash.com/random?tree'
                     }
                   ],
                   imgName: 'Agricultural Project View'

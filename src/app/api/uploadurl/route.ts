@@ -1,7 +1,7 @@
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
 import { randomUUID } from 'crypto'
-import type { DocImgsProps, uploadFileToS3Props } from '@/types'
+import type { imgsProps, uploadFileToS3Props } from '@/types'
 import { APP_LOGO } from '@/data/constants'
 
 const { AWS_ACCESS_ID, AWS_SECRET, AWS_BUCKET_NAME, AWS_REGION } = process.env
@@ -132,9 +132,9 @@ export async function POST(request: any) {
           shms_project_id: projectId,
           shms_project_images: fileKeys.map((fileKey, index) => {
             return {
-              docImgDisplayName: fileKey,
-              docImgDisplayPath: fileURLs[index] ?? APP_LOGO
-            } satisfies DocImgsProps
+              imgDisplayName: fileKey,
+              imgDisplayPath: fileURLs[index] ?? APP_LOGO
+            } satisfies imgsProps
           })
         }),
         { status: 200 }

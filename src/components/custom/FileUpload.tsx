@@ -4,10 +4,7 @@ import { FileUploadContext } from '@/providers/FileUpload'
 import { FILE_UPLOAD_IMG_SIZE } from '@/data/constants'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import type {
-  FileUploadComponentProps,
-  FileUploadProps /*, DocImgsProps*/
-} from '@/types'
+import type { FileUploadComponentProps, FileUploadProps /*, imgsProps*/ } from '@/types'
 
 const FileUpload = ({
   data,
@@ -19,8 +16,8 @@ const FileUpload = ({
     useContext<FileUploadProps>(FileUploadContext)
 
   const hasImgs =
-    (data.defaultImg[0]?.docImgDisplayName?.length ?? 0 > 0) ||
-    (data.defaultImg[0]?.docImgDisplayPath?.length ?? 0 > 0)
+    (data.defaultImg[0]?.imgDisplayName?.length ?? 0 > 0) ||
+    (data.defaultImg[0]?.imgDisplayPath?.length ?? 0 > 0)
 
   return (
     <>
@@ -63,18 +60,15 @@ const FileUpload = ({
           ))
         ) : (
           data.defaultImg.map(
-            (
-              { docImgDisplayName, docImgDisplayPath }: any /*DocImgsProps*/,
-              idx: number
-            ) => (
+            ({ imgDisplayName, imgDisplayPath }: any /*imgsProps*/, idx: number) => (
               <div
                 className={`flex flex-col col-span-full items-center gap-y-3 max-h-44 h-44 place-content-center`}
                 key={data.foodId! + idx}
               >
                 <Image
                   loading='lazy'
-                  src={docImgDisplayPath || `https://source.unsplash.com/random?tree`}
-                  alt={docImgDisplayName || `Agricultural Project View`}
+                  src={imgDisplayPath || `https://source.unsplash.com/random?tree`}
+                  alt={imgDisplayName || `Agricultural Project View`}
                   height={FILE_UPLOAD_IMG_SIZE}
                   width={FILE_UPLOAD_IMG_SIZE}
                   className='object-cover w-32 h-32 p-1 border border-gray-400 min-h-fit dark:border-gray-300 rounded-xl'
@@ -84,7 +78,7 @@ const FileUpload = ({
                     type='button'
                     id='deleteImg'
                     className='px-6 py-1 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
-                    data-img-name={docImgDisplayName}
+                    data-img-name={imgDisplayName}
                   >
                     حذف
                   </button>

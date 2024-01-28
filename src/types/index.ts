@@ -39,7 +39,7 @@ export type UserProps = {
 
 export type ProjectProps = {
   shms_project_id: string
-  shms_project_images: string[]
+  shms_project_images: imgsProps[]
   shms_project_name: string
   shms_project_location: string
   shms_project_start_date: Date
@@ -81,7 +81,7 @@ export type FileUploadComponentProps = {
   data: {
     foodId?: string
     imgName: string
-    defaultImg: DocImgsProps[]
+    defaultImg: imgsProps[]
   }
   ignoreRequired?: boolean
   ignoreDelete?: boolean | undefined
@@ -93,9 +93,9 @@ export type fileRequestProps = NextApiRequest & {
   type: string
 }
 
-export type DocImgsProps = {
-  docImgDisplayName: string
-  docImgDisplayPath: string
+export type imgsProps = {
+  imgDisplayName: string
+  imgDisplayPath: string
 }
 
 export type uploadFileToS3Props = {
@@ -143,3 +143,11 @@ export type MenuItemsProps = {
   href: string
   description: string
 }[]
+
+export type NoItemsProps = {
+  msg?: string
+  links: {
+    to: string
+    label: string
+  }[]
+}
