@@ -195,7 +195,7 @@ export default function Projects() {
   }
 
   return (
-    <TabsContent dir='rtl' value='projects'>
+    <TabsContent dir='rtl' value='add_project'>
       <Card>
         <form onSubmit={e => handelAddProject(e)}>
           <CardHeader>
@@ -327,9 +327,7 @@ export default function Projects() {
             <Button
               disabled={isSubmittingForm}
               type='submit'
-              className={`shadow bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold${
-                isDoneSubmitting ? ' opacity-50' : ''
-              }`}
+              className={`shadow bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold`}
             >
               {isSubmittingForm ? (
                 <>

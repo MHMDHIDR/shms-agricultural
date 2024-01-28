@@ -59,21 +59,21 @@ export default function DashboardStocks() {
         <Table className='min-w-full divide-y divide-gray-200'>
           <TableHeader>
             <TableRow>
-              <TableHead style={{ textAlign: 'center' }}>الاسهم المتاحة</TableHead>
-              <TableHead style={{ textAlign: 'center' }}>تاريخ الاضافة</TableHead>
-              <TableHead style={{ textAlign: 'center' }}>الاجراء</TableHead>
+              <TableHead className='text-center'>الاسهم المتاحة</TableHead>
+              <TableHead className='text-center'>تاريخ الاضافة</TableHead>
+              <TableHead className='text-center'>الاجراء</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {invoices.map(invoice => (
               <TableRow key={invoice.stocks}>
-                <TableCell style={{ textAlign: 'center' }}>{invoice.stocks}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>{invoice.date}</TableCell>
-
-                <TableCell style={{ textAlign: 'center' }}>
-                  {' '}
-                  <Button style={{ backgroundColor: 'red', margin: 1 }}>حذف</Button>{' '}
-                  <Button style={{ margin: 1 }}>تعديل</Button>{' '}
+                <TableCell className='text-center'>{invoice.stocks}</TableCell>
+                <TableCell className='text-center'>{invoice.date}</TableCell>
+                <TableCell className='flex justify-center gap-2'>
+                  <Button className='font-bold bg-red-500 hover:bg-red-600 dark:text-white'>
+                    حذف
+                  </Button>
+                  <Button variant={'outline'}>تعديل</Button>
                 </TableCell>
               </TableRow>
             ))}
