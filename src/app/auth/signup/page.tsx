@@ -52,6 +52,10 @@ const SignupPage = () => {
 
   // Errors States
   const [fullNameError, setFullNameError] = useState('')
+  const [fNameError, setFNameError] = useState('')
+  const [sNameError, setSNameError] = useState('')
+  const [tNameError, setTNameError] = useState('')
+
   const [nationlityError, setNationlityError] = useState('')
   const [dateOfBirthError, setDateOfBirthError] = useState('')
   const [addressError, setAddressError] = useState('')
@@ -61,6 +65,30 @@ const SignupPage = () => {
   const [passConfirmError, setPassConfirmError] = useState('')
   const [fileError, setFileError] = useState('')
   const [acceptedTermError, setAcceptedTermError] = useState('')
+
+  const blurFName = (e: string) => {
+    if (e === '') {
+      setFNameError('الرجاء ادخال الاسم الاول')
+    } else {
+      setFNameError('')
+    }
+  }
+
+  const blurSName = (e: string) => {
+    if (e === '') {
+      setSNameError('الرجاء ادخال الاسم الثاني')
+    } else {
+      setSNameError('')
+    }
+  }
+
+  const blurTName = (e: string) => {
+    if (e === '') {
+      setTNameError('الرجاء ادخال الاسم الثالث')
+    } else {
+      setTNameError('')
+    }
+  }
 
   const blurEmail = (e: string) => {
     if (!validateEmail(e)) {
@@ -127,10 +155,13 @@ const SignupPage = () => {
     return allowedExtensions.includes(fileExtension!)
   }
 
+  const maxSize = 2 * 1024 * 1024
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileName = e.target.value
     if (!validateFile(fileName)) {
       setFileError('فقط الملفات من النوع jpg, jpeg, png, pdf مسموح بها')
+    } else if (e.target.size > maxSize) {
+      setFileError('حجم الملف يجب أن يكون أقل من 2 ميجابايت')
     } else {
       setFileError('')
       onFileAdd(e)
@@ -152,7 +183,7 @@ const SignupPage = () => {
     // check if the form is valid
     if (fName === '' || sName === '' || tName === '') {
       resetFormErrors()
-      setFullNameError('الرجاء التأكد من إدخال الاسم بشكل صحيح')
+      setFullNameError('الرجاء التأكد من إدخال الاسم الأول، والثاني، والثالث')
     } else if (nationality === '') {
       resetFormErrors()
       setNationlityError('الرجاء التأكد من إدخال الجنسية')
@@ -225,7 +256,6 @@ const SignupPage = () => {
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(JSON.stringify(error ?? 'حدث خطأ ما'), {
-          // message: old var
           icon: <Error className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
           className: 'text-right select-none rtl',
@@ -268,17 +298,21 @@ const SignupPage = () => {
           backButtonHref='/auth/signin'
         >
           <form
-            className='w-full max-w-fit md:m-5'
             dir='rtl'
+            className='w-full max-w-fit md:m-5'
             onSubmit={e => handelSignupForm(e)}
+            noValidate
           >
-            {fullNameError && <FormMessage error>{fullNameError}</FormMessage>}
             <div className='mb-6'>
-              <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
+              {fullNameError && <FormMessage error>{fullNameError}</FormMessage>}
+              {fNameError && <FormMessage error>{fNameError}</FormMessage>}
+              {sNameError && <FormMessage error>{sNameError}</FormMessage>}
+              {tNameError && <FormMessage error>{tNameError}</FormMessage>}
+              <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
                 <div>
                   <label
                     htmlFor='firstName'
-                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
+                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
                   >
                     الاسم الاول
                     <span className='text-red-500'>*</span>
@@ -286,98 +320,100 @@ const SignupPage = () => {
                   <input
                     id='firstName'
                     type='text'
-                    onChange={e => setFName(e.target.value)}
                     onFocus={() =>
-                      // hide placeholder on focus
                       ((
                         document.getElementById('firstName') as HTMLInputElement
                       ).placeholder = '')
                     }
-                    onBlur={() =>
-                      // show placeholder on blur
-                      ((
+                    onChange={e => setFName(e.target.value)}
+                    onBlur={e => {
+                      blurFName(e.target.value)
+                      ;(
                         document.getElementById('firstName') as HTMLInputElement
-                      ).placeholder = 'محمد')
-                    }
-                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                      ).placeholder = 'محمد'
+                    }}
+                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                     placeholder='محمد'
+                    required
                   />
                 </div>
                 <div>
                   <label
                     htmlFor='secondName'
-                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
+                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
                   >
                     الاسم الثاني
                     <span className='text-red-500'>*</span>
                   </label>
                   <input
                     id='secondName'
-                    onChange={e => setSName(e.target.value)}
                     onFocus={() =>
-                      // hide placeholder on focus
                       ((
                         document.getElementById('secondName') as HTMLInputElement
                       ).placeholder = '')
                     }
-                    onBlur={() =>
-                      // show placeholder on blur
-                      ((
+                    onChange={e => setSName(e.target.value)}
+                    onBlur={e => {
+                      blurSName(e.target.value)
+                      ;(
                         document.getElementById('secondName') as HTMLInputElement
-                      ).placeholder = 'عبد الرحيم')
-                    }
-                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                      ).placeholder = 'عبد الرحيم'
+                    }}
+                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
-                    placeholder='عبد الرحيم'
+                    placeholder='عبدالرحيم'
+                    required
                   />
                 </div>
                 <div>
                   <label
                     htmlFor='thirdName'
-                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
+                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
                   >
                     الاسم الثالث
                     <span className='text-red-500'>*</span>
                   </label>
                   <input
                     id='thirdName'
-                    onChange={e => setTName(e.target.value)}
                     onFocus={() =>
                       ((
                         document.getElementById('thirdName') as HTMLInputElement
                       ).placeholder = '')
                     }
-                    onBlur={() =>
-                      ((
+                    onChange={e => setTName(e.target.value)}
+                    onBlur={e => {
+                      blurTName(e.target.value)
+                      ;(
                         document.getElementById('thirdName') as HTMLInputElement
-                      ).placeholder = 'محمد')
-                    }
-                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                      ).placeholder = 'محمد'
+                    }}
+                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='محمد'
+                    required
                   />
                 </div>
                 <div>
                   <label
                     htmlFor='lastName'
-                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
+                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
                   >
                     الاسم الاخير
                   </label>
                   <input
                     id='lastName'
-                    onChange={e => setFoName(e.target.value)}
                     onFocus={() =>
                       ((
                         document.getElementById('lastName') as HTMLInputElement
                       ).placeholder = '')
                     }
-                    onBlur={() =>
-                      ((
+                    onChange={e => setFoName(e.target.value)}
+                    onBlur={() => {
+                      ;(
                         document.getElementById('lastName') as HTMLInputElement
-                      ).placeholder = 'مكي')
-                    }
-                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                      ).placeholder = 'مكي'
+                    }}
+                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='مكي'
                   />
@@ -387,11 +423,11 @@ const SignupPage = () => {
             </div>
 
             {nationlityError && <FormMessage error>{nationlityError}</FormMessage>}
-            <div className='mb-6 md:flex md:items-center'>
+            <div className='md:flex md:items-center mb-6'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='nationality'
-                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   الجنسية
                   <span className='text-red-500'>*</span>
@@ -402,17 +438,17 @@ const SignupPage = () => {
                   nationality={nationality}
                   setNationality={setNationality}
                   placeholder='إختر الجنسية ...'
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                 />
               </div>
             </div>
 
             {dateOfBirthError && <FormMessage error>{dateOfBirthError}</FormMessage>}
-            <div className='mb-6 md:flex md:items-center'>
+            <div className='md:flex md:items-center mb-6'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='dateOfBirth'
-                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   تاريخ الميلاد
                   <span className='text-red-500'>*</span>
@@ -422,10 +458,9 @@ const SignupPage = () => {
                 <input
                   id='dateOfBirth'
                   onChange={e => setDateOfBirth(e.target.value)}
-                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
                   type='date'
                   max={
-                    // todays date - 18 years
                     new Date(
                       new Date().getFullYear() - 18,
                       new Date().getMonth(),
@@ -452,6 +487,11 @@ const SignupPage = () => {
               <div className='md:w-2/3'>
                 <input
                   id='address'
+                  onFocus={() =>
+                    ((
+                      document.getElementById('address') as HTMLInputElement
+                    ).placeholder = '')
+                  }
                   onChange={e => setAddress(e.target.value)}
                   onBlur={() => {
                     blurAddress()
@@ -459,24 +499,20 @@ const SignupPage = () => {
                       document.getElementById('address') as HTMLInputElement
                     ).placeholder = 'العــــنوان ...'
                   }}
-                  onFocus={() =>
-                    ((
-                      document.getElementById('address') as HTMLInputElement
-                    ).placeholder = '')
-                  }
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='text'
                   placeholder='العــــنوان ...'
+                  required
                 />
               </div>
             </div>
 
             {emailError && <FormMessage error>{emailError}</FormMessage>}
-            <div className='mb-6 md:flex md:items-center'>
+            <div className='md:flex md:items-center mb-6'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='email'
-                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   البريد الالكتروني
                   <span className='text-red-500'>*</span>
@@ -485,29 +521,30 @@ const SignupPage = () => {
               <div className='md:w-2/3'>
                 <input
                   id='email'
+                  onFocus={() =>
+                    ((document.getElementById('email') as HTMLInputElement).placeholder =
+                      '')
+                  }
                   onBlur={e => {
                     blurEmail(e.target.value)
                     ;(document.getElementById('email') as HTMLInputElement).placeholder =
                       'example@gmail.com'
                   }}
                   onChange={e => setEmail(e.target.value)}
-                  onFocus={() =>
-                    ((document.getElementById('email') as HTMLInputElement).placeholder =
-                      '')
-                  }
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                   type='email'
                   placeholder='example@gmail.com'
+                  required
                 />
               </div>
             </div>
 
             {phoneError && <FormMessage error>{phoneError}</FormMessage>}
-            <div className='mb-6 md:flex md:items-center'>
+            <div className='md:flex md:items-center mb-6'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='phone'
-                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   رقم الهاتف
                   <span className='text-red-500'>*</span>
@@ -516,30 +553,31 @@ const SignupPage = () => {
               <div className='md:w-2/3'>
                 <input
                   id='phone'
+                  onFocus={() =>
+                    ((document.getElementById('phone') as HTMLInputElement).placeholder =
+                      '')
+                  }
+                  onChange={e => setPhone(e.target.value)}
                   onBlur={e => {
                     blurPhone(e.target.value)
                     ;(document.getElementById('phone') as HTMLInputElement).placeholder =
                       '55123456'
                   }}
-                  onChange={e => setPhone(e.target.value)}
-                  onFocus={() =>
-                    ((document.getElementById('phone') as HTMLInputElement).placeholder =
-                      '')
-                  }
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                   dir='rtl'
                   type='tel'
                   placeholder='55123456'
+                  required
                 />
               </div>
             </div>
 
             {passError && <FormMessage error>{passError}</FormMessage>}
-            <div className='mb-6 md:flex md:items-center'>
+            <div className='md:flex md:items-center mb-6'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='password'
-                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   كلمة المرور
                   <span className='text-red-500'>*</span>
@@ -550,7 +588,7 @@ const SignupPage = () => {
                   id='password'
                   onChange={handlePasswordChange}
                   onBlur={blurPassword}
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                   type='password'
                   placeholder='******'
                 />
@@ -558,11 +596,11 @@ const SignupPage = () => {
             </div>
 
             {passConfirmError && <FormMessage error>{passConfirmError}</FormMessage>}
-            <div className='mb-6 md:flex md:items-center'>
+            <div className='md:flex md:items-center mb-6'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='confirmPassword'
-                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
+                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   التأكد من كلمة المرور
                   <span className='text-red-500'>*</span>
@@ -573,19 +611,20 @@ const SignupPage = () => {
                   id='confirmPassword'
                   onChange={handleConfirmPasswordChange}
                   onBlur={blurConfrimPassword}
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
                   type='password'
                   placeholder='******'
+                  required
                 />
               </div>
             </div>
 
             {fileError && <FormMessage error>{fileError}</FormMessage>}
-            <div className='mb-6 md:flex md:items-center'>
+            <div className='md:flex md:items-center mb-6'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='document'
-                  className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
+                  className='block cursor-pointer text-gray-500 font-bold md:text-right mb-1 md:mb-0'
                 >
                   صورة المستند الرسمي
                   <span className='text-red-500'>*</span>
@@ -596,22 +635,24 @@ const SignupPage = () => {
                   id='document'
                   type='file'
                   aria-label='file'
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded cursor-pointer dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 cursor-pointer'
                   onChange={handleFileChange}
+                  required
                 />
               </div>
             </div>
 
             {acceptedTermError && <FormMessage error>{acceptedTermError}</FormMessage>}
-            <div className='flex-col items-start w-full mb-6 gap-2 md:flex'>
+            <div className='md:flex flex-col gap-2 w-full mb-6 items-start'>
               <label
                 htmlFor='accept_termsAndPrivacy'
-                className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
+                className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 cursor-pointer'
               >
                 <Checkbox
                   id='accept_termsAndPrivacy'
                   className='ml-2'
                   onCheckedChange={(isChecked: boolean) => setAcceptedTerm(isChecked)}
+                  required
                 />
                 أوافق على &nbsp;
                 <Link href='/terms' className='font-bold underline-hover'>
@@ -621,6 +662,7 @@ const SignupPage = () => {
                 <Link href='/privacy' className='font-bold underline-hover'>
                   سياسة الخصوصية
                 </Link>
+                <span className='text-red-500'>*</span>
               </label>
               <div className='md:w-1/3'></div>
             </div>
@@ -636,7 +678,7 @@ const SignupPage = () => {
               >
                 {isSubmittingForm ? (
                   <>
-                    <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
+                    <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
                     جاري التسجيل ...
                   </>
                 ) : isDoneSubmitting ? (
@@ -648,6 +690,15 @@ const SignupPage = () => {
                   'تسجيل'
                 )}
               </Button>
+            </div>
+
+            <div className='w-full flex justify-between my-4'>
+              <Link
+                href='/auth/signin'
+                className='text-gray-500 transition-colors hover:text-gray-700 text-sm'
+              >
+                لديك حساب؟ سجل دخولك
+              </Link>
             </div>
           </form>
         </CardWrapper>
