@@ -23,7 +23,7 @@ export async function GET(
     )[0]
 
     // Return project
-    !project || !project.shms_project_id
+    return !project || !project.shms_project_id
       ? new Response(
           JSON.stringify({ project: null, message: 'عفواً لم يتم العثور على المشروع!' }),
           { status: 404 }
