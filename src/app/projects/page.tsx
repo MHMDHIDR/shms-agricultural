@@ -6,21 +6,13 @@ import Layout from '@/components/custom/Layout'
 const projects = [
   {
     id: 1,
-    images: [
-      'https://cdn.wikifarmer.com/wp-content/uploads/2022/07/%D9%85%D8%A7-%D9%87%D9%8A-%D8%A7%D9%84%D8%B2%D8%B1%D8%A7%D8%B9%D8%A9-%D8%A7%D9%84%D8%A3%D8%AD%D8%A7%D8%AF%D9%8A%D8%A9.jpg',
-      '',
-      ''
-    ],
+    images: ['https://shmsagricultural.com/logo-slogan.png', '', ''],
     name: 'المشروع الاول 2024',
     area: 'الابيض'
   },
   {
     id: 2,
-    images: [
-      'https://modo3.com/thumbs/fit630x300/123/1348062273/%D8%AA%D8%B9%D8%B1%D9%8A%D9%81_%D8%A7%D9%84%D8%B2%D8%B1%D8%A7%D8%B9%D8%A9.jpg',
-      '',
-      ''
-    ],
+    images: ['https://shmsagricultural.com/logo-slogan.png', '', ''],
     name: ' المشروع الثاني 2023',
     area: 'شندي'
   }

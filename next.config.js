@@ -5,6 +5,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'shmsagricultural.com',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
         hostname: 'shms-uploads.s3.eu-west-2.amazonaws.com',
         pathname: '/**'
       },
