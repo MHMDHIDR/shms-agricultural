@@ -3,6 +3,7 @@ import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3
 import { randomUUID } from 'crypto'
 import type { imgsProps, uploadFileToS3Props } from '@/types'
 import { APP_LOGO } from '@/data/constants'
+import { createSlug } from '@/lib/utils'
 
 const { AWS_ACCESS_ID, AWS_SECRET, AWS_BUCKET_NAME, AWS_REGION } = process.env
 
@@ -31,7 +32,9 @@ async function uploadFileToS3({
   projectId
 }: uploadFileToS3Props): Promise<string> {
   const { name, type } = fileObject
-  const key = `${randomUUID()}-${fullname}-${name}`
+  const key = `${(fullname ? createSlug(fullname) : '') + name}-SHMS-${projectId}`
+  // key is => محمد-مستخدم-testing-small-file.jpg-SHMS-599dfa64-1b01-4eb7-a1a6-cb32e7de880f
+
   const params = {
     Bucket: AWS_BUCKET_NAME,
     Key: multiple ? `projects/${projectId ? `${projectId}/${key}` : key}` : key,
@@ -86,7 +89,8 @@ export async function POST(request: any) {
         file: Buffer.from(await file.arrayBuffer()),
         multiple,
         fileObject: file,
-        fullname: fullname ?? 'user-document'
+        fullname: fullname ?? 'user-document',
+        projectId
       })
 
       const fileUrl =
@@ -99,7 +103,9 @@ export async function POST(request: any) {
           3600
         ))
 
-      return new Response(fileUrl, { status: 200 })
+      return new Response(JSON.stringify({ shms_id: projectId, shms_doc: fileUrl }), {
+        status: 200
+      })
     } else {
       const fileURLs: string[] = []
       const fileKeys: string[] = []
@@ -109,7 +115,6 @@ export async function POST(request: any) {
           file: Buffer.from(await file.arrayBuffer()),
           multiple,
           fileObject: file,
-          fullname: fullname ?? 'user-document',
           projectId
         })
 

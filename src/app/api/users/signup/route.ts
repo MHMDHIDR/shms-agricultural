@@ -1,6 +1,5 @@
 import { connectDB } from '@/app/api/utils/db'
 import { genSalt, hash } from 'bcryptjs'
-import { randomUUID } from 'crypto'
 import { ResultSetHeader } from 'mysql2/promise'
 import email, { customEmail } from '@/app/api/utils/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
@@ -9,6 +8,7 @@ import type { UserProps } from '@/types'
 export async function POST(req: Request) {
   const body = await req.json()
   const {
+    shms_id,
     userFullName,
     nationality,
     dateOfBirth,
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     email: newUserEmail,
     phone,
     password,
-    user_doc
+    shms_doc
   } = body
 
   if (newUserEmail === '' || phone === '') {
@@ -46,8 +46,6 @@ export async function POST(req: Request) {
     const salt = await genSalt(10)
     const hashedPassword = await hash(password, salt)
 
-    // Generate user id
-    const userId = randomUUID()
     const userCanResetPasswordUntil = new Date(Date.now() + 3600000).toISOString() // 1 hour from signup time
 
     // create new user
@@ -55,7 +53,7 @@ export async function POST(req: Request) {
       `INSERT INTO users (shms_id, shms_fullname, shms_nationality, shms_date_of_birth, shms_address, shms_email, shms_phone, shms_password, shms_doc, shms_user_account_status, shms_user_reset_token_expires)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        userId,
+        shms_id,
         userFullName,
         nationality,
         dateOfBirth,
@@ -63,7 +61,7 @@ export async function POST(req: Request) {
         newUserEmail,
         phone,
         hashedPassword,
-        user_doc,
+        shms_doc,
         'pending',
         userCanResetPasswordUntil
       ]
@@ -73,7 +71,7 @@ export async function POST(req: Request) {
 
     if (isCreated) {
       //send the user an email with a link to activate his/her account
-      const buttonLink = APP_URL + `/auth/activate/${userId}`
+      const buttonLink = APP_URL + `/auth/activate/${shms_id}`
 
       const emailData = {
         from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,

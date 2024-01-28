@@ -75,16 +75,18 @@ export default function Nav() {
       if (loading) return
       setIsUserAdmin(userType === 'admin')
     }
+    getUserData()
+  }, [])
 
+  useEffect(() => {
     setUserName(
       abstractWords({
         words: session?.token?.user.fullname ?? 'حسابي',
-        wordsLength: 1,
+        wordsLength: 2,
         ellipsis: false
       })
     )
-    getUserData()
-  }, [])
+  }, [session?.token?.user.fullname])
 
   useEffect(() => {
     setOnMobileScreen(WINDOW_WIDTH < MOBILE_SCREEN)

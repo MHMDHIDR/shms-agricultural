@@ -225,11 +225,17 @@ const SignupPage = () => {
         formData.append('fullname', userFullName)
         formData.append('multiple', 'false')
         formData.append('file', file[0]!)
-        const { data: user_doc } = await axios.post(`${API_URL}/uploadurl`, formData)
 
+        // upload the project images to s3
+        const {
+          data: { shms_id, shms_doc }
+        }: {
+          data: UserProps
+        } = await axios.post(`${API_URL}/uploadurl`, formData)
         const joinUser: { data: UserProps } = await axios.post(
           `${API_URL}/users/signup`,
           {
+            shms_id,
             userFullName,
             nationality,
             dateOfBirth,
@@ -237,7 +243,7 @@ const SignupPage = () => {
             email,
             phone,
             password,
-            user_doc
+            shms_doc
           }
         )
         //getting response from backend
@@ -262,7 +268,7 @@ const SignupPage = () => {
             }
           )
 
-        setTimeout(() => replace(`/`), DEFAULT_DURATION)
+        // setTimeout(() => replace(`/`), DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(JSON.stringify(error ?? 'حدث خطأ ما'), {

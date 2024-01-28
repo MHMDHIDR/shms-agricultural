@@ -11,6 +11,8 @@ export default async function ProjectDetailsPage({
     data: { project }
   }: { data: { project: ProjectProps } } = await axios.get(`${API_URL}/projects/${id}`)
 
+  console.log(project)
+
   return (
     <main className='flex flex-col items-center justify-between min-h-screen sm:p-24'>
       <h1> تفاصيل المشروع </h1>
