@@ -154,7 +154,9 @@ export const customEmail: customEmailProps = ({
                                 APP_URL?.split('//')[1]
                               }</strong> ${new Date().getFullYear()}. جميع الحقوق محفوظة.
                               ${
-                                buttonLink
+                                buttonLink &&
+                                (buttonLink.includes('reset-password') ||
+                                  buttonLink.includes('activate'))
                                   ? `<br><small>ملاحظة: هذا الرابط سيتنهي خلال ساعة واحدة</small>`
                                   : ''
                               }

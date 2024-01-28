@@ -10,6 +10,7 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import {
   validateEmail,
+  validateFile,
   validatePasswordStrength,
   validateQatarPhoneNumber
 } from '@/lib/utils'
@@ -146,22 +147,15 @@ const SignupPage = () => {
     }
   }
 
-  const validateFile = (fileName: string) => {
-    // Get the file extension
-    const fileExtension = fileName.split('.').pop()?.toLowerCase()
-
-    // Check if the extension is allowed
-    const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf']
-    return allowedExtensions.includes(fileExtension!)
-  }
-
-  const maxSize = 2 * 1024 * 1024
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileName = e.target.value
-    if (!validateFile(fileName)) {
+    // get the first file uploaded
+    const file = e.target.files![0]
+    const { isAllowedExtension, isAllowedSize } = validateFile(file as File)
+
+    if (!isAllowedExtension) {
       setFileError('فقط الملفات من النوع jpg, jpeg, png, pdf مسموح بها')
-    } else if (e.target.size > maxSize) {
-      setFileError('حجم الملف يجب أن يكون أقل من 2 ميجابايت')
+    } else if (!isAllowedSize) {
+      setFileError('الحد الأقصى لحجم الملف هو 2 ميغابايت')
     } else {
       setFileError('')
       onFileAdd(e)
@@ -196,15 +190,30 @@ const SignupPage = () => {
     } else if (!validateEmail(email)) {
       resetFormErrors()
       setEmailError('الرجاء التأكد من صحة البريد الالكتروني')
-    } else if (password === '') {
-      resetFormErrors()
-      setPassError('الرجاء التأكد من إدخال كلمة المرور')
-    } else if (!validateQatarPhoneNumber(phone)) {
-      resetFormErrors()
-      setPhoneError('الرجاء التأكد من إدخال رقم الهاتف بشكل صحيح')
     } else if (phone === '') {
       resetFormErrors()
       setPhoneError('الرجاء التأكد من إدخال رقم الهاتف')
+    } else if (!validateQatarPhoneNumber(phone)) {
+      resetFormErrors()
+      setPhoneError('الرجاء التأكد من إدخال رقم الهاتف بشكل صحيح')
+    } else if (password === '') {
+      resetFormErrors()
+      setPassError('الرجاء التأكد من إدخال كلمة المرور')
+    } else if (!validatePasswordStrength(password)) {
+      resetFormErrors()
+      setPassError(
+        'كلمة المرور يجب ان تكون على الاقل 8 احرف وتحتوي على حرف كبير وحرف صغير ورقم وحرف خاص مثل !@#$%^&*()'
+      )
+    } else if (confirmPassword !== password) {
+      setPassConfirmError('الرجاء التأكد من تطابق كلمة المرور')
+    } else if (!validatePasswordStrength(confirmPassword)) {
+      resetFormErrors()
+      setPassConfirmError(
+        'تأكيد كلمة المرور يجب ان تكون على الاقل 8 احرف وتحتوي على حرف كبير وحرف صغير ورقم وحرف خاص مثل !@#$%^&*()'
+      )
+    } else if (!file[0]) {
+      resetFormErrors()
+      setFileError('الرجاء التأكد من رفع صورة المستند الرسمي')
     } else if (!acceptedTerm) {
       resetFormErrors()
       setAcceptedTermError('الرجاء الموافقة على بنود الاستخدام وسياسة الخصوصية')
@@ -214,6 +223,7 @@ const SignupPage = () => {
         setIsSubmittingForm(true)
         const formData = new FormData()
         formData.append('fullname', userFullName)
+        formData.append('multiple', 'false')
         formData.append('file', file[0]!)
         const { data: user_doc } = await axios.post(`${API_URL}/uploadurl`, formData)
 
@@ -308,11 +318,11 @@ const SignupPage = () => {
               {fNameError && <FormMessage error>{fNameError}</FormMessage>}
               {sNameError && <FormMessage error>{sNameError}</FormMessage>}
               {tNameError && <FormMessage error>{tNameError}</FormMessage>}
-              <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
+              <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
                 <div>
                   <label
                     htmlFor='firstName'
-                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
                   >
                     الاسم الاول
                     <span className='text-red-500'>*</span>
@@ -332,7 +342,7 @@ const SignupPage = () => {
                         document.getElementById('firstName') as HTMLInputElement
                       ).placeholder = 'محمد'
                     }}
-                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     placeholder='محمد'
                     required
                   />
@@ -340,7 +350,7 @@ const SignupPage = () => {
                 <div>
                   <label
                     htmlFor='secondName'
-                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
                   >
                     الاسم الثاني
                     <span className='text-red-500'>*</span>
@@ -359,7 +369,7 @@ const SignupPage = () => {
                         document.getElementById('secondName') as HTMLInputElement
                       ).placeholder = 'عبد الرحيم'
                     }}
-                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='عبدالرحيم'
                     required
@@ -368,7 +378,7 @@ const SignupPage = () => {
                 <div>
                   <label
                     htmlFor='thirdName'
-                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
                   >
                     الاسم الثالث
                     <span className='text-red-500'>*</span>
@@ -387,7 +397,7 @@ const SignupPage = () => {
                         document.getElementById('thirdName') as HTMLInputElement
                       ).placeholder = 'محمد'
                     }}
-                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='محمد'
                     required
@@ -396,7 +406,7 @@ const SignupPage = () => {
                 <div>
                   <label
                     htmlFor='lastName'
-                    className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 text-xs'
+                    className='block mb-1 text-xs font-bold text-gray-500 md:text-right md:mb-0'
                   >
                     الاسم الاخير
                   </label>
@@ -413,7 +423,7 @@ const SignupPage = () => {
                         document.getElementById('lastName') as HTMLInputElement
                       ).placeholder = 'مكي'
                     }}
-                    className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='مكي'
                   />
@@ -423,11 +433,11 @@ const SignupPage = () => {
             </div>
 
             {nationlityError && <FormMessage error>{nationlityError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='nationality'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   الجنسية
                   <span className='text-red-500'>*</span>
@@ -438,17 +448,17 @@ const SignupPage = () => {
                   nationality={nationality}
                   setNationality={setNationality}
                   placeholder='إختر الجنسية ...'
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 />
               </div>
             </div>
 
             {dateOfBirthError && <FormMessage error>{dateOfBirthError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='dateOfBirth'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   تاريخ الميلاد
                   <span className='text-red-500'>*</span>
@@ -458,7 +468,7 @@ const SignupPage = () => {
                 <input
                   id='dateOfBirth'
                   onChange={e => setDateOfBirth(e.target.value)}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-right'
+                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
                   max={
                     new Date(
@@ -508,11 +518,11 @@ const SignupPage = () => {
             </div>
 
             {emailError && <FormMessage error>{emailError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='email'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   البريد الالكتروني
                   <span className='text-red-500'>*</span>
@@ -531,7 +541,7 @@ const SignupPage = () => {
                       'example@gmail.com'
                   }}
                   onChange={e => setEmail(e.target.value)}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='email'
                   placeholder='example@gmail.com'
                   required
@@ -540,11 +550,11 @@ const SignupPage = () => {
             </div>
 
             {phoneError && <FormMessage error>{phoneError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='phone'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   رقم الهاتف
                   <span className='text-red-500'>*</span>
@@ -563,7 +573,7 @@ const SignupPage = () => {
                     ;(document.getElementById('phone') as HTMLInputElement).placeholder =
                       '55123456'
                   }}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   dir='rtl'
                   type='tel'
                   placeholder='55123456'
@@ -573,11 +583,11 @@ const SignupPage = () => {
             </div>
 
             {passError && <FormMessage error>{passError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='password'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   كلمة المرور
                   <span className='text-red-500'>*</span>
@@ -588,7 +598,7 @@ const SignupPage = () => {
                   id='password'
                   onChange={handlePasswordChange}
                   onBlur={blurPassword}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='password'
                   placeholder='******'
                 />
@@ -596,11 +606,11 @@ const SignupPage = () => {
             </div>
 
             {passConfirmError && <FormMessage error>{passConfirmError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='confirmPassword'
-                  className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   التأكد من كلمة المرور
                   <span className='text-red-500'>*</span>
@@ -611,7 +621,7 @@ const SignupPage = () => {
                   id='confirmPassword'
                   onChange={handleConfirmPasswordChange}
                   onBlur={blurConfrimPassword}
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='password'
                   placeholder='******'
                   required
@@ -620,11 +630,11 @@ const SignupPage = () => {
             </div>
 
             {fileError && <FormMessage error>{fileError}</FormMessage>}
-            <div className='md:flex md:items-center mb-6'>
+            <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='document'
-                  className='block cursor-pointer text-gray-500 font-bold md:text-right mb-1 md:mb-0'
+                  className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
                 >
                   صورة المستند الرسمي
                   <span className='text-red-500'>*</span>
@@ -635,7 +645,7 @@ const SignupPage = () => {
                   id='document'
                   type='file'
                   aria-label='file'
-                  className='bg-gray-200 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 cursor-pointer'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded cursor-pointer dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   onChange={handleFileChange}
                   required
                 />
@@ -643,10 +653,10 @@ const SignupPage = () => {
             </div>
 
             {acceptedTermError && <FormMessage error>{acceptedTermError}</FormMessage>}
-            <div className='md:flex flex-col gap-2 w-full mb-6 items-start'>
+            <div className='flex-col items-start w-full gap-2 mb-6 md:flex'>
               <label
                 htmlFor='accept_termsAndPrivacy'
-                className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 cursor-pointer'
+                className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
               >
                 <Checkbox
                   id='accept_termsAndPrivacy'
@@ -678,7 +688,7 @@ const SignupPage = () => {
               >
                 {isSubmittingForm ? (
                   <>
-                    <ReloadIcon className='ml-3 h-4 w-4 animate-spin' />
+                    <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
                     جاري التسجيل ...
                   </>
                 ) : isDoneSubmitting ? (
@@ -692,10 +702,10 @@ const SignupPage = () => {
               </Button>
             </div>
 
-            <div className='w-full flex justify-between my-4'>
+            <div className='flex justify-between w-full my-4'>
               <Link
                 href='/auth/signin'
-                className='text-gray-500 transition-colors hover:text-gray-700 text-sm'
+                className='text-sm text-gray-500 transition-colors hover:text-gray-700'
               >
                 لديك حساب؟ سجل دخولك
               </Link>

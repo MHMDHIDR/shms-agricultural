@@ -6,16 +6,14 @@ import type { UserProps } from '@/types'
 
 export async function PUT(req: Request) {
   const body = await req.json()
-  const { tokenId } = body
+  const { userId } = body
 
-  if (!tokenId) throw new Error('Token ID is required')
+  if (!userId) throw new Error('Token ID is required')
 
   try {
     // Check if user exists
     const user = (
-      (await connectDB(`SELECT * FROM users WHERE shms_user_reset_token = ?`, [
-        tokenId
-      ])) as UserProps[]
+      (await connectDB(`SELECT * FROM users WHERE shms_id = ?`, [userId])) as UserProps[]
     )[0]
 
     // If user does not exist
@@ -46,10 +44,9 @@ export async function PUT(req: Request) {
       const activateUser = (await connectDB(
         `UPDATE users
           SET shms_user_account_status = ?, 
-            shms_user_reset_token = NULL, 
             shms_user_reset_token_expires = NULL
-            WHERE shms_user_reset_token = ?`,
-        ['active', tokenId]
+            WHERE shms_id = ?`,
+        ['active', userId]
       )) as ResultSetHeader
 
       const { affectedRows: isActivated } = activateUser as ResultSetHeader

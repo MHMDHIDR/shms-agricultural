@@ -151,3 +151,8 @@ export type NoItemsProps = {
     label: string
   }[]
 }
+
+export type validateFileProps = (file: File) => {
+  isAllowedExtension: boolean
+  isAllowedSize: boolean
+}

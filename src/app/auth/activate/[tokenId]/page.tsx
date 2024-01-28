@@ -29,7 +29,7 @@ export default function ActivateAccount({
       setIsSubmittingForm(true)
       const activateUser: { data: UserProps } = await axios.put(
         API_URL + `/users/activate`,
-        { tokenId }
+        { userId: tokenId }
       )
       const { userActivated } = activateUser.data
 

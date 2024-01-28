@@ -1,3 +1,4 @@
+import { validateFileProps } from '@/types'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -65,6 +66,31 @@ export const validateEmail = (email: string) => {
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     )
+}
+
+/**
+ * a function to validate if a string is a valid file extension and size
+ * and validate the file size to be less than 2MB
+ * @param File [file] file to be validated
+ * @returns {boolean} [boolean] isAllowedExtension
+ * @returns {boolean} [boolean] isAllowedSize
+ */
+export const validateFile: validateFileProps = (
+  file: File
+): { isAllowedExtension: boolean; isAllowedSize: boolean } => {
+  let isAllowedExtension = false
+  let isAllowedSize = false
+
+  // Get the file extension
+  const fileExtension = file.name.split('.').pop()?.toLowerCase()
+  const fileSizes = file.size / 1024 / 1024 // in MB
+  const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf']
+
+  // Check if the extension is allowed and the file size is less than 2MB
+  allowedExtensions.includes(fileExtension!) && (isAllowedExtension = true)
+  fileSizes <= 2 && (isAllowedSize = true)
+
+  return { isAllowedExtension, isAllowedSize }
 }
 
 /**

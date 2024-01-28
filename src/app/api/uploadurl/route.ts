@@ -73,7 +73,7 @@ export async function POST(request: any) {
       index++
     }
 
-    if (!files || files.length === 0) {
+    if (!files || (files.length === 0 && multiple)) {
       return new Response('No file found', { status: 400 })
     }
 
