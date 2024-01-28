@@ -603,7 +603,7 @@ const SignupPage = () => {
             </div>
 
             {acceptedTermError && <FormMessage error>{acceptedTermError}</FormMessage>}
-            <div className='flex-col items-start w-full gap-2 mb-6 md:flex'>
+            <div className='flex-col items-start w-full mb-6 gap-2 md:flex'>
               <label
                 htmlFor='accept_termsAndPrivacy'
                 className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'

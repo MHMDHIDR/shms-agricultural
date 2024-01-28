@@ -143,19 +143,19 @@ export default function Projects() {
         setTimeout(() => replace(`/dashboard`), DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
-        toast(JSON.stringify(error ?? 'حدث خطأ ما'), {
-          // message: old var
-          icon: <Error className='w-6 h-6 ml-3' />,
-          position: 'bottom-center',
-          className: 'text-right select-none rtl',
-          style: {
-            backgroundColor: '#FFF0F0',
-            color: '#BE2A2A',
-            border: '1px solid #BE2A2A',
-            gap: '1.5rem',
-            textAlign: 'justify'
+        toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
+          {
+            icon: <Error className='w-6 h-6 ml-3' />,
+            position: 'bottom-center',
+            className: 'text-right select-none rtl',
+            style: {
+              backgroundColor: '#FFF0F0',
+              color: '#BE2A2A',
+              border: '1px solid #BE2A2A',
+              gap: '1.5rem',
+              textAlign: 'justify'
+            }
           }
-        })
         console.error('Error', error)
       } finally {
         setIsSubmittingForm(false)

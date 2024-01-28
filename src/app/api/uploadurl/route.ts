@@ -31,7 +31,6 @@ async function uploadFileToS3({
   projectId
 }: uploadFileToS3Props): Promise<string> {
   const { name, type } = fileObject
-  // a Unique key (name) for the file
   const key = `${randomUUID()}-${fullname}-${name}`
   const params = {
     Bucket: AWS_BUCKET_NAME,
@@ -91,12 +90,12 @@ export async function POST(request: any) {
       })
 
       const fileUrl =
-        `https://${
-          multiple ? `projects/` + AWS_BUCKET_NAME : AWS_BUCKET_NAME
-        }.s3.${AWS_REGION}.amazonaws.com/${key}` ??
+        `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${
+          multiple ? `projects/${projectId}/${key}` : key
+        }` ??
         (await getSignedFileUrl(
-          key,
-          multiple ? `projects/` + AWS_BUCKET_NAME : AWS_BUCKET_NAME!,
+          multiple ? `projects/${projectId}/${key}` : key,
+          AWS_BUCKET_NAME!,
           3600
         ))
 

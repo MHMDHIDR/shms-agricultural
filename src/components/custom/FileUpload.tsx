@@ -54,7 +54,7 @@ const FileUpload = ({
               />
               <button
                 type='button'
-                className='px-6 py-1 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
+                className='px-6 py-1 text-white bg-red-500 rounded-full transition-colors hover:bg-red-700'
                 onClick={() => onFileRemove(fileURL, file[index]?.name ?? '')}
               >
                 حذف
@@ -68,7 +68,7 @@ const FileUpload = ({
               idx: number
             ) => (
               <div
-                className={`flex flex-col items-center gap-y-3 max-h-44 h-44 place-content-center`}
+                className={`flex flex-col col-span-full items-center gap-y-3 max-h-44 h-44 place-content-center`}
                 key={data.foodId! + idx}
               >
                 <Image
@@ -83,7 +83,7 @@ const FileUpload = ({
                   <button
                     type='button'
                     id='deleteImg'
-                    className='px-6 py-1 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
+                    className='px-6 py-1 text-white bg-red-500 rounded-full transition-colors hover:bg-red-700'
                     data-img-name={docImgDisplayName}
                   >
                     حذف
@@ -100,7 +100,7 @@ const FileUpload = ({
         htmlFor='projectImg'
         className={`grid col-span-full h-fit place-items-center justify-center gap-5 p-3 overflow-y-auto border border-gray-200 hover:bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-700 hover:dark:bg-gray-600 transition-colors duration-300`}
       >
-        {/* Getting the id from: { params }: { params: { id: string } } */}
+        {/* When editing a project Getting the id from: { params }: { params: { id: string } } */}
         {id && (
           <p className='text-center text-green-700 dark:text-green-400'>
             لا تنسى الضغط على زر التحديث في أسفل النموذج لتحديث الصور
@@ -117,7 +117,7 @@ const FileUpload = ({
           type='file'
           name='projectImg'
           id='projectImg'
-          className='hidden p-3 text-lg text-white transition-colors bg-green-800 cursor-pointer rounded-xl hover:bg-green-700'
+          className='hidden p-3 text-lg text-white bg-green-800 cursor-pointer transition-colors rounded-xl hover:bg-green-700'
           accept='image/*'
           onChange={onFileAdd}
           multiple

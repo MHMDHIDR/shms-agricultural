@@ -33,7 +33,8 @@ export async function POST(req: Request) {
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         shms_project_id,
-        shms_project_images,
+        // To store in DB we need to stringify the array
+        JSON.stringify(shms_project_images),
         shms_project_name,
         shms_project_location,
         shms_project_start_date,
