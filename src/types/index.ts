@@ -156,3 +156,9 @@ export type validateFileProps = (file: File) => {
   isAllowedExtension: boolean
   isAllowedSize: boolean
 }
+
+export type abstractWordsProps = (props: {
+  words: string
+  wordsLength: number
+  ellipsis: boolean
+}) => string

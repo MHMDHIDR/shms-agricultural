@@ -16,7 +16,7 @@ import {
 import MobileNavigation from './MobileNavigation'
 import { LogOut, LogIn } from 'lucide-react'
 import { MenuToggler } from './MenuToggler'
-import { cn } from '@/lib/utils'
+import { abstractWords, cn } from '@/lib/utils'
 import useEventListener from '@/hooks/useEventListener'
 import { ShmsIcon } from '../icons/Socials'
 import { getAuth } from '@/lib/actions/auth'
@@ -25,8 +25,10 @@ import type { MenuItemsProps, UserLoggedInProps } from '@/types'
 import { useRouter } from 'next/navigation'
 
 export default function Nav() {
-  const { status }: { status: SessionContextValue['status']; data: UserLoggedInProps } =
-    useSession()
+  const {
+    status,
+    data: session
+  }: { status: SessionContextValue['status']; data: UserLoggedInProps } = useSession()
 
   const isAuth = status === 'authenticated' ? true : false
   const { replace } = useRouter()
@@ -34,7 +36,9 @@ export default function Nav() {
   const [isOpen, setIsOpen] = useState(false)
   const [sticky, setSticky] = useState(false)
   const [onMobileScreen, setOnMobileScreen] = useState(false)
+
   const [isUserAdmin, setIsUserAdmin] = useState(false)
+  const [userName, setUserName] = useState('')
 
   // عناصر القائمة
   const MenuItems: MenuItemsProps = [
@@ -71,6 +75,14 @@ export default function Nav() {
       if (loading) return
       setIsUserAdmin(userType === 'admin')
     }
+
+    setUserName(
+      abstractWords({
+        words: session?.token?.user.fullname ?? 'حسابي',
+        wordsLength: 1,
+        ellipsis: false
+      })
+    )
     getUserData()
   }, [])
 
@@ -119,7 +131,7 @@ export default function Nav() {
                 </Link>
               ) : (
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>حسابي</NavigationMenuTrigger>
+                  <NavigationMenuTrigger>{userName}</NavigationMenuTrigger>
                   <NavigationMenuContent className='rtl'>
                     <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
                       <NavigationListItem

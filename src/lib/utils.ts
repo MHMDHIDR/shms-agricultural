@@ -1,4 +1,4 @@
-import { validateFileProps } from '@/types'
+import { abstractWordsProps, validateFileProps } from '@/types'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -123,3 +123,19 @@ export const scrollToView = (scrollY: number | undefined = 500) =>
       }),
     100
   )
+
+/**
+ * a function to abstract words, if and give me the amount of words i want
+ * @param words the words to be abstracted
+ * @param wordsLength the amount of words to be returned
+ * @param ellipsis if the words should be followed by ellipsis
+ * @returns the abstracted words
+ */
+export const abstractWords: abstractWordsProps = ({ words, wordsLength, ellipsis }) => {
+  const wordsArray = words.split(' ')
+  const abstractedWords =
+    wordsArray.length > wordsLength
+      ? wordsArray.slice(0, wordsLength).join(' ') + (ellipsis ? '...' : '')
+      : words
+  return abstractedWords
+}
