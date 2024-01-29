@@ -1,12 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import axios from 'axios'
-import { toast } from 'sonner'
-import { Info } from 'lucide-react'
-import { ReloadIcon } from '@radix-ui/react-icons'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import {
   validateEmail,
@@ -15,15 +8,22 @@ import {
   validateQatarPhoneNumber
 } from '@/lib/utils'
 import type { UserProps } from '@/types'
+import { ReloadIcon } from '@radix-ui/react-icons'
+import axios from 'axios'
+import { Info } from 'lucide-react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 import { CardWrapper } from '@/components/auth/card-wrapper'
+import FormMessage from '@/components/custom/FormMessage'
+import Layout from '@/components/custom/Layout'
+import SelectCountry from '@/components/custom/SelectCountry'
+import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
-import { Error, Success } from '@/components/icons/Status'
-import FormMessage from '@/components/custom/FormMessage'
-import SelectCountry from '@/components/custom/SelectCountry'
-import Layout from '@/components/custom/Layout'
 
 const SignupPage = () => {
   // Form States
@@ -231,7 +231,7 @@ const SignupPage = () => {
           data: { shms_id, shms_doc }
         }: {
           data: UserProps
-        } = await axios.post(`${API_URL}/uploadurl`, formData)
+        } = await axios.post(`${API_URL}/uploadToS3`, formData)
         const joinUser: { data: UserProps } = await axios.post(
           `${API_URL}/users/signup`,
           {
@@ -268,7 +268,7 @@ const SignupPage = () => {
             }
           )
 
-        // setTimeout(() => replace(`/`), DEFAULT_DURATION)
+        setTimeout(() => replace(`/`), DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(JSON.stringify(error ?? 'حدث خطأ ما'), {

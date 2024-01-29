@@ -106,7 +106,7 @@ export type uploadFileToS3Props = {
   projectId?: string | undefined
 }
 
-export type uploadurlDataProps = {
+export type uploadToS3DataProps = {
   data: {
     map(arg0: ({ fields, url }: any, idx: number) => Promise<void>): unknown
     fields: {

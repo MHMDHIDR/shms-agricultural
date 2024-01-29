@@ -1,9 +1,9 @@
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
-import { randomUUID } from 'crypto'
-import type { imgsProps, uploadFileToS3Props } from '@/types'
 import { APP_LOGO } from '@/data/constants'
 import { createSlug } from '@/lib/utils'
+import type { imgsProps, uploadFileToS3Props } from '@/types'
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import { randomUUID } from 'crypto'
 
 const { AWS_ACCESS_ID, AWS_SECRET, AWS_BUCKET_NAME, AWS_REGION } = process.env
 
@@ -33,7 +33,6 @@ async function uploadFileToS3({
 }: uploadFileToS3Props): Promise<string> {
   const { name, type } = fileObject
   const key = `${(fullname ? createSlug(fullname) : '') + name}-SHMS-${projectId}`
-  // key is => محمد-مستخدم-testing-small-file.jpg-SHMS-599dfa64-1b01-4eb7-a1a6-cb32e7de880f
 
   const params = {
     Bucket: AWS_BUCKET_NAME,

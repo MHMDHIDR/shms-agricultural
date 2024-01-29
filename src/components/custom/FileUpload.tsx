@@ -1,10 +1,10 @@
-import { useContext } from 'react'
-import Image from 'next/image'
-import { FileUploadContext } from '@/providers/FileUpload'
-import { FILE_UPLOAD_IMG_SIZE } from '@/data/constants'
-import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import type { FileUploadComponentProps, FileUploadProps /*, imgsProps*/ } from '@/types'
+import { Label } from '@/components/ui/label'
+import { FILE_UPLOAD_IMG_SIZE } from '@/data/constants'
+import { FileUploadContext } from '@/providers/FileUpload'
+import type { FileUploadComponentProps, FileUploadProps } from '@/types'
+import Image from 'next/image'
+import { useContext } from 'react'
 
 const FileUpload = ({
   data,
@@ -51,7 +51,7 @@ const FileUpload = ({
               />
               <button
                 type='button'
-                className='px-6 py-1 text-white bg-red-500 rounded-full transition-colors hover:bg-red-700'
+                className='px-6 py-1 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
                 onClick={() => onFileRemove(fileURL, file[index]?.name ?? '')}
               >
                 حذف
@@ -77,7 +77,7 @@ const FileUpload = ({
                   <button
                     type='button'
                     id='deleteImg'
-                    className='px-6 py-1 text-white bg-red-500 rounded-full transition-colors hover:bg-red-700'
+                    className='px-6 py-1 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
                     data-img-name={imgDisplayName}
                   >
                     حذف
@@ -111,7 +111,7 @@ const FileUpload = ({
           type='file'
           name='projectImg'
           id='projectImg'
-          className='hidden p-3 text-lg text-white bg-green-800 cursor-pointer transition-colors rounded-xl hover:bg-green-700'
+          className='hidden p-3 text-lg text-white transition-colors bg-green-800 cursor-pointer rounded-xl hover:bg-green-700'
           accept='image/*'
           onChange={onFileAdd}
           multiple

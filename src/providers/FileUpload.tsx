@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState, createContext } from 'react'
 import { FileUploadProps } from '@/types'
+import { createContext, useEffect, useState } from 'react'
 
 export const FileUploadContext = createContext({} as FileUploadProps)
 
@@ -9,8 +9,9 @@ export const FileUploadProvider = ({ children }: { children: React.ReactNode }) 
   const [file, setFile] = useState<File[]>([])
   const [fileURLs, setFileURLs] = useState<any>([])
 
-  const onFileAdd = (e: { target: { files: any } }) =>
+  const onFileAdd = (e: { target: { files: any } }) => {
     setFile(file => [...file, ...e.target.files])
+  }
 
   const onFileRemove = (fileUrl: string, fileName: string) => {
     setFileURLs(fileURLs.filter((url: string) => url !== fileUrl))

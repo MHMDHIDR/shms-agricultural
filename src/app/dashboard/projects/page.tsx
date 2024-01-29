@@ -1,12 +1,9 @@
 'use client'
 
-import { useContext, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import axios from 'axios'
-import { ReloadIcon } from '@radix-ui/react-icons'
-import { toast } from 'sonner'
-import { Info } from 'lucide-react'
-import { FileUploadContext } from '@/providers/FileUpload'
+import FileUpload from '@/components/custom/FileUpload'
+import FormMessage from '@/components/custom/FormMessage'
+import { Error, Success } from '@/components/icons/Status'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -14,15 +11,18 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { TabsContent } from '@/components/ui/tabs'
-import FileUpload from '@/components/custom/FileUpload'
-import FormMessage from '@/components/custom/FormMessage'
-import { Error, Success } from '@/components/icons/Status'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
+import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
+import { ReloadIcon } from '@radix-ui/react-icons'
+import axios from 'axios'
+import { Info } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useContext, useState } from 'react'
+import { toast } from 'sonner'
 
 export default function Projects() {
   const [projectName, setProjectName] = useState('')
@@ -102,7 +102,7 @@ export default function Projects() {
           data: { shms_project_id, shms_project_images }
         }: {
           data: ProjectProps
-        } = await axios.post(`${API_URL}/uploadurl`, formData)
+        } = await axios.post(`${API_URL}/uploadToS3`, formData)
 
         // upload the project data to the database
         const addProject: { data: ProjectProps } = await axios.post(

@@ -1,5 +1,5 @@
 import { abstractWordsProps, validateFileProps } from '@/types'
-import { type ClassValue, clsx } from 'clsx'
+import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
 /**

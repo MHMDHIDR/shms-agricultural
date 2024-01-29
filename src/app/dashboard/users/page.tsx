@@ -1,8 +1,16 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import axios from 'axios'
+import Confirm from '@/components/custom/Confirm'
+import Modal from '@/components/custom/Modal'
+import { Error, Success } from '@/components/icons/Status'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
   TableBody,
@@ -11,21 +19,13 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
 import { TabsContent } from '@/components/ui/tabs'
 import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
-import type { UserProps } from '@/types'
 import { arabicDate } from '@/lib/utils'
-import Confirm from '@/components/custom/Confirm'
-import Modal from '@/components/custom/Modal'
-import { Error, Success } from '@/components/icons/Status'
-import { Skeleton } from '@/components/ui/skeleton'
+import type { UserProps } from '@/types'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 export default function Users() {
@@ -34,24 +34,45 @@ export default function Users() {
 
   const { refresh } = useRouter()
 
+  const getUsers = async () => {
+    const { data: users }: { data: UserProps[] } = await axios.get(`${API_URL}/users/all`)
+    setUsers(users)
+  }
+
   useEffect(() => {
-    const getUsers = async () => {
-      const { data: users }: { data: UserProps[] } = await axios.get(
-        `${API_URL}/users/all`
-      )
-      setUsers(users)
-    }
     getUsers()
   }, [userDeleted])
 
-  const deleteUser = async (id: string) => {
+  const deleteUser = async (id: string, S3docId: string) => {
+    if (!S3docId) {
+      return toast(`عفواً لم يتم العثور على مستند لهذا المستخدم`, {
+        icon: <Error className='w-6 h-6 ml-3' />,
+        position: 'bottom-center',
+        className: 'text-right select-none rtl',
+        style: {
+          backgroundColor: '#FFF0F0',
+          color: '#BE2A2A',
+          border: '1px solid #BE2A2A',
+          gap: '1.5rem',
+          textAlign: 'justify'
+        }
+      })
+    }
+
     try {
       const { data }: { data: UserProps } = await axios.delete(
         `${API_URL}/users/delete/${id}`
       )
 
+      // delete user document from s3 bucket
+      const {
+        data: { docDeleted }
+      }: { data: { docDeleted: boolean } } = await axios.delete(
+        decodeURI(`${API_URL}/deleteFromS3/${S3docId}`)
+      )
+
       // make sure to view the response from the data
-      data.userDeleted === 1 &&
+      if (data.userDeleted === 1 && docDeleted) {
         toast(data.message ?? 'تم حذف حساب المستخدم بنجاح 👍🏼', {
           icon: <Success className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
@@ -65,13 +86,26 @@ export default function Users() {
             textAlign: 'justify'
           }
         })
+      } else {
+        toast('حدث خطأ ما', {
+          icon: <Error className='w-6 h-6 ml-3' />,
+          position: 'bottom-center',
+          className: 'text-right select-none rtl',
+          style: {
+            backgroundColor: '#FFF0F0',
+            color: '#BE2A2A',
+            border: '1px solid #BE2A2A',
+            gap: '1.5rem',
+            textAlign: 'justify'
+          }
+        })
+      }
 
       setUserDeleted(data.userDeleted ?? 0)
-
       setTimeout(() => refresh(), DEFAULT_DURATION)
     } catch (error) {
       //handle error, show notification using Shadcn notifcation
-      toast(JSON.stringify(error ?? 'حدث خطأ ما'), {
+      toast('حدث خطأ ما', {
         // message: old var
         icon: <Error className='w-6 h-6 ml-3' />,
         position: 'bottom-center',
@@ -84,7 +118,7 @@ export default function Users() {
           textAlign: 'justify'
         }
       })
-      console.error('Error', error)
+      console.error('Error =>', error)
     }
   }
 
@@ -137,7 +171,12 @@ export default function Users() {
                       <TableCell className='flex min-w-56 gap-x-2'>
                         <Confirm
                           className='font-bold bg-red-500 hover:bg-red-600 dark:text-white'
-                          onClick={async () => await deleteUser(user.shms_id)}
+                          onClick={async () => {
+                            await deleteUser(
+                              user.shms_id,
+                              user.shms_doc?.split('/').pop() ?? ''
+                            )
+                          }}
                         >
                           حذف
                         </Confirm>
