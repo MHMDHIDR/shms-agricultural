@@ -1,6 +1,6 @@
-import axios from 'axios'
 import { API_URL } from '@/data/constants'
 import type { ProjectProps } from '@/types'
+import axios from 'axios'
 
 export default async function ProjectDetailsPage({
   params: { id }

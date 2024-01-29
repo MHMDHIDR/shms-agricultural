@@ -139,7 +139,7 @@ export default function Projects() {
             }
           })
 
-        setIsDoneSubmitting(true)
+        data.projectAdded === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
         resetFormFields()
         setTimeout(() => push(`/dashboard`), DEFAULT_DURATION)
       } catch (error: any) {
@@ -327,7 +327,9 @@ export default function Projects() {
             <Button
               disabled={isSubmittingForm}
               type='submit'
-              className={`shadow bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold`}
+              className={`shadow bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold${
+                isDoneSubmitting ? ' disabled:opacity-50 disabled:cursor-not-allowed' : ''
+              }`}
             >
               {isSubmittingForm ? (
                 <>

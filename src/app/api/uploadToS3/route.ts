@@ -1,8 +1,7 @@
 import { APP_LOGO } from '@/data/constants'
 import { createSlug } from '@/lib/utils'
 import type { imgsProps, uploadFileToS3Props } from '@/types'
-import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { randomUUID } from 'crypto'
 
 const { AWS_ACCESS_ID, AWS_SECRET, AWS_BUCKET_NAME, AWS_REGION } = process.env
@@ -47,18 +46,18 @@ async function uploadFileToS3({
   return key
 }
 
-/*
- * Generates a signed URL for the file
- * @param key - The key of the file in S3
- * @param bucket - The bucket name
- * @param expiresIn - The time in seconds for the signed URL to expire
- * @returns {Promise<string>} - The signed URL
- */
-async function getSignedFileUrl(key: string, bucket: string, expiresIn: number) {
-  const command = new GetObjectCommand({ Bucket: bucket, Key: key })
+// /*
+//  * Generates a signed URL for the file
+//  * @param key - The key of the file in S3
+//  * @param bucket - The bucket name
+//  * @param expiresIn - The time in seconds for the signed URL to expire
+//  * @returns {Promise<string>} - The signed URL
+//  */
+// async function getSignedFileUrl(key: string, bucket: string, expiresIn: number) {
+//   const command = new GetObjectCommand({ Bucket: bucket, Key: key })
 
-  return await getSignedUrl(s3Client, command, { expiresIn })
-}
+//   return await getSignedUrl(s3Client, command, { expiresIn })
+// }
 
 export async function POST(request: any) {
   try {
@@ -92,15 +91,7 @@ export async function POST(request: any) {
         projectId
       })
 
-      const fileUrl =
-        `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${
-          multiple ? `projects/${projectId}/${key}` : key
-        }` ??
-        (await getSignedFileUrl(
-          multiple ? `projects/${projectId}/${key}` : key,
-          AWS_BUCKET_NAME!,
-          3600
-        ))
+      const fileUrl = `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}`
 
       return new Response(JSON.stringify({ shms_id: projectId, shms_doc: fileUrl }), {
         status: 200
@@ -117,15 +108,7 @@ export async function POST(request: any) {
           projectId
         })
 
-        const fileUrl =
-          `https://${
-            multiple ? `projects/${projectId}` + AWS_BUCKET_NAME : AWS_BUCKET_NAME
-          }.s3.${AWS_REGION}.amazonaws.com/${key}` ??
-          (await getSignedFileUrl(
-            key,
-            multiple ? `projects/${projectId}` + AWS_BUCKET_NAME : AWS_BUCKET_NAME!,
-            3600
-          ))
+        const fileUrl = `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/projects/${projectId}/${key}`
 
         fileURLs.push(fileUrl)
         fileKeys.push(key)
