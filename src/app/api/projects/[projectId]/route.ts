@@ -1,9 +1,9 @@
 import { connectDB } from '@/app/api/utils/db'
-import type { ProjectProps } from '@/types'
+import { ProjectProps } from '@/types'
 
 export async function GET(
   _req: Request,
-  { params: { projectId: projectId } }: { params: { projectId: string } }
+  { params: { projectId } }: { params: { projectId: string } }
 ) {
   if (!projectId) throw new Error('Project ID is required')
 
