@@ -1,28 +1,28 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { SessionContextValue, signOut, useSession } from 'next-auth/react'
-import Link from 'next/link'
 import {
+  NavigationListItem,
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationListItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu'
-import MobileNavigation from './MobileNavigation'
-import { LogOut, LogIn } from 'lucide-react'
-import { MenuToggler } from './MenuToggler'
-import { abstractWords, cn } from '@/lib/utils'
 import useEventListener from '@/hooks/useEventListener'
-import { ShmsIcon } from '../icons/Socials'
 import { getAuth } from '@/lib/actions/auth'
-import { Button } from '../ui/button'
+import { abstractWords, cn } from '@/lib/utils'
 import type { MenuItemsProps, UserLoggedInProps } from '@/types'
+import { LogIn, LogOut } from 'lucide-react'
+import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { ShmsIcon } from '../icons/Socials'
+import { Button } from '../ui/button'
+import { MenuToggler } from './MenuToggler'
+import MobileNavigation from './MobileNavigation'
 
 export default function Nav() {
   const {
