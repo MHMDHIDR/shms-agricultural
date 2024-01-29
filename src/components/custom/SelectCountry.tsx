@@ -1,8 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
-import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -13,6 +10,9 @@ import {
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { countryNames } from '@/data/list-of-countries'
+import { cn } from '@/lib/utils'
+import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
+import { useState } from 'react'
 
 export default function SelectCountry({
   nationality,
@@ -42,7 +42,7 @@ export default function SelectCountry({
           <CaretSortIcon className='w-4 h-4 ml-2 opacity-50 shrink-0' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-full p-0 rtl'>
+      <PopoverContent className='w-full p-0 rtl' avoidCollisions={false}>
         <Command>
           <CommandInput placeholder='إبحث عن الجنسية' className='px-4 h-9' />
           <CommandEmpty>عفواً لم يتم العثور على البلد</CommandEmpty>
