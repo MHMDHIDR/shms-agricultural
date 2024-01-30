@@ -18,7 +18,8 @@ export async function PATCH(
     shms_project_available_stocks,
     shms_project_stock_price,
     shms_project_stock_profits,
-    shms_project_description
+    shms_project_description,
+    shms_project_status
   }: ProjectProps = await request.json()
 
   if (!projectId) {
@@ -49,19 +50,10 @@ export async function PATCH(
       )
     }
 
-    // console.log('Details=>> ', {
-    //   shms_project_images,
-    //   shms_project_name,
-    //   shms_project_location,
-    //   shms_project_start_date,
-    //   shms_project_end_date,
-    //   shms_project_invest_date,
-    //   shms_project_available_stocks,
-    //   shms_project_stock_price,
-    //   shms_project_stock_profits,
-    //   shms_project_description,
-    //   projectId
-    // })
+    console.log('Details=>> ', {
+      shms_project_status,
+      projectId
+    })
 
     // Update project
     const updateProject = (await connectDB(
@@ -75,7 +67,8 @@ export async function PATCH(
         shms_project_available_stocks = ?,
         shms_project_stock_price = ?,
         shms_project_stock_profits = ?,
-        shms_project_description = ?
+        shms_project_description = ?,
+        shms_project_status = ?
       WHERE shms_project_id = ?`,
       [
         JSON.stringify(shms_project_images),
@@ -88,6 +81,7 @@ export async function PATCH(
         shms_project_stock_price,
         shms_project_stock_profits,
         shms_project_description ?? '',
+        shms_project_status ?? 'pending',
         projectId
       ]
     )) as ResultSetHeader

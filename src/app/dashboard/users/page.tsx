@@ -168,7 +168,7 @@ export default function Users() {
                       </TableCell>
                       <TableCell className='flex min-w-56 gap-x-2'>
                         <Confirm
-                          className='font-bold bg-red-500 hover:bg-red-600 dark:text-white'
+                          variant={'destructive'}
                           onClick={async () => {
                             await deleteUser(
                               user.shms_id,

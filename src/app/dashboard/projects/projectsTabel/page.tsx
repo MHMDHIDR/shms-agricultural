@@ -15,7 +15,7 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import { arabicDate, getProjectStatus } from '@/lib/utils'
+import { arabicDate, cn, getProjectStatus } from '@/lib/utils'
 import type { ProjectProps } from '@/types'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -156,12 +156,19 @@ export default function ProjectsTable() {
               <TableCell className='min-w-40'>
                 {project.shms_project_stock_profits}
               </TableCell>
-              <TableCell className='min-w-40'>
+              <TableCell
+                className={cn(
+                  'min-w-40',
+                  project.shms_project_status === 'active'
+                    ? 'text-green-500'
+                    : 'text-red-500'
+                )}
+              >
                 {getProjectStatus(project.shms_project_status)}
               </TableCell>
               <TableCell className='flex min-w-56 gap-x-2'>
                 <Confirm
-                  className='font-bold bg-red-500 hover:bg-red-600 dark:text-white'
+                  variant={'destructive'}
                   onClick={async () => {
                     await deleteProject(project.shms_project_id)
                   }}

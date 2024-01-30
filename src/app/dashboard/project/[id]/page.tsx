@@ -97,8 +97,6 @@ export default function EditProjectPage({
       setStockProfits(project.shms_project_stock_profits)
       setProjectDescription(project.shms_project_description)
       setProjectStatus(project.shms_project_status)
-
-      console.log('project.shms_project_status: ', project.shms_project_status)
     }
 
     getProjectDetails()
@@ -179,7 +177,8 @@ export default function EditProjectPage({
             shms_project_available_stocks: projectAvailableStocks,
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
-            shms_project_description: projectDescription
+            shms_project_description: projectDescription,
+            shms_project_status: projectStatus
           }
         )
         //getting response from backend
