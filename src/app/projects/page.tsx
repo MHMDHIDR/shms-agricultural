@@ -38,8 +38,8 @@ export default async function Projects() {
                     <Image
                       key={project.shms_project_id}
                       src={
-                        JSON.parse(project.shms_project_images)[0]?.imgDisplayPath ??
-                        APP_LOGO
+                        JSON.parse(String(project.shms_project_images))[0]
+                          ?.imgDisplayPath ?? APP_LOGO
                       }
                       priority={true}
                       alt={`Project ${index + 1}`}

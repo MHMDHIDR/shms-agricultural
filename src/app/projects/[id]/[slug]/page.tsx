@@ -2,6 +2,7 @@ import Layout from '@/components/custom/Layout'
 import { API_URL } from '@/data/constants'
 import type { ProjectProps } from '@/types'
 import axios from 'axios'
+import Image from 'next/image'
 
 export default async function ProjectDetailsPage({
   params: { id: projectId /*, slug*/ }
@@ -27,7 +28,7 @@ export default async function ProjectDetailsPage({
         {/* Render images in a row */}
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
           {projectImages.map((image, index) => (
-            <img
+            <Image
               key={index}
               src={image.imgDisplayPath}
               alt={image.imgDisplayName}

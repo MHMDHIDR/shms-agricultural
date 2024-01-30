@@ -55,6 +55,17 @@ export default function Projects() {
 
   const { refresh } = useRouter()
 
+  /*
+   * a function to set the grid rows and columns based on the number of files uploaded
+   * @returns {string} the grid rows and columns
+   */
+  const fileUploadGrid = (): string => {
+    // Calculate the number of rows based on the filesLength
+    const numRows = Math.ceil(file.length / 3)
+    // Return the dynamic grid rows string
+    return `grid-rows-${numRows}`
+  }
+
   const handelAddProject = async (e: {
     target: any
     key?: string
@@ -380,16 +391,4 @@ export default function Projects() {
       </Card>
     </TabsContent>
   )
-}
-
-/*
- * a function to set the grid rows and columns based on the number of files uploaded
- * @returns {string} the grid rows and columns
- */
-function fileUploadGrid(): string {
-  const filesLength = useContext(FileUploadContext).file.length
-  // Calculate the number of rows based on the filesLength
-  const numRows = Math.ceil(filesLength / 3)
-  // Return the dynamic grid rows string
-  return `grid-rows-${numRows}`
 }

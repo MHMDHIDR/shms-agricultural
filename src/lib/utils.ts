@@ -110,21 +110,6 @@ export const arabicDate = (date: string) =>
   })
 
 /**
- * Method to scroll to a top the top of the page
- * @param scrollY - the scrollY position to scroll to
- * @returns void
- */
-export const scrollToView = (scrollY: number | undefined = 500) =>
-  setTimeout(
-    () =>
-      window.scrollTo({
-        top: scrollY ?? (document.querySelector(`#hero`) as HTMLElement)?.offsetHeight,
-        behavior: 'smooth'
-      }),
-    100
-  )
-
-/**
  * a function to abstract words, if and give me the amount of words i want
  * @param words the words to be abstracted
  * @param wordsLength the amount of words to be returned

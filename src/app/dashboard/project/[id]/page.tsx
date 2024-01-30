@@ -1,6 +1,6 @@
 'use client'
 
-// import FileUpload from '@/components/custom/FileUpload'
+import FileUpload from '@/components/custom/FileUpload'
 import FormMessage from '@/components/custom/FormMessage'
 import Layout from '@/components/custom/Layout'
 import { Error, Success } from '@/components/icons/Status'
@@ -32,9 +32,9 @@ export default function EditProjectPage({
 }: {
   params: { id: string }
 }) {
-  // const [projectImages, setProjectImages] = useState<ProjectProps['shms_project_images']>(
-  //   []
-  // )
+  const [projectImages, setProjectImages] = useState<ProjectProps['shms_project_images']>(
+    []
+  )
   const [projectName, setProjectName] = useState('')
   const [projectLocation, setProjectLocation] = useState('')
   const [projectStartDate, setProjectStartDate] = useState<Date>()
@@ -48,7 +48,7 @@ export default function EditProjectPage({
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
   // Form Errors
-  // const [projectImagesError, setImagesNameError] = useState('')
+  const [projectImagesError, setImagesNameError] = useState('')
   const [projectNameError, setProjectNameError] = useState('')
   const [projectLocationError, setProjectLocationError] = useState('')
   const [projectStartDateError, setProjectStartDateError] = useState('')
@@ -59,9 +59,20 @@ export default function EditProjectPage({
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
 
-  const { /*file, */ setFileURLs, setFile } = useContext(FileUploadContext)
+  const { file, setFileURLs, setFile } = useContext(FileUploadContext)
 
   const { push } = useRouter()
+
+  /*
+   * a function to set the grid rows and columns based on the number of files uploaded
+   * @returns {string} the grid rows and columns
+   */
+  const fileUploadGrid = (): string => {
+    // Calculate the number of rows based on the filesLength
+    const numRows = Math.ceil(file.length / 3)
+    // Return the dynamic grid rows string
+    return `grid-rows-${numRows}`
+  }
 
   // Get Project details and set the state
   useEffect(() => {
@@ -71,7 +82,7 @@ export default function EditProjectPage({
       }: { data: { project: ProjectProps } } = await axios.get(
         `${API_URL}/projects/get/${projectId}`
       )
-      // setProjectImages(JSON.parse(String(project.shms_project_images)))
+      setProjectImages(JSON.parse(String(project.shms_project_images)))
       setProjectName(project.shms_project_name)
       setProjectLocation(project.shms_project_location)
       setProjectStartDate(new Date(project.shms_project_start_date))
@@ -93,14 +104,12 @@ export default function EditProjectPage({
   }) => {
     // don't refresh the page
     e.preventDefault()
-    /*
+
     // check if the form is valid
     if (file.length === 0) {
       resetFormErrors()
       setImagesNameError('الرجاء التأكد من رفع صور المشروع')
-    } else
-    */
-    if (projectName === '') {
+    } else if (projectName === '') {
       resetFormErrors()
       setProjectNameError('الرجاء التأكد من كتابة اسم المشروع')
     } else if (projectLocation === '') {
@@ -264,13 +273,15 @@ export default function EditProjectPage({
             </CardTitle>
           </CardHeader>
           <CardContent className='space-y-2'>
-            {/* <div className='grid grid-cols-2 grid-rows-3 gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+            <div
+              className={`grid ${fileUploadGrid()} gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5`}
+            >
               <FileUpload
                 data={{ projectId, defaultImg: projectImages, imgName: projectName }}
                 ignoreRequired
               />
             </div>
-            {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>} */}
+            {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}
 
             <div className='space-y-1'>
               <Label htmlFor='projectName'>اسم المشروع</Label>
