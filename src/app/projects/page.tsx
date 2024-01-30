@@ -24,47 +24,49 @@ export default async function Projects() {
           <NoRecords links={[{ to: `/`, label: 'الصفحة الرئيسية' }]} />
         ) : (
           <div className='grid justify-end grid-cols-1 gap-4 md:grid-cols-2 rtl'>
-            {projects.map((project, index) => (
-              <Card
-                className='w-4/5 max-w-screen-md m-5 mx-auto min-w-72 rtl'
-                key={index}
-              >
-                <CardContent className='flex flex-col p-0 shadow-md gap-y-6'>
-                  <Link
-                    href={`projects/${project.shms_project_id}/${createSlug(
-                      project.shms_project_name
-                    )}`}
-                  >
-                    <Image
-                      key={project.shms_project_id}
-                      src={
-                        JSON.parse(String(project.shms_project_images))[0]
-                          ?.imgDisplayPath ?? APP_LOGO
-                      }
-                      priority={true}
-                      alt={`Project ${index + 1}`}
-                      width={400}
-                      height={200}
-                      className='object-cover w-full h-40 rounded-lg cursor-pointer md:h-72'
-                    />
-                  </Link>
-
-                  <CardDescription className='flex flex-col pb-4 mx-3 md:mx-6 gap-y-2 md:gap-y-4'>
+            {projects
+              .filter(project => project.shms_project_status === 'active')
+              .map((project, index) => (
+                <Card
+                  className='w-4/5 max-w-screen-md m-5 mx-auto min-w-72 rtl'
+                  key={index}
+                >
+                  <CardContent className='flex flex-col p-0 shadow-md gap-y-6'>
                     <Link
                       href={`projects/${project.shms_project_id}/${createSlug(
                         project.shms_project_name
                       )}`}
-                      className='text-sm transition-colors md:font-bold w-fit hover:text-green-500 md:text-lg'
                     >
-                      {project.shms_project_name}
+                      <Image
+                        key={project.shms_project_id}
+                        src={
+                          JSON.parse(String(project.shms_project_images))[0]
+                            ?.imgDisplayPath ?? APP_LOGO
+                        }
+                        priority={true}
+                        alt={`Project ${index + 1}`}
+                        width={400}
+                        height={200}
+                        className='object-cover w-full h-40 rounded-lg cursor-pointer md:h-72'
+                      />
                     </Link>
-                    <span className='text-sm md:font-bold md:text-lg'>
-                      <strong>{project.shms_project_location}</strong>
-                    </span>
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            ))}
+
+                    <CardDescription className='flex flex-col pb-4 mx-3 md:mx-6 gap-y-2 md:gap-y-4'>
+                      <Link
+                        href={`projects/${project.shms_project_id}/${createSlug(
+                          project.shms_project_name
+                        )}`}
+                        className='text-sm transition-colors md:font-bold w-fit hover:text-green-500 md:text-lg'
+                      >
+                        {project.shms_project_name}
+                      </Link>
+                      <span className='text-sm md:font-bold md:text-lg'>
+                        <strong>{project.shms_project_location}</strong>
+                      </span>
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
           </div>
         )}
       </main>
