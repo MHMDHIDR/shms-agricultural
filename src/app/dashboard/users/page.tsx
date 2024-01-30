@@ -104,9 +104,7 @@ export default function Users() {
       setUserDeleted(data.userDeleted ?? 0)
       setTimeout(() => refresh(), DEFAULT_DURATION)
     } catch (error) {
-      //handle error, show notification using Shadcn notifcation
       toast('حدث خطأ ما', {
-        // message: old var
         icon: <Error className='w-6 h-6 ml-3' />,
         position: 'bottom-center',
         className: 'text-right select-none rtl',

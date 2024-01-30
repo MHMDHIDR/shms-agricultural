@@ -85,9 +85,7 @@ export default function ProjectsTable() {
       setProjectDeleted(data.projectDeleted ?? 0)
       setTimeout(() => refresh(), DEFAULT_DURATION)
     } catch (error) {
-      //handle error, show notification using Shadcn notifcation
       toast('حدث خطأ ما أثناء حذف المشروع', {
-        // message: old var
         icon: <Error className='w-6 h-6 ml-3' />,
         position: 'bottom-center',
         className: 'text-right select-none rtl',
@@ -107,15 +105,25 @@ export default function ProjectsTable() {
     <Table className='min-w-full text-center divide-y divide-gray-200'>
       <TableHeader>
         <TableRow>
-          <TableHead className='select-none font-bold'>اسم المشروع</TableHead>
-          <TableHead className='select-none font-bold'>منطقة المشروع</TableHead>
-          <TableHead className='select-none font-bold'>تاريخ البدء</TableHead>
-          <TableHead className='select-none font-bold'>تاريخ الانتهاء</TableHead>
-          <TableHead className='select-none font-bold'>اخر موعد للمساهمة</TableHead>
-          <TableHead className='select-none font-bold'>سعر السهم الواحد</TableHead>
-          <TableHead className='select-none font-bold'>عدد الاسهم</TableHead>
-          <TableHead className='select-none font-bold'>حالة المشروع</TableHead>
-          <TableHead className='select-none font-bold'>العمليات</TableHead>
+          <TableHead className='select-none text-center font-bold'>اسم المشروع</TableHead>
+          <TableHead className='select-none text-center font-bold'>
+            منطقة المشروع
+          </TableHead>
+          <TableHead className='select-none text-center font-bold'>تاريخ البدء</TableHead>
+          <TableHead className='select-none text-center font-bold'>
+            تاريخ الانتهاء
+          </TableHead>
+          <TableHead className='select-none text-center font-bold'>
+            اخر موعد للمساهمة
+          </TableHead>
+          <TableHead className='select-none text-center font-bold'>
+            سعر السهم الواحد
+          </TableHead>
+          <TableHead className='select-none text-center font-bold'>عدد الاسهم</TableHead>
+          <TableHead className='select-none text-center font-bold'>
+            حالة المشروع
+          </TableHead>
+          <TableHead className='select-none text-center font-bold'>العمليات</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

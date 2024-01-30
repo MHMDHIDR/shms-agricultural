@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Skeleton } from '@/components/ui/skeleton'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
@@ -228,7 +229,11 @@ export default function EditProjectPage({
             <CardTitle className='select-none text-center'>
               تعديل مشروع{' '}
               <strong>
-                {projectName && projectName.length > 0 ? projectName : '...'}
+                {projectName && projectName.length > 0 ? (
+                  projectName
+                ) : (
+                  <Skeleton className='w-32 h-4 inline-block bg-gray-400' />
+                )}
               </strong>
             </CardTitle>
           </CardHeader>
@@ -250,7 +255,7 @@ export default function EditProjectPage({
             {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectName'> اسم المشروع </Label>
+              <Label htmlFor='projectName'>اسم المشروع</Label>
               <Input
                 id='projectName'
                 type='text'

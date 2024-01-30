@@ -223,7 +223,7 @@ export default function Projects() {
             {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectName'> اسم المشروع </Label>
+              <Label htmlFor='projectName'>اسم المشروع</Label>
               <Input
                 id='projectName'
                 type='text'
