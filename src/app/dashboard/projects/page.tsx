@@ -32,6 +32,7 @@ export default function Projects() {
   const [projectStartDate, setProjectStartDate] = useState<Date>()
   const [projectEndDate, setProjectEndDate] = useState<Date>()
   const [projectInvestEndDate, setProjectInvestEndDate] = useState<Date>()
+  const [projectAvailableStocks, setProjectAvailableStocks] = useState<number>()
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
   const [projectDescription, setProjectDescription] = useState('')
@@ -45,6 +46,7 @@ export default function Projects() {
   const [projectStartDateError, setProjectStartDateError] = useState('')
   const [projectEndDateError, setProjectEndDateError] = useState('')
   const [projectInvestEndDateError, setProjectInvestEndDateError] = useState('')
+  const [projectAvailableStocksError, setProjectAvailableStocksError] = useState('')
   const [stockPriceError, setStockPriceError] = useState('')
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
@@ -80,6 +82,9 @@ export default function Projects() {
     } else if (!projectInvestEndDate) {
       resetFormErrors()
       setProjectInvestEndDateError('الرجاء التأكد من تحديد تاريخ اخر موعد للمساهمة')
+    } else if (!projectAvailableStocks || projectAvailableStocks === 0) {
+      resetFormErrors()
+      setProjectAvailableStocksError('الرجاء التأكد من كتابة عدد الأسهم المتاحة')
     } else if (!stockPrice || stockPrice === 0) {
       resetFormErrors()
       setStockPriceError('الرجاء التأكد من كتابة سعر السهم')
@@ -116,6 +121,7 @@ export default function Projects() {
             shms_project_start_date: projectStartDate,
             shms_project_end_date: projectEndDate,
             shms_project_invest_date: projectInvestEndDate,
+            shms_project_available_stocks: projectAvailableStocks,
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
             shms_project_description: projectDescription,
@@ -271,6 +277,24 @@ export default function Projects() {
             </div>
             {projectEndDateError && (
               <FormMessage error>{projectEndDateError}</FormMessage>
+            )}
+
+            <div className='space-y-1'>
+              <Label htmlFor='projectAvailableStocks'>عدد الأسهم المتاحة</Label>
+              <div className='md:w-3/3'>
+                <input
+                  id='projectAvailableStocks'
+                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='number'
+                  inputMode='numeric'
+                  min={0}
+                  onChange={e => setProjectAvailableStocks(parseFloat(e.target.value))}
+                  defaultValue={projectAvailableStocks}
+                />
+              </div>
+            </div>
+            {projectAvailableStocksError && (
+              <FormMessage error>{projectAvailableStocksError}</FormMessage>
             )}
 
             <div className='space-y-1'>

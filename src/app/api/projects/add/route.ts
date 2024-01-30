@@ -1,6 +1,6 @@
 import { connectDB } from '@/app/api/utils/db'
-import { ResultSetHeader } from 'mysql2/promise'
 import type { ProjectProps } from '@/types'
+import { ResultSetHeader } from 'mysql2/promise'
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -11,6 +11,7 @@ export async function POST(req: Request) {
     shms_project_start_date,
     shms_project_end_date,
     shms_project_invest_date,
+    shms_project_available_stocks,
     shms_project_stock_price,
     shms_project_stock_profits,
     shms_project_description,
@@ -27,10 +28,11 @@ export async function POST(req: Request) {
                           shms_project_start_date,
                           shms_project_end_date,
                           shms_project_invest_date,
+                          shms_project_available_stocks,
                           shms_project_stock_price,
                           shms_project_stock_profits,
                           shms_project_description)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         shms_project_id,
         // To store in DB we need to stringify the array
@@ -40,6 +42,7 @@ export async function POST(req: Request) {
         shms_project_start_date,
         shms_project_end_date,
         shms_project_invest_date,
+        shms_project_available_stocks,
         shms_project_stock_price,
         shms_project_stock_profits,
         shms_project_description

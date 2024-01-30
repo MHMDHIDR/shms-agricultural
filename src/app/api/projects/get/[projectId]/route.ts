@@ -1,5 +1,5 @@
 import { connectDB } from '@/app/api/utils/db'
-import { ProjectProps } from '@/types'
+import type { ProjectProps } from '@/types'
 
 export async function GET(
   _req: Request,

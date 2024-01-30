@@ -16,11 +16,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
+import { abstractWords } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
-import { ArrowBigRight, Info } from 'lucide-react'
+import { ArrowBigRight } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
@@ -39,6 +40,7 @@ export default function EditProjectPage({
   const [projectStartDate, setProjectStartDate] = useState<Date>()
   const [projectEndDate, setProjectEndDate] = useState<Date>()
   const [projectInvestEndDate, setProjectInvestEndDate] = useState<Date>()
+  const [projectAvailableStocks, setProjectAvailableStocks] = useState<number>(0)
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
   const [projectDescription, setProjectDescription] = useState('')
@@ -52,6 +54,7 @@ export default function EditProjectPage({
   const [projectStartDateError, setProjectStartDateError] = useState('')
   const [projectEndDateError, setProjectEndDateError] = useState('')
   const [projectInvestEndDateError, setProjectInvestEndDateError] = useState('')
+  const [projectAvailableStocksError, setProjectAvailableStocksError] = useState('')
   const [stockPriceError, setStockPriceError] = useState('')
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
@@ -74,6 +77,7 @@ export default function EditProjectPage({
       setProjectStartDate(new Date(project.shms_project_start_date))
       setProjectEndDate(new Date(project.shms_project_end_date))
       setProjectInvestEndDate(new Date(project.shms_project_invest_date))
+      setProjectAvailableStocks(project.shms_project_available_stocks ?? 0)
       setStockPrice(project.shms_project_stock_price)
       setStockProfits(project.shms_project_stock_profits)
       setProjectDescription(project.shms_project_description)
@@ -111,6 +115,9 @@ export default function EditProjectPage({
     } else if (!projectInvestEndDate) {
       resetFormErrors()
       setProjectInvestEndDateError('الرجاء التأكد من تحديد تاريخ اخر موعد للمساهمة')
+    } else if (!projectAvailableStocks || projectAvailableStocks === 0) {
+      resetFormErrors()
+      setProjectAvailableStocksError('الرجاء التأكد من كتابة عدد الأسهم المتاحة')
     } else if (!stockPrice || stockPrice === 0) {
       resetFormErrors()
       setStockPriceError('الرجاء التأكد من كتابة سعر السهم')
@@ -126,28 +133,11 @@ export default function EditProjectPage({
         setIsSubmittingForm(true)
 
         // create a new form data with files data
-        const formData = new FormData()
-        formData.append('multiple', 'true')
+
+        // formData.append('multiple', 'true') // for s3 to allow update multiple files
 
         //using FormData to send constructed data
-        formData.append('projectId', projectId)
-        formData.append('projectName', projectName)
-        formData.append('projectLocation', projectLocation)
-        formData.append(
-          'projectStartDate',
-          projectStartDate?.toISOString().split('T')[0] ?? ''
-        )
-        formData.append(
-          'projectEndDate',
-          projectEndDate?.toISOString().split('T')[0] ?? ''
-        )
-        formData.append(
-          'projectInvestEndDate',
-          projectInvestEndDate?.toISOString().split('T')[0] ?? ''
-        )
-        formData.append('stockPrice', stockPrice?.toString() ?? '')
-        formData.append('stockProfits', stockProfits?.toString() ?? '')
-        formData.append('projectDescription', projectDescription)
+
         // formData.append('prevProjectImgPathsAndNames', JSON.stringify(projectImages))
 
         // file.forEach((singleFile, index) => formData.append(`file[${index}]`, singleFile))
@@ -161,7 +151,17 @@ export default function EditProjectPage({
         // upload the project data to the database
         const updatedProject: { data: ProjectProps } = await axios.patch(
           `${API_URL}/projects/edit/${projectId}`,
-          formData
+          {
+            shms_project_name: projectName,
+            shms_project_location: projectLocation,
+            shms_project_start_date: projectStartDate,
+            shms_project_end_date: projectEndDate,
+            shms_project_invest_date: projectInvestEndDate,
+            shms_project_available_stocks: projectAvailableStocks,
+            shms_project_stock_price: stockPrice,
+            shms_project_stock_profits: stockProfits,
+            shms_project_descriptio: projectDescription
+          }
         )
         //getting response from backend
         const { data } = updatedProject
@@ -169,7 +169,7 @@ export default function EditProjectPage({
         // make sure to view the response from the data
         data.projectUpdated === 1 &&
           toast(data.message, {
-            icon: <Info className='text-blue-300' />,
+            icon: <Success />,
             position: 'bottom-center',
             className: 'text-right select-none rtl',
             duration: DEFAULT_DURATION,
@@ -241,7 +241,7 @@ export default function EditProjectPage({
       <Card className='mt-56 rtl'>
         <Link
           href={`/dashboard`}
-          className='underline-hover mt-4 mr-5 inline-block font-bold group'
+          className='underline-hover mt-4 mr-5 inline-block font-bold group text-blue-500'
         >
           <ArrowBigRight className='inline-block w-4 h-4 ml-0.5 group-hover:translate-x-2 transition-transform' />
           العودة للوحة التحكم
@@ -252,7 +252,11 @@ export default function EditProjectPage({
               تعديل مشروع{' '}
               <strong>
                 {projectName && projectName.length > 0 ? (
-                  projectName
+                  abstractWords({
+                    words: projectName,
+                    wordsLength: 4,
+                    ellipsis: true
+                  })
                 ) : (
                   <Skeleton className='w-32 h-4 inline-block bg-gray-400' />
                 )}
@@ -338,6 +342,24 @@ export default function EditProjectPage({
             </div>
             {projectInvestEndDateError && (
               <FormMessage error>{projectInvestEndDateError}</FormMessage>
+            )}
+
+            <div className='space-y-1'>
+              <Label htmlFor='projectAvailableStocks'>عدد الأسهم المتاحة</Label>
+              <div className='md:w-3/3'>
+                <input
+                  id='projectAvailableStocks'
+                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='number'
+                  inputMode='numeric'
+                  min={0}
+                  onChange={e => setProjectAvailableStocks(parseFloat(e.target.value))}
+                  defaultValue={projectAvailableStocks}
+                />
+              </div>
+            </div>
+            {projectAvailableStocksError && (
+              <FormMessage error>{projectAvailableStocksError}</FormMessage>
             )}
 
             <div className='space-y-1'>

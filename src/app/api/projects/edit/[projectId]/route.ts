@@ -1,0 +1,98 @@
+import { connectDB } from '@/app/api/utils/db'
+import type { ProjectProps } from '@/types'
+import { ResultSetHeader } from 'mysql2/promise'
+
+export async function PATCH(
+  request: Request,
+  { params: { projectId } }: { params: { projectId: string } }
+) {
+  if (!projectId) throw new Error('Project ID is required')
+
+  const {
+    shms_project_name,
+    shms_project_location,
+    shms_project_start_date,
+    shms_project_end_date,
+    shms_project_invest_date,
+    shms_project_available_stocks,
+    shms_project_stock_price,
+    shms_project_stock_profits,
+    shms_project_description
+  }: ProjectProps = await request.json()
+
+  if (!projectId) {
+    return new Response(
+      JSON.stringify({ project: null, message: 'عفواً لم يتم العثور على المشروع!' }),
+      { status: 404 }
+    )
+  }
+
+  try {
+    // Get project
+    const project = (
+      (await connectDB(`SELECT * FROM projects WHERE shms_project_id = ?`, [
+        projectId
+      ])) as ProjectProps[]
+    )[0]
+
+    if (!project || !project.shms_project_id) {
+      new Response(
+        JSON.stringify({ project: null, message: 'عفواً لم يتم العثور على المشروع!' }),
+        { status: 404 }
+      )
+    }
+
+    // Update project
+    const updateProject = (await connectDB(
+      `UPDATE projects SET
+        shms_project_name = ?,
+        shms_project_location = ?,
+        shms_project_start_date = ?,
+        shms_project_end_date = ?,
+        shms_project_invest_date = ?,
+        shms_project_available_stocks = ?,
+        shms_project_stock_price = ?,
+        shms_project_stock_profits = ?,
+        shms_project_description = ?
+      WHERE shms_project_id = ?`,
+      [
+        shms_project_name,
+        shms_project_location,
+        shms_project_start_date,
+        shms_project_end_date,
+        shms_project_invest_date,
+        shms_project_available_stocks,
+        shms_project_stock_price,
+        shms_project_stock_profits,
+        shms_project_description,
+        projectId
+      ]
+    )) as ResultSetHeader
+
+    const { affectedRows: projectUpdated } = updateProject as ResultSetHeader
+
+    return projectUpdated
+      ? new Response(
+          JSON.stringify({
+            projectUpdated,
+            message: `تم تعديل المشروع بنجاح .. جاري تحويلك`
+          }),
+          { status: 200 }
+        )
+      : new Response(
+          JSON.stringify({
+            projectUpdated,
+            message: `عفواً، لم يتم تعديل المشروع، يرجى المحاولة مرة أخرى`
+          }),
+          { status: 500 }
+        )
+  } catch (err) {
+    return new Response(
+      JSON.stringify({
+        projectUpdated: 0,
+        message: `عفواً، لم يتم تعديل المشروع! ${err}`
+      }),
+      { status: 500 }
+    )
+  }
+}
