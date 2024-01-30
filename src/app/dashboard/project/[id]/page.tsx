@@ -52,7 +52,7 @@ export default function EditProjectPage({
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
   // Form Errors
-  const [projectImagesError, setImagesNameError] = useState('')
+  // const [projectImagesError, setImagesNameError] = useState('')
   const [projectNameError, setProjectNameError] = useState('')
   const [projectLocationError, setProjectLocationError] = useState('')
   const [projectStartDateError, setProjectStartDateError] = useState('')
@@ -63,7 +63,7 @@ export default function EditProjectPage({
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
 
-  const { file, setFileURLs, setFile } = useContext(FileUploadContext)
+  const { /*file, */ setFileURLs, setFile } = useContext(FileUploadContext)
 
   const { push } = useRouter()
 
@@ -71,12 +71,12 @@ export default function EditProjectPage({
    * a function to set the grid rows and columns based on the number of files uploaded
    * @returns {string} the grid rows and columns
    */
-  const fileUploadGrid = (): string => {
-    // Calculate the number of rows based on the filesLength
-    const numRows = Math.ceil(file.length / 3)
-    // Return the dynamic grid rows string
-    return `grid-rows-${numRows}`
-  }
+  // const fileUploadGrid = (): string => {
+  //   // Calculate the number of rows based on the filesLength
+  //   const numRows = Math.ceil(file.length / 3)
+  //   // Return the dynamic grid rows string
+  //   return `grid-rows-${numRows}`
+  // }
 
   // Get Project details and set the state
   useEffect(() => {
