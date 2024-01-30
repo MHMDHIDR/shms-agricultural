@@ -2,6 +2,7 @@ import Layout from '@/components/custom/Layout'
 import NoRecords from '@/components/custom/NoRecords'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
 import { API_URL, APP_LOGO } from '@/data/constants'
+import { createSlug } from '@/lib/utils'
 import { ProjectProps } from '@/types'
 import axios from 'axios'
 import Image from 'next/image'
@@ -29,7 +30,11 @@ export default async function Projects() {
                 key={index}
               >
                 <CardContent className='flex flex-col p-0 shadow-md gap-y-6'>
-                  <Link href={`projects/${project.shms_project_id}`}>
+                  <Link
+                    href={`projects/${project.shms_project_id}/${createSlug(
+                      project.shms_project_name
+                    )}`}
+                  >
                     <Image
                       key={project.shms_project_id}
                       src={
@@ -46,7 +51,9 @@ export default async function Projects() {
 
                   <CardDescription className='flex flex-col pb-4 mx-3 md:mx-6 gap-y-2 md:gap-y-4'>
                     <Link
-                      href={`projects/${project.shms_project_id}`}
+                      href={`projects/${project.shms_project_id}/${createSlug(
+                        project.shms_project_name
+                      )}`}
                       className='text-sm transition-colors md:font-bold w-fit hover:text-green-500 md:text-lg'
                     >
                       {project.shms_project_name}

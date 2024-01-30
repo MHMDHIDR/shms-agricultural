@@ -18,8 +18,8 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         pressable: `min-w-[7rem] text-white py-1.5 px-6 rounded-md
           shadow-[0_7px] hover:shadow-[0_5px]
-          shadow-green-700 shadow-green-700 hover:shadow-green-900 hover:shadow-green-900
-          bg-green-600 bg-green-600 hover:bg-green-700 hover:bg-green-700
+          shadow-green-700 hover:shadow-green-900
+          bg-green-600 hover:bg-green-700
           hover:translate-y-1 transition-all
         `
       },

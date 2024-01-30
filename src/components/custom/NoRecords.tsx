@@ -1,6 +1,6 @@
-import Link from 'next/link'
-import Image from 'next/image'
 import { NoItemsProps } from '@/types'
+import Image from 'next/image'
+import Link from 'next/link'
 import { Button } from '../ui/button'
 
 /**
@@ -9,7 +9,7 @@ import { Button } from '../ui/button'
  * @param links.label - The label of the link
  * @returns {JSX.Element} - The NoRecords component
  */
-export default function NoRecords({ msg, links }: NoItemsProps): JSX.Element {
+export default function NoRecords({ msg, links, button }: NoItemsProps): JSX.Element {
   return (
     <div className='flex flex-col items-center justify-center my-5 gap-6'>
       <div className='w-56 h-56 md:w-72 md:h-72 flex items-center justify-center rounded-full bg-gray-50 shadow-md md:shadow-lg shadow-[#e1e3ec]'>
@@ -30,6 +30,7 @@ export default function NoRecords({ msg, links }: NoItemsProps): JSX.Element {
             <Button variant='pressable'>{link.label}</Button>
           </Link>
         ))}
+        {button && button}
       </div>
     </div>
   )

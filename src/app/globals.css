@@ -70,6 +70,10 @@
 }
 
 @layer components {
+  .pressable {
+    @apply inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 min-w-[7rem] text-white rounded-md shadow-[0_7px] hover:shadow-[0_5px] shadow-green-700 hover:shadow-green-900 bg-green-600 hover:bg-green-700 hover:translate-y-1 transition-all h-10 px-4 py-2;
+  }
+
   .underline-hover {
     @apply relative before:h-0.5 before:w-0 before:absolute py-2 px-6 rounded-lg text-sm xl:text-base hover:bg-opacity-50 outline-offset-8 before:bottom-0 before:right-0 before:transition-all hover:before:w-full md:bg-transparent md:bg-opacity-0 md:py-0 md:px-0 md:rounded-none md:hover:bg-opacity-0 dark:text-gray-200 md:before:bg-green-500;
   }

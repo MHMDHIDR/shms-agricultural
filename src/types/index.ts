@@ -146,10 +146,11 @@ export type MenuItemsProps = {
 
 export type NoItemsProps = {
   msg?: string
-  links: {
+  links?: {
     to: string
     label: string
   }[]
+  button?: React.ReactNode
 }
 
 export type validateFileProps = (file: File) => {

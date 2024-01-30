@@ -1,9 +1,9 @@
-import DashboardView from './view/page'
+import Layout from '@/components/custom/Layout'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import AddProjects from './projects/page'
 import DashboardStocks from './stocks/page'
 import Users from './users/page'
-import AddProjects from './projects/page'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Layout from '@/components/custom/Layout'
+import DashboardView from './view/page'
 
 export default function DashboardPage() {
   return (
@@ -25,12 +25,13 @@ export default function DashboardPage() {
             </TabsTrigger>
           </TabsList>
 
+          {/*  إحصائيات المستثمرين و المساهمين */}
           <DashboardView />
-
+          {/* تاب الأسهم */}
           <DashboardStocks />
-
+          {/* تاب المستخدمين */}
           <Users />
-
+          {/* تاب إدارة المشاريع */}
           <AddProjects />
         </Tabs>
       </main>

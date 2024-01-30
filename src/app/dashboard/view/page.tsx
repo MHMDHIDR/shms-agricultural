@@ -1,3 +1,12 @@
+import Modal from '@/components/custom/Modal'
+import NoRecords from '@/components/custom/NoRecords'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -6,106 +15,93 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
 import { TabsContent } from '@/components/ui/tabs'
+import { API_URL, APP_LOGO } from '@/data/constants'
+import type { UserProps } from '@/types'
+import axios from 'axios'
 
-const invoices = [
-  {
-    name: 'محمد عبدالرحيم محمد مكي',
-    docType: 'جواز',
-    docNumber: 'P20836146',
-    stocks: '5'
-  },
-  {
-    name: 'محمد بشير عوض الكريم',
-    docType: 'بطاقة قطرية',
-    docNumber: '200393552723',
-    stocks: '10'
-  }
-]
+export default async function DashboardView() {
+  const { data: users }: { data: UserProps[] } = await axios.get(
+    `${API_URL}/users/all?role=investor`
+  )
 
-export default function DashboardView() {
   return (
     <TabsContent value='view'>
-      <div className='flex flex-wrap justify-center'>
-        <Card style={{ margin: 10 }} dir='rtl' className='w-full md:w-[350px]'>
+      <div className='flex flex-wrap justify-center gap-2.5 my-4'>
+        <Card className='w-full text-center md:w-[350px]'>
           <CardHeader>
             <CardTitle>عدد المساهمين</CardTitle>
-            <CardDescription>153</CardDescription>
+            <CardDescription className='text-2xl pt-4'>
+              <strong>{users.length}</strong>
+            </CardDescription>
           </CardHeader>
-          <CardContent>{/* Add your content here */}</CardContent>
-          <CardFooter className='flex justify-between'>
-            {/* Add your footer content here */}
-          </CardFooter>
         </Card>
 
-        <Card style={{ margin: 10 }} dir='rtl' className='w-full md:w-[300px]'>
+        <Card className='w-full text-center md:w-[300px]'>
           <CardHeader>
-            <CardTitle> مجموع المبالغ المستثمرة </CardTitle>
-            <CardDescription>6000</CardDescription>
+            <CardTitle>مجموع المبالغ المستثمرة</CardTitle>
+            <CardDescription className='text-2xl pt-4'>
+              <strong>153</strong>
+            </CardDescription>
           </CardHeader>
-          <CardContent>{/* Add your content here */}</CardContent>
-          <CardFooter className='flex justify-between'>
-            {/* Add your footer content here */}
-          </CardFooter>
         </Card>
 
-        <Card style={{ margin: 10 }} dir='rtl' className='w-full md:w-[300px]'>
+        <Card className='w-full text-center md:w-[300px]'>
           <CardHeader>
-            <CardTitle> عدد الاسهم </CardTitle>
-            <CardDescription>6000</CardDescription>
+            <CardTitle>عدد الاسهم</CardTitle>
+            <CardDescription className='text-2xl pt-4'>
+              <strong>153</strong>
+            </CardDescription>
           </CardHeader>
-          <CardContent>{/* Add your content here */}</CardContent>
-          <CardFooter className='flex justify-between'>
-            {/* Add your footer content here */}
-          </CardFooter>
         </Card>
       </div>
 
       <div style={{ width: '100%', display: 'flex' }}>
         <Card dir='rtl' style={{ width: '100%' }} className='w-full md:w-[300px]'>
-          <CardHeader dir='rtl'>
-            <CardTitle> المستثمرين </CardTitle>
-            <CardDescription>30</CardDescription>
+          <CardHeader>
+            <CardTitle>المستثمرين</CardTitle>
+            {
+              <CardDescription className='text-l pt-2'>
+                <small>
+                  <strong>لديك {users.length} مستثمر</strong>
+                </small>
+              </CardDescription>
+            }
           </CardHeader>
           <CardContent>
-            <Table className='min-w-full divide-y divide-gray-200'>
-              <TableHeader>
-                <TableRow>
-                  <TableHead style={{ textAlign: 'center' }}>الاسم</TableHead>
-                  <TableHead style={{ textAlign: 'center' }}>نوع المستند</TableHead>
-                  <TableHead style={{ textAlign: 'center' }}>رقم المستند</TableHead>
-                  <TableHead style={{ textAlign: 'center' }}>عدد الاسهم</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {invoices.map(invoice => (
-                  <TableRow key={invoice.name}>
-                    <TableCell style={{ textAlign: 'center' }}>{invoice.name}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      {invoice.docType}
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      {invoice.docNumber}
-                    </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
-                      {invoice.stocks}
-                    </TableCell>
+            {!users || users.length === 0 ? (
+              <NoRecords msg='لم يتم العثور على مستثمرين في الوقت الحالي!' />
+            ) : (
+              <Table className='min-w-full divide-y divide-gray-200'>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className='text-right'>الاسم</TableHead>
+                    <TableHead className='text-right'>عدد الاسهم</TableHead>
+                    <TableHead className='text-right'>المستند الشخصي</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {users.map(user => (
+                    <TableRow key={user.shms_id}>
+                      <TableCell className='text-right'>{user.shms_fullname}</TableCell>
+                      <TableCell className='text-right'>
+                        {user.shms_user_stocks?.length}
+                      </TableCell>
+                      <TableCell className='text-right'>
+                        <Modal
+                          title={`صورة المستند لــ ${user.shms_fullname}`}
+                          document={user.shms_doc ?? APP_LOGO}
+                          className='font-bold dark:text-white'
+                        >
+                          عرض المستند
+                        </Modal>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
-          <CardFooter className='flex justify-between'>
-            {/* Add your footer content here */}
-          </CardFooter>
         </Card>
       </div>
     </TabsContent>

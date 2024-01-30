@@ -27,7 +27,7 @@ const FileUpload = ({
           <div className={`flex items-center gap-y-3 max-h-44 h-44 place-content-center`}>
             <Image
               loading='lazy'
-              src={`https://source.unsplash.com/random?food`}
+              src={`https://source.unsplash.com/random?tree`}
               alt={`Agricultural Project View`}
               height={FILE_UPLOAD_IMG_SIZE}
               width={FILE_UPLOAD_IMG_SIZE}
@@ -42,7 +42,6 @@ const FileUpload = ({
               className={`flex items-center flex-col gap-y-3 max-h-44 h-44 place-content-center`}
             >
               <Image
-                loading='lazy'
                 src={fileURL}
                 alt={data?.imgName ?? `Agricultural Project View`}
                 height={FILE_UPLOAD_IMG_SIZE}
@@ -66,11 +65,11 @@ const FileUpload = ({
                 key={data.foodId! + idx}
               >
                 <Image
-                  loading='lazy'
                   src={imgDisplayPath || `https://source.unsplash.com/random?tree`}
                   alt={imgDisplayName || `Agricultural Project View`}
                   height={FILE_UPLOAD_IMG_SIZE}
                   width={FILE_UPLOAD_IMG_SIZE}
+                  priority={true}
                   className='object-cover w-32 h-32 p-1 border border-gray-400 min-h-fit dark:border-gray-300 rounded-xl'
                 />
                 {fileURLs.length > 0 && hasImgs && !ignoreDelete && (
