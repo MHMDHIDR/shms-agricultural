@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { TabsContent } from '@/components/ui/tabs'
-import { API_URL, DEFAULT_DURATION } from '@/data/constants'
+import { API_URL, APP_LOGO_sm, APP_TITLE, DEFAULT_DURATION } from '@/data/constants'
 import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -210,10 +210,7 @@ export default function Projects() {
               <FileUpload
                 data={{
                   defaultImg: [
-                    {
-                      imgDisplayName: 'Tree',
-                      imgDisplayPath: 'https://source.unsplash.com/random?tree'
-                    }
+                    { imgDisplayName: APP_TITLE, imgDisplayPath: APP_LOGO_sm }
                   ],
                   imgName: 'Agricultural Project View'
                 }}

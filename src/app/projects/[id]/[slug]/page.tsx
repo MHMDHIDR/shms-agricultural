@@ -11,15 +11,15 @@ export default async function ProjectDetailsPage({
   const {
     data: { project }
   }: { data: { project: ProjectProps } } = await axios.get(
-    `${API_URL}/projects/${projectId}`
+    `${API_URL}/projects/get/${projectId}`
   )
 
+  // to get decoded slug from url
   // const projectSlug = decodeURI(slug)
 
-  const projectImages: Array<{
-    imgDisplayName: string
-    imgDisplayPath: string
-  }> = JSON.parse(project.shms_project_images)
+  const projectImages: ProjectProps['shms_project_images'] = JSON.parse(
+    String(project.shms_project_images)
+  )
 
   return (
     <Layout>

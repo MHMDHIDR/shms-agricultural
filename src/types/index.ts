@@ -39,7 +39,7 @@ export type UserProps = {
 
 export type ProjectProps = {
   shms_project_id: string
-  shms_project_images: string
+  shms_project_images: imgsProps[]
   shms_project_name: string
   shms_project_location: string
   shms_project_start_date: Date
@@ -79,7 +79,7 @@ export type FileUploadProps = {
 
 export type FileUploadComponentProps = {
   data: {
-    foodId?: string
+    projectId?: string
     imgName: string
     defaultImg: imgsProps[]
   }

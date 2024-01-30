@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { FILE_UPLOAD_IMG_SIZE } from '@/data/constants'
+import { APP_LOGO_sm, APP_TITLE, FILE_UPLOAD_IMG_SIZE } from '@/data/constants'
 import { FileUploadContext } from '@/providers/FileUpload'
-import type { FileUploadComponentProps, FileUploadProps } from '@/types'
+import type { FileUploadComponentProps, FileUploadProps, imgsProps } from '@/types'
 import Image from 'next/image'
 import { useContext } from 'react'
 
@@ -27,8 +27,8 @@ const FileUpload = ({
           <div className={`flex items-center gap-y-3 max-h-44 h-44 place-content-center`}>
             <Image
               loading='lazy'
-              src={`https://source.unsplash.com/random?tree`}
-              alt={`Agricultural Project View`}
+              src={APP_LOGO_sm}
+              alt={APP_TITLE}
               height={FILE_UPLOAD_IMG_SIZE}
               width={FILE_UPLOAD_IMG_SIZE}
               className='object-cover w-32 h-32 p-1 border border-gray-400 min-h-fit dark:border-gray-300 rounded-xl'
@@ -43,7 +43,7 @@ const FileUpload = ({
             >
               <Image
                 src={fileURL}
-                alt={data?.imgName ?? `Agricultural Project View`}
+                alt={data?.imgName ?? APP_TITLE}
                 height={FILE_UPLOAD_IMG_SIZE}
                 width={FILE_UPLOAD_IMG_SIZE}
                 className={`object-cover p-1 border border-gray-400 max-w-[7rem] w-32 min-h-fit h-32 dark:border-gray-300 rounded-xl`}
@@ -59,14 +59,14 @@ const FileUpload = ({
           ))
         ) : (
           data.defaultImg.map(
-            ({ imgDisplayName, imgDisplayPath }: any /*imgsProps*/, idx: number) => (
+            ({ imgDisplayName, imgDisplayPath }: imgsProps, idx: number) => (
               <div
                 className={`flex flex-col col-span-full items-center gap-y-3 max-h-44 h-44 place-content-center`}
-                key={data.foodId! + idx}
+                key={data.projectId! + idx}
               >
                 <Image
-                  src={imgDisplayPath || `https://source.unsplash.com/random?tree`}
-                  alt={imgDisplayName || `Agricultural Project View`}
+                  src={imgDisplayPath ?? APP_LOGO_sm}
+                  alt={imgDisplayName ?? APP_TITLE}
                   height={FILE_UPLOAD_IMG_SIZE}
                   width={FILE_UPLOAD_IMG_SIZE}
                   priority={true}
@@ -93,7 +93,7 @@ const FileUpload = ({
         htmlFor='projectImg'
         className={`grid col-span-full h-fit place-items-center justify-center gap-5 p-3 overflow-y-auto border border-gray-200 hover:bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-700 hover:dark:bg-gray-600 transition-colors duration-300`}
       >
-        {/* When editing a project Getting the id from: { params }: { params: { id: string } } */}
+        {/* When editing a project GET the id from: { params }: { params: { id: string } } */}
         {id && (
           <p className='text-center text-green-700 dark:text-green-400'>
             لا تنسى الضغط على زر التحديث في أسفل النموذج لتحديث الصور

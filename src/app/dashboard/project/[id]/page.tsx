@@ -30,6 +30,9 @@ export default function EditProjectPage({
 }: {
   params: { id: string }
 }) {
+  const [projectImages, setProjectImages] = useState<ProjectProps['shms_project_images']>(
+    []
+  )
   const [projectName, setProjectName] = useState('')
   const [projectLocation, setProjectLocation] = useState('')
   const [projectStartDate, setProjectStartDate] = useState<Date>()
@@ -62,9 +65,9 @@ export default function EditProjectPage({
       const {
         data: { project }
       }: { data: { project: ProjectProps } } = await axios.get(
-        `${API_URL}/projects/${projectId}`
+        `${API_URL}/projects/get/${projectId}`
       )
-
+      setProjectImages(JSON.parse(String(project.shms_project_images)))
       setProjectName(project.shms_project_name)
       setProjectLocation(project.shms_project_location)
       setProjectStartDate(new Date(project.shms_project_start_date))
@@ -133,7 +136,7 @@ export default function EditProjectPage({
 
         // upload the project data to the database
         const addProject: { data: ProjectProps } = await axios.post(
-          `${API_URL}/projects/add`,
+          `${API_URL}/projects/edit/${projectId}`,
           {
             shms_project_id,
             shms_project_name: projectName,
@@ -170,7 +173,6 @@ export default function EditProjectPage({
         resetFormFields()
         setTimeout(() => push(`/dashboard`), DEFAULT_DURATION)
       } catch (error: any) {
-        //handle error, show notification using Shadcn notifcation
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
           {
             icon: <Error className='w-6 h-6 ml-3' />,
@@ -241,13 +243,9 @@ export default function EditProjectPage({
             <div className='grid grid-cols-2 grid-rows-3 gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
               <FileUpload
                 data={{
-                  defaultImg: [
-                    {
-                      imgDisplayName: 'Tree',
-                      imgDisplayPath: 'https://source.unsplash.com/random?tree'
-                    }
-                  ],
-                  imgName: 'Agricultural Project View'
+                  projectId,
+                  defaultImg: projectImages,
+                  imgName: projectName
                 }}
                 ignoreRequired
               />
