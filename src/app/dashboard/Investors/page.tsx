@@ -20,13 +20,13 @@ import { API_URL, APP_LOGO } from '@/data/constants'
 import type { UserProps } from '@/types'
 import axios from 'axios'
 
-export default async function DashboardView() {
+export default async function DashboardInvestors() {
   const { data: users }: { data: UserProps[] } = await axios.get(
     `${API_URL}/users/all?role=investor`
   )
 
   return (
-    <TabsContent value='view'>
+    <TabsContent value='investors'>
       <div className='flex flex-wrap justify-center gap-2.5 my-4'>
         <Card className='w-full select-none font-bold text-center md:w-[350px]'>
           <CardHeader>

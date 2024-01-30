@@ -92,7 +92,7 @@ export default function EditProjectPage({
       setProjectStartDate(new Date(project.shms_project_start_date))
       setProjectEndDate(new Date(project.shms_project_end_date))
       setProjectInvestEndDate(new Date(project.shms_project_invest_date))
-      setProjectAvailableStocks(project.shms_project_available_stocks ?? 0)
+      setProjectAvailableStocks(project.shms_project_available_stocks)
       setStockPrice(project.shms_project_stock_price)
       setStockProfits(project.shms_project_stock_profits)
       setProjectDescription(project.shms_project_description)

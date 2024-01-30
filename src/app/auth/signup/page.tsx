@@ -53,10 +53,6 @@ const SignupPage = () => {
 
   // Errors States
   const [fullNameError, setFullNameError] = useState('')
-  const [fNameError, setFNameError] = useState('')
-  const [sNameError, setSNameError] = useState('')
-  const [tNameError, setTNameError] = useState('')
-
   const [nationlityError, setNationlityError] = useState('')
   const [dateOfBirthError, setDateOfBirthError] = useState('')
   const [addressError, setAddressError] = useState('')
@@ -67,84 +63,12 @@ const SignupPage = () => {
   const [fileError, setFileError] = useState('')
   const [acceptedTermError, setAcceptedTermError] = useState('')
 
-  const blurFName = (e: string) => {
-    if (e === '') {
-      setFNameError('الرجاء ادخال الاسم الاول')
-    } else {
-      setFNameError('')
-    }
-  }
-
-  const blurSName = (e: string) => {
-    if (e === '') {
-      setSNameError('الرجاء ادخال الاسم الثاني')
-    } else {
-      setSNameError('')
-    }
-  }
-
-  const blurTName = (e: string) => {
-    if (e === '') {
-      setTNameError('الرجاء ادخال الاسم الثالث')
-    } else {
-      setTNameError('')
-    }
-  }
-
-  const blurEmail = (e: string) => {
-    if (!validateEmail(e)) {
-      setEmailError('الرجاء التأكد من صحة البريد الالكتروني')
-    } else {
-      setEmailError('')
-    }
-  }
-
-  const blurAddress = () => {
-    if (!address) {
-      setAddressError('الرجاء التأكد من إدخال العنوان')
-    } else {
-      setAddressError('')
-    }
-  }
-
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
   }
 
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmPassword(e.target.value)
-  }
-
-  const blurPassword = () => {
-    if (!validatePasswordStrength(password)) {
-      setPassError(
-        'كلمة المرور يجب ان تكون على الاقل 8 احرف وتحتوي على حرف كبير وحرف صغير ورقم وحرف خاص مثل !@#$%^&*()'
-      )
-    } else {
-      setPassError('')
-    }
-  }
-
-  const blurConfrimPassword = () => {
-    if (!validatePasswordStrength(password)) {
-      setPassConfirmError(
-        'كلمة المرور يجب ان تكون على الاقل 8 احرف وتحتوي على حرف كبير وحرف صغير ورقم وحرف خاص مثل !@#$%^&*()'
-      )
-    } else if (password !== confirmPassword) {
-      setPassConfirmError('الرجاء التأكد من تطابق كلمة المرور')
-    } else {
-      setPassConfirmError('')
-      resetFormErrors()
-    }
-  }
-
-  const blurPhone = (p: string) => {
-    if (!validateQatarPhoneNumber(p)) {
-      setPhoneError('الرجاء التأكد من إدخال رقم الهاتف بشكل صحيح')
-    } else {
-      setPhoneError('')
-      resetFormErrors()
-    }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -321,9 +245,6 @@ const SignupPage = () => {
           >
             <div className='mb-6'>
               {fullNameError && <FormMessage error>{fullNameError}</FormMessage>}
-              {fNameError && <FormMessage error>{fNameError}</FormMessage>}
-              {sNameError && <FormMessage error>{sNameError}</FormMessage>}
-              {tNameError && <FormMessage error>{tNameError}</FormMessage>}
               <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
                 <div>
                   <label
@@ -342,8 +263,7 @@ const SignupPage = () => {
                       ).placeholder = '')
                     }
                     onChange={e => setFName(e.target.value)}
-                    onBlur={e => {
-                      blurFName(e.target.value)
+                    onBlur={() => {
                       ;(
                         document.getElementById('firstName') as HTMLInputElement
                       ).placeholder = 'محمد'
@@ -369,8 +289,7 @@ const SignupPage = () => {
                       ).placeholder = '')
                     }
                     onChange={e => setSName(e.target.value)}
-                    onBlur={e => {
-                      blurSName(e.target.value)
+                    onBlur={() => {
                       ;(
                         document.getElementById('secondName') as HTMLInputElement
                       ).placeholder = 'عبد الرحيم'
@@ -397,8 +316,7 @@ const SignupPage = () => {
                       ).placeholder = '')
                     }
                     onChange={e => setTName(e.target.value)}
-                    onBlur={e => {
-                      blurTName(e.target.value)
+                    onBlur={() => {
                       ;(
                         document.getElementById('thirdName') as HTMLInputElement
                       ).placeholder = 'محمد'
@@ -510,7 +428,6 @@ const SignupPage = () => {
                   }
                   onChange={e => setAddress(e.target.value)}
                   onBlur={() => {
-                    blurAddress()
                     ;(
                       document.getElementById('address') as HTMLInputElement
                     ).placeholder = 'العــــنوان ...'
@@ -541,8 +458,7 @@ const SignupPage = () => {
                     ((document.getElementById('email') as HTMLInputElement).placeholder =
                       '')
                   }
-                  onBlur={e => {
-                    blurEmail(e.target.value)
+                  onBlur={() => {
                     ;(document.getElementById('email') as HTMLInputElement).placeholder =
                       'example@gmail.com'
                   }}
@@ -574,8 +490,7 @@ const SignupPage = () => {
                       '')
                   }
                   onChange={e => setPhone(e.target.value)}
-                  onBlur={e => {
-                    blurPhone(e.target.value)
+                  onBlur={() => {
                     ;(document.getElementById('phone') as HTMLInputElement).placeholder =
                       '55123456'
                   }}
@@ -603,7 +518,6 @@ const SignupPage = () => {
                 <input
                   id='password'
                   onChange={handlePasswordChange}
-                  onBlur={blurPassword}
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='password'
                   placeholder='******'
@@ -626,7 +540,6 @@ const SignupPage = () => {
                 <input
                   id='confirmPassword'
                   onChange={handleConfirmPasswordChange}
-                  onBlur={blurConfrimPassword}
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='password'
                   placeholder='******'

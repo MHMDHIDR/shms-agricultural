@@ -1,4 +1,6 @@
 import {
+  DeleteObjectCommand,
+  DeleteObjectCommandOutput,
   DeleteObjectsCommand,
   DeletedObject,
   ListObjectsV2Command,
@@ -18,7 +20,7 @@ const s3ClientConfig = {
 const s3Client = new S3Client(s3ClientConfig)
 
 /**
- * Uploads The User document to S3
+ * Deletes a Objects or a folder from S3
  * @param file - The file to be uploaded
  * @param fileObject - The file object
  * @param fullname  - The fullname of the user
@@ -27,7 +29,8 @@ const s3Client = new S3Client(s3ClientConfig)
 async function deleteFilesFromS3(projectOrFileId: string): Promise<DeletedObject[]> {
   const listCommand = new ListObjectsV2Command({
     Bucket: AWS_BUCKET_NAME,
-    Prefix: `projects/${projectOrFileId}`
+    // replace only the first - symbol in project-this-is-the-id to project/this-is-the-id
+    Prefix: projectOrFileId.replace('-', '/')
   })
 
   let list = await s3Client.send(listCommand)
@@ -58,32 +61,63 @@ async function deleteFilesFromS3(projectOrFileId: string): Promise<DeletedObject
   return deleted
 }
 
+/**
+ * Deletes a document or a file from S3
+ * @param file - The file to be uploaded
+ * @param fileObject - The file object
+ * @param fullname  - The fullname of the user
+ * @returns {Promise<string>} - The key of the file in S3
+ */
+async function deleteFileFromS3(
+  projectOrFileId: string
+): Promise<DeleteObjectCommandOutput> {
+  const params = {
+    Bucket: AWS_BUCKET_NAME,
+    Key: projectOrFileId
+  }
+
+  const command = new DeleteObjectCommand(params)
+  const data = await s3Client.send(command)
+
+  return data
+}
+
 export async function DELETE(
   _req: Request,
   { params: { S3docId } }: { params: { S3docId: string } }
 ) {
   if (!S3docId) {
-    throw new Error('ID of the document or the folder of documents is required')
+    throw new Error('ID of the document or the folder is required!')
   }
 
-  try {
-    const dataAfterDelete = await deleteFilesFromS3(S3docId)
-    //  map in dataAfterDelete and check if all DeleteMarker are true, if all are true then return true
-    dataAfterDelete.map(({ DeleteMarker }) => {
-      if (!DeleteMarker) {
-        return new Response(
-          JSON.stringify({
-            docDeleted: false,
-            message: 'حدث خطأ أثناء حذف صور المشروع! حاول مرة أخرى لاحقاً'
-          }),
-          { status: 400 }
-        )
-      }
-    })
+  if (S3docId.includes('projects')) {
+    try {
+      const dataAfterDelete = await deleteFilesFromS3(S3docId)
 
-    return new Response(JSON.stringify({ docDeleted: true }), { status: 200 })
-  } catch (error: any) {
-    console.error(error)
-    return new Response(error.message, { status: 500 })
+      dataAfterDelete.map(({ DeleteMarker }) => {
+        if (!DeleteMarker) {
+          return new Response(
+            JSON.stringify({
+              docDeleted: false,
+              message: 'حدث خطأ أثناء حذف صور المشروع! حاول مرة أخرى لاحقاً'
+            }),
+            { status: 400 }
+          )
+        }
+      })
+
+      return new Response(JSON.stringify({ docDeleted: true }), { status: 200 })
+    } catch (error: any) {
+      return new Response(error.message, { status: 500 })
+    }
+  } else {
+    try {
+      const { DeleteMarker: docDeleted } = await deleteFileFromS3(S3docId)
+
+      return new Response(JSON.stringify({ docDeleted }), { status: 200 })
+    } catch (error: any) {
+      console.error(error)
+      return new Response(error.message, { status: 500 })
+    }
   }
 }

@@ -44,21 +44,6 @@ export default function Users() {
   }, [userDeleted])
 
   const deleteUser = async (id: string, S3docId: string) => {
-    if (!S3docId) {
-      return toast(`عفواً لم يتم العثور على مستند لهذا المستخدم`, {
-        icon: <Error className='w-6 h-6 ml-3' />,
-        position: 'bottom-center',
-        className: 'text-right select-none rtl',
-        style: {
-          backgroundColor: '#FFF0F0',
-          color: '#BE2A2A',
-          border: '1px solid #BE2A2A',
-          gap: '1.5rem',
-          textAlign: 'justify'
-        }
-      })
-    }
-
     try {
       const { data }: { data: UserProps } = await axios.delete(
         `${API_URL}/users/delete/${id}`

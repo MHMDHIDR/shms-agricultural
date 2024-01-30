@@ -11,7 +11,6 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-// import { ReloadIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
@@ -19,14 +18,15 @@ import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { arabicDate, cn, getProjectStatus } from '@/lib/utils'
 import type { ProjectProps } from '@/types'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 export default function ProjectsTable() {
   const [projects, setProjects] = useState<ProjectProps[]>([])
   const [projectDeleted, setProjectDeleted] = useState<number>(0)
-  // const [isSubmittingForm, setIsSubmittingForm] = useState(false)
-  // const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+
+  const { refresh } = useRouter()
 
   const getProjects = async () => {
     const { data: projects }: { data: ProjectProps[] } = await axios.get(
@@ -41,8 +41,6 @@ export default function ProjectsTable() {
 
   const deleteProject = async (projectId: string) => {
     try {
-      // setIsSubmittingForm(true)
-      // delete project from database
       const { data }: { data: ProjectProps } = await axios.delete(
         `${API_URL}/projects/delete/${projectId}`
       )
@@ -51,7 +49,7 @@ export default function ProjectsTable() {
       const {
         data: { docDeleted }
       }: { data: { docDeleted: boolean } } = await axios.delete(
-        decodeURI(`${API_URL}/deleteFromS3/${projectId}`)
+        decodeURI(`${API_URL}/deleteFromS3/projects-${projectId}`)
       )
 
       // make sure to view the response from the data
@@ -69,7 +67,6 @@ export default function ProjectsTable() {
             textAlign: 'justify'
           }
         })
-        // setIsDoneSubmitting(true)
       } else {
         toast('حدث خطأ ما أثناء حذف المشروع', {
           icon: <Error className='w-6 h-6 ml-3' />,
@@ -83,10 +80,10 @@ export default function ProjectsTable() {
             textAlign: 'justify'
           }
         })
-        // setIsDoneSubmitting(false)
       }
 
       setProjectDeleted(data.projectDeleted ?? 0)
+      setTimeout(() => refresh(), DEFAULT_DURATION)
     } catch (error) {
       toast('حدث خطأ ما أثناء حذف المشروع', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -102,9 +99,6 @@ export default function ProjectsTable() {
       })
       console.error('Error =>', error)
     }
-    // finally {
-    //   setIsSubmittingForm(false)
-    // }
   }
 
   return (
@@ -184,31 +178,10 @@ export default function ProjectsTable() {
                   onClick={async () => {
                     await deleteProject(project.shms_project_id)
                   }}
-                  // className={
-                  //   isDoneSubmitting
-                  //     ? 'pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
-                  //     : ''
-                  // }
                 >
                   حذف
-                  {/* {isSubmittingForm ? (
-                    <>
-                      <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
-                      حذف
-                    </>
-                  ) : isDoneSubmitting ? (
-                    <>
-                      <Success className='ml-2' />
-                      حذف
-                    </>
-                  ) : (
-                    'حذف'
-                  )} */}
                 </Confirm>
-                <Link
-                  href={'/dashboard/project/' + project.shms_project_id}
-                  // as={'/dashboard/project/' + project.shms_project_id}
-                >
+                <Link href={'/dashboard/project/' + project.shms_project_id}>
                   <Button variant={'outline'}>تعديل المشروع</Button>
                 </Link>
               </TableCell>
