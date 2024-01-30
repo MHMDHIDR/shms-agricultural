@@ -15,7 +15,7 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import { arabicDate } from '@/lib/utils'
+import { arabicDate, getProjectStatus } from '@/lib/utils'
 import type { ProjectProps } from '@/types'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -178,15 +178,6 @@ export default function ProjectsTable() {
       </TableBody>
     </Table>
   )
-}
-
-/**
- * A function to get the project status in arabic
- * @param {string} status
- * @returns {string} arabic status
- */
-function getProjectStatus(status: string): string {
-  return status === 'active' ? 'تم النشر' : status === 'pending' ? 'قيد النشر' : status
 }
 
 /**

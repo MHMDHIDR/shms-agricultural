@@ -1,6 +1,6 @@
 'use client'
 
-import FileUpload from '@/components/custom/FileUpload'
+// import FileUpload from '@/components/custom/FileUpload'
 import FormMessage from '@/components/custom/FormMessage'
 import Layout from '@/components/custom/Layout'
 import { Error, Success } from '@/components/icons/Status'
@@ -15,8 +15,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Switch } from '@/components/ui/switch'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import { abstractWords } from '@/lib/utils'
+import { abstractWords, cn, getProjectStatus } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -44,6 +45,9 @@ export default function EditProjectPage({
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
   const [projectDescription, setProjectDescription] = useState('')
+  const [projectStatus, setProjectStatus] =
+    useState<ProjectProps['shms_project_status']>('pending')
+
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
@@ -92,6 +96,9 @@ export default function EditProjectPage({
       setStockPrice(project.shms_project_stock_price)
       setStockProfits(project.shms_project_stock_profits)
       setProjectDescription(project.shms_project_description)
+      setProjectStatus(project.shms_project_status)
+
+      console.log('project.shms_project_status: ', project.shms_project_status)
     }
 
     getProjectDetails()
@@ -106,10 +113,12 @@ export default function EditProjectPage({
     e.preventDefault()
 
     // check if the form is valid
-    if (file.length === 0) {
+    /*if (file.length === 0) {
       resetFormErrors()
       setImagesNameError('الرجاء التأكد من رفع صور المشروع')
-    } else if (projectName === '') {
+    } else
+    */
+    if (projectName === '') {
       resetFormErrors()
       setProjectNameError('الرجاء التأكد من كتابة اسم المشروع')
     } else if (projectLocation === '') {
@@ -161,6 +170,7 @@ export default function EditProjectPage({
         const updatedProject: { data: ProjectProps } = await axios.patch(
           `${API_URL}/projects/edit/${projectId}`,
           {
+            shms_project_images: projectImages,
             shms_project_name: projectName,
             shms_project_location: projectLocation,
             shms_project_start_date: projectStartDate,
@@ -169,7 +179,7 @@ export default function EditProjectPage({
             shms_project_available_stocks: projectAvailableStocks,
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
-            shms_project_descriptio: projectDescription
+            shms_project_description: projectDescription
           }
         )
         //getting response from backend
@@ -261,11 +271,7 @@ export default function EditProjectPage({
               تعديل مشروع{' '}
               <strong>
                 {projectName && projectName.length > 0 ? (
-                  abstractWords({
-                    words: projectName,
-                    wordsLength: 4,
-                    ellipsis: true
-                  })
+                  abstractWords({ words: projectName, wordsLength: 4, ellipsis: true })
                 ) : (
                   <Skeleton className='w-32 h-4 inline-block bg-gray-400' />
                 )}
@@ -273,7 +279,7 @@ export default function EditProjectPage({
             </CardTitle>
           </CardHeader>
           <CardContent className='space-y-2'>
-            <div
+            {/* <div
               className={`grid ${fileUploadGrid()} gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5`}
             >
               <FileUpload
@@ -281,7 +287,7 @@ export default function EditProjectPage({
                 ignoreRequired
               />
             </div>
-            {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}
+            {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>} */}
 
             <div className='space-y-1'>
               <Label htmlFor='projectName'>اسم المشروع</Label>
@@ -413,7 +419,28 @@ export default function EditProjectPage({
             {projectDescriptionError && (
               <FormMessage error>{projectDescriptionError}</FormMessage>
             )}
+
+            <div className='space-y-1 flex gap-x-5 items-center'>
+              <Label htmlFor='projectStatus' className='cursor-pointer'>
+                حالة المشروع:
+              </Label>
+              <Switch
+                id='projectStatus'
+                dir='ltr'
+                checked={projectStatus === 'active'}
+                onCheckedChange={e => setProjectStatus(e ? 'active' : 'pending')}
+              />
+              <strong
+                className={cn(
+                  `select-none`,
+                  projectStatus === 'active' ? 'text-green-600' : 'text-red-600'
+                )}
+              >
+                {getProjectStatus(projectStatus)}
+              </strong>
+            </div>
           </CardContent>
+
           <CardFooter>
             <Button
               disabled={isDoneSubmitting}

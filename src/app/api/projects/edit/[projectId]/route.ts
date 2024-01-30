@@ -9,6 +9,7 @@ export async function PATCH(
   if (!projectId) throw new Error('Project ID is required')
 
   const {
+    shms_project_images,
     shms_project_name,
     shms_project_location,
     shms_project_start_date,
@@ -22,7 +23,10 @@ export async function PATCH(
 
   if (!projectId) {
     return new Response(
-      JSON.stringify({ project: null, message: 'عفواً لم يتم العثور على المشروع!' }),
+      JSON.stringify({
+        projectUpdated: 0,
+        message: 'الرقم التعريفي الـ ID مطلوب لتحديث المشروع!'
+      }),
       { status: 404 }
     )
   }
@@ -37,14 +41,32 @@ export async function PATCH(
 
     if (!project || !project.shms_project_id) {
       new Response(
-        JSON.stringify({ project: null, message: 'عفواً لم يتم العثور على المشروع!' }),
+        JSON.stringify({
+          projectUpdated: 0,
+          message: 'عفواً لم يتم العثور على المشروع!'
+        }),
         { status: 404 }
       )
     }
 
+    // console.log('Details=>> ', {
+    //   shms_project_images,
+    //   shms_project_name,
+    //   shms_project_location,
+    //   shms_project_start_date,
+    //   shms_project_end_date,
+    //   shms_project_invest_date,
+    //   shms_project_available_stocks,
+    //   shms_project_stock_price,
+    //   shms_project_stock_profits,
+    //   shms_project_description,
+    //   projectId
+    // })
+
     // Update project
     const updateProject = (await connectDB(
       `UPDATE projects SET
+        shms_project_images = ?,
         shms_project_name = ?,
         shms_project_location = ?,
         shms_project_start_date = ?,
@@ -56,6 +78,7 @@ export async function PATCH(
         shms_project_description = ?
       WHERE shms_project_id = ?`,
       [
+        JSON.stringify(shms_project_images),
         shms_project_name,
         shms_project_location,
         shms_project_start_date,
@@ -64,12 +87,14 @@ export async function PATCH(
         shms_project_available_stocks,
         shms_project_stock_price,
         shms_project_stock_profits,
-        shms_project_description,
+        shms_project_description ?? '',
         projectId
       ]
     )) as ResultSetHeader
 
     const { affectedRows: projectUpdated } = updateProject as ResultSetHeader
+
+    console.log('projectUpdated=>> ', projectUpdated)
 
     return projectUpdated
       ? new Response(
@@ -87,6 +112,8 @@ export async function PATCH(
           { status: 500 }
         )
   } catch (err) {
+    console.log('Error=>> ', err)
+
     return new Response(
       JSON.stringify({
         projectUpdated: 0,

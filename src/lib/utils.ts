@@ -143,3 +143,12 @@ export const createSlug = (txt: string) =>
  * @returns the normal text example (this-is-text) => (this is text)
  */
 export const removeSlug = (txt: string) => txt?.replace(/-/g, ' ')
+
+/**
+ * A function to get the project status in arabic
+ * @param {string} status
+ * @returns {string} arabic status
+ */
+export function getProjectStatus(status: string): string {
+  return status === 'active' ? 'مفعل' : status === 'pending' ? 'قيد التفعيل' : status
+}
