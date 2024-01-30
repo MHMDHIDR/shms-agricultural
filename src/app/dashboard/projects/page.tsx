@@ -196,8 +196,6 @@ export default function Projects() {
     setFileURLs([])
   }
 
-  console.log('file length ==> ', file.length)
-
   return (
     <TabsContent value='add_project'>
       <Card className='rtl'>
@@ -332,11 +330,12 @@ export default function Projects() {
             <Button
               disabled={isDoneSubmitting}
               type='submit'
-              className={`shadow bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold${
+              variant={'pressable'}
+              className={
                 isDoneSubmitting
-                  ? ' pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
+                  ? 'pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
                   : ''
-              }`}
+              }
             >
               {isSubmittingForm ? (
                 <>

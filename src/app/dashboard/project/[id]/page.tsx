@@ -1,6 +1,6 @@
 'use client'
 
-import FileUpload from '@/components/custom/FileUpload'
+// import FileUpload from '@/components/custom/FileUpload'
 import FormMessage from '@/components/custom/FormMessage'
 import Layout from '@/components/custom/Layout'
 import { Error, Success } from '@/components/icons/Status'
@@ -20,7 +20,8 @@ import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
-import { Info } from 'lucide-react'
+import { ArrowBigRight, Info } from 'lucide-react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -30,9 +31,9 @@ export default function EditProjectPage({
 }: {
   params: { id: string }
 }) {
-  const [projectImages, setProjectImages] = useState<ProjectProps['shms_project_images']>(
-    []
-  )
+  // const [projectImages, setProjectImages] = useState<ProjectProps['shms_project_images']>(
+  //   []
+  // )
   const [projectName, setProjectName] = useState('')
   const [projectLocation, setProjectLocation] = useState('')
   const [projectStartDate, setProjectStartDate] = useState<Date>()
@@ -45,7 +46,7 @@ export default function EditProjectPage({
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
   // Form Errors
-  const [projectImagesError, setImagesNameError] = useState('')
+  // const [projectImagesError, setImagesNameError] = useState('')
   const [projectNameError, setProjectNameError] = useState('')
   const [projectLocationError, setProjectLocationError] = useState('')
   const [projectStartDateError, setProjectStartDateError] = useState('')
@@ -55,7 +56,7 @@ export default function EditProjectPage({
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
 
-  const { file, setFileURLs, setFile } = useContext(FileUploadContext)
+  const { /*file, */ setFileURLs, setFile } = useContext(FileUploadContext)
 
   const { push } = useRouter()
 
@@ -67,7 +68,7 @@ export default function EditProjectPage({
       }: { data: { project: ProjectProps } } = await axios.get(
         `${API_URL}/projects/get/${projectId}`
       )
-      setProjectImages(JSON.parse(String(project.shms_project_images)))
+      // setProjectImages(JSON.parse(String(project.shms_project_images)))
       setProjectName(project.shms_project_name)
       setProjectLocation(project.shms_project_location)
       setProjectStartDate(new Date(project.shms_project_start_date))
@@ -88,12 +89,14 @@ export default function EditProjectPage({
   }) => {
     // don't refresh the page
     e.preventDefault()
-
+    /*
     // check if the form is valid
     if (file.length === 0) {
       resetFormErrors()
       setImagesNameError('الرجاء التأكد من رفع صور المشروع')
-    } else if (projectName === '') {
+    } else
+    */
+    if (projectName === '') {
       resetFormErrors()
       setProjectNameError('الرجاء التأكد من كتابة اسم المشروع')
     } else if (projectLocation === '') {
@@ -126,35 +129,45 @@ export default function EditProjectPage({
         const formData = new FormData()
         formData.append('multiple', 'true')
 
-        file.forEach((singleFile, index) => formData.append(`file[${index}]`, singleFile))
-        // upload the project images to s3
-        const {
-          data: { shms_project_id, shms_project_images }
-        }: {
-          data: ProjectProps
-        } = await axios.post(`${API_URL}/uploadToS3`, formData)
+        //using FormData to send constructed data
+        formData.append('projectId', projectId)
+        formData.append('projectName', projectName)
+        formData.append('projectLocation', projectLocation)
+        formData.append(
+          'projectStartDate',
+          projectStartDate?.toISOString().split('T')[0] ?? ''
+        )
+        formData.append(
+          'projectEndDate',
+          projectEndDate?.toISOString().split('T')[0] ?? ''
+        )
+        formData.append(
+          'projectInvestEndDate',
+          projectInvestEndDate?.toISOString().split('T')[0] ?? ''
+        )
+        formData.append('stockPrice', stockPrice?.toString() ?? '')
+        formData.append('stockProfits', stockProfits?.toString() ?? '')
+        formData.append('projectDescription', projectDescription)
+        // formData.append('prevProjectImgPathsAndNames', JSON.stringify(projectImages))
+
+        // file.forEach((singleFile, index) => formData.append(`file[${index}]`, singleFile))
+        // // upload the project images to s3
+        // const {
+        //   data: { shms_project_id, shms_project_images }
+        // }: {
+        //   data: ProjectProps
+        // } = await axios.post(`${API_URL}/uploadToS3`, formData)
 
         // upload the project data to the database
-        const addProject: { data: ProjectProps } = await axios.post(
+        const updatedProject: { data: ProjectProps } = await axios.patch(
           `${API_URL}/projects/edit/${projectId}`,
-          {
-            shms_project_id,
-            shms_project_name: projectName,
-            shms_project_location: projectLocation,
-            shms_project_start_date: projectStartDate,
-            shms_project_end_date: projectEndDate,
-            shms_project_invest_date: projectInvestEndDate,
-            shms_project_stock_price: stockPrice,
-            shms_project_stock_profits: stockProfits,
-            shms_project_description: projectDescription,
-            shms_project_images
-          }
+          formData
         )
         //getting response from backend
-        const { data } = addProject
+        const { data } = updatedProject
 
         // make sure to view the response from the data
-        data.projectAdded === 1 &&
+        data.projectUpdated === 1 &&
           toast(data.message, {
             icon: <Info className='text-blue-300' />,
             position: 'bottom-center',
@@ -169,7 +182,7 @@ export default function EditProjectPage({
             }
           })
 
-        data.projectAdded === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
+        data.projectUpdated === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
         resetFormFields()
         setTimeout(() => push(`/dashboard`), DEFAULT_DURATION)
       } catch (error: any) {
@@ -226,6 +239,13 @@ export default function EditProjectPage({
   return (
     <Layout>
       <Card className='mt-56 rtl'>
+        <Link
+          href={`/dashboard`}
+          className='underline-hover mt-4 mr-5 inline-block font-bold group'
+        >
+          <ArrowBigRight className='inline-block w-4 h-4 ml-0.5 group-hover:translate-x-2 transition-transform' />
+          العودة للوحة التحكم
+        </Link>
         <form onSubmit={e => handelEditProject(e)}>
           <CardHeader>
             <CardTitle className='select-none text-center'>
@@ -240,13 +260,13 @@ export default function EditProjectPage({
             </CardTitle>
           </CardHeader>
           <CardContent className='space-y-2'>
-            <div className='grid grid-cols-2 grid-rows-3 gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+            {/* <div className='grid grid-cols-2 grid-rows-3 gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
               <FileUpload
                 data={{ projectId, defaultImg: projectImages, imgName: projectName }}
                 ignoreRequired
               />
             </div>
-            {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}
+            {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>} */}
 
             <div className='space-y-1'>
               <Label htmlFor='projectName'>اسم المشروع</Label>
@@ -365,11 +385,12 @@ export default function EditProjectPage({
             <Button
               disabled={isDoneSubmitting}
               type='submit'
-              className={`shadow bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold${
+              variant={'pressable'}
+              className={
                 isDoneSubmitting
-                  ? ' pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
+                  ? 'pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
                   : ''
-              }`}
+              }
             >
               {isSubmittingForm ? (
                 <>
