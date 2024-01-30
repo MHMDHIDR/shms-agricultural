@@ -242,11 +242,7 @@ export default function EditProjectPage({
           <CardContent className='space-y-2'>
             <div className='grid grid-cols-2 grid-rows-3 gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
               <FileUpload
-                data={{
-                  projectId,
-                  defaultImg: projectImages,
-                  imgName: projectName
-                }}
+                data={{ projectId, defaultImg: projectImages, imgName: projectName }}
                 ignoreRequired
               />
             </div>
@@ -367,10 +363,12 @@ export default function EditProjectPage({
           </CardContent>
           <CardFooter>
             <Button
-              disabled={isSubmittingForm}
+              disabled={isDoneSubmitting}
               type='submit'
               className={`shadow bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold${
-                isDoneSubmitting ? ' disabled:opacity-50 disabled:cursor-not-allowed' : ''
+                isDoneSubmitting
+                  ? ' pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
+                  : ''
               }`}
             >
               {isSubmittingForm ? (

@@ -51,7 +51,7 @@ export default function Projects() {
 
   const { file, setFileURLs, setFile } = useContext(FileUploadContext)
 
-  const { push } = useRouter()
+  const { refresh } = useRouter()
 
   const handelAddProject = async (e: {
     target: any
@@ -143,7 +143,7 @@ export default function Projects() {
 
         data.projectAdded === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
         resetFormFields()
-        setTimeout(() => push(`/dashboard`), DEFAULT_DURATION)
+        setTimeout(() => refresh(), DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
@@ -196,6 +196,8 @@ export default function Projects() {
     setFileURLs([])
   }
 
+  console.log('file length ==> ', file.length)
+
   return (
     <TabsContent value='add_project'>
       <Card className='rtl'>
@@ -206,7 +208,9 @@ export default function Projects() {
             <CardTitle>اضافة مشروع جديد</CardTitle>
           </CardHeader>
           <CardContent className='space-y-2'>
-            <div className='grid grid-cols-2 grid-rows-3 gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+            <div
+              className={`grid ${fileUploadGrid()} gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5`}
+            >
               <FileUpload
                 data={{
                   defaultImg: [
@@ -326,10 +330,12 @@ export default function Projects() {
           </CardContent>
           <CardFooter>
             <Button
-              disabled={isSubmittingForm}
+              disabled={isDoneSubmitting}
               type='submit'
               className={`shadow bg-green-500 hover:bg-green-400 focus:shadow-outline focus:outline-none text-white font-bold${
-                isDoneSubmitting ? ' disabled:opacity-50 disabled:cursor-not-allowed' : ''
+                isDoneSubmitting
+                  ? ' pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
+                  : ''
               }`}
             >
               {isSubmittingForm ? (
@@ -351,4 +357,16 @@ export default function Projects() {
       </Card>
     </TabsContent>
   )
+}
+
+/*
+ * a function to set the grid rows and columns based on the number of files uploaded
+ * @returns {string} the grid rows and columns
+ */
+function fileUploadGrid(): string {
+  const filesLength = useContext(FileUploadContext).file.length
+  // Calculate the number of rows based on the filesLength
+  const numRows = Math.ceil(filesLength / 3)
+  // Return the dynamic grid rows string
+  return `grid-rows-${numRows}`
 }
