@@ -41,11 +41,11 @@ export async function DELETE(
       { status: 400 }
     )
   } catch (err) {
-    // console.error(err)
+    console.error(err)
     return new Response(
       JSON.stringify({
         userDeleted: 0,
-        message: `عفواً، لم يتم حذف حساب المستخدم بنجاح!`
+        message: `عفواً، حدثت مشكلة غير متوقعة، حاول مرة أخرى لاحقاً!`
       }),
       { status: 500 }
     )

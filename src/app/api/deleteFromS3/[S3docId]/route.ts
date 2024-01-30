@@ -1,6 +1,7 @@
 import {
-  DeleteObjectCommand,
-  DeleteObjectCommandOutput,
+  DeleteObjectsCommand,
+  DeletedObject,
+  ListObjectsV2Command,
   S3Client
 } from '@aws-sdk/client-s3'
 
@@ -23,18 +24,38 @@ const s3Client = new S3Client(s3ClientConfig)
  * @param fullname  - The fullname of the user
  * @returns {Promise<string>} - The key of the file in S3
  */
-async function deleteFileFromS3(
-  projectOrFileId: string
-): Promise<DeleteObjectCommandOutput> {
-  const params = {
+async function deleteFilesFromS3(projectOrFileId: string): Promise<DeletedObject[]> {
+  const listCommand = new ListObjectsV2Command({
     Bucket: AWS_BUCKET_NAME,
-    Key: projectOrFileId
+    Prefix: `projects/${projectOrFileId}`
+  })
+
+  let list = await s3Client.send(listCommand)
+  let deleted: Array<DeletedObject> = []
+
+  if (list.KeyCount && list.Contents) {
+    // delete the files
+    const deleteCommand = new DeleteObjectsCommand({
+      Bucket: AWS_BUCKET_NAME,
+      Delete: {
+        Objects: list.Contents.map(item => ({ Key: item.Key })),
+        Quiet: false
+      }
+    })
+    let { Errors, Deleted } = await s3Client.send(deleteCommand)
+
+    if (Errors) {
+      Errors.map(error =>
+        console.error(`${error.Key} could not be deleted - ${error.Code}`)
+      )
+    }
+
+    if (Deleted) {
+      deleted.push(...Deleted)
+    }
   }
 
-  const command = new DeleteObjectCommand(params)
-  const data = await s3Client.send(command)
-
-  return data
+  return deleted
 }
 
 export async function DELETE(
@@ -46,9 +67,21 @@ export async function DELETE(
   }
 
   try {
-    const { DeleteMarker: docDeleted } = await deleteFileFromS3(S3docId)
+    const dataAfterDelete = await deleteFilesFromS3(S3docId)
+    //  map in dataAfterDelete and check if all DeleteMarker are true, if all are true then return true
+    dataAfterDelete.map(({ DeleteMarker }) => {
+      if (!DeleteMarker) {
+        return new Response(
+          JSON.stringify({
+            docDeleted: false,
+            message: 'حدث خطأ أثناء حذف صور المشروع! حاول مرة أخرى لاحقاً'
+          }),
+          { status: 400 }
+        )
+      }
+    })
 
-    return new Response(JSON.stringify({ docDeleted }), { status: 200 })
+    return new Response(JSON.stringify({ docDeleted: true }), { status: 200 })
   } catch (error: any) {
     console.error(error)
     return new Response(error.message, { status: 500 })

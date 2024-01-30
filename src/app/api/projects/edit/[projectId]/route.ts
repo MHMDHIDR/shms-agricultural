@@ -50,11 +50,6 @@ export async function PATCH(
       )
     }
 
-    console.log('Details=>> ', {
-      shms_project_status,
-      projectId
-    })
-
     // Update project
     const updateProject = (await connectDB(
       `UPDATE projects SET
@@ -88,8 +83,6 @@ export async function PATCH(
 
     const { affectedRows: projectUpdated } = updateProject as ResultSetHeader
 
-    console.log('projectUpdated=>> ', projectUpdated)
-
     return projectUpdated
       ? new Response(
           JSON.stringify({
@@ -106,8 +99,6 @@ export async function PATCH(
           { status: 500 }
         )
   } catch (err) {
-    console.log('Error=>> ', err)
-
     return new Response(
       JSON.stringify({
         projectUpdated: 0,

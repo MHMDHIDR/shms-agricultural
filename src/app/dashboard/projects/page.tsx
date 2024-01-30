@@ -53,7 +53,7 @@ export default function Projects() {
 
   const { file, setFileURLs, setFile } = useContext(FileUploadContext)
 
-  const { refresh } = useRouter()
+  const { refresh, replace } = useRouter()
 
   /*
    * a function to set the grid rows and columns based on the number of files uploaded
@@ -160,7 +160,10 @@ export default function Projects() {
 
         data.projectAdded === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
         resetFormFields()
-        setTimeout(() => refresh(), DEFAULT_DURATION)
+        setTimeout(() => {
+          refresh()
+          replace('/dashboard')
+        }, DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
@@ -291,6 +294,21 @@ export default function Projects() {
             )}
 
             <div className='space-y-1'>
+              <Label htmlFor='projectInvestEndDate'> اخر موعد للمساهمة </Label>
+              <div className='md:w-3/3'>
+                <input
+                  id='projectInvestEndDate'
+                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='date'
+                  onChange={e => setProjectInvestEndDate(new Date(e.target.value))}
+                />
+              </div>
+            </div>
+            {projectInvestEndDateError && (
+              <FormMessage error>{projectInvestEndDateError}</FormMessage>
+            )}
+
+            <div className='space-y-1'>
               <Label htmlFor='projectAvailableStocks'>عدد الأسهم المتاحة</Label>
               <div className='md:w-3/3'>
                 <input
@@ -306,21 +324,6 @@ export default function Projects() {
             </div>
             {projectAvailableStocksError && (
               <FormMessage error>{projectAvailableStocksError}</FormMessage>
-            )}
-
-            <div className='space-y-1'>
-              <Label htmlFor='projectInvestEndDate'> اخر موعد للمساهمة </Label>
-              <div className='md:w-3/3'>
-                <input
-                  id='projectInvestEndDate'
-                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
-                  type='date'
-                  onChange={e => setProjectInvestEndDate(new Date(e.target.value))}
-                />
-              </div>
-            </div>
-            {projectInvestEndDateError && (
-              <FormMessage error>{projectInvestEndDateError}</FormMessage>
             )}
 
             <div className='space-y-1'>

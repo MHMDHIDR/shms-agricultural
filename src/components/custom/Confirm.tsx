@@ -15,17 +15,21 @@ export default function Confirm({
   message,
   onClick,
   variant,
+  className,
   children
 }: {
   message?: string
   onClick: () => void
   variant?: ButtonProps['variant']
+  className?: string
   children: string | React.ReactNode
 }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Button variant={variant}>{children ?? 'إجراء'}</Button>
+        <Button variant={variant} asSpan className={className}>
+          {children ?? 'إجراء'}
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
