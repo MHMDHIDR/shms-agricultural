@@ -25,6 +25,9 @@ export default async function ProjectDetailsPage({
   return (
     <Layout>
       <main className='flex flex-col items-center justify-between min-h-screen sm:p-24'>
+        <h1 className='text-2xl font-bold text-center select-none mb-10' dir='rtl'>
+          {project.shms_project_name}
+        </h1>
         {/* Render images in a row */}
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
           {projectImages.map((image, index) => (
