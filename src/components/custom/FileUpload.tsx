@@ -22,16 +22,9 @@ import { toast } from 'sonner'
 import { Error, Success } from '@/components/icons/Status'
 import { Card, CardDescription } from '@/components/ui/card'
 
-const FileUpload = ({
-  data,
-  ignoreDelete,
-  ignoreRequired = false,
-  id
-}: FileUploadComponentProps) => {
+const FileUpload = ({ data, ignoreRequired = false, id }: FileUploadComponentProps) => {
   const { file, fileURLs, onFileRemove, onFileAdd } =
     useContext<FileUploadProps>(FileUploadContext)
-
-  // const hasImgs = data.defaultImg[0]
 
   const handleDeleteProjectImg = async (
     e: React.MouseEvent<HTMLButtonElement>
@@ -110,8 +103,11 @@ const FileUpload = ({
     <>
       {
         //if there's no image in Preview (fileURLs) AND no images in the data base
-        fileURLs.length === 0 && data.defaultImg?.length === 0 ? (
-          <div className={`flex items-center gap-y-3 max-h-44 h-44 place-content-center`}>
+        data.defaultImg.length === 0 ||
+        (fileURLs.length === 0 && data.defaultImg[0]?.imgDisplayName === APP_TITLE) ? (
+          <div
+            className={`flex col-span-full items-center gap-y-3 max-h-44 h-44 place-content-center`}
+          >
             <Image
               priority={true}
               src={APP_LOGO_sm}
@@ -144,7 +140,8 @@ const FileUpload = ({
               </Button>
             </div>
           ))
-        ) : data.defaultImg.length > 0 ? (
+        ) : data.defaultImg.length > 0 &&
+          data.defaultImg[0]?.imgDisplayName !== APP_TITLE ? (
           //if there're existing images in the data base
           data.defaultImg.map(
             ({ imgDisplayName, imgDisplayPath }: imgsProps, idx: number) => (
@@ -160,17 +157,15 @@ const FileUpload = ({
                   priority={true}
                   className='object-cover w-32 h-32 p-1 border border-gray-400 min-h-fit dark:border-gray-300 rounded-xl'
                 />
-                {!ignoreDelete && (
-                  <Confirm
-                    imageId={imgDisplayName}
-                    shmsProjectImages={JSON.stringify(data.defaultImg)}
-                    variant={'destructive'}
-                    onClick={handleDeleteProjectImg}
-                    message='هل أنت متأكد من حذف هذه الصورة؟'
-                  >
-                    حذف
-                  </Confirm>
-                )}
+                <Confirm
+                  imageId={imgDisplayName}
+                  shmsProjectImages={JSON.stringify(data.defaultImg)}
+                  variant={'destructive'}
+                  onClick={handleDeleteProjectImg}
+                  message='هل أنت متأكد من حذف هذه الصورة؟'
+                >
+                  حذف
+                </Confirm>
               </div>
             )
           )
@@ -210,7 +205,7 @@ const FileUpload = ({
           accept='image/*'
           onChange={onFileAdd}
           multiple
-          required={ignoreRequired ? !ignoreRequired : true}
+          required={!ignoreRequired}
         />
       </Label>
     </>

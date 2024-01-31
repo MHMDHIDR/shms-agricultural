@@ -65,7 +65,7 @@ export default function EditProjectPage({
 
   const { file, setFileURLs, setFile } = useContext(FileUploadContext)
 
-  const { push } = useRouter()
+  const { refresh } = useRouter()
 
   /*
    * a function to set the grid rows and columns based on the number of files uploaded
@@ -111,7 +111,7 @@ export default function EditProjectPage({
     e.preventDefault()
 
     // check if the form is valid
-    if (file.length === 0) {
+    if (file.length === 0 && projectImages.length === 0) {
       resetFormErrors()
       setImagesNameError('الرجاء التأكد من رفع صور المشروع')
     } else if (projectName === '') {
@@ -162,10 +162,7 @@ export default function EditProjectPage({
         const updatedProject: { data: ProjectProps } = await axios.patch(
           `${API_URL}/projects/edit/${projectId}`,
           {
-            shms_project_images: JSON.stringify([
-              ...projectImages,
-              ...shms_project_images
-            ]),
+            shms_project_images: [...projectImages, ...shms_project_images],
             shms_project_name: projectName,
             shms_project_location: projectLocation,
             shms_project_start_date: projectStartDate,
@@ -199,7 +196,7 @@ export default function EditProjectPage({
 
         data.projectUpdated === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
         resetFormFields()
-        setTimeout(() => push(`/dashboard`), DEFAULT_DURATION)
+        setTimeout(() => refresh(), DEFAULT_DURATION)
       } catch (error: any) {
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
           {
@@ -281,6 +278,7 @@ export default function EditProjectPage({
               <FileUpload
                 data={{ projectId, defaultImg: projectImages, imgName: projectName }}
                 id={projectId}
+                ignoreRequired={true}
               />
             </div>
             {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}

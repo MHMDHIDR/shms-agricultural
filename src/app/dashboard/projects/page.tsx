@@ -230,7 +230,6 @@ export default function Projects() {
                   ],
                   imgName: 'Agricultural Project View'
                 }}
-                ignoreRequired
               />
             </div>
             {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}

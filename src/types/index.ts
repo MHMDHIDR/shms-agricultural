@@ -86,7 +86,6 @@ export type FileUploadComponentProps = {
     defaultImg: imgsProps[]
   }
   ignoreRequired?: boolean
-  ignoreDelete?: boolean | undefined
   id?: string
 }
 
