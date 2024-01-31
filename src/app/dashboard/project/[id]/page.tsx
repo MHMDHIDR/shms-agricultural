@@ -277,10 +277,11 @@ export default function EditProjectPage({
           </CardHeader>
           <CardContent className='space-y-2'>
             <div
-              className={`grid ${fileUploadGrid()} grid-rows-3 gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5`}
+              className={`grid ${fileUploadGrid()} gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5`}
             >
               <FileUpload
                 data={{ projectId, defaultImg: projectImages, imgName: projectName }}
+                id={projectId}
               />
             </div>
             {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}

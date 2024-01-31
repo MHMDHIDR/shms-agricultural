@@ -180,10 +180,10 @@ const FileUpload = ({
         htmlFor='projectImg'
         className={`grid col-span-full h-fit place-items-center justify-center gap-5 p-3 overflow-y-auto border border-gray-200 hover:bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-700 hover:dark:bg-gray-600 transition-colors duration-300`}
       >
-        {/* When editing a project GET the id from: { params }: { params: { id: string } } */}
-        {id && (
+        {id && fileURLs.length > 0 && (
           <p className='text-center text-green-700 dark:text-green-400'>
-            لا تنسى الضغط على زر التحديث في أسفل النموذج لتحديث الصور
+            لا تنسى الضغط على زر حفظ التعديلات في أسفل النموذج لحفظ{' '}
+            <strong>الصور الجديدة</strong>
           </p>
         )}
 
