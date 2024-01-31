@@ -658,21 +658,21 @@
 
 @layer utilities {
   ::-webkit-scrollbar {
-    @apply w-[calc(var(--scrollbarSize)*1.5)] h-[var(--scrollbarSize)];
+    @apply w-[calc(var(--scrollbarSize)*1.7)] h-[var(--scrollbarSize)];
   }
 
   ::-webkit-scrollbar-thumb,
   ::-webkit-scrollbar-track {
-    @apply bg-green-100;
+    @apply bg-green-300;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-green-600;
+    @apply bg-green-100;
   }
 
   ::-webkit-scrollbar-track:hover,
   ::-webkit-scrollbar-track:active {
-    @apply bg-green-300;
+    @apply bg-green-600;
   }
 
   ::-webkit-scrollbar-thumb {

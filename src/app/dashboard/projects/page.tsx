@@ -20,7 +20,6 @@ import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import ProjectsTable from './projectsTabel/page'
@@ -51,9 +50,7 @@ export default function Projects() {
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
 
-  const { file, setFileURLs, setFile } = useContext(FileUploadContext)
-
-  const { refresh } = useRouter()
+  const { file } = useContext(FileUploadContext)
 
   const getProjects = async () => {
     const { data: projects }: { data: ProjectProps[] } = await axios.get(
@@ -211,22 +208,6 @@ export default function Projects() {
     setStockPriceError('')
     setStockProfitsError('')
     setProjectDescriptionError('')
-  }
-
-  /**
-   * Reset all form fields
-   */
-  function resetFormFields() {
-    setProjectName('')
-    setProjectLocation('')
-    setProjectStartDate(undefined)
-    setProjectEndDate(undefined)
-    setProjectInvestEndDate(undefined)
-    setStockPrice(undefined)
-    setStockProfits(undefined)
-    setProjectDescription('')
-    setFile!([])
-    setFileURLs([])
   }
 
   return (
