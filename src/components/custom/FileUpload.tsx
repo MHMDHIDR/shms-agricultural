@@ -19,7 +19,8 @@ import axios from 'axios'
 import Image from 'next/image'
 import { useContext } from 'react'
 import { toast } from 'sonner'
-import { Error, Success } from '../icons/Status'
+import { Error, Success } from '@/components/icons/Status'
+import { Card, CardDescription } from '@/components/ui/card'
 
 const FileUpload = ({
   data,
@@ -143,7 +144,7 @@ const FileUpload = ({
               </Button>
             </div>
           ))
-        ) : (
+        ) : data.defaultImg.length > 0 ? (
           //if there're existing images in the data base
           data.defaultImg.map(
             ({ imgDisplayName, imgDisplayPath }: imgsProps, idx: number) => (
@@ -173,6 +174,13 @@ const FileUpload = ({
               </div>
             )
           )
+        ) : (
+          <Card className='col-span-full bg-destructive'>
+            <CardDescription className='flex justify-center py-4 font-bold items-center select-none text-white text-lg'>
+              <Error className='w-8 h-8 ml-4' />
+              هنالك خلل في عرض صور لهذا المشروع 😕
+            </CardDescription>
+          </Card>
         )
       }
 
