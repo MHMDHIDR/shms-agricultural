@@ -24,7 +24,6 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { ArrowBigRight } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -63,9 +62,7 @@ export default function EditProjectPage({
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
 
-  const { file, setFileURLs, setFile } = useContext(FileUploadContext)
-
-  const { refresh } = useRouter()
+  const { file } = useContext(FileUploadContext)
 
   /*
    * a function to set the grid rows and columns based on the number of files uploaded
@@ -145,24 +142,32 @@ export default function EditProjectPage({
       try {
         resetFormErrors()
         setIsSubmittingForm(true)
+        let newProjectImages: ProjectProps['shms_project_images'] = []
 
-        // create a new form data with files data
-        const formData = new FormData()
-        formData.append('multiple', 'true') // for s3 to allow update multiple files
-        formData.append('projectId', projectId)
-        file.forEach((singleFile, index) => formData.append(`file[${index}]`, singleFile))
-        // upload the project images to s3
-        const {
-          data: { shms_project_images }
-        }: {
-          data: ProjectProps
-        } = await axios.post(`${API_URL}/uploadToS3`, formData)
+        if (file.length > 0) {
+          // create a new form data with files data
+          const formData = new FormData()
+          formData.append('multiple', 'true') // for s3 to allow update multiple files
+          formData.append('projectId', projectId)
+          file.forEach((singleFile, index) =>
+            formData.append(`file[${index}]`, singleFile)
+          )
+          // upload the project images to s3
+          const {
+            data: { shms_project_images }
+          }: {
+            data: ProjectProps
+          } = await axios.post(`${API_URL}/uploadToS3`, formData)
+
+          // getting response from backend
+          newProjectImages = shms_project_images
+        }
 
         // upload the project data to the database
         const updatedProject: { data: ProjectProps } = await axios.patch(
           `${API_URL}/projects/edit/${projectId}`,
           {
-            shms_project_images: [...projectImages, ...shms_project_images],
+            shms_project_images: [...projectImages, ...newProjectImages],
             shms_project_name: projectName,
             shms_project_location: projectLocation,
             shms_project_start_date: projectStartDate,
@@ -195,8 +200,9 @@ export default function EditProjectPage({
           })
 
         data.projectUpdated === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
-        resetFormFields()
-        setTimeout(() => refresh(), DEFAULT_DURATION)
+        setTimeout(() => {
+          window.location.href = `/dashboard/project/${projectId}`
+        }, DEFAULT_DURATION)
       } catch (error: any) {
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
           {
@@ -230,22 +236,6 @@ export default function EditProjectPage({
     setStockPriceError('')
     setStockProfitsError('')
     setProjectDescriptionError('')
-  }
-
-  /**
-   * Reset all form fields
-   */
-  function resetFormFields() {
-    setProjectName('')
-    setProjectLocation('')
-    setProjectStartDate(undefined)
-    setProjectEndDate(undefined)
-    setProjectInvestEndDate(undefined)
-    setStockPrice(undefined)
-    setStockProfits(undefined)
-    setProjectDescription('')
-    setFile!([])
-    setFileURLs([])
   }
 
   return (
