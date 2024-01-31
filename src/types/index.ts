@@ -1,3 +1,4 @@
+import type { ButtonProps } from '@/components/ui/button'
 import { NextApiRequest } from 'next'
 import { Session } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
@@ -50,6 +51,7 @@ export type ProjectProps = {
   shms_project_stock_profits: number
   shms_project_description: string
   shms_project_status: 'active' | 'pending'
+  updateImg?: boolean
   // When project is added, this is set to 1
   projectAdded?: number
   // When project is updated, this is set to 1
@@ -163,3 +165,13 @@ export type abstractWordsProps = (props: {
   wordsLength: number
   ellipsis: boolean
 }) => string
+
+export type ConfirmProps = {
+  message?: string
+  onClick: (() => void) | ((e: React.MouseEvent<HTMLButtonElement>) => Promise<void>)
+  variant?: ButtonProps['variant']
+  className?: string
+  children: string | React.ReactNode
+  imageId?: string
+  shmsProjectImages?: string
+}

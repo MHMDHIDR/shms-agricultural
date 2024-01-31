@@ -19,7 +19,8 @@ export async function PATCH(
     shms_project_stock_price,
     shms_project_stock_profits,
     shms_project_description,
-    shms_project_status
+    shms_project_status,
+    updateImg
   }: ProjectProps = await request.json()
 
   if (!projectId) {
@@ -51,8 +52,15 @@ export async function PATCH(
     }
 
     // Update project
-    const updateProject = (await connectDB(
-      `UPDATE projects SET
+    const updateProject = updateImg
+      ? ((await connectDB(
+          `UPDATE projects SET
+              shms_project_images = ?
+            WHERE shms_project_id = ?`,
+          [JSON.stringify(shms_project_images), projectId]
+        )) as ResultSetHeader)
+      : ((await connectDB(
+          `UPDATE projects SET
         shms_project_images = ?,
         shms_project_name = ?,
         shms_project_location = ?,
@@ -65,21 +73,21 @@ export async function PATCH(
         shms_project_description = ?,
         shms_project_status = ?
       WHERE shms_project_id = ?`,
-      [
-        JSON.stringify(shms_project_images),
-        shms_project_name,
-        shms_project_location,
-        shms_project_start_date,
-        shms_project_end_date,
-        shms_project_invest_date,
-        shms_project_available_stocks,
-        shms_project_stock_price,
-        shms_project_stock_profits,
-        shms_project_description ?? '',
-        shms_project_status ?? 'pending',
-        projectId
-      ]
-    )) as ResultSetHeader
+          [
+            JSON.stringify(shms_project_images),
+            shms_project_name,
+            shms_project_location,
+            shms_project_start_date,
+            shms_project_end_date,
+            shms_project_invest_date,
+            shms_project_available_stocks,
+            shms_project_stock_price,
+            shms_project_stock_profits,
+            shms_project_description ?? '',
+            shms_project_status ?? 'pending',
+            projectId
+          ]
+        )) as ResultSetHeader)
 
     const { affectedRows: projectUpdated } = updateProject as ResultSetHeader
 

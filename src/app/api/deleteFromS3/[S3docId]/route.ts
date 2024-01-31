@@ -112,7 +112,15 @@ export async function DELETE(
     }
   } else {
     try {
-      const { DeleteMarker: docDeleted } = await deleteFileFromS3(S3docId)
+      // if it includes -SHMS- then the left side is the file name
+      // and the right side is project id split them
+      const objectId = S3docId.includes('-SHMS-')
+        ? `projects/${S3docId.split('-SHMS-')[1]}/${S3docId}`
+        : S3docId
+
+      //another solution to add prefix to the file name (/projects/ + file name) in deleteFileFromS3 function
+
+      const { DeleteMarker: docDeleted } = await deleteFileFromS3(objectId)
 
       return new Response(JSON.stringify({ docDeleted }), { status: 200 })
     } catch (error: any) {

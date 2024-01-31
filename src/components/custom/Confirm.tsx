@@ -9,21 +9,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
-import { Button, type ButtonProps } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+import type { ConfirmProps } from '@/types'
 
 export default function Confirm({
   message,
   onClick,
   variant,
   className,
-  children
-}: {
-  message?: string
-  onClick: () => void
-  variant?: ButtonProps['variant']
-  className?: string
-  children: string | React.ReactNode
-}) {
+  children,
+  imageId,
+  shmsProjectImages
+}: ConfirmProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
@@ -42,7 +39,13 @@ export default function Confirm({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>إلغاء</AlertDialogCancel>
-          <AlertDialogAction onClick={onClick}>متابعة</AlertDialogAction>
+          <AlertDialogAction
+            onClick={onClick}
+            id={imageId}
+            data-shms-project-images={shmsProjectImages}
+          >
+            متابعة
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

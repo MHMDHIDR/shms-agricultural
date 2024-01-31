@@ -20,9 +20,8 @@ import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
-import { Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import ProjectsTable from './projectsTabel/page'
 
@@ -38,6 +37,7 @@ export default function Projects() {
   const [projectDescription, setProjectDescription] = useState('')
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+  const [_projects, setProjects] = useState<ProjectProps[]>([])
 
   // Form Errors
   const [projectImagesError, setImagesNameError] = useState('')
@@ -53,7 +53,18 @@ export default function Projects() {
 
   const { file, setFileURLs, setFile } = useContext(FileUploadContext)
 
-  const { refresh, replace } = useRouter()
+  const { refresh } = useRouter()
+
+  const getProjects = async () => {
+    const { data: projects }: { data: ProjectProps[] } = await axios.get(
+      `${API_URL}/projects/get`
+    )
+    setProjects(projects)
+  }
+
+  useEffect(() => {
+    getProjects()
+  }, [isDoneSubmitting])
 
   /*
    * a function to set the grid rows and columns based on the number of files uploaded
@@ -143,9 +154,9 @@ export default function Projects() {
         const { data } = addProject
 
         // make sure to view the response from the data
-        data.projectAdded === 1 &&
+        if (data.projectAdded === 1) {
           toast(data.message, {
-            icon: <Info className='text-blue-300' />,
+            icon: <Success />,
             position: 'bottom-center',
             className: 'text-right select-none rtl',
             duration: DEFAULT_DURATION,
@@ -157,12 +168,14 @@ export default function Projects() {
               textAlign: 'justify'
             }
           })
+          setIsDoneSubmitting(true)
+        } else {
+          setIsDoneSubmitting(false)
+        }
 
-        data.projectAdded === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
-        resetFormFields()
         setTimeout(() => {
-          refresh()
-          replace('/dashboard')
+          // force reload the page
+          window.location.reload()
         }, DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
@@ -252,7 +265,7 @@ export default function Projects() {
             {projectNameError && <FormMessage error>{projectNameError}</FormMessage>}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectLocation'> منطقة المشروع </Label>
+              <Label htmlFor='projectLocation'>منطقة المشروع</Label>
               <Input
                 id='projectLocation'
                 type='text'
@@ -264,11 +277,11 @@ export default function Projects() {
             )}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectStartDate'> تاريخ بداية المشروع </Label>
+              <Label htmlFor='projectStartDate'>تاريخ بداية المشروع</Label>
               <div className='md:w-3/3'>
                 <input
                   id='projectStartDate'
-                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full rtl px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
                   onChange={e => setProjectStartDate(new Date(e.target.value))}
                 />
@@ -279,11 +292,11 @@ export default function Projects() {
             )}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectEndDate'> تاريخ نهاية المشروع </Label>
+              <Label htmlFor='projectEndDate'>تاريخ نهاية المشروع</Label>
               <div className='md:w-3/3'>
                 <input
                   id='projectEndDate'
-                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full rtl px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
                   onChange={e => setProjectEndDate(new Date(e.target.value))}
                 />
@@ -294,11 +307,11 @@ export default function Projects() {
             )}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectInvestEndDate'> اخر موعد للمساهمة </Label>
+              <Label htmlFor='projectInvestEndDate'>اخر موعد للمساهمة</Label>
               <div className='md:w-3/3'>
                 <input
                   id='projectInvestEndDate'
-                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full rtl px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
                   onChange={e => setProjectInvestEndDate(new Date(e.target.value))}
                 />
@@ -327,7 +340,7 @@ export default function Projects() {
             )}
 
             <div className='space-y-1'>
-              <Label htmlFor='stockPrice'> قيمة السهم الواحد </Label>
+              <Label htmlFor='stockPrice'>قيمة السهم الواحد</Label>
               <Input
                 id='stockPrice'
                 type='number'
@@ -339,7 +352,7 @@ export default function Projects() {
             {stockPriceError && <FormMessage error>{stockPriceError}</FormMessage>}
 
             <div className='space-y-1'>
-              <Label htmlFor='stockProfits'> ارباح السهم الواحد </Label>
+              <Label htmlFor='stockProfits'>ارباح السهم الواحد</Label>
               <Input
                 id='stockProfits'
                 type='number'
@@ -351,7 +364,7 @@ export default function Projects() {
             {stockProfitsError && <FormMessage error>{stockProfitsError}</FormMessage>}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectDescription'> وصف المشروع </Label>
+              <Label htmlFor='projectDescription'>وصف المشروع</Label>
               <textarea
                 id='projectDescription'
                 onChange={e => setProjectDescription(e.target.value)}
