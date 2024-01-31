@@ -144,6 +144,7 @@ const FileUpload = ({
             </div>
           ))
         ) : (
+          //if there're existing images in the data base
           data.defaultImg.map(
             ({ imgDisplayName, imgDisplayPath }: imgsProps, idx: number) => (
               <div

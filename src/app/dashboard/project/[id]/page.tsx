@@ -147,26 +147,25 @@ export default function EditProjectPage({
         setIsSubmittingForm(true)
 
         // create a new form data with files data
-
-        // formData.append('multiple', 'true') // for s3 to allow update multiple files
-
-        //using FormData to send constructed data
-
-        // formData.append('prevProjectImgPathsAndNames', JSON.stringify(projectImages))
-
-        // file.forEach((singleFile, index) => formData.append(`file[${index}]`, singleFile))
-        // // upload the project images to s3
-        // const {
-        //   data: { shms_project_id, shms_project_images }
-        // }: {
-        //   data: ProjectProps
-        // } = await axios.post(`${API_URL}/uploadToS3`, formData)
+        const formData = new FormData()
+        formData.append('multiple', 'true') // for s3 to allow update multiple files
+        formData.append('projectId', projectId)
+        file.forEach((singleFile, index) => formData.append(`file[${index}]`, singleFile))
+        // upload the project images to s3
+        const {
+          data: { shms_project_images }
+        }: {
+          data: ProjectProps
+        } = await axios.post(`${API_URL}/uploadToS3`, formData)
 
         // upload the project data to the database
         const updatedProject: { data: ProjectProps } = await axios.patch(
           `${API_URL}/projects/edit/${projectId}`,
           {
-            shms_project_images: projectImages,
+            shms_project_images: JSON.stringify([
+              ...projectImages,
+              ...shms_project_images
+            ]),
             shms_project_name: projectName,
             shms_project_location: projectLocation,
             shms_project_start_date: projectStartDate,

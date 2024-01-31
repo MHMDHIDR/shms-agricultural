@@ -64,7 +64,7 @@ export async function POST(request: any) {
     const formData = await request.formData()
     const fullname: string = formData.get('fullname')
     const multiple: boolean = JSON.parse(formData.get('multiple') ?? 'false')
-    const projectId: string = randomUUID()
+    const projectId: string = formData.get('projectId') ?? randomUUID()
 
     // Extract files dynamically based on their dynamic names
     const files: File[] = []
