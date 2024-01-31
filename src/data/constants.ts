@@ -11,6 +11,9 @@ export const ITEMS_PER_PAGE = 5
 
 export const FILE_UPLOAD_IMG_SIZE = 122
 
+//  max file upload size in MB = 5 MB
+export const MAX_FILE_UPLOAD_SIZE = 5
+
 /**
  * @description الوفت الافتراضي لإخفاء رسالة التنبيه بعد ظهورها = 5 ثواني
  */

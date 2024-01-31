@@ -1,3 +1,4 @@
+import { MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
 import type { abstractWordsProps, validateFileProps } from '@/types'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -83,12 +84,12 @@ export const validateFile: validateFileProps = (
 
   // Get the file extension
   const fileExtension = file.name.split('.').pop()?.toLowerCase()
-  const fileSizes = file.size / 1024 / 1024 // in MB
+  const fileSizes = file.size // in bytes
   const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf']
 
   // Check if the extension is allowed and the file size is less than 2MB
   allowedExtensions.includes(fileExtension!) && (isAllowedExtension = true)
-  fileSizes <= 2 && (isAllowedSize = true)
+  fileSizes <= MAX_FILE_UPLOAD_SIZE * 1024 * 1024 && (isAllowedSize = true)
 
   return { isAllowedExtension, isAllowedSize }
 }

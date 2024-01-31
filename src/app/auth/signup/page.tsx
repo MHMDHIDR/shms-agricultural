@@ -1,6 +1,6 @@
 'use client'
 
-import { API_URL, DEFAULT_DURATION } from '@/data/constants'
+import { API_URL, DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
 import {
   validateEmail,
   validateFile,
@@ -79,7 +79,7 @@ const SignupPage = () => {
     if (!isAllowedExtension) {
       setFileError('فقط الملفات من النوع jpg, jpeg, png, pdf مسموح بها')
     } else if (!isAllowedSize) {
-      setFileError('الحد الأقصى لحجم الملف هو 2 ميغابايت')
+      setFileError(`الحد الأقصى لحجم الملف هو ${MAX_FILE_UPLOAD_SIZE} ميغابايت`)
     } else {
       setFileError('')
       onFileAdd(e)
