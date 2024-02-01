@@ -15,7 +15,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { TabsContent } from '@/components/ui/tabs'
-import { API_URL, APP_LOGO_sm, APP_TITLE, DEFAULT_DURATION } from '@/data/constants'
+import {
+  API_URL,
+  APP_LOGO_sm,
+  APP_TITLE,
+  DEFAULT_DURATION,
+  MAX_FILE_UPLOAD_SIZE
+} from '@/data/constants'
+import { validateFile } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -25,6 +32,7 @@ import { toast } from 'sonner'
 import ProjectsTable from './projectsTabel/page'
 
 export default function Projects() {
+  const [_projects, setProjects] = useState<ProjectProps[]>([])
   const [projectName, setProjectName] = useState('')
   const [projectLocation, setProjectLocation] = useState('')
   const [projectStartDate, setProjectStartDate] = useState<Date>()
@@ -34,9 +42,14 @@ export default function Projects() {
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
   const [projectDescription, setProjectDescription] = useState('')
+  const [caseStudyfile, setCaseStudyFile] = useState<File[]>([])
+
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
-  const [_projects, setProjects] = useState<ProjectProps[]>([])
+
+  const onCaseStudyFileAdd = (e: { target: { files: any } }) => {
+    setCaseStudyFile(e.target.files)
+  }
 
   // Form Errors
   const [projectImagesError, setImagesNameError] = useState('')
@@ -49,6 +62,7 @@ export default function Projects() {
   const [stockPriceError, setStockPriceError] = useState('')
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
+  const [caseStudyfileError, setCaseStudyFileError] = useState('')
 
   const { file } = useContext(FileUploadContext)
 
@@ -72,6 +86,24 @@ export default function Projects() {
     const numRows = Math.ceil(file.length / 3)
     // Return the dynamic grid rows string
     return `grid-rows-${numRows}`
+  }
+
+  const handleCaseStudyFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // get the first file uploaded
+    const file = e.target.files![0]
+    const { isAllowedExtension, isAllowedSize } = validateFile(file as File)
+
+    if (!isAllowedExtension) {
+      setCaseStudyFileError('فقط الملفات من النوع jpg, jpeg, png, pdf مسموح بها')
+    } else if (!isAllowedSize) {
+      // MAX_FILE_UPLOAD_SIZE === 10MB
+      setCaseStudyFileError(
+        `الحد الأقصى لحجم الملف هو ${MAX_FILE_UPLOAD_SIZE * 2} ميغابايت`
+      )
+    } else {
+      setCaseStudyFileError('')
+      onCaseStudyFileAdd(e)
+    }
   }
 
   const handelAddProject = async (e: {
@@ -113,6 +145,9 @@ export default function Projects() {
     } else if (projectDescription === '') {
       resetFormErrors()
       setProjectDescriptionError('الرجاء التأكد من كتابة وصف المشروع')
+    } else if (!caseStudyfile[0] || caseStudyfile.length === 0) {
+      resetFormErrors()
+      setCaseStudyFileError('الرجاء التأكد من رفع دراسة الجدوي')
     } else {
       try {
         resetFormErrors()
@@ -121,8 +156,10 @@ export default function Projects() {
         // create a new form data with files data
         const formData = new FormData()
         formData.append('multiple', 'true')
+        formData.append('caseStudyfile', caseStudyfile[0]!)
 
         file.forEach((singleFile, index) => formData.append(`file[${index}]`, singleFile))
+
         // upload the project images to s3
         const {
           data: { shms_project_id, shms_project_images }
@@ -217,7 +254,10 @@ export default function Projects() {
         <Divider className='my-10' />
         <form onSubmit={e => handelAddProject(e)}>
           <CardHeader>
-            <CardTitle>اضافة مشروع جديد</CardTitle>
+            <CardTitle>
+              اضافة مشروع جديد
+              <span className='text-red-500'>*</span>
+            </CardTitle>
           </CardHeader>
           <CardContent className='space-y-2'>
             <div
@@ -235,7 +275,10 @@ export default function Projects() {
             {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectName'>اسم المشروع</Label>
+              <Label htmlFor='projectName'>
+                اسم المشروع
+                <span className='text-red-500'>*</span>
+              </Label>
               <Input
                 id='projectName'
                 type='text'
@@ -245,7 +288,10 @@ export default function Projects() {
             {projectNameError && <FormMessage error>{projectNameError}</FormMessage>}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectLocation'>منطقة المشروع</Label>
+              <Label htmlFor='projectLocation'>
+                منطقة المشروع
+                <span className='text-red-500'>*</span>
+              </Label>
               <Input
                 id='projectLocation'
                 type='text'
@@ -257,7 +303,10 @@ export default function Projects() {
             )}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectStartDate'>تاريخ بداية المشروع</Label>
+              <Label htmlFor='projectStartDate'>
+                تاريخ بداية المشروع
+                <span className='text-red-500'>*</span>
+              </Label>
               <div className='md:w-3/3'>
                 <input
                   id='projectStartDate'
@@ -272,7 +321,10 @@ export default function Projects() {
             )}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectEndDate'>تاريخ نهاية المشروع</Label>
+              <Label htmlFor='projectEndDate'>
+                تاريخ نهاية المشروع
+                <span className='text-red-500'>*</span>
+              </Label>
               <div className='md:w-3/3'>
                 <input
                   id='projectEndDate'
@@ -287,7 +339,10 @@ export default function Projects() {
             )}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectInvestEndDate'>اخر موعد للمساهمة</Label>
+              <Label htmlFor='projectInvestEndDate'>
+                اخر موعد للمساهمة
+                <span className='text-red-500'>*</span>
+              </Label>
               <div className='md:w-3/3'>
                 <input
                   id='projectInvestEndDate'
@@ -302,7 +357,10 @@ export default function Projects() {
             )}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectAvailableStocks'>عدد الأسهم المتاحة</Label>
+              <Label htmlFor='projectAvailableStocks'>
+                عدد الأسهم المتاحة
+                <span className='text-red-500'>*</span>
+              </Label>
               <div className='md:w-3/3'>
                 <input
                   id='projectAvailableStocks'
@@ -320,7 +378,10 @@ export default function Projects() {
             )}
 
             <div className='space-y-1'>
-              <Label htmlFor='stockPrice'>قيمة السهم الواحد</Label>
+              <Label htmlFor='stockPrice'>
+                قيمة السهم الواحد
+                <span className='text-red-500'>*</span>
+              </Label>
               <Input
                 id='stockPrice'
                 type='number'
@@ -332,7 +393,10 @@ export default function Projects() {
             {stockPriceError && <FormMessage error>{stockPriceError}</FormMessage>}
 
             <div className='space-y-1'>
-              <Label htmlFor='stockProfits'>ارباح السهم الواحد</Label>
+              <Label htmlFor='stockProfits'>
+                ارباح السهم الواحد
+                <span className='text-red-500'>*</span>
+              </Label>
               <Input
                 id='stockProfits'
                 type='number'
@@ -344,11 +408,14 @@ export default function Projects() {
             {stockProfitsError && <FormMessage error>{stockProfitsError}</FormMessage>}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectDescription'>وصف المشروع</Label>
+              <Label htmlFor='projectDescription'>
+                وصف المشروع
+                <span className='text-red-500'>*</span>
+              </Label>
               <textarea
                 id='projectDescription'
                 onChange={e => setProjectDescription(e.target.value)}
-                className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                className='w-full leading-10 px-4 py-2 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 placeholder='أدخل وصف المشروع'
                 rows={5}
               />
@@ -356,7 +423,31 @@ export default function Projects() {
             {projectDescriptionError && (
               <FormMessage error>{projectDescriptionError}</FormMessage>
             )}
+
+            <div className='mb-6 md:flex md:items-center'>
+              <div className='md:w-1/3'>
+                <label
+                  htmlFor='document'
+                  className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
+                >
+                  دراسة الجدوى
+                  <span className='text-red-500'>*</span>
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <Input
+                  id='document'
+                  type='file'
+                  aria-label='file'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded cursor-pointer dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  onChange={handleCaseStudyFileChange}
+                  required
+                />
+              </div>
+            </div>
+            {caseStudyfileError && <FormMessage error>{caseStudyfileError}</FormMessage>}
           </CardContent>
+
           <CardFooter>
             <Button
               disabled={isDoneSubmitting}

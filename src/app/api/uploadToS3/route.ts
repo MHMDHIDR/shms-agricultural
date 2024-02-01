@@ -46,19 +46,6 @@ async function uploadFileToS3({
   return key
 }
 
-// /*
-//  * Generates a signed URL for the file
-//  * @param key - The key of the file in S3
-//  * @param bucket - The bucket name
-//  * @param expiresIn - The time in seconds for the signed URL to expire
-//  * @returns {Promise<string>} - The signed URL
-//  */
-// async function getSignedFileUrl(key: string, bucket: string, expiresIn: number) {
-//   const command = new GetObjectCommand({ Bucket: bucket, Key: key })
-
-//   return await getSignedUrl(s3Client, command, { expiresIn })
-// }
-
 export async function POST(request: any) {
   try {
     const formData = await request.formData()
@@ -71,6 +58,7 @@ export async function POST(request: any) {
     let index = 0
     while (formData.has(`file[${index}]`)) {
       files.push(formData.get(`file[${index}]`))
+      files.push(formData.get('caseStudyfile'))
       index++
     }
 
