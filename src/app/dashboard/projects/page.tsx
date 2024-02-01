@@ -210,10 +210,10 @@ export default function Projects() {
           setIsDoneSubmitting(false)
         }
 
-        // setTimeout(() => {
-        //   // force reload the page
-        //   window.location.reload()
-        // }, DEFAULT_DURATION)
+        setTimeout(() => {
+          // force reload the page
+          window.location.reload()
+        }, DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),

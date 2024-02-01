@@ -50,20 +50,29 @@ export default function Modal({
           <DialogDescription>{description ?? ''}</DialogDescription>
         </DialogHeader>
         <div className='flex flex-col items-center gap-y-6'>
-          <Image
-            src={document ?? APP_LOGO}
-            alt={description ?? title}
-            width={350}
-            height={350}
-            className='object-contain w-full rounded-lg max-h-72'
-          />
+          {
+            // if document contains pdf in the path then render pdf
+            document.includes('pdf') ? (
+              <div className='w-full h-96'>
+                <iframe src={document} className='w-full h-full' title={title} />
+              </div>
+            ) : (
+              <Image
+                src={document ?? APP_LOGO}
+                alt={description ?? title}
+                width={350}
+                height={350}
+                className='object-contain w-full rounded-lg max-h-72'
+              />
+            )
+          }
 
           {!asModal && (
             <Button
               type='button'
               size='sm'
               className='w-32 px-3 md:w-full'
-              onClick={() => saveAs(document, `${title}.jpg`)}
+              onClick={() => saveAs(document, title)}
               variant={'pressable'}
             >
               <span className='sr-only'>تحميل مستند {title}</span>
