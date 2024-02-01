@@ -89,7 +89,7 @@ export async function POST(request: any) {
       caseStudyIndex++
     }
 
-    if (!files || (files.length === 0 && multiple)) {
+    if ((!files || !caseStudyfile) && multiple) {
       return new Response('No file found', { status: 400 })
     }
 

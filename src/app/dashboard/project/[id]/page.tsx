@@ -16,8 +16,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
-import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import { abstractWords, cn, getProjectStatus } from '@/lib/utils'
+import { API_URL, DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
+import { abstractWords, cn, getProjectStatus, validateFile } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -44,11 +44,16 @@ export default function EditProjectPage({
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
   const [projectDescription, setProjectDescription] = useState('')
+  const [caseStudyfile, setCaseStudyFile] = useState<File[]>([])
   const [projectStatus, setProjectStatus] =
     useState<ProjectProps['shms_project_status']>('pending')
 
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+
+  const onCaseStudyFileAdd = (e: { target: { files: any } }) => {
+    setCaseStudyFile(Array.from(e.target.files))
+  }
 
   // Form Errors
   const [projectImagesError, setImagesNameError] = useState('')
@@ -61,6 +66,7 @@ export default function EditProjectPage({
   const [stockPriceError, setStockPriceError] = useState('')
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
+  const [caseStudyfileError, setCaseStudyFileError] = useState('')
 
   const { file } = useContext(FileUploadContext)
 
@@ -93,11 +99,30 @@ export default function EditProjectPage({
       setStockPrice(project.shms_project_stock_price)
       setStockProfits(project.shms_project_stock_profits)
       setProjectDescription(project.shms_project_description)
+      setCaseStudyFile(JSON.parse(String(project.shms_project_study_case)))
       setProjectStatus(project.shms_project_status)
     }
 
     getProjectDetails()
   }, [projectId])
+
+  const handleCaseStudyFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // get the first file uploaded
+    const file = e.target.files![0]
+    const { isAllowedExtension, isAllowedSize } = validateFile(file as File, ['pdf'])
+
+    if (!isAllowedExtension) {
+      setCaseStudyFileError('فقط الملفات من النوع pdf مسموح بها')
+    } else if (!isAllowedSize) {
+      // MAX_FILE_UPLOAD_SIZE === 10MB
+      setCaseStudyFileError(
+        `الحد الأقصى لحجم الملف هو ${MAX_FILE_UPLOAD_SIZE * 2} ميغابايت`
+      )
+    } else {
+      setCaseStudyFileError('')
+      onCaseStudyFileAdd(e)
+    }
+  }
 
   const handelEditProject = async (e: {
     target: any
@@ -111,6 +136,9 @@ export default function EditProjectPage({
     if (file.length === 0 && projectImages.length === 0) {
       resetFormErrors()
       setImagesNameError('الرجاء التأكد من رفع صور المشروع')
+    } else if (!caseStudyfile) {
+      resetFormErrors()
+      setCaseStudyFileError('الرجاء التأكد من رفع دراسة الجدوى')
     } else if (projectName === '') {
       resetFormErrors()
       setProjectNameError('الرجاء التأكد من كتابة اسم المشروع')
@@ -163,6 +191,19 @@ export default function EditProjectPage({
           newProjectImages = shms_project_images
         }
 
+        const formData = new FormData()
+        formData.append('multiple', 'true') // for s3 to allow update multiple files
+        formData.append('projectId', projectId)
+        caseStudyfile.forEach((singleFile, index) =>
+          formData.append(`caseStudyfile[${index}]`, singleFile)
+        )
+
+        const {
+          data: { shms_project_study_case }
+        }: {
+          data: ProjectProps
+        } = await axios.post(`${API_URL}/uploadToS3`, formData)
+
         // upload the project data to the database
         const updatedProject: { data: ProjectProps } = await axios.patch(
           `${API_URL}/projects/edit/${projectId}`,
@@ -177,6 +218,7 @@ export default function EditProjectPage({
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
             shms_project_description: projectDescription,
+            shms_project_study_case,
             shms_project_status: projectStatus
           }
         )
@@ -200,9 +242,9 @@ export default function EditProjectPage({
           })
 
         data.projectUpdated === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
-        setTimeout(() => {
-          window.location.href = `/dashboard/project/${projectId}`
-        }, DEFAULT_DURATION)
+        // setTimeout(() => {
+        //   window.location.href = `/dashboard/project/${projectId}`
+        // }, DEFAULT_DURATION)
       } catch (error: any) {
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
           {
@@ -403,6 +445,30 @@ export default function EditProjectPage({
             {projectDescriptionError && (
               <FormMessage error>{projectDescriptionError}</FormMessage>
             )}
+
+            <div className='mb-6 md:flex md:items-center'>
+              <div className='md:w-1/3'>
+                <label
+                  htmlFor='document'
+                  className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
+                >
+                  دراسة الجدوى
+                  <span className='text-red-500'>*</span>
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <Input
+                  id='document'
+                  type='file'
+                  aria-label='file'
+                  accept='.pdf'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded cursor-pointer dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  onChange={handleCaseStudyFileChange}
+                  required
+                />
+              </div>
+            </div>
+            {caseStudyfileError && <FormMessage error>{caseStudyfileError}</FormMessage>}
 
             <div className='space-y-1 flex gap-x-5 items-center'>
               <Label htmlFor='projectStatus' className='cursor-pointer'>
