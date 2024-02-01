@@ -157,7 +157,8 @@ export type NoItemsProps = {
   button?: React.ReactNode
 }
 
-export type allowedExtensions = ['jpg' | 'jpeg' | 'png' | 'pdf']
+export type allowedExtensions = string[] | undefined
+
 export type validateFileProps = (
   file: File,
   allowedExtensions?: allowedExtensions

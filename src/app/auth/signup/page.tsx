@@ -1,7 +1,12 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
-import { validateEmail, validateFile, validatePasswordStrength } from '@/lib/utils'
+import {
+  validateEmail,
+  validateFile,
+  validatePasswordStrength,
+  validatePhone
+} from '@/lib/utils'
 import type { UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
@@ -9,6 +14,8 @@ import { Info } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 import { toast } from 'sonner'
 
 import { CardWrapper } from '@/components/auth/card-wrapper'
@@ -69,7 +76,12 @@ const SignupPage = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // get the first file uploaded
     const file = e.target.files![0]
-    const { isAllowedExtension, isAllowedSize } = validateFile(file as File)
+    const { isAllowedExtension, isAllowedSize } = validateFile(file as File, [
+      'jpeg',
+      'png',
+      'jpg',
+      'pdf'
+    ])
 
     if (!isAllowedExtension) {
       setFileError('فقط الملفات من النوع jpg, jpeg, png, pdf مسموح بها')
@@ -112,7 +124,7 @@ const SignupPage = () => {
     } else if (phone === '') {
       resetFormErrors()
       setPhoneError('الرجاء التأكد من إدخال رقم الهاتف')
-    } else if (!validateQatarPhoneNumber(phone)) {
+    } else if (!validatePhone(phone)) {
       resetFormErrors()
       setPhoneError('الرجاء التأكد من إدخال رقم الهاتف بشكل صحيح')
     } else if (password === '') {
@@ -478,23 +490,45 @@ const SignupPage = () => {
                 </label>
               </div>
               <div className='md:w-2/3'>
-                <input
-                  id='phone'
-                  onFocus={() =>
-                    ((document.getElementById('phone') as HTMLInputElement).placeholder =
-                      '')
-                  }
-                  onChange={e => setPhone(e.target.value)}
-                  onBlur={() => {
-                    ;(document.getElementById('phone') as HTMLInputElement).placeholder =
-                      '55123456'
-                  }}
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
-                  dir='rtl'
-                  type='tel'
-                  placeholder='55123456'
-                  required
-                />
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <PhoneInput
+                    containerStyle={{ direction: 'ltr' }}
+                    country={'qa'}
+                    value={phone}
+                    onFocus={() =>
+                      ((
+                        document.querySelector('input[type="tel"]') as HTMLInputElement
+                      ).placeholder = '')
+                    }
+                    onChange={e => setPhone(e)}
+                    onBlur={() => {
+                      //blurPhone(e.target.value)
+
+                      ;(
+                        document.querySelector('input[type="tel"]') as HTMLInputElement
+                      ).placeholder = '55123456'
+                    }}
+                    //dir='rtl'
+                    // type='tel'
+                    placeholder='55123456'
+                    //  required
+
+                    preferredCountries={['qa', 'sd']}
+                    inputStyle={{
+                      width: '100%',
+                      padding: '20px',
+                      paddingLeft: '50px',
+                      lineHeight: '1.5',
+                      color: '#718096',
+                      backgroundColor: '#edf2f7',
+                      border: '1px solid #edf2f7',
+                      borderRadius: '0.375rem',
+                      outline: 'none',
+                      transition:
+                        'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out'
+                    }}
+                  />
+                </div>
               </div>
             </div>
 

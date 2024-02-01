@@ -1,12 +1,12 @@
-import { getServerSession } from 'next-auth'
-import { Cairo as FontSans } from 'next/font/google'
-import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/sonner'
+import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
+import { cn } from '@/lib/utils'
+import { FileUploadProvider } from '@/providers/FileUpload'
 import SessionProvider from '@/providers/Session'
 import { ThemeProvider } from '@/providers/Theme'
-import { FileUploadProvider } from '@/providers/FileUpload'
-import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import type { Metadata } from 'next'
+import { getServerSession } from 'next-auth'
+import { Cairo as FontSans } from 'next/font/google'
 import './globals.css'
 
 export const fontSans = FontSans({ subsets: ['arabic'], variable: '--font-sans' })

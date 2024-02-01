@@ -51,10 +51,7 @@ export const validatePasswordStrength = (password: string) => {
  * @param phoneNumber
  * @returns boolean
  */
-export const validateQatarPhoneNumber = (phoneNumber: string) => {
-  const qatarPhoneNumberRegex = /^[34567]\d{7}$/
-  return qatarPhoneNumberRegex.test(phoneNumber)
-}
+export const validatePhone = (phoneNumber: string) => phoneNumber.length >= 8
 
 /**
  * a function to validate if a string is a valid email
@@ -73,6 +70,8 @@ export const validateEmail = (email: string) => {
  * a function to validate if a string is a valid file extension and size
  * and validate the file size to be less than 2MB
  * @param File [file] file to be validated
+ * @param string [allowedExtensions] the types are the allowed file extensions optional parameter, if not provided all of the file extensions are allowed
+
  * @returns {boolean} [boolean] isAllowedExtension
  * @returns {boolean} [boolean] isAllowedSize
  */

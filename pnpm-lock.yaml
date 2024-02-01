@@ -122,6 +122,9 @@ dependencies:
   react-icons:
     specifier: ^5.0.1
     version: 5.0.1(react@18.2.0)
+  react-phone-input-2:
+    specifier: ^2.15.1
+    version: 2.15.1(react-dom@18.2.0)(react@18.2.0)
   react-spinners:
     specifier: ^0.13.8
     version: 0.13.8(react-dom@18.2.0)(react@18.2.0)
@@ -3116,6 +3119,10 @@ packages:
       clsx: 2.0.0
     dev: false
 
+  /classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
+    dev: false
+
   /client-only@0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
     dev: false
@@ -4492,9 +4499,25 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lodash.debounce@4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: false
+
+  /lodash.memoize@4.1.2:
+    resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
+    dev: false
+
   /lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
+
+  /lodash.reduce@4.6.0:
+    resolution: {integrity: sha512-6raRe2vxCYBhpBu+B+TtNGUzah+hQjVdu3E17wfusjyrXBka2nBS8OH/gjVZ5PvHOhWmIZTYri09Z6n/QfnNMw==}
+    dev: false
+
+  /lodash.startswith@4.2.1:
+    resolution: {integrity: sha512-XClYR1h4/fJ7H+mmCKppbiBmljN/nGs73iq2SjCT9SF4CBPoUHzLvWmH1GtZMhMBZSiRkHXfeA2RY1eIlJ75ww==}
+    dev: false
 
   /long@5.2.3:
     resolution: {integrity: sha512-lcHwpNoggQTObv5apGNCTdJrO69eHOZMi4BNC+rTLER8iHAqGrUVeLh/irVIM7zTw2bOXA8T6uNPeujwOLg/2Q==}
@@ -5081,7 +5104,6 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
-    dev: true
 
   /proto-list@1.2.4:
     resolution: {integrity: sha512-vtK/94akxsTMhe0/cbfpR+syPuszcuwhqVjJq26CuNDgFGj682oRBXOP5MJpv2r7JtE8MsiepGIqvvOTBwn2vA==}
@@ -5138,7 +5160,22 @@ packages:
 
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
-    dev: true
+
+  /react-phone-input-2@2.15.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-W03abwhXcwUoq+vUFvC6ch2+LJYMN8qSOiO889UH6S7SyMCQvox/LF3QWt+cZagZrRdi5z2ON3omnjoCUmlaYw==}
+    peerDependencies:
+      react: ^16.12.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0
+      react-dom: ^16.12.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0
+    dependencies:
+      classnames: 2.5.1
+      lodash.debounce: 4.0.8
+      lodash.memoize: 4.1.2
+      lodash.reduce: 4.6.0
+      lodash.startswith: 4.2.1
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
 
   /react-remove-scroll-bar@2.3.4(@types/react@18.2.48)(react@18.2.0):
     resolution: {integrity: sha512-63C4YQBUt0m6ALadE9XV56hV8BgJWDmmTPY758iIJjfQKt2nYwoUrPk0LXRXcB/yIj82T1/Ixfdpdk68LwIB0A==}
