@@ -1,5 +1,7 @@
 import Confirm from '@/components/custom/Confirm'
+import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
+import { Card, CardDescription } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import {
   API_URL,
@@ -19,8 +21,6 @@ import axios from 'axios'
 import Image from 'next/image'
 import { useContext } from 'react'
 import { toast } from 'sonner'
-import { Error, Success } from '@/components/icons/Status'
-import { Card, CardDescription } from '@/components/ui/card'
 
 const FileUpload = ({ data, ignoreRequired = false, id }: FileUploadComponentProps) => {
   const { file, fileURLs, onFileRemove, onFileAdd } =
@@ -68,6 +68,10 @@ const FileUpload = ({ data, ignoreRequired = false, id }: FileUploadComponentPro
             textAlign: 'justify'
           }
         })
+
+        setTimeout(() => {
+          window.location.href = `/dashboard/project/${projectId}`
+        }, DEFAULT_DURATION)
       } else {
         toast('حدث خطأ ما', {
           icon: <Error className='w-6 h-6 ml-3' />,

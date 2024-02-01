@@ -45,6 +45,7 @@ export default function EditProjectPage({
   const [stockProfits, setStockProfits] = useState<number>()
   const [projectDescription, setProjectDescription] = useState('')
   const [caseStudyfile, setCaseStudyFile] = useState<File[]>([])
+  const [caseStudyIsVisible, setCaseStudyIsVisible] = useState<number>(0)
   const [projectStatus, setProjectStatus] =
     useState<ProjectProps['shms_project_status']>('pending')
 
@@ -100,6 +101,7 @@ export default function EditProjectPage({
       setStockProfits(project.shms_project_stock_profits)
       setProjectDescription(project.shms_project_description)
       setCaseStudyFile(JSON.parse(String(project.shms_project_study_case)))
+      setCaseStudyIsVisible(project.shms_project_study_case_visibility ?? 0)
       setProjectStatus(project.shms_project_status)
     }
 
@@ -171,6 +173,7 @@ export default function EditProjectPage({
         resetFormErrors()
         setIsSubmittingForm(true)
         let newProjectImages: ProjectProps['shms_project_images'] = []
+        let newCaseStudyFile: ProjectProps['shms_project_images'] = []
 
         if (file.length > 0) {
           // create a new form data with files data
@@ -189,20 +192,44 @@ export default function EditProjectPage({
 
           // getting response from backend
           newProjectImages = shms_project_images
+        } else if (caseStudyfile) {
+          const formData = new FormData()
+          formData.append('multiple', 'true') // for s3 to allow update multiple files
+          formData.append('projectId', projectId)
+          caseStudyfile.forEach((singleFile, index) =>
+            formData.append(`caseStudyfile[${index}]`, singleFile)
+          )
+
+          const {
+            data: { shms_project_study_case }
+          }: {
+            data: ProjectProps
+          } = await axios.post(`${API_URL}/uploadToS3`, formData)
+
+          // getting response from backend
+          newCaseStudyFile = shms_project_study_case
         }
+        if (file.length > 0 && caseStudyfile) {
+          const formData = new FormData()
+          formData.append('multiple', 'true') // for s3 to allow update multiple files
+          formData.append('projectId', projectId)
+          file.forEach((singleFile, index) =>
+            formData.append(`file[${index}]`, singleFile)
+          )
+          caseStudyfile.forEach((singleFile, index) =>
+            formData.append(`caseStudyfile[${index}]`, singleFile)
+          )
 
-        const formData = new FormData()
-        formData.append('multiple', 'true') // for s3 to allow update multiple files
-        formData.append('projectId', projectId)
-        caseStudyfile.forEach((singleFile, index) =>
-          formData.append(`caseStudyfile[${index}]`, singleFile)
-        )
+          const {
+            data: { shms_project_images, shms_project_study_case }
+          }: {
+            data: ProjectProps
+          } = await axios.post(`${API_URL}/uploadToS3`, formData)
 
-        const {
-          data: { shms_project_study_case }
-        }: {
-          data: ProjectProps
-        } = await axios.post(`${API_URL}/uploadToS3`, formData)
+          // getting response from backend
+          newProjectImages = shms_project_images
+          newCaseStudyFile = shms_project_study_case
+        }
 
         // upload the project data to the database
         const updatedProject: { data: ProjectProps } = await axios.patch(
@@ -218,9 +245,10 @@ export default function EditProjectPage({
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
             shms_project_description: projectDescription,
-            shms_project_study_case,
+            shms_project_study_case: [...newCaseStudyFile],
+            shms_project_study_case_visibility: caseStudyIsVisible,
             shms_project_status: projectStatus
-          }
+          } as ProjectProps
         )
         //getting response from backend
         const { data } = updatedProject
@@ -242,9 +270,9 @@ export default function EditProjectPage({
           })
 
         data.projectUpdated === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
-        // setTimeout(() => {
-        //   window.location.href = `/dashboard/project/${projectId}`
-        // }, DEFAULT_DURATION)
+        setTimeout(() => {
+          window.location.href = `/dashboard/project/${projectId}`
+        }, DEFAULT_DURATION)
       } catch (error: any) {
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
           {
@@ -303,7 +331,7 @@ export default function EditProjectPage({
               </strong>
             </CardTitle>
           </CardHeader>
-          <CardContent className='space-y-2'>
+          <CardContent className='space-y-5'>
             <div
               className={`grid ${fileUploadGrid()} gap-y-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5`}
             >
@@ -464,11 +492,30 @@ export default function EditProjectPage({
                   accept='.pdf'
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded cursor-pointer dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   onChange={handleCaseStudyFileChange}
-                  required
                 />
               </div>
             </div>
             {caseStudyfileError && <FormMessage error>{caseStudyfileError}</FormMessage>}
+
+            <div className='space-y-1 flex gap-x-5 items-center'>
+              <Label htmlFor='caseStudyIsVisible' className='cursor-pointer'>
+                حالة دراسة الجدوى:
+              </Label>
+              <Switch
+                id='caseStudyIsVisible'
+                dir='ltr'
+                checked={caseStudyIsVisible === 1}
+                onCheckedChange={isVisible => setCaseStudyIsVisible(isVisible ? 1 : 0)}
+              />
+              <strong
+                className={cn(
+                  `select-none`,
+                  caseStudyIsVisible ? 'text-green-600' : 'text-red-600'
+                )}
+              >
+                {caseStudyIsVisible ? 'عام' : 'خاص'}
+              </strong>
+            </div>
 
             <div className='space-y-1 flex gap-x-5 items-center'>
               <Label htmlFor='projectStatus' className='cursor-pointer'>

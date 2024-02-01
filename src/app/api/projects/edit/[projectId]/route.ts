@@ -20,6 +20,7 @@ export async function PATCH(
     shms_project_stock_profits,
     shms_project_description,
     shms_project_study_case,
+    shms_project_study_case_visibility,
     shms_project_status,
     updateImg
   }: ProjectProps = await request.json()
@@ -73,6 +74,7 @@ export async function PATCH(
         shms_project_stock_profits = ?,
         shms_project_description = ?,
         shms_project_study_case = ?,
+        shms_project_study_case_visibility = ?,
         shms_project_status = ?
       WHERE shms_project_id = ?`,
           [
@@ -87,6 +89,7 @@ export async function PATCH(
             shms_project_stock_profits,
             shms_project_description ?? '',
             JSON.stringify(shms_project_study_case),
+            shms_project_study_case_visibility,
             shms_project_status ?? 'pending',
             projectId
           ]
