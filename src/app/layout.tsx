@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
         <link rel='manifest' href='/manifest.json' />
         <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon' />
-        <link rel='apple-touch-icon' href='/icon-192x128.png' />
+        <link rel='apple-touch-icon' href='/ios/192.png' />
         {/* Open Graph Data */}
         <meta property='og:type' content='website' />
         <meta property='og:site_name' content='شمس | للخدمات الزراعية' />
@@ -47,7 +47,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
         <meta
           property='og:image'
-          content='https://shmsagricultural.com/icon-192x128.png'
+          content='https://shmsagricultural.com/logo-slogan.png'
         />
         <meta property='og:image:width' content='192' />
         <meta property='og:image:height' content='128' />
@@ -58,7 +58,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <meta property='twitter:title' content='شمس | للخدمات الزراعية' />
         <meta
           name='twitter:image'
-          content='https://shmsagricultural.com/icon-192x128.png'
+          content='https://shmsagricultural.com/logo-slogan.png'
         />
         <meta
           name='twitter:card'
