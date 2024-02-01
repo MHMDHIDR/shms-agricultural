@@ -27,6 +27,7 @@ import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import ProjectsTable from './projectsTabel/page'
@@ -46,6 +47,7 @@ export default function Projects() {
 
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+  const [projectAdded, setProjectAdded] = useState<number>(0)
 
   const onCaseStudyFileAdd = (e: { target: { files: any } }) => {
     setCaseStudyFile(Array.from(e.target.files))
@@ -66,6 +68,8 @@ export default function Projects() {
 
   const { file } = useContext(FileUploadContext)
 
+  const { push } = useRouter()
+
   const getProjects = async () => {
     const { data: projects }: { data: ProjectProps[] } = await axios.get(
       `${API_URL}/projects/get`
@@ -75,7 +79,7 @@ export default function Projects() {
 
   useEffect(() => {
     getProjects()
-  }, [isDoneSubmitting])
+  }, [projectAdded])
 
   /*
    * a function to set the grid rows and columns based on the number of files uploaded
@@ -210,9 +214,9 @@ export default function Projects() {
           setIsDoneSubmitting(false)
         }
 
+        setProjectAdded(data.projectAdded ?? 0)
         setTimeout(() => {
-          // force reload the page
-          window.location.reload()
+          push(`dashboard/project/${shms_project_id}`)
         }, DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation

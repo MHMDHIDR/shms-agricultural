@@ -1,7 +1,7 @@
 import { APP_LOGO } from '@/data/constants'
 import { createSlug } from '@/lib/utils'
 import type { imgsProps, uploadFileToS3Props } from '@/types'
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { randomUUID } from 'crypto'
 
 const { AWS_ACCESS_ID, AWS_SECRET, AWS_BUCKET_NAME, AWS_REGION } = process.env
@@ -41,12 +41,23 @@ async function uploadFileToS3({
     ContentType: type
   }
 
+  const paramsDeleteOldCaseStudyPDF = {
+    Bucket: AWS_BUCKET_NAME,
+    Key: `projects/${projectId}/caseStudy/*`,
+    Body: file,
+    ContentType: type
+  }
+
   const paramsCaseStudyPDF = {
     Bucket: AWS_BUCKET_NAME,
     Key: multiple ? `projects/${projectId ? `${projectId}/caseStudy/${key}` : key}` : key,
     Body: file,
     ContentType: type
   }
+
+  // delete old case study pdf
+  const deleteOldCaseStudyPDF = new DeleteObjectCommand(paramsDeleteOldCaseStudyPDF)
+  await s3Client.send(deleteOldCaseStudyPDF)
 
   const command = isCaseStudyIncluded
     ? new PutObjectCommand(paramsCaseStudyPDF)

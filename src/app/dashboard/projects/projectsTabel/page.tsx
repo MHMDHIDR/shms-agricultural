@@ -167,15 +167,19 @@ export default function ProjectsTable() {
                 {project.shms_project_stock_profits}
               </TableCell>
               <TableCell className='min-w-40'>
-                <Modal
-                  title={`دراسة الجدوى ${project.shms_project_name}`}
-                  document={
-                    getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO
-                  }
-                  className='font-bold dark:text-white'
-                >
-                  عرض دراسة الجدوى
-                </Modal>
+                {!project.shms_project_study_case ? (
+                  <span className='text-red-500'>لا يوجد</span>
+                ) : (
+                  <Modal
+                    title={`دراسة الجدوى ${project.shms_project_name}`}
+                    document={
+                      getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO
+                    }
+                    className='font-bold dark:text-white'
+                  >
+                    عرض دراسة الجدوى
+                  </Modal>
+                )}
               </TableCell>
               <TableCell
                 className={cn(
@@ -222,14 +226,9 @@ function getProjectStudyCase(studyCase: ProjectProps['shms_project_study_case'])
   try {
     const studyCaseArray = JSON.parse(studyCase)
 
-    if (Array.isArray(studyCaseArray) && studyCaseArray.length > 0) {
-      imgDisplayPath = studyCaseArray[0]?.imgDisplayPath
-    } else {
-      console.log('No study case data found for this project')
-    }
+    imgDisplayPath = studyCaseArray[0]?.imgDisplayPath
   } catch (error) {
     console.error('Error parsing study case data:', error)
-    console.log('No valid study case data found for this project')
   }
 
   return imgDisplayPath
