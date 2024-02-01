@@ -48,7 +48,7 @@ export default function Projects() {
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
   const onCaseStudyFileAdd = (e: { target: { files: any } }) => {
-    setCaseStudyFile(e.target.files)
+    setCaseStudyFile(Array.from(e.target.files))
   }
 
   // Form Errors
@@ -91,10 +91,10 @@ export default function Projects() {
   const handleCaseStudyFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // get the first file uploaded
     const file = e.target.files![0]
-    const { isAllowedExtension, isAllowedSize } = validateFile(file as File)
+    const { isAllowedExtension, isAllowedSize } = validateFile(file as File, ['pdf'])
 
     if (!isAllowedExtension) {
-      setCaseStudyFileError('فقط الملفات من النوع jpg, jpeg, png, pdf مسموح بها')
+      setCaseStudyFileError('فقط الملفات من النوع pdf مسموح بها')
     } else if (!isAllowedSize) {
       // MAX_FILE_UPLOAD_SIZE === 10MB
       setCaseStudyFileError(
@@ -145,7 +145,7 @@ export default function Projects() {
     } else if (projectDescription === '') {
       resetFormErrors()
       setProjectDescriptionError('الرجاء التأكد من كتابة وصف المشروع')
-    } else if (!caseStudyfile[0] || caseStudyfile.length === 0) {
+    } else if (caseStudyfile.length === 0) {
       resetFormErrors()
       setCaseStudyFileError('الرجاء التأكد من رفع دراسة الجدوي')
     } else {
@@ -156,13 +156,15 @@ export default function Projects() {
         // create a new form data with files data
         const formData = new FormData()
         formData.append('multiple', 'true')
-        formData.append('caseStudyfile', caseStudyfile[0]!)
 
         file.forEach((singleFile, index) => formData.append(`file[${index}]`, singleFile))
+        caseStudyfile.forEach((singleFile, index) =>
+          formData.append(`caseStudyfile[${index}]`, singleFile)
+        )
 
         // upload the project images to s3
         const {
-          data: { shms_project_id, shms_project_images }
+          data: { shms_project_id, shms_project_images, shms_project_study_case }
         }: {
           data: ProjectProps
         } = await axios.post(`${API_URL}/uploadToS3`, formData)
@@ -181,7 +183,8 @@ export default function Projects() {
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
             shms_project_description: projectDescription,
-            shms_project_images
+            shms_project_images,
+            shms_project_study_case
           }
         )
         //getting response from backend
@@ -207,10 +210,10 @@ export default function Projects() {
           setIsDoneSubmitting(false)
         }
 
-        setTimeout(() => {
-          // force reload the page
-          window.location.reload()
-        }, DEFAULT_DURATION)
+        // setTimeout(() => {
+        //   // force reload the page
+        //   window.location.reload()
+        // }, DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
@@ -439,6 +442,7 @@ export default function Projects() {
                   id='document'
                   type='file'
                   aria-label='file'
+                  accept='.pdf'
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded cursor-pointer dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   onChange={handleCaseStudyFileChange}
                   required

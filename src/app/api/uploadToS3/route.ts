@@ -25,6 +25,7 @@ const s3Client = new S3Client(s3ClientConfig)
  */
 async function uploadFileToS3({
   file,
+  isCaseStudyIncluded = false,
   multiple,
   fileObject,
   fullname,
@@ -40,7 +41,16 @@ async function uploadFileToS3({
     ContentType: type
   }
 
-  const command = new PutObjectCommand(params)
+  const paramsCaseStudyPDF = {
+    Bucket: AWS_BUCKET_NAME,
+    Key: multiple ? `projects/${projectId ? `${projectId}/caseStudy/${key}` : key}` : key,
+    Body: file,
+    ContentType: type
+  }
+
+  const command = isCaseStudyIncluded
+    ? new PutObjectCommand(paramsCaseStudyPDF)
+    : new PutObjectCommand(params)
   await s3Client.send(command)
 
   return key
@@ -55,11 +65,17 @@ export async function POST(request: any) {
 
     // Extract files dynamically based on their dynamic names
     const files: File[] = []
+    const caseStudyfile: File[] = []
+
     let index = 0
     while (formData.has(`file[${index}]`)) {
       files.push(formData.get(`file[${index}]`))
-      files.push(formData.get('caseStudyfile'))
       index++
+    }
+    let caseStudyIndex = 0
+    while (formData.has(`caseStudyfile[${caseStudyIndex}]`)) {
+      caseStudyfile.push(formData.get(`caseStudyfile[${caseStudyIndex}]`))
+      caseStudyIndex++
     }
 
     if (!files || (files.length === 0 && multiple)) {
@@ -88,6 +104,9 @@ export async function POST(request: any) {
       const fileURLs: string[] = []
       const fileKeys: string[] = []
 
+      const caseStudyFileURLs: string[] = []
+      const caseStudyFileKeys: string[] = []
+
       for (const file of files) {
         const key = await uploadFileToS3({
           file: Buffer.from(await file.arrayBuffer()),
@@ -101,6 +120,18 @@ export async function POST(request: any) {
         fileURLs.push(fileUrl)
         fileKeys.push(key)
       }
+      for (const file of caseStudyfile) {
+        const caseStudyKey = await uploadFileToS3({
+          file: Buffer.from(await file.arrayBuffer()),
+          isCaseStudyIncluded: true,
+          multiple,
+          fileObject: file,
+          projectId
+        })
+        const caseStudyFileUrl = `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/projects/${projectId}/caseStudy/${caseStudyKey}`
+        caseStudyFileURLs.push(caseStudyFileUrl)
+        caseStudyFileKeys.push(caseStudyKey)
+      }
 
       return new Response(
         JSON.stringify({
@@ -109,6 +140,12 @@ export async function POST(request: any) {
             return {
               imgDisplayName: fileKey,
               imgDisplayPath: fileURLs[index] ?? APP_LOGO
+            } satisfies imgsProps
+          }),
+          shms_project_study_case: caseStudyFileKeys.map((fileKey, index) => {
+            return {
+              imgDisplayName: fileKey,
+              imgDisplayPath: caseStudyFileURLs[index] ?? APP_LOGO
             } satisfies imgsProps
           })
         }),

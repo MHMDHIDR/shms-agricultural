@@ -41,6 +41,7 @@ export type UserProps = {
 export type ProjectProps = {
   shms_project_id: string
   shms_project_images: imgsProps[]
+  shms_project_study_case: imgsProps
   shms_project_name: string
   shms_project_location: string
   shms_project_start_date: Date
@@ -101,6 +102,7 @@ export type imgsProps = {
 
 export type uploadFileToS3Props = {
   file: Buffer
+  isCaseStudyIncluded?: boolean
   multiple: boolean
   fileObject: File
   fullname?: string
@@ -154,9 +156,14 @@ export type NoItemsProps = {
   button?: React.ReactNode
 }
 
-export type validateFileProps = (file: File) => {
+export type allowedExtensions = ['jpg' | 'jpeg' | 'png' | 'pdf']
+export type validateFileProps = (
+  file: File,
+  allowedExtensions?: allowedExtensions
+) => {
   isAllowedExtension: boolean
   isAllowedSize: boolean
+  allowedExtensions?: allowedExtensions
 }
 
 export type abstractWordsProps = (props: {

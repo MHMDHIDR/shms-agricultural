@@ -15,7 +15,8 @@ export async function POST(req: Request) {
     shms_project_stock_price,
     shms_project_stock_profits,
     shms_project_description,
-    shms_project_images
+    shms_project_images,
+    shms_project_study_case
   }: ProjectProps = body
 
   try {
@@ -23,6 +24,7 @@ export async function POST(req: Request) {
     const newProject = await connectDB(
       `INSERT INTO projects (shms_project_id,
                           shms_project_images,
+                          shms_project_study_case,
                           shms_project_name,
                           shms_project_location,
                           shms_project_start_date,
@@ -32,11 +34,12 @@ export async function POST(req: Request) {
                           shms_project_stock_price,
                           shms_project_stock_profits,
                           shms_project_description)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         shms_project_id,
         // To store in DB we need to stringify the array
         JSON.stringify(shms_project_images),
+        JSON.stringify(shms_project_study_case),
         shms_project_name,
         shms_project_location,
         shms_project_start_date,

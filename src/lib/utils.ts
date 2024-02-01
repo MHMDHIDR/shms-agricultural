@@ -77,7 +77,8 @@ export const validateEmail = (email: string) => {
  * @returns {boolean} [boolean] isAllowedSize
  */
 export const validateFile: validateFileProps = (
-  file: File
+  file: File,
+  allowedExtensions?: string[]
 ): { isAllowedExtension: boolean; isAllowedSize: boolean } => {
   let isAllowedExtension = false
   let isAllowedSize = false
@@ -85,10 +86,9 @@ export const validateFile: validateFileProps = (
   // Get the file extension
   const fileExtension = file.name.split('.').pop()?.toLowerCase()
   const fileSizes = file.size // in bytes
-  const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf']
 
   // Check if the extension is allowed and the file size is less than 2MB
-  allowedExtensions.includes(fileExtension!) && (isAllowedExtension = true)
+  allowedExtensions?.includes(fileExtension!) && (isAllowedExtension = true)
   fileSizes <= MAX_FILE_UPLOAD_SIZE * 1024 * 1024 && (isAllowedSize = true)
 
   return { isAllowedExtension, isAllowedSize }
