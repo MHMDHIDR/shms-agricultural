@@ -1,12 +1,7 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
-import {
-  validateEmail,
-  validateFile,
-  validatePasswordStrength,
-  validateQatarPhoneNumber
-} from '@/lib/utils'
+import { validateEmail, validateFile, validatePasswordStrength } from '@/lib/utils'
 import type { UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
