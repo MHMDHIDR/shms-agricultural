@@ -224,7 +224,7 @@ function getProjectDate(date: Date): string {
 function getProjectStudyCase(studyCase: ProjectProps['shms_project_study_case']) {
   let imgDisplayPath = ''
   try {
-    const studyCaseArray = JSON.parse(studyCase)
+    const studyCaseArray = JSON.parse(String(studyCase))
 
     imgDisplayPath = studyCaseArray[0]?.imgDisplayPath
   } catch (error) {
