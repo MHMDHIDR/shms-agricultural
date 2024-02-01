@@ -1,5 +1,7 @@
 import Layout from '@/components/custom/Layout'
-import { API_URL } from '@/data/constants'
+import Modal from '@/components/custom/Modal'
+import { API_URL, APP_LOGO } from '@/data/constants'
+import { getProjectStudyCase } from '@/lib/utils'
 import type { ProjectProps } from '@/types'
 import axios from 'axios'
 import Image from 'next/image'
@@ -136,6 +138,22 @@ export default async function ProjectDetailsPage({
               </p>
             </div>
           </div>
+
+          {project.shms_project_study_case_visibility ? (
+            <div style={{ width: '50%', backgroundColor: 'gray' }}>
+              <div style={{ margin: 20 }} dir='rtl' className='flex items-center'>
+                <Modal
+                  title={`دراسة الجدوى ${project.shms_project_name}`}
+                  document={
+                    getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO
+                  }
+                  className='font-bold dark:text-white'
+                >
+                  عرض دراسة الجدوى
+                </Modal>
+              </div>
+            </div>
+          ) : null}
         </div>
       </main>
     </Layout>

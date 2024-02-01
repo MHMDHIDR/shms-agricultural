@@ -16,7 +16,7 @@ import Link from 'next/link'
 import Modal from '@/components/custom/Modal'
 import { Button } from '@/components/ui/button'
 import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
-import { arabicDate, cn, getProjectStatus } from '@/lib/utils'
+import { arabicDate, cn, getProjectStatus, getProjectStudyCase } from '@/lib/utils'
 import type { ProjectProps } from '@/types'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -219,17 +219,4 @@ export default function ProjectsTable() {
  */
 function getProjectDate(date: Date): string {
   return arabicDate(String(date)).split('في')[0]?.trim() ?? 'غير معروف'
-}
-
-function getProjectStudyCase(studyCase: ProjectProps['shms_project_study_case']) {
-  let imgDisplayPath = ''
-  try {
-    const studyCaseArray = JSON.parse(String(studyCase))
-
-    imgDisplayPath = studyCaseArray[0]?.imgDisplayPath
-  } catch (error) {
-    console.error('Error parsing study case data:', error)
-  }
-
-  return imgDisplayPath
 }

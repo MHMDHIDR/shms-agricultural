@@ -45,6 +45,9 @@ export default function EditProjectPage({
   const [stockProfits, setStockProfits] = useState<number>()
   const [projectDescription, setProjectDescription] = useState('')
   const [caseStudyfile, setCaseStudyFile] = useState<File[]>([])
+  const [_currentCaseStudyFile, setCurrentCaseStudyFile] = useState<
+    ProjectProps['shms_project_study_case']
+  >([])
   const [caseStudyIsVisible, setCaseStudyIsVisible] = useState<number>(0)
   const [projectStatus, setProjectStatus] =
     useState<ProjectProps['shms_project_status']>('pending')
@@ -100,7 +103,7 @@ export default function EditProjectPage({
       setStockPrice(project.shms_project_stock_price)
       setStockProfits(project.shms_project_stock_profits)
       setProjectDescription(project.shms_project_description)
-      setCaseStudyFile(JSON.parse(String(project.shms_project_study_case)))
+      setCurrentCaseStudyFile(JSON.parse(String(project.shms_project_study_case)))
       setCaseStudyIsVisible(project.shms_project_study_case_visibility ?? 0)
       setProjectStatus(project.shms_project_status)
     }
@@ -192,7 +195,7 @@ export default function EditProjectPage({
 
           // getting response from backend
           newProjectImages = shms_project_images
-        } else if (caseStudyfile) {
+        } else if (caseStudyfile && caseStudyfile.length > 0) {
           const formData = new FormData()
           formData.append('multiple', 'true') // for s3 to allow update multiple files
           formData.append('projectId', projectId)
@@ -208,8 +211,7 @@ export default function EditProjectPage({
 
           // getting response from backend
           newCaseStudyFile = shms_project_study_case
-        }
-        if (file.length > 0 && caseStudyfile) {
+        } else if (file.length > 0 && caseStudyfile) {
           const formData = new FormData()
           formData.append('multiple', 'true') // for s3 to allow update multiple files
           formData.append('projectId', projectId)

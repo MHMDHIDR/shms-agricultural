@@ -1,5 +1,5 @@
 import { MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
-import type { abstractWordsProps, validateFileProps } from '@/types'
+import type { ProjectProps, abstractWordsProps, validateFileProps } from '@/types'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -152,4 +152,24 @@ export const removeSlug = (txt: string) => txt?.replace(/-/g, ' ')
  */
 export function getProjectStatus(status: string): string {
   return status === 'active' ? 'مفعل' : status === 'pending' ? 'قيد التفعيل' : status
+}
+
+/**
+ * A function to get the project study case document
+ * @param {string} studyCase
+ * @returns {string} studyCase document path
+ */
+export function getProjectStudyCase(
+  studyCase: ProjectProps['shms_project_study_case']
+): string {
+  let imgDisplayPath = ''
+  try {
+    const studyCaseArray = JSON.parse(String(studyCase))
+
+    imgDisplayPath = studyCaseArray[0]?.imgDisplayPath
+  } catch (error) {
+    console.error('Error parsing study case data:', error)
+  }
+
+  return imgDisplayPath
 }
