@@ -61,6 +61,9 @@ const config = {
       width: {
         xxs: '300px'
       },
+      fontSize: {
+        xxs: '0.625rem'
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

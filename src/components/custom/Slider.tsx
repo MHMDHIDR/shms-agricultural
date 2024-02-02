@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Carousel,
@@ -11,10 +9,19 @@ import {
   CarouselPrevious,
   type CarouselApi
 } from '@/components/ui/carousel'
+import { cn } from '@/lib/utils'
 import Autoplay from 'embla-carousel-autoplay'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
 // import Overlay from './Overlay'
 
-export default function CarouselDApiDemo({ images }: { images: string[] }) {
+export default function CarouselDApiDemo({
+  images,
+  className
+}: {
+  images: string[]
+  className?: string
+}) {
   const [api, setApi] = useState<CarouselApi>()
   const [_current, setCurrent] = useState(0)
 
@@ -29,7 +36,10 @@ export default function CarouselDApiDemo({ images }: { images: string[] }) {
       setApi={setApi}
       opts={{ loop: true }}
       plugins={[Autoplay({ delay: 3000 })]}
-      className='min-w-full max-w-xs max-h-72 md:max-h-96 lg:max-h-[35rem] overflow-y-clip'
+      className={cn(
+        `min-w-full max-w-xs max-h-72 md:max-h-96 lg:max-h-[35rem] overflow-y-clip`,
+        className
+      )}
     >
       <CarouselContent /*overlay={<Overlay className='opacity-20' />}*/>
         {images.map((image, index) => (

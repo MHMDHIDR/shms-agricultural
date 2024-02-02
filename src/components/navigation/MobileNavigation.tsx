@@ -95,33 +95,26 @@ export default function MobileNavigation({
         </AccordionContent>
       </AccordionItem>
       {/* تسجيل الدخول */}
-      <AccordionItem value='item-2'>
+      <AccordionItem value='item-1'>
         <AccordionTrigger>{userName}</AccordionTrigger>
         <AccordionContent>
-          <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
-            <NavigationListItem
-              className={`py-2 ${isAuth ? `w-1/2 text-center` : `w-full`}`}
-              href={isAuth ? `/profile` : `/auth/signin`}
-            >
+          <ul className='grid min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
+            <NavigationListItem href={isAuth ? `/profile` : `/auth/signin`}>
               {isAuth ? 'الملف الشخصي' : `تسجيل الدخول`}
             </NavigationListItem>
             {isUserAdmin ? (
-              <NavigationListItem className={`w-full text-center`} href='/dashboard'>
-                لوحة التحكم
-              </NavigationListItem>
+              <NavigationListItem href='/dashboard'>لوحة التحكم</NavigationListItem>
             ) : null}
             {isAuth && (
               <NavigationListItem
-                className='flex items-center justify-center gap-2 md:gap-1'
+                className='flex items-center justify-start md:gap-1'
                 onClick={async () => {
                   await signOut({ redirect: false })
                   replace('/auth/signin')
                 }}
               >
-                <LogOut className='text-[#FDB813] dark:text-[#ffd87e]' />
-                <span className='inline-block text-white md:hidden dark:text-black'>
-                  تسجيل الخروج
-                </span>
+                <span className='inline md:hidden dark:text-white'>تسجيل الخروج</span>
+                <LogOut className='text-[#FDB813] inline-block dark:text-[#ffd87e] mr-2' />
               </NavigationListItem>
             )}
           </ul>

@@ -7,7 +7,7 @@ import {
   validatePasswordStrength,
   validatePhone
 } from '@/lib/utils'
-import type { UserProps } from '@/types'
+import type { UserProps, shms_formSignupDataProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { Info } from 'lucide-react'
@@ -36,13 +36,13 @@ const SignupPage = () => {
   // combine all names to one state
   const [userFullName, setUserFullName] = useState('')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [nationality, setNationality] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
   const [address, setAddress] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [acceptedTerm, setAcceptedTerm] = useState(false)
-  const [phone, setPhone] = useState('')
   const [file, setFile] = useState<File[]>([])
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
@@ -57,7 +57,6 @@ const SignupPage = () => {
   const [fullNameError, setFullNameError] = useState('')
   const [nationlityError, setNationlityError] = useState('')
   const [dateOfBirthError, setDateOfBirthError] = useState('')
-  const [addressError, setAddressError] = useState('')
   const [emailError, setEmailError] = useState('')
   const [phoneError, setPhoneError] = useState('')
   const [passError, setPassError] = useState('')
@@ -93,9 +92,53 @@ const SignupPage = () => {
     }
   }
 
+  // To keep track of the signup form data
+  useEffect(() => {
+    localStorage.setItem(
+      'shms_formSignupData',
+      JSON.stringify({
+        fName,
+        sName,
+        tName,
+        foName,
+        email,
+        nationality,
+        dateOfBirth,
+        address,
+        password,
+        confirmPassword,
+        acceptedTerm,
+        phone
+      })
+    )
+
+    // Remove shms_formSignupData from localStorage when component unmounts
+    return () => {
+      localStorage.removeItem('shms_formSignupData')
+    }
+  }, [
+    fName,
+    sName,
+    tName,
+    foName,
+    email,
+    nationality,
+    dateOfBirth,
+    address,
+    password,
+    confirmPassword,
+    acceptedTerm,
+    phone
+  ])
+
   useEffect(() => {
     setUserFullName(`${fName} ${sName} ${tName} ${foName}`)
   }, [fName, sName, tName, foName])
+
+  const shms_formSignupData: shms_formSignupDataProps =
+    typeof window !== 'undefined'
+      ? JSON.parse(localStorage.getItem('shms_formSignupData') || '[]')
+      : []
 
   const handelSignupForm = async (e: {
     target: any
@@ -115,9 +158,6 @@ const SignupPage = () => {
     } else if (dateOfBirth === '') {
       resetFormErrors()
       setDateOfBirthError('الرجاء التأكد من إدخال تاريخ الميلاد')
-    } else if (address.length < 10) {
-      resetFormErrors()
-      setAddressError('الرجاء التأكد من إدخال العنوان بشكل صحيح')
     } else if (!validateEmail(email)) {
       resetFormErrors()
       setEmailError('الرجاء التأكد من صحة البريد الالكتروني')
@@ -228,7 +268,6 @@ const SignupPage = () => {
     setFullNameError('')
     setNationlityError('')
     setDateOfBirthError('')
-    setAddressError('')
     setEmailError('')
     setPassError('')
     setPhoneError('')
@@ -238,7 +277,7 @@ const SignupPage = () => {
 
   return (
     <Layout>
-      <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24'>
+      <section className='mt-32 mb-auto mx-auto'>
         <CardWrapper
           headerLabel='إنضم إلينا'
           backButtonLabel='لديك حساب بالفعل؟ تسجيل الدخول'
@@ -263,6 +302,7 @@ const SignupPage = () => {
                   </label>
                   <input
                     id='firstName'
+                    defaultValue={shms_formSignupData.fName}
                     type='text'
                     onFocus={() =>
                       ((
@@ -302,6 +342,7 @@ const SignupPage = () => {
                       ).placeholder = 'عبد الرحيم'
                     }}
                     className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                    defaultValue={shms_formSignupData.sName}
                     type='text'
                     placeholder='عبدالرحيم'
                     required
@@ -329,6 +370,7 @@ const SignupPage = () => {
                       ).placeholder = 'محمد'
                     }}
                     className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                    defaultValue={shms_formSignupData.tName}
                     type='text'
                     placeholder='محمد'
                     required
@@ -355,6 +397,7 @@ const SignupPage = () => {
                       ).placeholder = 'مكي'
                     }}
                     className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                    defaultValue={shms_formSignupData.foName}
                     type='text'
                     placeholder='مكي'
                   />
@@ -379,7 +422,7 @@ const SignupPage = () => {
                   nationality={nationality}
                   setNationality={setNationality}
                   placeholder='إختر الجنسية ...'
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full max-h-48 px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 />
               </div>
             </div>
@@ -400,6 +443,7 @@ const SignupPage = () => {
                   id='dateOfBirth'
                   onChange={e => setDateOfBirth(e.target.value)}
                   className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  defaultValue={shms_formSignupData.dateOfBirth}
                   type='date'
                   max={
                     new Date(
@@ -414,7 +458,6 @@ const SignupPage = () => {
               </div>
             </div>
 
-            {addressError && <FormMessage error>{addressError}</FormMessage>}
             <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
@@ -440,6 +483,7 @@ const SignupPage = () => {
                     ).placeholder = 'العــــنوان ...'
                   }}
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  defaultValue={shms_formSignupData.address}
                   type='text'
                   placeholder='العــــنوان ...'
                   required
@@ -471,6 +515,7 @@ const SignupPage = () => {
                   }}
                   onChange={e => setEmail(e.target.value)}
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  defaultValue={shms_formSignupData.email}
                   type='email'
                   placeholder='example@gmail.com'
                   required
@@ -548,9 +593,14 @@ const SignupPage = () => {
                   id='password'
                   onChange={handlePasswordChange}
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  defaultValue={shms_formSignupData.password}
                   type='password'
                   placeholder='******'
                 />
+                <span className='inline-block text-gray-600 w-full text-xxs select-none'>
+                  كلمة المرور يجب ان تكون على الاقل من 8 احرف وتحتوي على حرف كبير وحرف
+                  صغير ورقم وحرف خاص مثل x@xxxxxxxx
+                </span>
               </div>
             </div>
 
@@ -569,11 +619,16 @@ const SignupPage = () => {
                 <input
                   id='confirmPassword'
                   onChange={handleConfirmPasswordChange}
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 text-xs leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  defaultValue={shms_formSignupData.confirmPassword}
                   type='password'
                   placeholder='******'
                   required
                 />
+                <span className='inline-block text-gray-600 w-full text-xxs select-none'>
+                  تأكيد كلمة المرور يجب ان تكون على الاقل من 8 احرف وتحتوي على حرف كبير
+                  وحرف صغير ورقم وحرف خاص مثل x@xxxxxxxx
+                </span>
               </div>
             </div>
 

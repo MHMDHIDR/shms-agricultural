@@ -34,7 +34,7 @@ export default function SelectCountry({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className={cn(`w-[200px] justify-between`, className)}
+          className={cn(`w-[200px] xxxxx justify-between`, className)}
         >
           {nationality
             ? countryNames.find(countryName => countryName.label === nationality)?.label
@@ -42,7 +42,10 @@ export default function SelectCountry({
           <CaretSortIcon className='w-4 h-4 ml-2 opacity-50 shrink-0' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-full p-0 rtl' avoidCollisions={false}>
+      <PopoverContent
+        className='w-full max-h-64 md:max-h-96 overflow-y-auto p-0 rtl'
+        avoidCollisions={false}
+      >
         <Command>
           <CommandInput placeholder='إبحث عن الجنسية' className='px-4 h-9' />
           <CommandEmpty>عفواً لم يتم العثور على البلد</CommandEmpty>

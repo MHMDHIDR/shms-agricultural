@@ -64,6 +64,21 @@ export type ProjectProps = {
   message?: string
 }
 
+export type shms_formSignupDataProps = {
+  fName: string
+  sName: string
+  tName: string
+  foName: string
+  email: string
+  nationality: string
+  dateOfBirth: string
+  address: string
+  password: string
+  confirmPassword: string
+  acceptedTerm: boolean
+  phone: string
+}
+
 export type UserLoggedInProps =
   | (Session & {
       token?: JWT & {

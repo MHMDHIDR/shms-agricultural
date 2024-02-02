@@ -23,6 +23,7 @@ export default function Modal({
   description,
   document,
   className,
+  contentClassName,
   asModal,
   children
 }: {
@@ -30,6 +31,7 @@ export default function Modal({
   description?: string
   document: string
   className?: string
+  contentClassName?: string
   asModal?: boolean
   children: string | React.ReactNode
 }) {
@@ -42,7 +44,7 @@ export default function Modal({
           <Button className={cn(className)}>{children ?? 'إجراء'}</Button>
         )}
       </DialogTrigger>
-      <DialogContent className='sm:max-w-md'>
+      <DialogContent className={cn(`sm:max-w-md`, contentClassName)}>
         <DialogHeader>
           <DialogTitle className='font-bold text-center text-green-600 select-none'>
             {title}
@@ -52,7 +54,7 @@ export default function Modal({
         <div className='flex flex-col items-center gap-y-6'>
           {
             // if document contains pdf in the path then render pdf
-            document.includes('pdf') ? (
+            document?.includes('pdf') ? (
               <div className='w-full h-96'>
                 <iframe src={document} className='w-full h-full' title={title} />
               </div>

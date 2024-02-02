@@ -1,21 +1,21 @@
 'use client'
 
-import { ChangeEvent, useState } from 'react'
-import Link from 'next/link'
-import { signIn } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { toast } from 'sonner'
-import { ReloadIcon } from '@radix-ui/react-icons'
 import { DEFAULT_DURATION } from '@/data/constants'
 import { getAuth } from '@/lib/actions/auth'
 import { validatePasswordStrength } from '@/lib/utils'
 import type { UserProps } from '@/types'
+import { ReloadIcon } from '@radix-ui/react-icons'
+import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { ChangeEvent, useState } from 'react'
+import { toast } from 'sonner'
 
 import { CardWrapper } from '@/components/auth/card-wrapper'
-import { Button } from '@/components/ui/button'
-import { Error, Success } from '@/components/icons/Status'
 import FormMessage from '@/components/custom/FormMessage'
 import Layout from '@/components/custom/Layout'
+import { Error, Success } from '@/components/icons/Status'
+import { Button } from '@/components/ui/button'
 
 const SigninPage = () => {
   // Form States
@@ -151,7 +151,7 @@ const SigninPage = () => {
 
   return (
     <Layout>
-      <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24'>
+      <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24 mx-auto'>
         <CardWrapper
           headerLabel='مرحبا بك'
           backButtonLabel='إنشاء حساب جديد'

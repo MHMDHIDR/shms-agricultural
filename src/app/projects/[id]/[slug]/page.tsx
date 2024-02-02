@@ -1,10 +1,10 @@
 import Layout from '@/components/custom/Layout'
 import Modal from '@/components/custom/Modal'
+import ProjectImages from '@/components/custom/projectsImages'
 import { API_URL, APP_LOGO } from '@/data/constants'
 import { getProjectStudyCase } from '@/lib/utils'
-import type { ProjectProps } from '@/types'
+import type { ProjectProps, imgsProps } from '@/types'
 import axios from 'axios'
-import Image from 'next/image'
 
 export default async function ProjectDetailsPage({
   params: { id: projectId /*, slug*/ }
@@ -17,12 +17,11 @@ export default async function ProjectDetailsPage({
     `${API_URL}/projects/get/${projectId}`
   )
 
-  // to get decoded slug from url
-  // const projectSlug = decodeURI(slug)
+  // to get decoded slug from url ==> onst projectSlug = decodeURI(slug)
 
-  const projectImages: ProjectProps['shms_project_images'] = JSON.parse(
+  const getProjectImages: imgsProps['imgDisplayPath'][] = JSON.parse(
     String(project.shms_project_images)
-  )
+  ).map(({ imgDisplayPath }: imgsProps) => imgDisplayPath)
 
   return (
     <Layout>
@@ -32,16 +31,7 @@ export default async function ProjectDetailsPage({
         </h1>
         {/* Render images in a row */}
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-          {projectImages.map((image, index) => (
-            <Image
-              key={index}
-              src={image.imgDisplayPath}
-              alt={image.imgDisplayName}
-              width={300}
-              height={300}
-              style={{ margin: 20, borderRadius: 10 }}
-            />
-          ))}
+          <ProjectImages images={getProjectImages} />
         </div>
         <p style={{ fontWeight: 'bold' }} dir='rtl'>
           {project.shms_project_description}
@@ -148,6 +138,7 @@ export default async function ProjectDetailsPage({
                     getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO
                   }
                   className='font-bold dark:text-white'
+                  contentClassName='min-w-[90svw]'
                 >
                   عرض دراسة الجدوى
                 </Modal>
