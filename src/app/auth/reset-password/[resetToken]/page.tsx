@@ -1,19 +1,18 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import axios from 'axios'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import FormMessage from '@/components/custom/FormMessage'
-import { Button } from '@/components/ui/button'
-import { Error, Success } from '@/components/icons/Status'
-import { validatePasswordStrength } from '@/lib/utils'
-import { ReloadIcon } from '@radix-ui/react-icons'
-import { validateUUID } from '@/lib/utils'
-import { toast } from 'sonner'
-import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { UserProps } from '@/types'
 import Layout from '@/components/custom/Layout'
+import { Error, Success } from '@/components/icons/Status'
+import { Button } from '@/components/ui/button'
+import { API_URL, DEFAULT_DURATION } from '@/data/constants'
+import { validatePasswordStrength, validateUUID } from '@/lib/utils'
+import type { UserProps } from '@/types'
+import { ReloadIcon } from '@radix-ui/react-icons'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 const ForgotPasswordPage = ({
   params: { resetToken }
@@ -23,7 +22,11 @@ const ForgotPasswordPage = ({
   const HEADING = 'إنشاء كلمة مرور جديدة'
 
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+
   const [passError, setPassError] = useState('')
+  const [passConfirmError, setPassConfirmError] = useState('')
+
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
@@ -31,6 +34,9 @@ const ForgotPasswordPage = ({
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
+  }
+  const handleConfrimPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(e.target.value)
   }
 
   function resetFormErrors() {
@@ -52,6 +58,8 @@ const ForgotPasswordPage = ({
       setPassError(
         'كلمة المرور يجب ان تكون على الاقل 8 احرف وتحتوي على حرف كبير وحرف صغير ورقم وحرف خاص مثل !@#$%^&*()'
       )
+    } else if (confirmPassword !== password) {
+      setPassConfirmError('كلمة المرور يجب أن تتطابق مع كلمة المرور الجديدة')
     } else {
       try {
         resetFormErrors()
@@ -120,7 +128,7 @@ const ForgotPasswordPage = ({
 
   return !validateUUID(resetToken) ? null : (
     <Layout>
-      <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24'>
+      <section className='min-h-screen h-screen mt-32 mb-24 mx-auto'>
         <CardWrapper
           heading={HEADING}
           backButtonLabel='الصفحة الرئيسية'
@@ -131,13 +139,14 @@ const ForgotPasswordPage = ({
             className='container w-full min-w-max'
             dir='rtl'
             onSubmit={e => handelResetForm(e)}
+            noValidate
           >
             {passError && <FormMessage error>{passError}</FormMessage>}
             <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label
                   htmlFor='password'
-                  className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
+                  className='block mb-4 font-bold text-gray-500 md:text-left ml-6 md:mb-0'
                 >
                   كلمة المرور
                 </label>
@@ -150,6 +159,35 @@ const ForgotPasswordPage = ({
                   type='password'
                   placeholder='******'
                 />
+                <span className='inline-block text-gray-600 w-full text-xxs select-none'>
+                  كلمة المرور يجب ان تكون على الاقل من 8 احرف وتحتوي على حرف كبير وحرف
+                  صغير ورقم وحرف خاص مثل x@xxxxxxxx
+                </span>
+              </div>
+            </div>
+
+            {passConfirmError && <FormMessage error>{passConfirmError}</FormMessage>}
+            <div className='mb-6 md:flex md:items-center'>
+              <div className='md:w-1/3'>
+                <label
+                  htmlFor='password'
+                  className='block mb-4 font-bold text-gray-500 md:text-left ml-6 md:mb-0'
+                >
+                  تأكيد كلمة المرور
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <input
+                  id='confirmPassword'
+                  onChange={handleConfrimPasswordChange}
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='confirmPassword'
+                  placeholder='******'
+                />
+                <span className='inline-block text-gray-600 w-full text-xxs select-none'>
+                  تأكيد كلمة المرور يجب ان تكون على الاقل من 8 احرف وتحتوي على حرف كبير
+                  وحرف صغير ورقم وحرف خاص مثل x@xxxxxxxx
+                </span>
               </div>
             </div>
 
