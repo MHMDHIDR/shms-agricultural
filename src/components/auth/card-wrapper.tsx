@@ -9,8 +9,8 @@ interface CardWrapperProps {
   children: React.ReactNode
   heading?: string | React.ReactNode
   headerLabel?: string
-  backButtonLabel: string | React.ReactNode
-  backButtonHref: string
+  backButtonLabel?: string | React.ReactNode
+  backButtonHref?: string
   backButtonTarget?: string
   className?: string
 }
@@ -31,11 +31,13 @@ export const CardWrapper = ({
       </CardHeader>
       <CardContent>{children}</CardContent>
       <CardFooter>
-        <BackButton
-          label={backButtonLabel}
-          href={backButtonHref}
-          target={backButtonTarget ?? '_self'}
-        />
+        {backButtonLabel ? (
+          <BackButton
+            label={backButtonLabel}
+            href={backButtonHref ?? '/'}
+            target={backButtonTarget ?? '_self'}
+          />
+        ) : null}
       </CardFooter>
     </Card>
   )
