@@ -28,7 +28,7 @@ const ProjectImages = ({ images }: { images: string[] }) => {
     <main className={`flex min-h-screen items-center justify-between p-24`}>
       <div>
         {images.map((imageUrl, index) => (
-          <img
+          <Image
             key={index}
             src={imageUrl}
             alt={`Image ${index + 1}`}
