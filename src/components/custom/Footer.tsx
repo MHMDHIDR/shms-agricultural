@@ -1,3 +1,4 @@
+import Divider from '@/components/custom/Divider'
 import {
   FacebookIcon,
   InstagramIcon,
@@ -9,8 +10,8 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    // simple black background footer with soccial media links
     <footer className='w-screen mt-20'>
+      <Divider />
       <section className='flex items-center justify-center w-full h-24 rtl gap-x-20'>
         <Link
           className='opacity-60 hover:opacity-90 hover:-translate-y-1 transition'
@@ -41,7 +42,7 @@ export default function Footer() {
           <TwitterIcon className='w-5 h-5 md:w-6 md:h-6' />
         </Link>
       </section>
-      <p className='text-gray-400 text-center'>
+      <p className='text-gray-400 text-center pb-6 select-none'>
         <span>&copy; {new Date().getFullYear()} </span>
         <span>{APP_TITLE}</span>
       </p>

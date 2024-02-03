@@ -1,7 +1,12 @@
 'use client'
 
-import { API_URL, DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
 import {
+  API_URL,
+  DEFAULT_DURATION,
+  MAX_FILE_UPLOAD_SIZE,
+  NAV_HEIGHT
+} from '@/data/constants'
+import scrollToView, {
   validateEmail,
   validateFile,
   validatePasswordStrength,
@@ -13,7 +18,7 @@ import axios from 'axios'
 import { Info } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { toast } from 'sonner'
@@ -46,6 +51,15 @@ const SignupPage = () => {
   const [file, setFile] = useState<File[]>([])
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+
+  const fNameRef = useRef<HTMLInputElement>(null)
+  const dateOfBirthRef = useRef<HTMLInputElement>(null)
+  const emailRef = useRef<HTMLInputElement>(null)
+  const phoneRef = useRef<HTMLDivElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
+  const confirmPasswordRef = useRef<HTMLInputElement>(null)
+  const documentRef = useRef<HTMLInputElement>(null)
+  const acceptTermsRef = useRef<HTMLLabelElement>(null)
 
   const { replace } = useRouter()
 
@@ -152,42 +166,53 @@ const SignupPage = () => {
     if (fName === '' || sName === '' || tName === '') {
       resetFormErrors()
       setFullNameError('الرجاء التأكد من إدخال الاسم الأول، والثاني، والثالث')
+      scrollToView(fNameRef.current!.offsetTop - NAV_HEIGHT)
     } else if (nationality === '') {
       resetFormErrors()
       setNationlityError('الرجاء التأكد من إدخال الجنسية')
     } else if (dateOfBirth === '') {
       resetFormErrors()
       setDateOfBirthError('الرجاء التأكد من إدخال تاريخ الميلاد')
+      scrollToView(dateOfBirthRef.current!.offsetTop - NAV_HEIGHT)
     } else if (!validateEmail(email)) {
       resetFormErrors()
       setEmailError('الرجاء التأكد من صحة البريد الالكتروني')
+      scrollToView(emailRef.current!.offsetTop - NAV_HEIGHT)
     } else if (phone === '') {
       resetFormErrors()
       setPhoneError('الرجاء التأكد من إدخال رقم الهاتف')
+      scrollToView(phoneRef.current!.offsetTop - NAV_HEIGHT)
     } else if (!validatePhone(phone)) {
       resetFormErrors()
       setPhoneError('الرجاء التأكد من إدخال رقم الهاتف بشكل صحيح')
+      scrollToView(phoneRef.current!.offsetTop - NAV_HEIGHT)
     } else if (password === '') {
       resetFormErrors()
       setPassError('الرجاء التأكد من إدخال كلمة المرور')
+      scrollToView(passwordRef.current!.offsetTop - NAV_HEIGHT)
     } else if (!validatePasswordStrength(password)) {
       resetFormErrors()
       setPassError(
         'كلمة المرور يجب ان تكون على الاقل 8 احرف وتحتوي على حرف كبير وحرف صغير ورقم وحرف خاص مثل !@#$%^&*()'
       )
+      scrollToView(passwordRef.current!.offsetTop - NAV_HEIGHT)
     } else if (confirmPassword !== password) {
       setPassConfirmError('الرجاء التأكد من تطابق كلمة المرور')
+      scrollToView(confirmPasswordRef.current!.offsetTop - NAV_HEIGHT)
     } else if (!validatePasswordStrength(confirmPassword)) {
       resetFormErrors()
       setPassConfirmError(
         'تأكيد كلمة المرور يجب ان تكون على الاقل 8 احرف وتحتوي على حرف كبير وحرف صغير ورقم وحرف خاص مثل !@#$%^&*()'
       )
+      scrollToView(confirmPasswordRef.current!.offsetTop - NAV_HEIGHT)
     } else if (!file[0]) {
       resetFormErrors()
       setFileError('الرجاء التأكد من رفع صورة المستند الرسمي')
+      scrollToView(documentRef.current!.offsetTop - NAV_HEIGHT)
     } else if (!acceptedTerm) {
       resetFormErrors()
       setAcceptedTermError('الرجاء الموافقة على بنود الاستخدام وسياسة الخصوصية')
+      scrollToView(acceptTermsRef.current!.offsetTop - NAV_HEIGHT)
     } else {
       try {
         resetFormErrors()
@@ -196,7 +221,6 @@ const SignupPage = () => {
         formData.append('fullname', userFullName)
         formData.append('multiple', 'false')
         formData.append('file', file[0]!)
-
         // upload the project images to s3
         const {
           data: { shms_id, shms_doc }
@@ -219,7 +243,6 @@ const SignupPage = () => {
         )
         //getting response from backend
         const { data } = joinUser
-
         // make sure to view the response from the data
         data.userAdded === 1 &&
           toast(
@@ -238,7 +261,6 @@ const SignupPage = () => {
               }
             }
           )
-
         setTimeout(() => replace(`/`), DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
@@ -277,7 +299,7 @@ const SignupPage = () => {
 
   return (
     <Layout>
-      <section className='mt-32 mb-auto mx-auto'>
+      <section className='mt-[55rem] md:mt-[50rem] mb-auto mx-auto'>
         <CardWrapper
           headerLabel='إنضم إلينا'
           backButtonLabel='لديك حساب بالفعل؟ تسجيل الدخول'
@@ -304,6 +326,7 @@ const SignupPage = () => {
                     id='firstName'
                     defaultValue={shms_formSignupData.fName}
                     type='text'
+                    ref={fNameRef}
                     onFocus={() =>
                       ((
                         document.getElementById('firstName') as HTMLInputElement
@@ -445,12 +468,10 @@ const SignupPage = () => {
                   className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   defaultValue={shms_formSignupData.dateOfBirth}
                   type='date'
+                  ref={dateOfBirthRef}
                   max={
-                    new Date(
-                      new Date().getFullYear() - 18,
-                      new Date().getMonth(),
-                      new Date().getDate()
-                    )
+                    // the minimum age is 18
+                    new Date(new Date().setFullYear(new Date().getFullYear() - 18))
                       .toISOString()
                       .split('T')[0]
                   }
@@ -465,7 +486,6 @@ const SignupPage = () => {
                   className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                 >
                   العنوان
-                  <span className='text-red-500'>*</span>
                 </label>
               </div>
               <div className='md:w-2/3'>
@@ -517,6 +537,7 @@ const SignupPage = () => {
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   defaultValue={shms_formSignupData.email}
                   type='email'
+                  ref={emailRef}
                   placeholder='example@gmail.com'
                   required
                 />
@@ -535,7 +556,7 @@ const SignupPage = () => {
                 </label>
               </div>
               <div className='md:w-2/3'>
-                <div style={{ position: 'relative', width: '100%' }}>
+                <div style={{ position: 'relative', width: '100%' }} ref={phoneRef}>
                   <PhoneInput
                     containerStyle={{ direction: 'ltr' }}
                     country={'qa'}
@@ -547,17 +568,11 @@ const SignupPage = () => {
                     }
                     onChange={e => setPhone(e)}
                     onBlur={() => {
-                      //blurPhone(e.target.value)
-
                       ;(
                         document.querySelector('input[type="tel"]') as HTMLInputElement
                       ).placeholder = '55123456'
                     }}
-                    //dir='rtl'
-                    // type='tel'
                     placeholder='55123456'
-                    //  required
-
                     preferredCountries={['qa', 'sd']}
                     inputStyle={{
                       width: '100%',
@@ -595,6 +610,7 @@ const SignupPage = () => {
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   defaultValue={shms_formSignupData.password}
                   type='password'
+                  ref={passwordRef}
                   placeholder='******'
                 />
                 <span className='inline-block text-gray-600 w-full text-xxs select-none'>
@@ -619,9 +635,10 @@ const SignupPage = () => {
                 <input
                   id='confirmPassword'
                   onChange={handleConfirmPasswordChange}
-                  className='w-full px-4 py-2 text-xs leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   defaultValue={shms_formSignupData.confirmPassword}
                   type='password'
+                  ref={confirmPasswordRef}
                   placeholder='******'
                   required
                 />
@@ -647,6 +664,7 @@ const SignupPage = () => {
                 <Input
                   id='document'
                   type='file'
+                  ref={documentRef}
                   aria-label='file'
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded cursor-pointer dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   onChange={handleFileChange}
@@ -660,6 +678,7 @@ const SignupPage = () => {
               <label
                 htmlFor='accept_termsAndPrivacy'
                 className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
+                ref={acceptTermsRef}
               >
                 <Checkbox
                   id='accept_termsAndPrivacy'

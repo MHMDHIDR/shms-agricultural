@@ -158,7 +158,7 @@ export default function ProjectsTable() {
                 {getProjectDate(project.shms_project_invest_date)}
               </TableCell>
               <TableCell className='min-w-40'>
-                {project.shms_project_available_stocks}
+                {project.shms_project_total_stocks}
               </TableCell>
               <TableCell className='min-w-40'>
                 {project.shms_project_stock_price}

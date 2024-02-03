@@ -14,6 +14,12 @@ export const FILE_UPLOAD_IMG_SIZE = 122
 //  max file upload size in MB = 5 MB
 export const MAX_FILE_UPLOAD_SIZE = 5
 
+export const NAV_HEIGHT =
+  typeof window === 'undefined' ||
+  (document.querySelector('header') as HTMLElement) === null
+    ? 150
+    : (document.querySelector('header') as HTMLElement).offsetHeight + 50
+
 /**
  * @description الوفت الافتراضي لإخفاء رسالة التنبيه بعد ظهورها = 5 ثواني
  */

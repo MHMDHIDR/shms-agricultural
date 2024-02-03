@@ -183,7 +183,7 @@ export default function Projects() {
             shms_project_start_date: projectStartDate,
             shms_project_end_date: projectEndDate,
             shms_project_invest_date: projectInvestEndDate,
-            shms_project_available_stocks: projectAvailableStocks,
+            shms_project_total_stocks: projectAvailableStocks,
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
             shms_project_description: projectDescription,

@@ -2,7 +2,6 @@
 
 import Confirm from '@/components/custom/Confirm'
 import Modal from '@/components/custom/Modal'
-import { Error, Success } from '@/components/icons/Status'
 import {
   Card,
   CardContent,
@@ -10,6 +9,12 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { Error, Success } from '@/components/icons/Status'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
@@ -24,13 +29,16 @@ import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
 import { arabicDate } from '@/lib/utils'
 import type { UserProps } from '@/types'
 import axios from 'axios'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 export default function Users() {
   const [users, setUsers] = useState<UserProps[]>([])
+
   const [userDeleted, setUserDeleted] = useState<UserProps['userDeleted']>(0)
+  const [userUpdated, setUserUpdated] = useState<UserProps['userUpdated']>(0)
 
   const { refresh } = useRouter()
 
@@ -41,7 +49,7 @@ export default function Users() {
 
   useEffect(() => {
     getUsers()
-  }, [userDeleted])
+  }, [userDeleted, userUpdated])
 
   const deleteUser = async (id: string, S3docId: string) => {
     try {
@@ -105,6 +113,64 @@ export default function Users() {
     }
   }
 
+  const toggleUserStatus = async (
+    id: string,
+    status: UserProps['shms_user_account_status']
+  ) => {
+    try {
+      const { data }: { data: UserProps } = await axios.patch(
+        `${API_URL}/users/toggleStatus/${id}`,
+        { status }
+      )
+
+      if (data.userUpdated === 1) {
+        toast(data.message ?? 'تم تحديث حالة المستخدم بنجاح 👍🏼', {
+          icon: <Success className='w-6 h-6 ml-3' />,
+          position: 'bottom-center',
+          className: 'text-right select-none rtl',
+          duration: DEFAULT_DURATION,
+          style: {
+            backgroundColor: '#F0FAF0',
+            color: '#367E18',
+            border: '1px solid #367E18',
+            gap: '1.5rem',
+            textAlign: 'justify'
+          }
+        })
+      } else {
+        toast('حدث خطأ ما', {
+          icon: <Error className='w-6 h-6 ml-3' />,
+          position: 'bottom-center',
+          className: 'text-right select-none rtl',
+          style: {
+            backgroundColor: '#FFF0F0',
+            color: '#BE2A2A',
+            border: '1px solid #BE2A2A',
+            gap: '1.5rem',
+            textAlign: 'justify'
+          }
+        })
+      }
+
+      setUserUpdated(data.userUpdated ?? 0)
+      setTimeout(() => refresh(), DEFAULT_DURATION)
+    } catch (error) {
+      toast('حدث خطأ ما', {
+        icon: <Error className='w-6 h-6 ml-3' />,
+        position: 'bottom-center',
+        className: 'text-right select-none rtl',
+        style: {
+          backgroundColor: '#FFF0F0',
+          color: '#BE2A2A',
+          border: '1px solid #BE2A2A',
+          gap: '1.5rem',
+          textAlign: 'justify'
+        }
+      })
+      console.error('Error =>', error)
+    }
+  }
+
   return (
     <TabsContent dir='rtl' value='users'>
       <div style={{ width: '100%', display: 'flex' }}>
@@ -143,26 +209,72 @@ export default function Users() {
                       <TableCell className='min-w-40'>
                         {arabicDate(user.shms_created_at ?? '')}
                       </TableCell>
-                      <TableCell className='min-w-40'>{user.shms_phone}</TableCell>
-                      <TableCell className='min-w-40'>{user.shms_email}</TableCell>
                       <TableCell className='min-w-40'>
-                        {user.shms_user_account_status === 'active' ? 'نشط' : 'غير نشط'}
+                        <Link href={`tel:${user.shms_phone}`}>{user.shms_phone}</Link>
+                      </TableCell>
+                      <TableCell className='min-w-40'>{user.shms_email}</TableCell>
+                      <TableCell
+                        className={
+                          user.shms_user_account_status === 'active'
+                            ? 'text-green-600'
+                            : user.shms_user_account_status === 'block'
+                            ? 'text-red-600'
+                            : 'text-gray-600'
+                        }
+                      >
+                        {user.shms_user_account_status === 'active'
+                          ? 'نشط'
+                          : user.shms_user_account_status === 'block'
+                          ? 'محظور'
+                          : 'غير مفعل'}
                       </TableCell>
                       <TableCell className='min-w-40'>
                         {user.shms_user_stocks?.length ?? 'لم يتم شراء أسهم بعد'}
                       </TableCell>
                       <TableCell className='flex min-w-56 gap-x-2'>
-                        <Confirm
-                          variant={'destructive'}
-                          onClick={async () => {
-                            await deleteUser(
-                              user.shms_id,
-                              user.shms_doc?.split('/').pop() ?? ''
-                            )
-                          }}
-                        >
-                          حذف
-                        </Confirm>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger>
+                            <span className='border py-1.5 px-4 rounded-md hover:bg-gray-100 transition-colors'>
+                              الاجراء
+                            </span>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className='space-y-2'>
+                            {/* Delete Button */}
+                            <Confirm
+                              variant={'destructive'}
+                              onClick={async () => {
+                                await deleteUser(
+                                  user.shms_id,
+                                  user.shms_doc?.split('/').pop() ?? ''
+                                )
+                              }}
+                              className='w-full'
+                            >
+                              حذف
+                            </Confirm>
+                            {/* Toggle User Status Button */}
+                            <Confirm
+                              variant={'secondary'}
+                              onClick={async () => {
+                                await toggleUserStatus(
+                                  user.shms_id,
+                                  user.shms_user_account_status === 'block'
+                                    ? 'active'
+                                    : user.shms_user_account_status === 'pending'
+                                    ? 'active'
+                                    : 'block'
+                                )
+                              }}
+                              className='w-full bg-gray-200'
+                            >
+                              {user.shms_user_account_status === 'block'
+                                ? 'تفعيل'
+                                : user.shms_user_account_status === 'pending'
+                                ? 'تفعيل الحساب'
+                                : 'تعطيل'}
+                            </Confirm>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                         <Modal
                           title={`صورة المستند لــ ${user.shms_fullname}`}
                           document={user.shms_doc ?? APP_LOGO}

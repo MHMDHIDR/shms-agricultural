@@ -26,6 +26,8 @@ export type UserProps = {
   loggedIn?: number
   // When user is registered, this is set to 1
   userAdded?: number
+  // When user is updated, this is set to 1
+  userUpdated?: number
   // When user is activated, this is set to 1
   userActivated?: number
   // When user forgot password, this is set to 1
@@ -49,6 +51,7 @@ export type ProjectProps = {
   shms_project_end_date: Date
   shms_project_invest_date: Date
   shms_project_available_stocks: number
+  shms_project_total_stocks: number
   shms_project_stock_price: number
   shms_project_stock_profits: number
   shms_project_description: string

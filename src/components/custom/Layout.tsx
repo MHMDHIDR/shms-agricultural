@@ -7,10 +7,10 @@ import Nav from '@/components/navigation/Nav'
  */
 export default function Layout({ children }: { children: React.ReactNode }): JSX.Element {
   return (
-    <section className='flex flex-col h-screen justify-between'>
+    <>
       <Nav />
       {children}
       <Footer />
-    </section>
+    </>
   )
 }

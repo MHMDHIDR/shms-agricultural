@@ -23,7 +23,7 @@ export default function Confirm({
 }: ConfirmProps) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger className='w-full'>
         <Button variant={variant} asSpan className={className}>
           {children ?? 'إجراء'}
         </Button>

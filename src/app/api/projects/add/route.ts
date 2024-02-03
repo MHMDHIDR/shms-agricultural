@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     shms_project_start_date,
     shms_project_end_date,
     shms_project_invest_date,
-    shms_project_available_stocks,
+    shms_project_total_stocks,
     shms_project_stock_price,
     shms_project_stock_profits,
     shms_project_description,
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
                           shms_project_start_date,
                           shms_project_end_date,
                           shms_project_invest_date,
-                          shms_project_available_stocks,
+                          shms_project_total_stocks,
                           shms_project_stock_price,
                           shms_project_stock_profits,
                           shms_project_description)
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
         shms_project_start_date,
         shms_project_end_date,
         shms_project_invest_date,
-        shms_project_available_stocks,
+        shms_project_total_stocks,
         shms_project_stock_price,
         shms_project_stock_profits,
         shms_project_description

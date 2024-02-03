@@ -1,10 +1,12 @@
 import Layout from '@/components/custom/Layout'
 import Modal from '@/components/custom/Modal'
+import { PercentageSlider } from '@/components/custom/PercentageSlider'
 import ProjectImages from '@/components/custom/projectsImages'
 import { API_URL, APP_LOGO } from '@/data/constants'
 import { getProjectStudyCase } from '@/lib/utils'
 import type { ProjectProps, imgsProps } from '@/types'
 import axios from 'axios'
+import Link from 'next/link'
 
 export default async function ProjectDetailsPage({
   params: { id: projectId /*, slug*/ }
@@ -22,6 +24,22 @@ export default async function ProjectDetailsPage({
   const getProjectImages: imgsProps['imgDisplayPath'][] = JSON.parse(
     String(project.shms_project_images)
   ).map(({ imgDisplayPath }: imgsProps) => imgDisplayPath)
+
+  const getProjectCompletedPercentage = (available: number, total: number) => {
+    return (
+      Number(
+        Math.min(
+          // it will return the minimum value between the two values
+          Math.round(
+            100 - (available / total) * 100 < 100
+              ? 100 - (available / total) * 100 + 1
+              : 100 - (available / total) * 100
+          ),
+          100
+        )
+      ) || 0
+    ) // 0 is a fallback value
+  }
 
   return (
     <Layout>
@@ -85,7 +103,6 @@ export default async function ProjectDetailsPage({
               </p>
             </div>
           </div>
-
           <div style={{ width: '50%', backgroundColor: 'gray' }}>
             <div style={{ margin: 20 }} dir='rtl' className='flex items-center'>
               <svg
@@ -128,7 +145,6 @@ export default async function ProjectDetailsPage({
               </p>
             </div>
           </div>
-
           {project.shms_project_study_case_visibility ? (
             <div style={{ width: '50%', backgroundColor: 'gray' }}>
               <div style={{ margin: 20 }} dir='rtl' className='flex items-center'>
@@ -146,6 +162,26 @@ export default async function ProjectDetailsPage({
             </div>
           ) : null}
         </div>
+
+        {/*  نسبة إكتمال المشروع */}
+        <p className='select-none font-bold'>نسبة إكتمال المشروع</p>
+        <PercentageSlider
+          // 1 تم إضافته لتجنب القيمة الصفرية  للنسبة المئوية و لعدم إظهار النسبة بشكل حقيقي
+          value={[
+            getProjectCompletedPercentage(
+              project.shms_project_available_stocks,
+              project.shms_project_total_stocks
+            )
+          ]}
+        />
+
+        {/* زر شراء السهم */}
+        <Link
+          href={`/projects/${projectId}/buy`}
+          className='bg-green-500 hover:bg-green-700 text-white p-4 rounded-lg mt-10'
+        >
+          شراء أسهم من المشروع
+        </Link>
       </main>
     </Layout>
   )

@@ -2,23 +2,15 @@
 
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import FormMessage from '@/components/custom/FormMessage'
-import {
-  FacebookIcon,
-  InstagramIcon,
-  TwitterIcon,
-  YouTubeIcon
-} from '@/components/icons/Socials'
 import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { Info } from 'lucide-react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-import Divider from '@/components/custom/Divider'
 import Layout from '@/components/custom/Layout'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import type { UserProps, emailProps } from '@/types'
@@ -235,43 +227,6 @@ const Contact = () => {
               </Button>
             </div>
           </form>
-
-          <Divider className='my-10' />
-
-          {/* Social Icons */}
-          <div className='flex items-center justify-center my-12 gap-x-10'>
-            <Link
-              className='hover:-translate-y-1 transition-transform'
-              href='https://facebook.com'
-              target='_blank'
-            >
-              <FacebookIcon />
-            </Link>
-
-            <Link
-              className='hover:-translate-y-1 transition-transform'
-              href='https://instagram.com/shmsagri'
-              target='_blank'
-            >
-              <InstagramIcon />
-            </Link>
-
-            <Link
-              className='hover:-translate-y-1 transition-transform'
-              href='https://youtube.com'
-              target='_blank'
-            >
-              <YouTubeIcon />
-            </Link>
-
-            <Link
-              className='hover:-translate-y-1 transition-transform'
-              href='https://twitter.com'
-              target='_blank'
-            >
-              <TwitterIcon />
-            </Link>
-          </div>
         </CardWrapper>
       </section>
     </Layout>

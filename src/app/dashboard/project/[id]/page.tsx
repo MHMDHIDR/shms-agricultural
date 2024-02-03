@@ -40,6 +40,7 @@ export default function EditProjectPage({
   const [projectStartDate, setProjectStartDate] = useState<Date>()
   const [projectEndDate, setProjectEndDate] = useState<Date>()
   const [projectInvestEndDate, setProjectInvestEndDate] = useState<Date>()
+  const [projectTotalStocks, setProjectTotalStocks] = useState<number>(0)
   const [projectAvailableStocks, setProjectAvailableStocks] = useState<number>(0)
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
@@ -66,7 +67,7 @@ export default function EditProjectPage({
   const [projectStartDateError, setProjectStartDateError] = useState('')
   const [projectEndDateError, setProjectEndDateError] = useState('')
   const [projectInvestEndDateError, setProjectInvestEndDateError] = useState('')
-  const [projectAvailableStocksError, setProjectAvailableStocksError] = useState('')
+  const [projectTotalStocksError, setProjectTotalStocksError] = useState('')
   const [stockPriceError, setStockPriceError] = useState('')
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
@@ -99,6 +100,7 @@ export default function EditProjectPage({
       setProjectStartDate(new Date(project.shms_project_start_date))
       setProjectEndDate(new Date(project.shms_project_end_date))
       setProjectInvestEndDate(new Date(project.shms_project_invest_date))
+      setProjectTotalStocks(project.shms_project_total_stocks)
       setProjectAvailableStocks(project.shms_project_available_stocks)
       setStockPrice(project.shms_project_stock_price)
       setStockProfits(project.shms_project_stock_profits)
@@ -159,9 +161,9 @@ export default function EditProjectPage({
     } else if (!projectInvestEndDate) {
       resetFormErrors()
       setProjectInvestEndDateError('الرجاء التأكد من تحديد تاريخ اخر موعد للمساهمة')
-    } else if (!projectAvailableStocks || projectAvailableStocks === 0) {
+    } else if (!projectTotalStocks || projectTotalStocks === 0) {
       resetFormErrors()
-      setProjectAvailableStocksError('الرجاء التأكد من كتابة عدد الأسهم المتاحة')
+      setProjectTotalStocksError('الرجاء التأكد من كتابة عدد الأسهم الإجمالي')
     } else if (!stockPrice || stockPrice === 0) {
       resetFormErrors()
       setStockPriceError('الرجاء التأكد من كتابة سعر السهم')
@@ -243,7 +245,7 @@ export default function EditProjectPage({
             shms_project_start_date: projectStartDate,
             shms_project_end_date: projectEndDate,
             shms_project_invest_date: projectInvestEndDate,
-            shms_project_available_stocks: projectAvailableStocks,
+            shms_project_total_stocks: projectTotalStocks,
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
             shms_project_description: projectDescription,
@@ -418,22 +420,39 @@ export default function EditProjectPage({
             )}
 
             <div className='space-y-1'>
-              <Label htmlFor='projectAvailableStocks'>عدد الأسهم المتاحة</Label>
+              <Label htmlFor='projectTotalStocks'>عدد الأسهم الإجمالي</Label>
               <div className='md:w-3/3'>
                 <input
-                  id='projectAvailableStocks'
+                  id='projectTotalStocks'
                   className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='number'
                   inputMode='numeric'
                   min={0}
-                  onChange={e => setProjectAvailableStocks(parseFloat(e.target.value))}
-                  defaultValue={projectAvailableStocks}
+                  onChange={e => setProjectTotalStocks(parseFloat(e.target.value))}
+                  // defaultValue={projectTotalStocks}
+                  value={projectTotalStocks}
                 />
               </div>
             </div>
-            {projectAvailableStocksError && (
-              <FormMessage error>{projectAvailableStocksError}</FormMessage>
+            {projectTotalStocksError && (
+              <FormMessage error>{projectTotalStocksError}</FormMessage>
             )}
+
+            <div className='space-y-1'>
+              <Label htmlFor='projectAvailableStocks'>عدد الأسهم المتاحة</Label>
+              <div className='md:w-3/3'>
+                <input
+                  id='projectAvailableStocks'
+                  className='w-full px-4 py-2 leading-tight font-bold select-none text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='number'
+                  inputMode='numeric'
+                  min={0}
+                  onChange={e => setProjectAvailableStocks(parseFloat(e.target.value))}
+                  value={projectAvailableStocks}
+                  disabled={true}
+                />
+              </div>
+            </div>
 
             <div className='space-y-1'>
               <Label htmlFor='stockPrice'>قيمة السهم الواحد</Label>
