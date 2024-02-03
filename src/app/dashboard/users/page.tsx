@@ -33,9 +33,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { ConfirmDialog } from '@/components/custom/ConfirmDialog'
 
 export default function Users() {
   const [users, setUsers] = useState<UserProps[]>([])
+  const [userStockLimit, setUserStockLimit] =
+    useState<UserProps['shms_user_stock_limit']>(1)
 
   const [userDeleted, setUserDeleted] = useState<UserProps['userDeleted']>(0)
   const [userUpdated, setUserUpdated] = useState<UserProps['userUpdated']>(0)
@@ -50,6 +53,10 @@ export default function Users() {
   useEffect(() => {
     getUsers()
   }, [userDeleted, userUpdated])
+
+  useEffect(() => {
+    console.log('userStockLimit =>', userStockLimit)
+  }, [userStockLimit])
 
   const deleteUser = async (id: string, S3docId: string) => {
     try {
@@ -171,6 +178,61 @@ export default function Users() {
     }
   }
 
+  const updateUserStockLimit = async (id: string, stockLimit: number) => {
+    try {
+      const { data }: { data: UserProps } = await axios.patch(
+        `${API_URL}/users/updateStockLimit/${id}`,
+        { stockLimit }
+      )
+
+      if (data.userUpdated === 1) {
+        toast(data.message ?? 'تم تحديث حد شراء الاسهم بنجاح 👍🏼', {
+          icon: <Success className='w-6 h-6 ml-3' />,
+          position: 'bottom-center',
+          className: 'text-right select-none rtl',
+          duration: DEFAULT_DURATION,
+          style: {
+            backgroundColor: '#F0FAF0',
+            color: '#367E18',
+            border: '1px solid #367E18',
+            gap: '1.5rem',
+            textAlign: 'justify'
+          }
+        })
+      } else {
+        toast('حدث خطأ ما', {
+          icon: <Error className='w-6 h-6 ml-3' />,
+          position: 'bottom-center',
+          className: 'text-right select-none rtl',
+          style: {
+            backgroundColor: '#FFF0F0',
+            color: '#BE2A2A',
+            border: '1px solid #BE2A2A',
+            gap: '1.5rem',
+            textAlign: 'justify'
+          }
+        })
+      }
+
+      setUserUpdated(data.userUpdated ?? 0)
+      setTimeout(() => refresh(), DEFAULT_DURATION)
+    } catch (error) {
+      toast('حدث خطأ ما', {
+        icon: <Error className='w-6 h-6 ml-3' />,
+        position: 'bottom-center',
+        className: 'text-right select-none rtl',
+        style: {
+          backgroundColor: '#FFF0F0',
+          color: '#BE2A2A',
+          border: '1px solid #BE2A2A',
+          gap: '1.5rem',
+          textAlign: 'justify'
+        }
+      })
+      console.error('Error =>', error)
+    }
+  }
+
   return (
     <TabsContent dir='rtl' value='users'>
       <div style={{ width: '100%', display: 'flex' }}>
@@ -189,6 +251,7 @@ export default function Users() {
                   <TableHead>البريد الالكتروني</TableHead>
                   <TableHead>حالة المستخدم</TableHead>
                   <TableHead>عدد الاسهم</TableHead>
+                  <TableHead>حد شراء الأسهم</TableHead>
                   <TableHead>الاجراء</TableHead>
                 </TableRow>
               </TableHeader>
@@ -231,6 +294,9 @@ export default function Users() {
                       <TableCell className='min-w-40'>
                         {user.shms_user_stocks?.length ?? 'لم يتم شراء أسهم بعد'}
                       </TableCell>
+                      <TableCell className='min-w-40'>
+                        {user.shms_user_stock_limit ?? 1}
+                      </TableCell>
                       <TableCell className='flex min-w-56 gap-x-2'>
                         <DropdownMenu>
                           <DropdownMenuTrigger>
@@ -238,7 +304,7 @@ export default function Users() {
                               الاجراء
                             </span>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent className='space-y-2'>
+                          <DropdownMenuContent className='space-y-2 max-w-20'>
                             {/* Delete Button */}
                             <Confirm
                               variant={'destructive'}
@@ -273,6 +339,13 @@ export default function Users() {
                                 ? 'تفعيل الحساب'
                                 : 'تعطيل'}
                             </Confirm>
+                            <ConfirmDialog
+                              StockLimit={userStockLimit}
+                              onClick={async () => {
+                                await updateUserStockLimit(user.shms_id, userStockLimit!)
+                              }}
+                              onChange={e => setUserStockLimit(Number(e.target.value))}
+                            ></ConfirmDialog>
                           </DropdownMenuContent>
                         </DropdownMenu>
                         <Modal

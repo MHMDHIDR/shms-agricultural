@@ -15,6 +15,7 @@ export type UserProps = {
   shms_address?: string
   shms_doc?: string
   shms_user_stocks?: ProjectProps[]
+  shms_user_stock_limit?: number
   shms_created_at?: string
   shms_user_account_type?: 'admin' | 'user'
   shms_user_account_status?: 'active' | 'block' | 'pending'

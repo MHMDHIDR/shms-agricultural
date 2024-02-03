@@ -6,11 +6,12 @@ import {
   MAX_FILE_UPLOAD_SIZE,
   NAV_HEIGHT
 } from '@/data/constants'
-import scrollToView, {
+import {
   validateEmail,
   validateFile,
   validatePasswordStrength,
-  validatePhone
+  validatePhone,
+  scrollToView
 } from '@/lib/utils'
 import type { UserProps, shms_formSignupDataProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
