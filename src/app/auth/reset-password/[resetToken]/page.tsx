@@ -128,7 +128,7 @@ const ForgotPasswordPage = ({
 
   return !validateUUID(resetToken) ? null : (
     <Layout>
-      <section className='min-h-screen h-screen mt-32 mb-24 mx-auto'>
+      <section className='h-screen min-h-screen mx-auto mt-32 mb-24'>
         <CardWrapper
           heading={HEADING}
           backButtonLabel='الصفحة الرئيسية'
@@ -146,7 +146,7 @@ const ForgotPasswordPage = ({
               <div className='md:w-1/3'>
                 <label
                   htmlFor='password'
-                  className='block mb-4 font-bold text-gray-500 md:text-left ml-6 md:mb-0'
+                  className='block mb-4 ml-6 font-bold text-gray-500 md:text-left md:mb-0'
                 >
                   كلمة المرور
                 </label>
@@ -159,7 +159,7 @@ const ForgotPasswordPage = ({
                   type='password'
                   placeholder='******'
                 />
-                <span className='inline-block text-gray-600 w-full text-xxs select-none'>
+                <span className='inline-block w-full text-gray-600 select-none text-xxs'>
                   كلمة المرور يجب ان تكون على الاقل من 8 احرف وتحتوي على حرف كبير وحرف
                   صغير ورقم وحرف خاص مثل x@xxxxxxxx
                 </span>
@@ -171,7 +171,7 @@ const ForgotPasswordPage = ({
               <div className='md:w-1/3'>
                 <label
                   htmlFor='password'
-                  className='block mb-4 font-bold text-gray-500 md:text-left ml-6 md:mb-0'
+                  className='block mb-4 ml-6 font-bold text-gray-500 md:text-left md:mb-0'
                 >
                   تأكيد كلمة المرور
                 </label>
@@ -184,7 +184,7 @@ const ForgotPasswordPage = ({
                   type='confirmPassword'
                   placeholder='******'
                 />
-                <span className='inline-block text-gray-600 w-full text-xxs select-none'>
+                <span className='inline-block w-full text-gray-600 select-none text-xxs'>
                   تأكيد كلمة المرور يجب ان تكون على الاقل من 8 احرف وتحتوي على حرف كبير
                   وحرف صغير ورقم وحرف خاص مثل x@xxxxxxxx
                 </span>

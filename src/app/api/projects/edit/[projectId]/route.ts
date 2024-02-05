@@ -15,9 +15,12 @@ export async function PATCH(
     shms_project_start_date,
     shms_project_end_date,
     shms_project_invest_date,
+    shms_project_profits_collect_date,
     shms_project_total_stocks,
     shms_project_stock_price,
     shms_project_stock_profits,
+    shms_project_special_percentage,
+    shms_project_special_percentage_code,
     shms_project_description,
     shms_project_study_case,
     shms_project_study_case_visibility,
@@ -35,6 +38,11 @@ export async function PATCH(
     )
   }
 
+  console.log({
+    shms_project_special_percentage,
+    shms_project_special_percentage_code
+  })
+
   try {
     // Get project
     const project = (
@@ -44,7 +52,7 @@ export async function PATCH(
     )[0]
 
     if (!project || !project.shms_project_id) {
-      new Response(
+      return new Response(
         JSON.stringify({
           projectUpdated: 0,
           message: 'عفواً لم يتم العثور على المشروع!'
@@ -57,26 +65,29 @@ export async function PATCH(
     const updateProject = updateImg
       ? ((await connectDB(
           `UPDATE projects SET
-              shms_project_images = ?
-            WHERE shms_project_id = ?`,
+        shms_project_images = ?
+      WHERE shms_project_id = ?`,
           [JSON.stringify(shms_project_images), projectId]
         )) as ResultSetHeader)
       : ((await connectDB(
           `UPDATE projects SET
-        shms_project_images = ?,
-        shms_project_name = ?,
-        shms_project_location = ?,
-        shms_project_start_date = ?,
-        shms_project_end_date = ?,
-        shms_project_invest_date = ?,
-        shms_project_total_stocks = ?,
-        shms_project_stock_price = ?,
-        shms_project_stock_profits = ?,
-        shms_project_description = ?,
-        shms_project_study_case = ?,
-        shms_project_study_case_visibility = ?,
-        shms_project_status = ?
-      WHERE shms_project_id = ?`,
+            shms_project_images = ?,
+            shms_project_name = COALESCE(?, shms_project_name),
+            shms_project_location = COALESCE(?, shms_project_location),
+            shms_project_start_date = COALESCE(?, shms_project_start_date),
+            shms_project_end_date = COALESCE(?, shms_project_end_date),
+            shms_project_invest_date = COALESCE(?, shms_project_invest_date),
+            shms_project_profits_collect_date = COALESCE(?, shms_project_profits_collect_date),
+            shms_project_total_stocks = COALESCE(?, shms_project_total_stocks),
+            shms_project_stock_price = COALESCE(?, shms_project_stock_price),
+            shms_project_stock_profits = COALESCE(?, shms_project_stock_profits),
+            shms_project_special_percentage = ?,
+            shms_project_special_percentage_code = ?,
+            shms_project_description = COALESCE(?, shms_project_description),
+            shms_project_study_case = COALESCE(?, shms_project_study_case),
+            shms_project_study_case_visibility = COALESCE(?, shms_project_study_case_visibility),
+            shms_project_status = COALESCE(?, shms_project_status)
+          WHERE shms_project_id = ?`,
           [
             JSON.stringify(shms_project_images),
             shms_project_name,
@@ -84,15 +95,18 @@ export async function PATCH(
             shms_project_start_date,
             shms_project_end_date,
             shms_project_invest_date,
+            shms_project_profits_collect_date,
             shms_project_total_stocks,
             shms_project_stock_price,
             shms_project_stock_profits,
-            shms_project_description ?? '',
+            shms_project_special_percentage || null,
+            shms_project_special_percentage_code || null,
+            shms_project_description,
             JSON.stringify(shms_project_study_case),
             shms_project_study_case_visibility,
-            shms_project_status ?? 'pending',
+            shms_project_status,
             projectId
-          ]
+          ].map(param => (param === undefined ? null : param === 'null' ? null : param))
         )) as ResultSetHeader)
 
     const { affectedRows: projectUpdated } = updateProject as ResultSetHeader
@@ -112,11 +126,13 @@ export async function PATCH(
           }),
           { status: 500 }
         )
-  } catch (err) {
+  } catch (error) {
+    console.error('Error in projects/edit/[projectId]/route.ts', error)
+
     return new Response(
       JSON.stringify({
         projectUpdated: 0,
-        message: `عفواً، لم يتم تعديل المشروع! ${err}`
+        message: `عفواً، لم يتم تعديل المشروع! ${error}`
       }),
       { status: 500 }
     )

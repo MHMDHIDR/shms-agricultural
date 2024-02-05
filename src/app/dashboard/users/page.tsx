@@ -54,10 +54,6 @@ export default function Users() {
     getUsers()
   }, [userDeleted, userUpdated])
 
-  useEffect(() => {
-    console.log('userStockLimit =>', userStockLimit)
-  }, [userStockLimit])
-
   const deleteUser = async (id: string, S3docId: string) => {
     try {
       const { data }: { data: UserProps } = await axios.delete(
@@ -258,7 +254,7 @@ export default function Users() {
               <TableBody>
                 {!users || users.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className='space-y-6'>
+                    <TableCell colSpan={12} className='space-y-6'>
                       <Skeleton className='w-full h-12' />
                       <Skeleton className='w-full h-12' />
                       <Skeleton className='w-full h-12' />

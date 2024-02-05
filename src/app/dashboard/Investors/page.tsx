@@ -31,7 +31,7 @@ export default async function DashboardInvestors() {
         <Card className='w-full select-none font-bold text-center md:w-[350px]'>
           <CardHeader>
             <CardTitle>عدد المساهمين</CardTitle>
-            <CardDescription className='text-2xl pt-4'>
+            <CardDescription className='pt-4 text-2xl'>
               <strong>{users.length}</strong>
             </CardDescription>
           </CardHeader>
@@ -40,7 +40,7 @@ export default async function DashboardInvestors() {
         <Card className='w-full select-none font-bold text-center md:w-[300px]'>
           <CardHeader>
             <CardTitle>مجموع المبالغ المستثمرة</CardTitle>
-            <CardDescription className='text-2xl pt-4'>
+            <CardDescription className='pt-4 text-2xl'>
               <strong>153</strong>
             </CardDescription>
           </CardHeader>
@@ -49,7 +49,7 @@ export default async function DashboardInvestors() {
         <Card className='w-full select-none font-bold text-center md:w-[300px]'>
           <CardHeader>
             <CardTitle>عدد الاسهم</CardTitle>
-            <CardDescription className='text-2xl pt-4'>
+            <CardDescription className='pt-4 text-2xl'>
               <strong>153</strong>
             </CardDescription>
           </CardHeader>
@@ -61,7 +61,7 @@ export default async function DashboardInvestors() {
           <CardHeader>
             <CardTitle>المستثمرين</CardTitle>
             {
-              <CardDescription className='text-l pt-2'>
+              <CardDescription className='pt-2 text-l'>
                 <small>
                   <strong>لديك {users.length} مستثمر</strong>
                 </small>
@@ -75,13 +75,13 @@ export default async function DashboardInvestors() {
               <Table className='min-w-full divide-y divide-gray-200'>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className='text-center font-bold select-none'>
+                    <TableHead className='font-bold text-center select-none'>
                       الاسم
                     </TableHead>
-                    <TableHead className='text-center font-bold select-none'>
+                    <TableHead className='font-bold text-center select-none'>
                       عدد الاسهم
                     </TableHead>
-                    <TableHead className='text-center font-bold select-none'>
+                    <TableHead className='font-bold text-center select-none'>
                       المستند الشخصي
                     </TableHead>
                   </TableRow>

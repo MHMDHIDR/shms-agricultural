@@ -51,10 +51,13 @@ export type ProjectProps = {
   shms_project_start_date: Date
   shms_project_end_date: Date
   shms_project_invest_date: Date
+  shms_project_profits_collect_date: Date
   shms_project_available_stocks: number
   shms_project_total_stocks: number
   shms_project_stock_price: number
   shms_project_stock_profits: number
+  shms_project_special_percentage: number
+  shms_project_special_percentage_code: string
   shms_project_description: string
   shms_project_status: 'active' | 'pending'
   updateImg?: boolean

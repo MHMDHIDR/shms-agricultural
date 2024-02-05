@@ -446,7 +446,7 @@ const SignupPage = () => {
                   nationality={nationality}
                   setNationality={setNationality}
                   placeholder='إختر الجنسية ...'
-                  className='w-full max-h-48 px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded max-h-48 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 />
               </div>
             </div>
@@ -614,7 +614,7 @@ const SignupPage = () => {
                   ref={passwordRef}
                   placeholder='******'
                 />
-                <span className='inline-block text-gray-600 w-full text-xxs select-none'>
+                <span className='inline-block w-full text-gray-600 select-none text-xxs'>
                   كلمة المرور يجب ان تكون على الاقل من 8 احرف وتحتوي على حرف كبير وحرف
                   صغير ورقم وحرف خاص مثل x@xxxxxxxx
                 </span>
@@ -643,7 +643,7 @@ const SignupPage = () => {
                   placeholder='******'
                   required
                 />
-                <span className='inline-block text-gray-600 w-full text-xxs select-none'>
+                <span className='inline-block w-full text-gray-600 select-none text-xxs'>
                   تأكيد كلمة المرور يجب ان تكون على الاقل من 8 احرف وتحتوي على حرف كبير
                   وحرف صغير ورقم وحرف خاص مثل x@xxxxxxxx
                 </span>
@@ -675,7 +675,7 @@ const SignupPage = () => {
             </div>
 
             {acceptedTermError && <FormMessage error>{acceptedTermError}</FormMessage>}
-            <div className='flex-col items-start w-full gap-2 mb-6 md:flex'>
+            <div className='flex-col items-start w-full mb-6 gap-2 md:flex'>
               <label
                 htmlFor='accept_termsAndPrivacy'
                 className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'

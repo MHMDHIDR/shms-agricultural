@@ -39,6 +39,7 @@ export default function Projects() {
   const [projectStartDate, setProjectStartDate] = useState<Date>()
   const [projectEndDate, setProjectEndDate] = useState<Date>()
   const [projectInvestEndDate, setProjectInvestEndDate] = useState<Date>()
+  const [projectProfitCollectDate, setProjectProfitCollectDate] = useState<Date>()
   const [projectAvailableStocks, setProjectAvailableStocks] = useState<number>()
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
@@ -60,6 +61,7 @@ export default function Projects() {
   const [projectStartDateError, setProjectStartDateError] = useState('')
   const [projectEndDateError, setProjectEndDateError] = useState('')
   const [projectInvestEndDateError, setProjectInvestEndDateError] = useState('')
+  const [projectProfitCollectDateError, setProjectProfitCollectDateError] = useState('')
   const [projectAvailableStocksError, setProjectAvailableStocksError] = useState('')
   const [stockPriceError, setStockPriceError] = useState('')
   const [stockProfitsError, setStockProfitsError] = useState('')
@@ -137,6 +139,9 @@ export default function Projects() {
     } else if (!projectInvestEndDate) {
       resetFormErrors()
       setProjectInvestEndDateError('الرجاء التأكد من تحديد تاريخ اخر موعد للمساهمة')
+    } else if (!projectProfitCollectDate) {
+      resetFormErrors()
+      setProjectProfitCollectDateError('الرجاء التأكد من تحديد تاريخ موعد لتسليم الارباح')
     } else if (!projectAvailableStocks || projectAvailableStocks === 0) {
       resetFormErrors()
       setProjectAvailableStocksError('الرجاء التأكد من كتابة عدد الأسهم المتاحة')
@@ -183,6 +188,7 @@ export default function Projects() {
             shms_project_start_date: projectStartDate,
             shms_project_end_date: projectEndDate,
             shms_project_invest_date: projectInvestEndDate,
+            shms_project_profits_collect_date: projectProfitCollectDate,
             shms_project_total_stocks: projectAvailableStocks,
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
@@ -317,7 +323,7 @@ export default function Projects() {
               <div className='md:w-3/3'>
                 <input
                   id='projectStartDate'
-                  className='w-full rtl px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded rtl dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
                   onChange={e => setProjectStartDate(new Date(e.target.value))}
                 />
@@ -335,7 +341,7 @@ export default function Projects() {
               <div className='md:w-3/3'>
                 <input
                   id='projectEndDate'
-                  className='w-full rtl px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded rtl dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
                   onChange={e => setProjectEndDate(new Date(e.target.value))}
                 />
@@ -353,7 +359,7 @@ export default function Projects() {
               <div className='md:w-3/3'>
                 <input
                   id='projectInvestEndDate'
-                  className='w-full rtl px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded rtl dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
                   onChange={e => setProjectInvestEndDate(new Date(e.target.value))}
                 />
@@ -361,6 +367,24 @@ export default function Projects() {
             </div>
             {projectInvestEndDateError && (
               <FormMessage error>{projectInvestEndDateError}</FormMessage>
+            )}
+
+            <div className='space-y-1'>
+              <Label htmlFor='projectProfitCollectDate'>
+                اخر موعد للمساهمة
+                <span className='text-red-500'>*</span>
+              </Label>
+              <div className='md:w-3/3'>
+                <input
+                  id='projectProfitCollectDate'
+                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded rtl dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='date'
+                  onChange={e => setProjectProfitCollectDate(new Date(e.target.value))}
+                />
+              </div>
+            </div>
+            {projectProfitCollectDateError && (
+              <FormMessage error>{projectProfitCollectDateError}</FormMessage>
             )}
 
             <div className='space-y-1'>
@@ -422,7 +446,7 @@ export default function Projects() {
               <textarea
                 id='projectDescription'
                 onChange={e => setProjectDescription(e.target.value)}
-                className='w-full leading-10 px-4 py-2 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                className='w-full px-4 py-2 leading-10 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 placeholder='أدخل وصف المشروع'
                 rows={5}
               />

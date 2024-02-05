@@ -9,7 +9,7 @@ export function PercentageSlider({
   ...props
 }: SliderProps & { value?: number[] }) {
   return (
-    <div className='flex flex-col w-full justify-center items-center my-6'>
+    <div className='flex flex-col items-center justify-center w-full my-6'>
       <Slider
         defaultValue={value ?? [50]}
         max={100}
@@ -18,7 +18,7 @@ export function PercentageSlider({
         disabled
         {...props}
       />
-      <span className='text-2xl select-none text-green-600 font-bold'>{value}%</span>
+      <span className='text-2xl font-bold text-green-600 select-none'>{value}%</span>
     </div>
   )
 }

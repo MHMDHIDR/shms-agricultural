@@ -42,7 +42,7 @@ export default function Footer() {
           <TwitterIcon className='w-5 h-5 md:w-6 md:h-6' />
         </Link>
       </section>
-      <p className='text-gray-400 text-center pb-6 select-none'>
+      <p className='pb-6 text-center text-gray-400 select-none'>
         <span>&copy; {new Date().getFullYear()} </span>
         <span>{APP_TITLE}</span>
       </p>

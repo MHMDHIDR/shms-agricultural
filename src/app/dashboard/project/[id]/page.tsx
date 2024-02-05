@@ -40,6 +40,7 @@ export default function EditProjectPage({
   const [projectStartDate, setProjectStartDate] = useState<Date>()
   const [projectEndDate, setProjectEndDate] = useState<Date>()
   const [projectInvestEndDate, setProjectInvestEndDate] = useState<Date>()
+  const [projectProfitCollectDate, setProjectProfitCollectDate] = useState<Date>()
   const [projectTotalStocks, setProjectTotalStocks] = useState<number>(0)
   const [projectAvailableStocks, setProjectAvailableStocks] = useState<number>(0)
   const [stockPrice, setStockPrice] = useState<number>()
@@ -67,6 +68,7 @@ export default function EditProjectPage({
   const [projectStartDateError, setProjectStartDateError] = useState('')
   const [projectEndDateError, setProjectEndDateError] = useState('')
   const [projectInvestEndDateError, setProjectInvestEndDateError] = useState('')
+  const [projectProfitCollectDateError, setProjectProfitCollectDateError] = useState('')
   const [projectTotalStocksError, setProjectTotalStocksError] = useState('')
   const [stockPriceError, setStockPriceError] = useState('')
   const [stockProfitsError, setStockProfitsError] = useState('')
@@ -100,14 +102,17 @@ export default function EditProjectPage({
       setProjectStartDate(new Date(project.shms_project_start_date))
       setProjectEndDate(new Date(project.shms_project_end_date))
       setProjectInvestEndDate(new Date(project.shms_project_invest_date))
+      setProjectProfitCollectDate(new Date(project.shms_project_profits_collect_date))
       setProjectTotalStocks(project.shms_project_total_stocks)
       setProjectAvailableStocks(project.shms_project_available_stocks)
       setStockPrice(project.shms_project_stock_price)
       setStockProfits(project.shms_project_stock_profits)
       setProjectDescription(project.shms_project_description)
-      setCurrentCaseStudyFile(JSON.parse(String(project.shms_project_study_case)))
       setCaseStudyIsVisible(project.shms_project_study_case_visibility ?? 0)
       setProjectStatus(project.shms_project_status)
+      if (project.shms_project_study_case && project.shms_project_study_case !== null) {
+        setCurrentCaseStudyFile(JSON.parse(String(project.shms_project_study_case)))
+      }
     }
 
     getProjectDetails()
@@ -161,6 +166,9 @@ export default function EditProjectPage({
     } else if (!projectInvestEndDate) {
       resetFormErrors()
       setProjectInvestEndDateError('الرجاء التأكد من تحديد تاريخ اخر موعد للمساهمة')
+    } else if (!projectProfitCollectDate) {
+      resetFormErrors()
+      setProjectProfitCollectDateError('الرجاء التأكد من تحديد تاريخ تسليم الأرباح')
     } else if (!projectTotalStocks || projectTotalStocks === 0) {
       resetFormErrors()
       setProjectTotalStocksError('الرجاء التأكد من كتابة عدد الأسهم الإجمالي')
@@ -245,6 +253,7 @@ export default function EditProjectPage({
             shms_project_start_date: projectStartDate,
             shms_project_end_date: projectEndDate,
             shms_project_invest_date: projectInvestEndDate,
+            shms_project_profits_collect_date: projectProfitCollectDate,
             shms_project_total_stocks: projectTotalStocks,
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
@@ -275,7 +284,7 @@ export default function EditProjectPage({
 
         data.projectUpdated === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
         setTimeout(() => {
-          window.location.href = `/dashboard/project/${projectId}`
+          window.location.href = `/dashboard`
         }, DEFAULT_DURATION)
       } catch (error: any) {
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
@@ -317,20 +326,20 @@ export default function EditProjectPage({
       <Card className='mt-56 rtl'>
         <Link
           href={`/dashboard`}
-          className='underline-hover mt-4 mr-5 inline-block font-bold group text-blue-500'
+          className='inline-block mt-4 mr-5 font-bold text-blue-500 underline-hover group'
         >
           <ArrowBigRight className='inline-block w-4 h-4 ml-0.5 group-hover:translate-x-2 transition-transform' />
           العودة للوحة التحكم
         </Link>
         <form onSubmit={e => handelEditProject(e)}>
           <CardHeader>
-            <CardTitle className='select-none text-center'>
+            <CardTitle className='text-center select-none'>
               تعديل مشروع{' '}
               <strong>
                 {projectName && projectName.length > 0 ? (
                   abstractWords({ words: projectName, wordsLength: 4, ellipsis: true })
                 ) : (
-                  <Skeleton className='w-32 h-4 inline-block bg-gray-400' />
+                  <Skeleton className='inline-block w-32 h-4 bg-gray-400' />
                 )}
               </strong>
             </CardTitle>
@@ -420,6 +429,22 @@ export default function EditProjectPage({
             )}
 
             <div className='space-y-1'>
+              <Label htmlFor='projectProfitCollectDate'>موعد تسليم الأرباح</Label>
+              <div className='md:w-3/3'>
+                <input
+                  id='projectProfitCollectDate'
+                  className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='date'
+                  onChange={e => setProjectInvestEndDate(new Date(e.target.value))}
+                  defaultValue={projectProfitCollectDate?.toISOString().split('T')[0]}
+                />
+              </div>
+            </div>
+            {projectProfitCollectDateError && (
+              <FormMessage error>{projectProfitCollectDateError}</FormMessage>
+            )}
+
+            <div className='space-y-1'>
               <Label htmlFor='projectTotalStocks'>عدد الأسهم الإجمالي</Label>
               <div className='md:w-3/3'>
                 <input
@@ -429,8 +454,7 @@ export default function EditProjectPage({
                   inputMode='numeric'
                   min={0}
                   onChange={e => setProjectTotalStocks(parseFloat(e.target.value))}
-                  // defaultValue={projectTotalStocks}
-                  value={projectTotalStocks}
+                  defaultValue={projectTotalStocks}
                 />
               </div>
             </div>
@@ -443,7 +467,7 @@ export default function EditProjectPage({
               <div className='md:w-3/3'>
                 <input
                   id='projectAvailableStocks'
-                  className='w-full px-4 py-2 leading-tight font-bold select-none text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 font-bold leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='number'
                   inputMode='numeric'
                   min={0}
@@ -518,7 +542,7 @@ export default function EditProjectPage({
             </div>
             {caseStudyfileError && <FormMessage error>{caseStudyfileError}</FormMessage>}
 
-            <div className='space-y-1 flex gap-x-5 items-center'>
+            <div className='flex items-center space-y-1 gap-x-5'>
               <Label htmlFor='caseStudyIsVisible' className='cursor-pointer'>
                 حالة دراسة الجدوى:
               </Label>
@@ -538,7 +562,7 @@ export default function EditProjectPage({
               </strong>
             </div>
 
-            <div className='space-y-1 flex gap-x-5 items-center'>
+            <div className='flex items-center space-y-1 gap-x-5'>
               <Label htmlFor='projectStatus' className='cursor-pointer'>
                 حالة المشروع:
               </Label>

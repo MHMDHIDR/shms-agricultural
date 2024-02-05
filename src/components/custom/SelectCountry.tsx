@@ -43,7 +43,7 @@ export default function SelectCountry({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className='w-full max-h-64 md:max-h-96 overflow-y-auto p-0 rtl'
+        className='w-full p-0 overflow-y-auto max-h-64 md:max-h-96 rtl'
         avoidCollisions={false}
       >
         <Command>

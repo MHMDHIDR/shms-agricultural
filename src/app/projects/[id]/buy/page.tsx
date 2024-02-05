@@ -9,6 +9,17 @@ import { CardWrapper } from '@/components/auth/card-wrapper'
 import Layout from '@/components/custom/Layout'
 import { Skeleton } from '@/components/ui/skeleton'
 import Divider from '@/components/custom/Divider'
+import { Button } from '@/components/ui/button'
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import UserStockSelect from './UserStockSelect/page'
+
 
 export default function BuyStocks({
   params: { id: projectId }
@@ -19,29 +30,32 @@ export default function BuyStocks({
   const [project, setProject] = useState<ProjectProps>()
   const [amountOfStocks, setAmountOfStocks] = useState(0)
 
-  const getProject = async () => {
-    try {
-      setIsLoading(true)
-      const {
-        data: { project }
-      }: { data: { project: ProjectProps } } = await axios.get(
-        `${API_URL}/projects/get/${projectId}`
-      )
-      setProject(project)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsLoading(false)
-    }
+  const calculateTotalAmount = () => {
+    return project ? project.shms_project_stock_price * amountOfStocks : 0
   }
 
   useEffect(() => {
+    const getProject = async () => {
+      try {
+        setIsLoading(true)
+        const {
+          data: { project }
+        }: { data: { project: ProjectProps } } = await axios.get(
+          `${API_URL}/projects/get/${projectId}`
+        )
+        setProject(project)
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
     getProject()
-  }, [])
+  }, [projectId])
 
   return (
     <Layout>
-      <section className='pt-20 container rtl min-h-screen'>
+      <section className='container min-h-screen pt-20 rtl'>
         {/* كل شخص يستطيع شراء عدد من الأسهم على حسب الحد المسموح به في user.shms_user_stock_limit */}
 
         <CardWrapper className='md:w-[50rem] mx-auto' heading={'صفحة شراء أسهم'}>
@@ -62,7 +76,7 @@ export default function BuyStocks({
                 </div>
                 <div className='md:w-2/3'>
                   <input
-                    className='w-full font-bold px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                    className='w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     value={project ? project.shms_project_stock_price : 0}
                     disabled
@@ -76,12 +90,10 @@ export default function BuyStocks({
                   </label>
                 </div>
                 <div className='md:w-2/3'>
-                  <input
-                    className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
-                    type='number'
-                    placeholder='عدد الأسهم'
-                    onChange={e => setAmountOfStocks(Number(e.target.value))}
-                  />
+
+                     {/* the select my tage  UserStockSelect  */}
+                     <UserStockSelect />
+             
                 </div>
               </div>
               <Divider className='my-10' />
@@ -95,9 +107,7 @@ export default function BuyStocks({
                   <input
                     className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
-                    placeholder={String(
-                      project ? project.shms_project_stock_price : 0 * amountOfStocks
-                    )}
+                    placeholder={String(calculateTotalAmount())}
                     disabled
                   />
                 </div>
@@ -113,12 +123,26 @@ export default function BuyStocks({
                     className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     type='text'
                     placeholder='عدد الأسهم'
+                    disabled
                   />
                 </div>
               </div>
             </form>
           )}
         </CardWrapper>
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: 20
+          }}
+        >
+          <a href={`/projects/${projectId}/personalData`}>
+            <Button>التالي</Button>
+          </a>
+        </div>
       </section>
     </Layout>
   )

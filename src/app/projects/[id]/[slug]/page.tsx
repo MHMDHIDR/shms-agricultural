@@ -44,7 +44,7 @@ export default async function ProjectDetailsPage({
   return (
     <Layout>
       <main className='flex flex-col items-center justify-between min-h-screen sm:p-24'>
-        <h1 className='text-2xl font-bold text-center select-none mb-10' dir='rtl'>
+        <h1 className='mb-10 text-2xl font-bold text-center select-none' dir='rtl'>
           {project.shms_project_name}
         </h1>
         {/* Render images in a row */}
@@ -62,7 +62,7 @@ export default async function ProjectDetailsPage({
           <div style={{ width: '50%', backgroundColor: 'pink' }}>
             <div style={{ margin: 20 }} dir='rtl' className='flex items-center'>
               <svg
-                className='h-8 w-8 text-red-500'
+                className='w-8 h-8 text-red-500'
                 viewBox='0 0 24 24'
                 fill='none'
                 stroke='currentColor'
@@ -85,7 +85,7 @@ export default async function ProjectDetailsPage({
               className='flex items-center'
             >
               <svg
-                className='h-8 w-8 text-black'
+                className='w-8 h-8 text-black'
                 fill='none'
                 viewBox='0 0 24 24'
                 stroke='currentColor'
@@ -106,7 +106,7 @@ export default async function ProjectDetailsPage({
           <div style={{ width: '50%', backgroundColor: 'gray' }}>
             <div style={{ margin: 20 }} dir='rtl' className='flex items-center'>
               <svg
-                className='h-8 w-8 text-red-500'
+                className='w-8 h-8 text-red-500'
                 viewBox='0 0 24 24'
                 fill='none'
                 stroke='currentColor'
@@ -129,7 +129,7 @@ export default async function ProjectDetailsPage({
               className='flex items-center'
             >
               <svg
-                className='h-8 w-8 text-green-500'
+                className='w-8 h-8 text-green-500'
                 viewBox='0 0 24 24'
                 fill='none'
                 stroke='currentColor'
@@ -164,7 +164,7 @@ export default async function ProjectDetailsPage({
         </div>
 
         {/*  نسبة إكتمال المشروع */}
-        <p className='select-none font-bold'>نسبة إكتمال المشروع</p>
+        <p className='font-bold select-none'>نسبة إكتمال المشروع</p>
         <PercentageSlider
           // 1 تم إضافته لتجنب القيمة الصفرية  للنسبة المئوية و لعدم إظهار النسبة بشكل حقيقي
           value={[
@@ -178,7 +178,7 @@ export default async function ProjectDetailsPage({
         {/* زر شراء السهم */}
         <Link
           href={`/projects/${projectId}/buy`}
-          className='bg-green-500 hover:bg-green-700 text-white p-4 rounded-lg mt-10'
+          className='p-4 mt-10 text-white bg-green-500 rounded-lg hover:bg-green-700'
         >
           شراء أسهم من المشروع
         </Link>

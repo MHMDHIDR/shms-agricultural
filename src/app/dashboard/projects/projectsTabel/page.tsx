@@ -106,37 +106,37 @@ export default function ProjectsTable() {
     <Table className='min-w-full text-center divide-y divide-gray-200'>
       <TableHeader>
         <TableRow>
-          <TableHead className='select-none text-center font-bold'>اسم المشروع</TableHead>
-          <TableHead className='select-none text-center font-bold'>
+          <TableHead className='font-bold text-center select-none'>اسم المشروع</TableHead>
+          <TableHead className='font-bold text-center select-none'>
             منطقة المشروع
           </TableHead>
-          <TableHead className='select-none text-center font-bold'>تاريخ البدء</TableHead>
-          <TableHead className='select-none text-center font-bold'>
+          <TableHead className='font-bold text-center select-none'>تاريخ البدء</TableHead>
+          <TableHead className='font-bold text-center select-none'>
             تاريخ الانتهاء
           </TableHead>
-          <TableHead className='select-none text-center font-bold'>
+          <TableHead className='font-bold text-center select-none'>
             اخر موعد للمساهمة
           </TableHead>
-          <TableHead className='select-none text-center font-bold'>
+          <TableHead className='font-bold text-center select-none'>
             عدد الأسهم المتاحة
           </TableHead>
-          <TableHead className='select-none text-center font-bold'>
+          <TableHead className='font-bold text-center select-none'>
             سعر السهم الواحد
           </TableHead>
-          <TableHead className='select-none text-center font-bold'>أرباح السهم</TableHead>
-          <TableHead className='select-none text-center font-bold'>
+          <TableHead className='font-bold text-center select-none'>أرباح السهم</TableHead>
+          <TableHead className='font-bold text-center select-none'>
             دراسة الجدوى
           </TableHead>
-          <TableHead className='select-none text-center font-bold'>
+          <TableHead className='font-bold text-center select-none'>
             حالة المشروع
           </TableHead>
-          <TableHead className='select-none text-center font-bold'>العمليات</TableHead>
+          <TableHead className='font-bold text-center select-none'>العمليات</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {!projects || projects.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={10} className='space-y-6'>
+            <TableCell colSpan={15} className='space-y-6'>
               <Skeleton className='w-full h-12' />
               <Skeleton className='w-full h-12' />
               <Skeleton className='w-full h-12' />

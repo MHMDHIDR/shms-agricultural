@@ -28,15 +28,15 @@ export function ConfirmDialog({
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px] rtl'>
         <DialogHeader>
-          <DialogTitle className='text-center font-bold select-none pb-4'>
+          <DialogTitle className='pb-4 font-bold text-center select-none'>
             تعديل حد شراء الاأسهم
           </DialogTitle>
           <DialogDescription className='text-right'>
             يمكنك تعديل حد شراء الاسهم لهذا المستخدم، ثم الضغط على حفظ التغييرات
           </DialogDescription>
         </DialogHeader>
-        <div className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
+        <div className='py-4 grid gap-4'>
+          <div className='items-center grid grid-cols-4 gap-4'>
             <Label htmlFor='stocks_limit' className='text-right'>
               عدد الاأسهم
             </Label>

@@ -34,7 +34,7 @@ const DropdownMenuSubTrigger = forwardRef<
     {...props}
   >
     {children}
-    <ChevronRight className='ml-auto h-4 w-4' />
+    <ChevronRight className='w-4 h-4 ml-auto' />
   </DropdownMenuPrimitive.SubTrigger>
 ))
 DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName
@@ -103,7 +103,7 @@ const DropdownMenuCheckboxItem = forwardRef<
   >
     <span className='absolute left-2 flex h-3.5 w-3.5 items-center justify-center'>
       <DropdownMenuPrimitive.ItemIndicator>
-        <Check className='h-4 w-4' />
+        <Check className='w-4 h-4' />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -125,7 +125,7 @@ const DropdownMenuRadioItem = forwardRef<
   >
     <span className='absolute left-2 flex h-3.5 w-3.5 items-center justify-center'>
       <DropdownMenuPrimitive.ItemIndicator>
-        <Circle className='h-2 w-2 fill-current' />
+        <Circle className='w-2 h-2 fill-current' />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}

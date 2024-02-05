@@ -23,7 +23,7 @@ export default async function Projects() {
         {!projects || projects.length === 0 ? (
           <NoRecords links={[{ to: `/`, label: 'الصفحة الرئيسية' }]} />
         ) : (
-          <div className='grid justify-end grid-cols-1 gap-4 md:grid-cols-2 rtl'>
+          <div className='justify-end grid grid-cols-1 gap-4 md:grid-cols-2 rtl'>
             {projects
               .filter(project => project.shms_project_status === 'active')
               .map((project, index) => (
@@ -34,7 +34,7 @@ export default async function Projects() {
                   key={index}
                   className='block hover:-translate-y-3 transition-transform duration-300 rtl overflow-clip'
                 >
-                  <Card className='w-4/5 max-w-screen-md m-5 mx-auto min-w-72'>
+                  <Card className='w-4/5 m-5 mx-auto max-w-screen-md min-w-72'>
                     <CardContent className='flex flex-col p-0 shadow-md gap-y-6'>
                       <div>
                         <Image

@@ -175,7 +175,7 @@ const FileUpload = ({ data, ignoreRequired = false, id }: FileUploadComponentPro
           )
         ) : (
           <Card className='col-span-full bg-destructive'>
-            <CardDescription className='flex justify-center py-4 font-bold items-center select-none text-white text-lg'>
+            <CardDescription className='flex items-center justify-center py-4 text-lg font-bold text-white select-none'>
               <Error className='w-8 h-8 ml-4' />
               هنالك خلل في عرض صور لهذا المشروع 😕
             </CardDescription>
@@ -205,7 +205,7 @@ const FileUpload = ({ data, ignoreRequired = false, id }: FileUploadComponentPro
           type='file'
           name='projectImg'
           id='projectImg'
-          className='hidden p-3 text-lg text-white transition-colors bg-green-800 cursor-pointer rounded-xl hover:bg-green-700'
+          className='hidden p-3 text-lg text-white bg-green-800 cursor-pointer transition-colors rounded-xl hover:bg-green-700'
           accept='image/*'
           onChange={onFileAdd}
           multiple
