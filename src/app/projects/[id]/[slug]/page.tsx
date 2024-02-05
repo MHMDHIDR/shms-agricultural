@@ -21,9 +21,11 @@ export default async function ProjectDetailsPage({
 
   // to get decoded slug from url ==> onst projectSlug = decodeURI(slug)
 
-  const getProjectImages: imgsProps['imgDisplayPath'][] = JSON.parse(
-    String(project.shms_project_images)
-  ).map(({ imgDisplayPath }: imgsProps) => imgDisplayPath)
+  const getProjectImages: imgsProps['imgDisplayPath'][] =
+    project.shms_project_images &&
+    JSON.parse(String(project.shms_project_images)).map(
+      ({ imgDisplayPath }: imgsProps) => imgDisplayPath
+    )
 
   const getProjectCompletedPercentage = (available: number, total: number) => {
     return (

@@ -81,7 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SessionProvider session={session}>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
             <FileUploadProvider>
-              <main className='mt-20'>{children}</main>
+              <main className='md:mt-20'>{children}</main>
               <Toaster />
             </FileUploadProvider>
           </ThemeProvider>

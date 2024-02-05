@@ -16,6 +16,7 @@ export async function PATCH(
     shms_project_end_date,
     shms_project_invest_date,
     shms_project_profits_collect_date,
+    shms_project_available_stocks,
     shms_project_total_stocks,
     shms_project_stock_price,
     shms_project_stock_profits,
@@ -37,11 +38,6 @@ export async function PATCH(
       { status: 404 }
     )
   }
-
-  console.log({
-    shms_project_special_percentage,
-    shms_project_special_percentage_code
-  })
 
   try {
     // Get project
@@ -71,13 +67,14 @@ export async function PATCH(
         )) as ResultSetHeader)
       : ((await connectDB(
           `UPDATE projects SET
-            shms_project_images = ?,
+            shms_project_images = COALESCE(?, shms_project_images),
             shms_project_name = COALESCE(?, shms_project_name),
             shms_project_location = COALESCE(?, shms_project_location),
             shms_project_start_date = COALESCE(?, shms_project_start_date),
             shms_project_end_date = COALESCE(?, shms_project_end_date),
             shms_project_invest_date = COALESCE(?, shms_project_invest_date),
             shms_project_profits_collect_date = COALESCE(?, shms_project_profits_collect_date),
+            shms_project_available_stocks = COALESCE(?, shms_project_available_stocks),
             shms_project_total_stocks = COALESCE(?, shms_project_total_stocks),
             shms_project_stock_price = COALESCE(?, shms_project_stock_price),
             shms_project_stock_profits = COALESCE(?, shms_project_stock_profits),
@@ -96,6 +93,7 @@ export async function PATCH(
             shms_project_end_date,
             shms_project_invest_date,
             shms_project_profits_collect_date,
+            shms_project_available_stocks,
             shms_project_total_stocks,
             shms_project_stock_price,
             shms_project_stock_profits,

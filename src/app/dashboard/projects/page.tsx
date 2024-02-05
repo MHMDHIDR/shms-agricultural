@@ -189,6 +189,7 @@ export default function Projects() {
             shms_project_end_date: projectEndDate,
             shms_project_invest_date: projectInvestEndDate,
             shms_project_profits_collect_date: projectProfitCollectDate,
+            shms_project_available_stocks: projectAvailableStocks,
             shms_project_total_stocks: projectAvailableStocks,
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
@@ -371,7 +372,7 @@ export default function Projects() {
 
             <div className='space-y-1'>
               <Label htmlFor='projectProfitCollectDate'>
-                اخر موعد للمساهمة
+                موعد تسليم الارباح
                 <span className='text-red-500'>*</span>
               </Label>
               <div className='md:w-3/3'>

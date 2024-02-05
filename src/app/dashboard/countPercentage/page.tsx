@@ -28,6 +28,7 @@ import { Success, Error } from '@/components/icons/Status'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { scrollToView } from '@/lib/utils'
+import { Info } from 'lucide-react'
 
 export default function CountPercentage() {
   const [projects, setProjects] = useState<ProjectProps[]>([])
@@ -56,13 +57,17 @@ export default function CountPercentage() {
   const handleSubmitPercentage = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     try {
+      setIsSubmittingForm(true)
+
       const { data } = await axios.patch(`${API_URL}/projects/edit/${selectedProject}`, {
         shms_project_special_percentage: percentage,
         shms_project_special_percentage_code: percentageCode
       })
 
       // make sure to view the response from the data
-      data.projectUpdated === 1 &&
+      if (data.projectUpdated === 1) {
+        setIsDoneSubmitting(true)
+
         toast(data.message, {
           icon: <Success />,
           position: 'bottom-center',
@@ -76,8 +81,10 @@ export default function CountPercentage() {
             textAlign: 'justify'
           }
         })
+      } else {
+        setIsDoneSubmitting(false)
+      }
 
-      data.projectUpdated === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
       setTimeout(() => {
         window.location.href = `/dashboard`
       }, DEFAULT_DURATION)
@@ -103,6 +110,8 @@ export default function CountPercentage() {
 
   const deletePercentageCode = async (projectId: string) => {
     try {
+      setIsSubmittingForm(true)
+
       const { data }: { data: ProjectProps } = await axios.patch(
         `${API_URL}/projects/edit/${projectId}`,
         {
@@ -157,6 +166,8 @@ export default function CountPercentage() {
         }
       })
       console.error('Error =>', error)
+    } finally {
+      setIsSubmittingForm(false)
     }
   }
 
@@ -326,7 +337,13 @@ export default function CountPercentage() {
                         : ''
                     }
                   >
-                    <Button>
+                    <Button
+                      className={
+                        isDoneSubmitting
+                          ? 'pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
+                          : ''
+                      }
+                    >
                       {isSubmittingForm ? (
                         <>
                           <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
@@ -413,7 +430,19 @@ export default function CountPercentage() {
                           await deletePercentageCode(project.shms_project_id)
                         }}
                       >
-                        حذف
+                        {isSubmittingForm ? (
+                          <>
+                            <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
+                            جاري الحذف ...
+                          </>
+                        ) : isDoneSubmitting ? (
+                          <>
+                            <Success className='ml-2' />
+                            تم الحذف
+                          </>
+                        ) : (
+                          'حذف'
+                        )}
                       </Confirm>
                     </TableCell>
                   </TableRow>

@@ -27,18 +27,28 @@ const ProjectImages = ({ images }: { images: string[] }) => {
   return (
     <main className={`flex min-h-screen items-center justify-between p-24`}>
       <div>
-        {images.map((imageUrl, index) => (
+        {images ? (
+          images.map((imageUrl, index) => (
+            <Image
+              key={index}
+              src={imageUrl}
+              alt={`Image ${index + 1}`}
+              width={500}
+              height={300}
+              style={{ margin: 50 }}
+              className='hover:cursor-zoom-in'
+              onClick={() => openModal(index)}
+            />
+          ))
+        ) : (
           <Image
-            key={index}
-            src={imageUrl}
-            alt={`Image ${index + 1}`}
+            src='/logo-slogan.png'
+            alt='No Image'
             width={500}
             height={300}
             style={{ margin: 50 }}
-            className='hover:cursor-zoom-in'
-            onClick={() => openModal(index)}
           />
-        ))}
+        )}
       </div>
 
       {showModal && (
