@@ -231,14 +231,11 @@ export default function BuyStocks({
                     {newPercentage > 0
                       ? selectedStocks *
                           (project ? project.shms_project_stock_profits : 0) +
-                        selectedStocks *
-                          (project ? project.shms_project_stock_price : 0) +
                         (selectedStocks *
-                          (project ? project.shms_project_stock_profits : 0) +
-                          selectedStocks *
-                            (project ? project.shms_project_stock_price : 0) *
-                            newPercentage) /
-                          100
+                          (project ? project.shms_project_stock_profits : 0) *
+                          newPercentage) /
+                          100 +
+                        selectedStocks * (project ? project.shms_project_stock_price : 0)
                       : selectedStocks *
                           (project ? project.shms_project_stock_profits : 0) +
                         selectedStocks * (project ? project.shms_project_stock_price : 0)}
