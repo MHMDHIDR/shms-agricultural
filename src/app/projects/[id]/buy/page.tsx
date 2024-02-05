@@ -9,11 +9,12 @@ import Layout from '@/components/custom/Layout'
 import { Skeleton } from '@/components/ui/skeleton'
 import Divider from '@/components/custom/Divider'
 import { Button } from '@/components/ui/button'
-import UserStockSelect from './UserStockSelect/page'
+import UserStockSelect from './UserStockSelect'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { Success, Error } from '@/components/icons/Status'
 import { ReloadIcon } from '@radix-ui/react-icons'
+import Link from 'next/link'
 
 export default function BuyStocks({
   params: { id: projectId }
@@ -32,7 +33,7 @@ export default function BuyStocks({
   const { data: session }: { data: UserLoggedInProps } = useSession()
 
   useEffect(() => {
-    setUserStockLimit(session?.token?.user.shms_user_stock_limit ?? 0)
+    setUserStockLimit(session?.token?.user.shms_user_stock_limit ?? 100)
   }, [session?.token?.user.shms_user_stock_limit])
 
   useEffect(() => {
@@ -284,18 +285,22 @@ export default function BuyStocks({
             </form>
           )}
         </CardWrapper>
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            margin: 20
-          }}
-        >
-          <a href={`/projects/${projectId}/personalData`}>
-            <Button className='dark:text-white dark:font-bold text-md'>التالي</Button>
-          </a>
+        <div className='flex justify-center items-center w-full m-5 space-x-4'>
+          <Link
+            href={
+              !session
+                ? `/auth/signin?callbackUrl=/projects/${projectId}/buy`
+                : `/projects/${projectId}/personalData`
+            }
+            aria-disabled={!selectedStocks || selectedStocks === 0}
+            className={`pressable ${
+              !selectedStocks || selectedStocks === 0
+                ? 'pointer-events-none opacity-50 cursor-not-allowed'
+                : ''
+            }`}
+          >
+            التالي
+          </Link>
         </div>
       </section>
     </Layout>

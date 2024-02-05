@@ -10,39 +10,42 @@ export default function PaymentMetods() {
 
   return (
     <div dir='rtl'>
-      <label>
+      {/* فيزا   -- Visa */}
+      <label className='opacity-50 cursor-not-allowed'>
         <input
           type='radio'
-          value='option1'
-          checked={selectedOption === 'option1'}
+          value='visa'
+          checked={selectedOption === 'visa'}
           onChange={handleOptionChange}
           disabled
         />
-        فيزا
+        <span className='mr-4'>فيزا</span>
       </label>
       <br />
-      <label>
+      {/* بطاقة ائتمانية   -- Credit Card */}
+      <label className='opacity-50 cursor-not-allowed'>
         <input
           type='radio'
-          value='option2'
-          checked={selectedOption === 'option2'}
+          value='credit'
+          checked={selectedOption === 'credit'}
           onChange={handleOptionChange}
           disabled
         />
-        بطاقة ائتمان
+        <span className='mr-4'>بطاقة ائتمان</span>
       </label>
       <br />
+      {/* نقدا   -- Cash */}
       <label>
         <input
           type='radio'
-          value='option3'
-          checked={selectedOption === 'option3'}
+          value='cash'
+          checked={selectedOption === 'cash'}
           onChange={handleOptionChange}
         />
-        نقدا
+        <span className='mr-4'>
+          <strong>نقدا</strong>
+        </span>
       </label>
-
-      {/* Add more options as needed */}
     </div>
   )
 }

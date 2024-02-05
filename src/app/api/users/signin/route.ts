@@ -52,6 +52,8 @@ export async function POST(req: Request) {
           loggedIn: 1,
           fullname: user.shms_fullname,
           shms_email: user.shms_email,
+          shms_phone: user.shms_phone,
+          shms_doc: user.shms_doc,
           shms_user_account_type: user.shms_user_account_type,
           shms_user_stock_limit: user.shms_user_stock_limit,
           message: 'تم تسجيل الدخول بنجاح'

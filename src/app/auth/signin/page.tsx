@@ -102,7 +102,7 @@ const SigninPage = () => {
           const { userType, loading } = await getAuth()
           loading ? setIsDoneSubmitting(false) : setIsDoneSubmitting(true)
 
-          const REDIRECT_TO = redirectUrl ?? userType === 'admin' ? '/dashboard' : '/'
+          const REDIRECT_TO = redirectUrl ?? (userType === 'admin' ? '/dashboard' : '/')
 
           toast('تم تسجيل دخولك بنجاح', {
             icon: <Success />,

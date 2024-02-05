@@ -36,7 +36,7 @@ const ProjectImages = ({ images }: { images: string[] }) => {
               width={500}
               height={300}
               style={{ margin: 50 }}
-              className='hover:cursor-zoom-in'
+              className='hover:cursor-zoom-in w-96 h-96'
               onClick={() => openModal(index)}
             />
           ))
