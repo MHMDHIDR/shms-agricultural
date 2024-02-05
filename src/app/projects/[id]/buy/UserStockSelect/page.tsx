@@ -25,8 +25,9 @@ export default function UserStockSelect({
         */}
         {Array.from({ length: userStockLimit }, (_, userStockLimitCounter) => (
           <SelectItem
-            key={userStockLimitCounter}
+            key={userStockLimitCounter + 1}
             value={String(userStockLimitCounter + 1)}
+            className='font-bold'
           >
             {userStockLimitCounter + 1}
           </SelectItem>

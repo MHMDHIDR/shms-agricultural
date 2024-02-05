@@ -9,17 +9,15 @@ import axios from 'axios'
 import Link from 'next/link'
 
 export default async function ProjectDetailsPage({
-  params: { id: projectId /*, slug*/ }
+  params: { id: projectId }
 }: {
-  params: { id: string /*, slug: string*/ }
+  params: { id: string }
 }) {
   const {
     data: { project }
   }: { data: { project: ProjectProps } } = await axios.get(
     `${API_URL}/projects/get/${projectId}`
   )
-
-  // to get decoded slug from url ==> onst projectSlug = decodeURI(slug)
 
   const getProjectImages: imgsProps['imgDisplayPath'][] =
     project.shms_project_images &&

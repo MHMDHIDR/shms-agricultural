@@ -28,7 +28,6 @@ import { Success, Error } from '@/components/icons/Status'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { scrollToView } from '@/lib/utils'
-import { Info } from 'lucide-react'
 
 export default function CountPercentage() {
   const [projects, setProjects] = useState<ProjectProps[]>([])
@@ -201,6 +200,7 @@ export default function CountPercentage() {
                       dir='rtl'
                       onValueChange={projectId => {
                         setSelectedProject(projectId)
+                        // special code for the percentage code contains 7 random characters
                         const PercentageCode = Math.random()
                           .toString(36)
                           .substring(2, 9)

@@ -62,6 +62,7 @@ const config = {
         xxs: '300px'
       },
       fontSize: {
+        md: '0.95rem',
         xxs: '0.625rem'
       },
       borderRadius: {

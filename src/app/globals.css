@@ -78,6 +78,11 @@
     @apply relative before:h-0.5 before:w-0 before:absolute py-2 px-6 rounded-lg text-sm xl:text-base hover:bg-opacity-50 outline-offset-8 before:bottom-0 before:right-0 before:transition-all hover:before:w-full md:bg-transparent md:bg-opacity-0 md:py-0 md:px-0 md:rounded-none md:hover:bg-opacity-0 dark:text-gray-200 md:before:bg-green-500;
   }
 
+  [data-price]:after {
+    /* add content as ر.ق in green color qatar reyial  */
+    @apply content-['ر.ق'] text-green-600 font-bold mr-3;
+  }
+
   .dark input[type='tel'],
   .dark .react-tel-input .country-list,
   .dark .react-tel-input .flag-dropdown {
