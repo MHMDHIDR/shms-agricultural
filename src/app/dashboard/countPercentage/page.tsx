@@ -6,7 +6,6 @@ import type { ProjectProps } from '@/types'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import Confirm from '@/components/custom/Confirm'
-import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
   TableBody,
@@ -15,7 +14,6 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import Link from 'next/link'
 import {
   Select,
   SelectContent,
@@ -31,7 +29,7 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { scrollToView } from '@/lib/utils'
 
-export default function countPercentage() {
+export default function CountPercentage() {
   const [projects, setProjects] = useState<ProjectProps[]>([])
   const [selectedProject, setSelectedProject] = useState<
     ProjectProps['shms_project_id'] | null

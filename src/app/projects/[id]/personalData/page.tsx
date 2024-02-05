@@ -1,9 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import axios from 'axios'
-import type { ProjectProps } from '@/types'
-import { API_URL } from '@/data/constants'
+// import axios from 'axios'
+// import type { ProjectProps } from '@/types'
+// import { API_URL } from '@/data/constants'
 import Layout from '@/components/custom/Layout'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Button } from '@/components/ui/button'

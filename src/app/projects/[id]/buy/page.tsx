@@ -4,22 +4,12 @@ import { API_URL } from '@/data/constants'
 import { ProjectProps } from '@/types'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import Layout from '@/components/custom/Layout'
 import { Skeleton } from '@/components/ui/skeleton'
 import Divider from '@/components/custom/Divider'
 import { Button } from '@/components/ui/button'
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import UserStockSelect from './UserStockSelect/page'
-
 
 export default function BuyStocks({
   params: { id: projectId }
@@ -28,7 +18,7 @@ export default function BuyStocks({
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [project, setProject] = useState<ProjectProps>()
-  const [amountOfStocks, setAmountOfStocks] = useState(0)
+  const [amountOfStocks, _setAmountOfStocks] = useState(0)
 
   const calculateTotalAmount = () => {
     return project ? project.shms_project_stock_price * amountOfStocks : 0
@@ -90,10 +80,7 @@ export default function BuyStocks({
                   </label>
                 </div>
                 <div className='md:w-2/3'>
-
-                     {/* the select my tage  UserStockSelect  */}
-                     <UserStockSelect />
-             
+                  <UserStockSelect />
                 </div>
               </div>
               <Divider className='my-10' />
