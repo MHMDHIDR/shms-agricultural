@@ -175,11 +175,10 @@ export default function Nav() {
               <NavigationMenuTrigger>عن شمس</NavigationMenuTrigger>
               <NavigationMenuContent className='rtl'>
                 <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] grid-rows-2 grid-cols-1'>
-                  <NavigationListItem href='/about' title='من نحن'></NavigationListItem>
-                  <NavigationListItem
-                    href='/contact'
-                    title='تواصل معنا'
-                  ></NavigationListItem>
+                  <NavigationListItem href='/about'>من نحن</NavigationListItem>
+                  <NavigationListItem href='/contact'>تواصل معنا</NavigationListItem>
+                  <NavigationListItem href='/terms'>شروط الاستخدام</NavigationListItem>
+                  <NavigationListItem href='/privacy'>سياسة الخصوصية</NavigationListItem>
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
