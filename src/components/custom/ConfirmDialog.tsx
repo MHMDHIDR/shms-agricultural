@@ -11,20 +11,28 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { ReloadIcon } from '@radix-ui/react-icons'
+import { Success } from '../icons/Status'
 
 export function ConfirmDialog({
   StockLimit = 1,
   onClick,
-  onChange
+  onChange,
+  formStatus,
+  children
 }: {
   StockLimit?: number
   onClick: () => void
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  formStatus: { isSubmitting: boolean; isSubmittingDone: boolean }
+  children: React.ReactNode
 }) {
+  const { isSubmitting, isSubmittingDone } = formStatus
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='outline'>حد شراء الاسهم</Button>
+        <Button variant='outline'>{children}</Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px] rtl'>
         <DialogHeader>
@@ -53,8 +61,26 @@ export function ConfirmDialog({
           </div>
         </div>
         <DialogFooter>
-          <Button type='submit' className='ml-auto' onClick={onClick}>
-            حفظ
+          <Button
+            type='submit'
+            className={`ml-auto ${
+              isSubmittingDone ? 'cursor-not-allowed opacity-75' : ''
+            }`}
+            onClick={onClick}
+          >
+            {isSubmitting ? (
+              <>
+                <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
+                جاري الحفظ ...
+              </>
+            ) : isSubmittingDone ? (
+              <>
+                <Success className='ml-3' />
+                تم حفظ التعديلات
+              </>
+            ) : (
+              'حفــظ'
+            )}
           </Button>
           <DialogClose asChild>
             <Button type='button' variant='secondary'>

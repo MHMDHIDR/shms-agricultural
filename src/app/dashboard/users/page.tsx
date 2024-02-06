@@ -26,11 +26,10 @@ import {
 } from '@/components/ui/table'
 import { TabsContent } from '@/components/ui/tabs'
 import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
-import { arabicDate } from '@/lib/utils'
+import { arabicDate, redirect } from '@/lib/utils'
 import type { UserProps } from '@/types'
 import axios from 'axios'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { ConfirmDialog } from '@/components/custom/ConfirmDialog'
@@ -40,10 +39,13 @@ export default function Users() {
   const [userStockLimit, setUserStockLimit] =
     useState<UserProps['shms_user_stock_limit']>(1)
 
+  const [formStatus, setFormStatus] = useState({
+    isSubmitting: false,
+    isSubmittingDone: false
+  })
+
   const [userDeleted, setUserDeleted] = useState<UserProps['userDeleted']>(0)
   const [userUpdated, setUserUpdated] = useState<UserProps['userUpdated']>(0)
-
-  const { refresh } = useRouter()
 
   const getUsers = async () => {
     const { data: users }: { data: UserProps[] } = await axios.get(`${API_URL}/users/all`)
@@ -98,7 +100,7 @@ export default function Users() {
       }
 
       setUserDeleted(data.userDeleted ?? 0)
-      setTimeout(() => refresh(), DEFAULT_DURATION)
+      redirect('/dashboard')
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -156,7 +158,7 @@ export default function Users() {
       }
 
       setUserUpdated(data.userUpdated ?? 0)
-      setTimeout(() => refresh(), DEFAULT_DURATION)
+      redirect('/dashboard')
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -176,6 +178,7 @@ export default function Users() {
 
   const updateUserStockLimit = async (id: string, stockLimit: number) => {
     try {
+      setFormStatus({ ...formStatus, isSubmitting: true })
       const { data }: { data: UserProps } = await axios.patch(
         `${API_URL}/users/updateStockLimit/${id}`,
         { stockLimit }
@@ -211,7 +214,7 @@ export default function Users() {
       }
 
       setUserUpdated(data.userUpdated ?? 0)
-      setTimeout(() => refresh(), DEFAULT_DURATION)
+      redirect('/dashboard')
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -226,6 +229,8 @@ export default function Users() {
         }
       })
       console.error('Error =>', error)
+    } finally {
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
     }
   }
 
@@ -269,7 +274,12 @@ export default function Users() {
                         {arabicDate(user.shms_created_at ?? '')}
                       </TableCell>
                       <TableCell className='min-w-40'>
-                        <Link href={`tel:${user.shms_phone}`}>{user.shms_phone}</Link>
+                        <Link
+                          href={`tel:${user.shms_phone}`}
+                          className='text-blue-500 hover:font-bold hover:text-blue-700 transition-colors'
+                        >
+                          {user.shms_phone}
+                        </Link>
                       </TableCell>
                       <TableCell className='min-w-40'>{user.shms_email}</TableCell>
                       <TableCell
@@ -335,13 +345,17 @@ export default function Users() {
                                 ? 'تفعيل الحساب'
                                 : 'تعطيل'}
                             </Confirm>
+                            {/* User Stock Limit */}
                             <ConfirmDialog
-                              StockLimit={userStockLimit}
+                              StockLimit={user.shms_user_stock_limit ?? 1}
                               onClick={async () => {
                                 await updateUserStockLimit(user.shms_id, userStockLimit!)
                               }}
                               onChange={e => setUserStockLimit(Number(e.target.value))}
-                            ></ConfirmDialog>
+                              formStatus={formStatus}
+                            >
+                              حد شراء الاسهم
+                            </ConfirmDialog>
                           </DropdownMenuContent>
                         </DropdownMenu>
                         <Modal

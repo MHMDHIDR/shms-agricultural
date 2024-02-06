@@ -1,4 +1,4 @@
-import { MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
+import { DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
 import type { ProjectProps, abstractWordsProps, validateFileProps } from '@/types'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -187,3 +187,13 @@ export const scrollToView = (scrollY: number | undefined = 500) =>
       }),
     100
   )
+
+/**
+ * A function to redirect
+ * @param url the url to be redirected to
+ * @returns void
+ */
+export const redirect = (url: string, time: number = DEFAULT_DURATION) =>
+  window.location
+    ? setTimeout(() => ((window as any).location = url), time)
+    : setTimeout(() => ((window as any).location.replace = url), time)
