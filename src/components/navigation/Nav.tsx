@@ -135,7 +135,7 @@ export default function Nav() {
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>{userName}</NavigationMenuTrigger>
                   <NavigationMenuContent className='rtl'>
-                    <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
+                    <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] grid-rows-3 grid-cols-1 lg:w-[500px]'>
                       <NavigationListItem
                         href='/profile'
                         title='الملف الشخصي'
@@ -174,7 +174,7 @@ export default function Nav() {
             <NavigationMenuItem>
               <NavigationMenuTrigger>عن شمس</NavigationMenuTrigger>
               <NavigationMenuContent className='rtl'>
-                <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
+                <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] grid-rows-2 grid-cols-1'>
                   <NavigationListItem href='/about' title='من نحن'></NavigationListItem>
                   <NavigationListItem
                     href='/contact'

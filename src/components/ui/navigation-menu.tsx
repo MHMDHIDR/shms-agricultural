@@ -84,7 +84,7 @@ const NavigationMenuViewport = forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     className={cn(
-      'absolute -right-10 md:right-10 top-full mt-16 md:mt-0 flex justify-center'
+      'absolute -right-10 md:right-56 top-full mt-16 md:mt-0 flex justify-center'
     )}
   >
     <NavigationMenuPrimitive.Viewport
