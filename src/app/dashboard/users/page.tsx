@@ -26,8 +26,8 @@ import {
 } from '@/components/ui/table'
 import { TabsContent } from '@/components/ui/tabs'
 import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
-import { arabicDate, redirect } from '@/lib/utils'
-import type { UserProps } from '@/types'
+import { arabicDate, cn, redirect } from '@/lib/utils'
+import type { UserProps, stocksPurchesedProps } from '@/types'
 import axios from 'axios'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -234,6 +234,14 @@ export default function Users() {
     }
   }
 
+  const getUserStokcs = (user: UserProps) => {
+    const USER_STOCKS = JSON.parse(
+      String(user.shms_user_stocks)
+    ) as stocksPurchesedProps[]
+    // count the stock in the USER_STOCKS array
+    return USER_STOCKS && USER_STOCKS.reduce((acc, stock) => acc + stock.stocks, 0)
+  }
+
   return (
     <TabsContent dir='rtl' value='users' className='mt-20 md:mt-5'>
       <div style={{ width: '100%', display: 'flex' }}>
@@ -297,8 +305,15 @@ export default function Users() {
                           ? 'محظور'
                           : 'غير مفعل'}
                       </TableCell>
-                      <TableCell className='min-w-40'>
-                        {user.shms_user_stocks?.length ?? 'لم يتم شراء أسهم بعد'}
+                      <TableCell
+                        className={cn(
+                          'min-w-40',
+                          getUserStokcs(user) > 0
+                            ? 'text-gray-600 font-bold'
+                            : 'text-gray-400'
+                        )}
+                      >
+                        {getUserStokcs(user) ?? 'لم يتم شراء اي اسهم'}
                       </TableCell>
                       <TableCell className='min-w-40'>
                         {user.shms_user_stock_limit ?? 1}
