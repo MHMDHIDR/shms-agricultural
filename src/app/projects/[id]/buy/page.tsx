@@ -1,7 +1,7 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { ProjectProps, UserLoggedInProps } from '@/types'
+import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { CardWrapper } from '@/components/auth/card-wrapper'
@@ -40,8 +40,8 @@ export default function BuyStocks({
   const { data: session }: { data: UserLoggedInProps } = useSession()
 
   useEffect(() => {
-    setUserStockLimit(session?.token?.user.shms_user_stock_limit ?? 100)
-  }, [session?.token?.user.shms_user_stock_limit])
+    setUserStockLimit(calculateStockLimit(session?.token?.user!, projectId))
+  }, [session?.token?.user])
 
   useEffect(() => {
     const getProject = async () => {
@@ -352,4 +352,15 @@ export default function BuyStocks({
       </section>
     </Layout>
   )
+}
+
+function calculateStockLimit(user: UserProps, projectId: string) {
+  if (!user || !user.shms_user_stock_limit) return 100
+  // check if the stock in the shms_user_stocks is equal to the projectId
+  const userStocks = JSON.parse(String(user.shms_user_stocks))
+  const userStocksForProject = userStocks
+    .filter((stock: { shms_project_id: string }) => stock.shms_project_id === projectId)
+    .reduce((acc: number, stock: { stocks: number }) => acc + stock.stocks, 0)
+
+  return user.shms_user_stock_limit - userStocksForProject
 }

@@ -14,7 +14,7 @@ export type UserProps = {
   shms_phone?: string
   shms_address?: string
   shms_doc?: string
-  shms_user_stocks?: ProjectProps[]
+  shms_user_stocks?: stocksPurchesedProps[]
   shms_user_stock_limit?: number
   shms_created_at?: string
   shms_user_account_type?: 'admin' | 'user'
@@ -207,11 +207,12 @@ export type ConfirmProps = {
 }
 
 export type stocksPurchesedProps = {
-  userId: UserProps['shms_id']
+  userId?: UserProps['shms_id']
   shms_project_id: ProjectProps['shms_project_id']
-  selectedStocks: number
+  stocks: number
   newPercentage: number
   percentageCode: string
+  createdAt: Date
 }
 
 export type ModalProps = {

@@ -8,19 +8,12 @@ export async function PATCH(req: Request) {
   const {
     userId: shms_id,
     shms_project_id,
-    selectedStocks,
+    stocks,
     newPercentage,
     percentageCode
   }: stocksPurchesedProps = body
 
   if (!shms_id) throw new Error('User ID is required')
-
-  console.log({
-    shms_id,
-    shms_project_id,
-    selectedStocks,
-    newPercentage
-  })
 
   try {
     // Check if the user has enough balance
@@ -37,34 +30,49 @@ export async function PATCH(req: Request) {
     const userPrevStocks = getUserPrevStocks(user as UserProps)
     const projectAvailableStocks = getProjectStocks(project as ProjectProps)
 
-    await connectDB(`UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`, [
-      JSON.stringify([
-        ...(userPrevStocks || []),
-        {
-          shms_project_id,
-          stocks: selectedStocks,
-          newPercentage,
-          percentageCode,
-          createdAt: new Date().toISOString()
-        }
-      ]),
-      shms_id
-    ])
+    const { affectedRows: updateUserStocks } = (await connectDB(
+      `UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`,
+      [
+        JSON.stringify([
+          ...(userPrevStocks || []),
+          {
+            shms_project_id,
+            stocks,
+            newPercentage,
+            percentageCode,
+            createdAt: new Date().toISOString()
+          }
+        ]),
+        shms_id
+      ]
+    )) as ResultSetHeader
 
-    await connectDB(
+    const { affectedRows: updateProjectAvailableStocks } = (await connectDB(
       `UPDATE projects SET shms_project_available_stocks = ? WHERE shms_project_id = ?`,
-      [projectAvailableStocks - selectedStocks, shms_project_id]
-    )
+      [projectAvailableStocks - stocks, shms_project_id]
+    )) as ResultSetHeader
 
-    return new Response(
-      JSON.stringify({
-        stocksPurchesed: 1,
-        message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
+    if (updateUserStocks && updateProjectAvailableStocks) {
+      return new Response(
+        JSON.stringify({
+          stocksPurchesed: 1,
+          message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
          سيتم التواصل معك من فريق 
          ${APP_TITLE}
          لتأكيد العملية ولإتمام باقي الإجراءات`
-      })
-    )
+        })
+      )
+    } else {
+      return (
+        new Response(
+          JSON.stringify({
+            stocksPurchesed: 0,
+            message: 'لم يتم تأكيد عملية الشراء، حاول مرة أخرى'
+          })
+        ),
+        { status: 400 }
+      )
+    }
   } catch (error) {
     console.error(error)
     return new Response(

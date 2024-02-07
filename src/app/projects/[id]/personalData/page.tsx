@@ -26,6 +26,7 @@ export default function PersonalData({
   const [userId, setUserId] = useState<string | null>('')
   const [stocksPurchesed, setStocksPurchesed] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     if (session) {
@@ -56,6 +57,7 @@ export default function PersonalData({
     const { selectedStocks, newPercentage, percentageCode } = JSON.parse(
       localStorage.getItem('shms_project')!
     )
+    setLoading(true)
 
     toast('جاري إتمام عملية شراء الأسهم  ...', {
       icon: <Loading className='text-blue-300' />,
@@ -77,7 +79,7 @@ export default function PersonalData({
       } = await axios.patch(`${API_URL}/stocks/save`, {
         userId,
         shms_project_id: projectId,
-        selectedStocks,
+        stocks: selectedStocks,
         newPercentage,
         percentageCode
       } as stocksPurchesedProps)
@@ -101,6 +103,8 @@ export default function PersonalData({
           textAlign: 'justify'
         }
       })
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -202,10 +206,18 @@ export default function PersonalData({
         <div className='flex justify-center items-center w-full m-5 space-x-4'>
           <Link
             href={`/projects/${projectId}/personalData`}
-            className='pressable'
+            className={`pressable ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             onClick={handleConfirmation}
+            aria-disabled={loading}
           >
-            تأكيد بيانات الشراء
+            {loading ? (
+              <span className='flex items-center justify-center space-x-2'>
+                <Loading className='w-6 h-6' />
+                <span>جاري إتمام عملية الشراء ...</span>
+              </span>
+            ) : (
+              'تأكيد بيانات الشراء'
+            )}
           </Link>
           <Link href={`/projects/${projectId}/buy`} className='pressable'>
             تعديل البيانات
