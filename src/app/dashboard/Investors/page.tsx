@@ -1,3 +1,4 @@
+import Divider from '@/components/custom/Divider'
 import Modal from '@/components/custom/Modal'
 import NoRecords from '@/components/custom/NoRecords'
 import {
@@ -7,6 +8,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
   TableBody,
@@ -20,6 +22,7 @@ import { API_URL, APP_LOGO } from '@/data/constants'
 import { arabicDate } from '@/lib/utils'
 import type { ProjectProps, UserProps, stocksPurchesedProps } from '@/types'
 import axios from 'axios'
+import { Suspense } from 'react'
 
 export default async function DashboardInvestors() {
   const { data: users }: { data: UserProps[] } = await axios.get(
@@ -73,14 +76,36 @@ export default async function DashboardInvestors() {
             {!users || users.length === 0 ? (
               <NoRecords msg='لم يتم العثور على مستثمرين في الوقت الحالي!' />
             ) : (
-              <Table className='min-w-full divide-y divide-gray-200'>
+              <Table className='min-w-full divide-y divide-gray-200 overflow-x-auto'>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className='font-bold text-center select-none'>
+                    <TableHead className='font-bold text-center select-none min-w-32'>
                       الاسم
                     </TableHead>
                     <TableHead className='font-bold text-center select-none'>
-                      المشاريع
+                      تفاصيل الأســــهــــم
+                      <Divider />
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className='border border-gray-200 text-center select-none min-w-56'>
+                              اسم المشروع
+                            </TableHead>
+                            <TableHead className='border border-gray-200 text-center select-none min-w-28'>
+                              عدد الاسهم
+                            </TableHead>
+                            <TableHead className='border border-gray-200 text-center select-none min-w-36'>
+                              نسبة زيادة الأرباح
+                            </TableHead>
+                            <TableHead className='border border-gray-200 text-center select-none min-w-28'>
+                              إجمالي الدفع
+                            </TableHead>
+                            <TableHead className='border border-gray-200 text-center select-none min-w-60'>
+                              تاريخ الشراء
+                            </TableHead>
+                          </TableRow>
+                        </TableHeader>
+                      </Table>
                     </TableHead>
                     <TableHead className='font-bold text-center select-none'>
                       المستند الشخصي
@@ -90,60 +115,56 @@ export default async function DashboardInvestors() {
                 <TableBody>
                   {users.map(user => (
                     <TableRow key={user.shms_id}>
-                      <TableCell className='text-center'>{user.shms_fullname}</TableCell>
+                      <TableCell className='text-center min-w-32'>
+                        {user.shms_fullname}
+                      </TableCell>
                       <TableCell className='text-center'>
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead className='border-b border-gray-200 text-center select-none'>
-                                اسم المشروع
-                              </TableHead>
-                              <TableHead className='border-b border-gray-200 text-center select-none'>
-                                عدد الاسهم
-                              </TableHead>
-                              <TableHead className='border-b border-gray-200 text-center select-none'>
-                                نسبة زيادة الأرباح
-                              </TableHead>
-                              <TableHead className='border-b border-gray-200 text-center select-none'>
-                                إجمالي الدفع
-                              </TableHead>
-                              <TableHead>تاريخ الشراء</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {JSON.parse(String(user.shms_user_stocks)).map(
-                              async (item: stocksPurchesedProps) => {
-                                const projectName = (
-                                  await getProject(item.shms_project_id)
-                                ).shms_project_name
-                                const projectStockPrice = (
-                                  await getProject(item.shms_project_id)
-                                ).shms_project_stock_price
-                                return (
-                                  <div key={item.shms_project_id}>
-                                    <TableRow>
-                                      <TableCell className='text-center'>
-                                        {projectName}
-                                      </TableCell>
-                                      <TableCell className='text-center'>
-                                        {item.stocks}
-                                      </TableCell>
-                                      <TableCell className='text-center'>
-                                        {item.newPercentage}
-                                      </TableCell>
-                                      <TableCell className='text-center'>
-                                        {item.stocks * projectStockPrice}
-                                      </TableCell>
-                                      <TableCell className='text-center'>
-                                        {arabicDate(item.createdAt)}
-                                      </TableCell>
-                                    </TableRow>
-                                  </div>
-                                )
-                              }
-                            )}
-                          </TableBody>
-                        </Table>
+                        <Suspense
+                          fallback={
+                            <div className='flex flex-col gap-y-1.5'>
+                              <Skeleton className='w-full h-4' />
+                              <Skeleton className='w-full h-4' />
+                            </div>
+                          }
+                        >
+                          {JSON.parse(String(user.shms_user_stocks)).map(
+                            async (item: stocksPurchesedProps) => {
+                              const projectName = (await getProject(item.shms_project_id))
+                                .shms_project_name
+                              const projectStockPrice = (
+                                await getProject(item.shms_project_id)
+                              ).shms_project_stock_price
+                              return (
+                                <div key={item.shms_project_id}>
+                                  <Table>
+                                    <TableBody>
+                                      <TableRow>
+                                        <TableCell className='text-center min-w-56'>
+                                          {projectName}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-28'>
+                                          {item.stocks}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-36'>
+                                          {item.newPercentage}
+                                        </TableCell>
+                                        <TableCell
+                                          className='text-center min-w-28'
+                                          data-price
+                                        >
+                                          {item.stocks * projectStockPrice}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-60'>
+                                          {arabicDate(item.createdAt)}
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableBody>
+                                  </Table>
+                                </div>
+                              )
+                            }
+                          )}
+                        </Suspense>
                       </TableCell>
                       <TableCell className='text-center'>
                         <Modal
