@@ -1,7 +1,6 @@
 import { connectDB } from '@/app/api/utils/db'
 import { APP_TITLE } from '@/data/constants'
 import type { ProjectProps, UserProps, stocksPurchesedProps } from '@/types'
-import { ResultSetHeader } from 'mysql2/promise'
 
 export async function PATCH(req: Request) {
   const body = await req.json()
@@ -31,40 +30,35 @@ export async function PATCH(req: Request) {
     const userPrevStocks = getUserPrevStocks(user as UserProps)
     const projectAvailableStocks = getProjectStocks(project as ProjectProps)
 
-    const { affectedRows: updateUserStocks } = (await connectDB(
-      `UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`,
-      [
-        //parse the previos stocks and add the new stocks
-        ...userPrevStocks,
-        JSON.stringify([
-          {
-            shms_project_id,
-            stocks,
-            newPercentage,
-            percentageCode,
-            createdAt
-          }
-        ]),
-        shms_id
-      ]
-    )) as ResultSetHeader
+    await connectDB(`UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`, [
+      //parse the previos stocks and add the new stocks
+      ...userPrevStocks,
+      JSON.stringify([
+        {
+          shms_project_id,
+          stocks,
+          newPercentage,
+          percentageCode,
+          createdAt
+        }
+      ]),
+      shms_id
+    ])
 
-    const { affectedRows: updateProjectAvailableStocks } = (await connectDB(
+    await connectDB(
       `UPDATE projects SET shms_project_available_stocks = ? WHERE shms_project_id = ?`,
       [projectAvailableStocks - stocks, shms_project_id]
-    )) as ResultSetHeader
+    )
 
-    if (updateUserStocks && updateProjectAvailableStocks) {
-      return new Response(
-        JSON.stringify({
-          stocksPurchesed: 1,
-          message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
+    return new Response(
+      JSON.stringify({
+        stocksPurchesed: 1,
+        message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
          سيتم التواصل معك من فريق
          ${APP_TITLE}
          لتأكيد العملية ولإتمام باقي الإجراءات`
-        })
-      )
-    }
+      })
+    )
   } catch (error) {
     console.error(error)
     return new Response(

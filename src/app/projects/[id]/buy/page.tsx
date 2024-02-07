@@ -31,7 +31,7 @@ export default function BuyStocks({
   // const [userStocks, setUserStocks] = useState<UserProps['shms_user_stocks']>()
   const [userStockLimit, setUserStockLimit] = useState(0)
   const [selectedStocks, setSelectedStocks] = useState(
-    JSON.parse(localStorage.getItem('shms_project')!)?.selectedStocks ?? 0
+    JSON.parse(localStorage.getItem('shms_project')!)?.stocks ?? 0
   )
 
   const [percentageCode, setPercentageCode] = useState<string>(
@@ -60,7 +60,7 @@ export default function BuyStocks({
 
       getUser()
     }
-  }, [session?.token?.user])
+  }, [projectId, session?.token])
 
   useEffect(() => {
     const getProject = async () => {

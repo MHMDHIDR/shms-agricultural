@@ -229,7 +229,9 @@ export default function PersonalData({
           </Button>
           <Link
             href={`/projects/${projectId}/buy`}
-            className={`pressable ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`pressable ${
+              loading ? 'opacity-50 cursor-not-allowed hover:scale-100' : ''
+            }`}
           >
             {loading ? (
               <span className='flex items-center justify-center space-x-2'>

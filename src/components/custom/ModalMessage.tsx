@@ -55,4 +55,6 @@ const ModalMessage = forwardRef(
   }
 )
 
+ModalMessage.displayName = 'ModalMessage'
+
 export default ModalMessage
