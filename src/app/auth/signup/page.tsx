@@ -107,45 +107,6 @@ const SignupPage = () => {
     }
   }
 
-  // To keep track of the signup form data
-  useEffect(() => {
-    localStorage.setItem(
-      'shms_formSignupData',
-      JSON.stringify({
-        fName,
-        sName,
-        tName,
-        foName,
-        email,
-        nationality,
-        dateOfBirth,
-        address,
-        password,
-        confirmPassword,
-        acceptedTerm,
-        phone
-      })
-    )
-
-    // Remove shms_formSignupData from localStorage when component unmounts
-    return () => {
-      localStorage.removeItem('shms_formSignupData')
-    }
-  }, [
-    fName,
-    sName,
-    tName,
-    foName,
-    email,
-    nationality,
-    dateOfBirth,
-    address,
-    password,
-    confirmPassword,
-    acceptedTerm,
-    phone
-  ])
-
   useEffect(() => {
     setUserFullName(`${fName} ${sName} ${tName} ${foName}`)
   }, [fName, sName, tName, foName])

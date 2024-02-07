@@ -9,8 +9,7 @@ export async function PATCH(req: Request) {
     shms_project_id,
     stocks,
     newPercentage,
-    percentageCode,
-    createdAt
+    percentageCode
   }: stocksPurchesedProps = body
 
   if (!shms_id) throw new Error('User ID is required')
@@ -31,15 +30,14 @@ export async function PATCH(req: Request) {
     const projectAvailableStocks = getProjectStocks(project as ProjectProps)
 
     await connectDB(`UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`, [
-      //parse the previos stocks and add the new stocks
-      ...userPrevStocks,
       JSON.stringify([
+        ...JSON.parse(String(userPrevStocks)),
         {
           shms_project_id,
           stocks,
           newPercentage,
           percentageCode,
-          createdAt
+          createdAt: new Date().toISOString()
         }
       ]),
       shms_id
@@ -54,7 +52,7 @@ export async function PATCH(req: Request) {
       JSON.stringify({
         stocksPurchesed: 1,
         message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
-         سيتم التواصل معك من فريق
+         سيتم التواصل معك من فريق 
          ${APP_TITLE}
          لتأكيد العملية ولإتمام باقي الإجراءات`
       })
@@ -71,7 +69,7 @@ export async function PATCH(req: Request) {
 }
 
 function getUserPrevStocks(user: UserProps) {
-  if (!user || !user.shms_user_stocks || user.shms_user_stocks.length === 0) return []
+  if (!user || !user.shms_user_stocks || user.shms_user_stocks.length === 0) return null
 
   return user.shms_user_stocks
 }

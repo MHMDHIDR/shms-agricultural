@@ -44,14 +44,12 @@ export default async function ProjectDetailsPage({
 
   return (
     <Layout>
-      <main className='flex flex-col items-center justify-between min-h-screen sm:p-24'>
-        <h1 className='mb-10 text-2xl font-bold text-center select-none' dir='rtl'>
+      <main className='container flex flex-col items-center justify-between min-h-screen px-4 mt-40'>
+        <h1 className='text-lg font-bold text-center select-none' dir='rtl'>
           {project.shms_project_name}
         </h1>
         {/* Render images in a row */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <ProjectImages images={getProjectImages} />
-        </div>
+        <ProjectImages images={getProjectImages} />
         <p
           style={{ fontWeight: 'bold' }}
           className='leading-loose text-justify'
@@ -60,9 +58,9 @@ export default async function ProjectDetailsPage({
           {project.shms_project_description}
         </p>
 
-        <div dir='rtl' className='grid grid-cols-3 grid-rows-3 gap-4 w-full my-10'>
-          <div className='flex items-center flex-col gap-y-2 rtl'>
-            <MapPin className='w-24 h-24 stroke-red-500 stroke-1' />
+        <div dir='rtl' className='grid w-full grid-cols-3 grid-rows-3 gap-4 my-10'>
+          <div className='flex flex-col items-center gap-y-2 rtl'>
+            <MapPin className='w-24 h-24 stroke-1 stroke-red-500' />
             <span>الموقع</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
               {project.shms_project_location}
@@ -71,8 +69,8 @@ export default async function ProjectDetailsPage({
 
           <div />
 
-          <div className='flex items-center flex-col gap-y-2 rtl'>
-            <BadgeDollarSign className='w-24 h-24 stroke-green-500 stroke-1' />
+          <div className='flex flex-col items-center gap-y-2 rtl'>
+            <BadgeDollarSign className='w-24 h-24 stroke-1 stroke-green-500' />
             <span>قيمة السهم الواحد</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
               {project.shms_project_stock_price}
@@ -81,7 +79,7 @@ export default async function ProjectDetailsPage({
 
           <div />
 
-          <div className='flex items-center flex-col gap-y-2 rtl'>
+          <div className='flex flex-col items-center gap-y-2 rtl'>
             <LineChart className='w-20 h-20' />
             <span>ارباح السهم الواحد</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
@@ -91,7 +89,7 @@ export default async function ProjectDetailsPage({
 
           <div />
 
-          <div className='flex items-center flex-col gap-y-2 rtl'>
+          <div className='flex flex-col items-center gap-y-2 rtl'>
             <TimerReset className='w-20 h-20' />
             <span>مدة المشروع</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
@@ -101,7 +99,7 @@ export default async function ProjectDetailsPage({
 
           <div />
 
-          <div className='flex items-center flex-col gap-y-2 m-5 mt-10 rtl'>
+          <div className='flex flex-col items-center m-5 mt-10 gap-y-2 rtl'>
             <TimerIcon className='w-20 h-20' />
             <span>موعد تسليم الأرباح</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>

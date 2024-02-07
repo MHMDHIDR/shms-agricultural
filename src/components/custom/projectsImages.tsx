@@ -25,18 +25,19 @@ const ProjectImages = ({ images }: { images: string[] }) => {
   }
 
   return (
-    <main className={`flex min-h-screen items-center justify-between p-24`}>
-      <div>
+    <main className={`my-10`}>
+      <div
+        className={`grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 col-rows-4 gap-4`}
+      >
         {images ? (
           images.map((imageUrl, index) => (
             <Image
               key={index}
               src={imageUrl}
               alt={`Image ${index + 1}`}
-              width={500}
+              width={350}
               height={300}
-              style={{ margin: 50 }}
-              className='hover:cursor-zoom-in w-96 h-96'
+              className='w-56 h-40 rounded-lg hover:cursor-zoom-in'
               onClick={() => openModal(index)}
             />
           ))
@@ -44,9 +45,9 @@ const ProjectImages = ({ images }: { images: string[] }) => {
           <Image
             src='/logo-slogan.png'
             alt='No Image'
-            width={500}
+            width={250}
             height={300}
-            style={{ margin: 50 }}
+            className='m-10'
           />
         )}
       </div>

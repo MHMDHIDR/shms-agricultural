@@ -82,14 +82,14 @@ export default function PersonalData({
       const createdAt = new Date().toISOString()
       const {
         data: { stocksPurchesed, message }
-      } = await axios.patch(`${API_URL}/stocks/save`, {
+      } = await axios.patch(`${API_URL}/stocks/add`, {
         userId,
         shms_project_id: projectId,
         stocks: stockItems?.stocks,
         newPercentage: stockItems?.newPercentage,
         percentageCode: stockItems?.percentageCode,
         createdAt
-      } as stocksPurchesedProps)
+      })
 
       setMessage(message)
       setStocksPurchesed(stocksPurchesed)
@@ -188,7 +188,7 @@ export default function PersonalData({
                       src='/logo-slogan.png'
                       alt='Your Image Alt Text'
                       style={{ borderRadius: 5 }}
-                      className='border rounded-lg p-4 border-gray-400 w-72 cursor-pointer'
+                      className='p-4 border border-gray-400 rounded-lg cursor-pointer w-72'
                       width={350}
                       height={350}
                     />
@@ -211,9 +211,11 @@ export default function PersonalData({
           </CardWrapper>
         </div>
 
-        <div className='flex justify-center items-center w-full m-5 space-x-4'>
+        <div className='flex items-center justify-center w-full m-5 space-x-4'>
           <Button
-            className={`pressable ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`pressable ${
+              loading ? 'opacity-50 hover:pointer-events-none cursor-not-allowed' : ''
+            }`}
             onClick={handleConfirmation}
             aria-disabled={loading}
             disabled={loading}
@@ -221,7 +223,7 @@ export default function PersonalData({
             {loading ? (
               <span className='flex items-center justify-center space-x-2'>
                 <Loading className='w-6 h-6' />
-                <span>جاري إتمام عملية الشراء ...</span>
+                <span className='rtl'>جاري إتمام عملية الشراء ...</span>
               </span>
             ) : (
               'تأكيد بيانات الشراء'
@@ -236,7 +238,7 @@ export default function PersonalData({
             {loading ? (
               <span className='flex items-center justify-center space-x-2'>
                 <Loading className='w-6 h-6' />
-                <span>جاري إتمام عملية الشراء ...</span>
+                <span className='rtl'>جاري إتمام عملية الشراء ...</span>
               </span>
             ) : (
               'تعديل البيانات'

@@ -146,7 +146,7 @@ export default function PrivacyPage() {
               </Link>
             </li>
           </ol>
-          <h2 id='section-1' className='text-lg font-semibold mt-4'>
+          <h2 id='section-1' className='text-lg font-semibold mt-4 scroll-mt-24'>
             1. ما هي المعلومات الشخصية التي نقوم بجمعها؟
           </h2>
           <p>المعلومات الشخصية التي تكشفها لنا</p>
@@ -180,7 +180,7 @@ export default function PrivacyPage() {
             يجب أن تكون جميع المعلومات الشخصية التي تقدمها لنا صحيحة، كاملة، ودقيقة، ويجب
             أن تُعلمنا بأي تغييرات في مثل هذه المعلومات الشخصية.
           </p>
-          <h2 id='section-2' className='text-lg font-semibold mt-4'>
+          <h2 id='section-2' className='text-lg font-semibold mt-4 scroll-mt-24'>
             2. كيف نقوم بمعالجة معلوماتك؟
           </h2>
           <p>
@@ -198,7 +198,7 @@ export default function PrivacyPage() {
             <li>لإرسال المعلومات الإدارية لك</li>
             <li>لتحقيق وتحسين خدماتنا ومنتجاتنا وتسويقنا وتجربتك</li>
           </ul>
-          <h2 id='section-3' className='text-lg font-semibold mt-4'>
+          <h2 id='section-3' className='text-lg font-semibold mt-4 scroll-mt-24'>
             3. متى ومع من نشارك معلوماتك الشخصية؟
           </h2>
           <p>باختصار: قد نشارك المعلومات في حالات محددة ومع أطراف معينة.</p>
@@ -210,7 +210,7 @@ export default function PrivacyPage() {
               أعمالنا إلى شركة أخرى.
             </li>
           </ul>
-          <h2 id='section-4' className='text-lg font-semibold mt-4'>
+          <h2 id='section-4' className='text-lg font-semibold mt-4 scroll-mt-24'>
             4. هل نستخدم ملفات تعريف الارتباط وغيرها من تقنيات التتبع؟
           </h2>
           <p>
@@ -229,7 +229,7 @@ export default function PrivacyPage() {
               https://shmsagricultural.com/cookies-policy.
             </Link>
           </p>
-          <h2 id='section-5' className='text-lg font-semibold mt-4'>
+          <h2 id='section-5' className='text-lg font-semibold mt-4 scroll-mt-24'>
             5. ما هو مدى الوقت الذي نحتفظ فيه بمعلوماتك؟
           </h2>
           <p>
@@ -250,7 +250,7 @@ export default function PrivacyPage() {
             بتخزين معلوماتك الشخصية بشكل آمن وعزلها عن أي معالجة مستقبلية حتى يكون الحذف
             ممكنًا.
           </p>
-          <h2 id='section-6' className='text-lg font-semibold mt-4'>
+          <h2 id='section-6' className='text-lg font-semibold mt-4 scroll-mt-24'>
             6. كيف نحافظ على سلامة معلوماتك؟
           </h2>
           <p>
@@ -268,12 +268,12 @@ export default function PrivacyPage() {
             قصارى جهدنا لحماية معلوماتك الشخصية، فإن نقل المعلومات الشخصية إلى ومن خدماتنا
             هو على مسؤوليتك الخاصة. يجب عليك فقط الوصول إلى الخدمات داخل بيئة آمنة.
           </p>
-          <h2 id='section-7' className='text-lg font-semibold mt-4'>
+          <h2 id='section-7' className='text-lg font-semibold mt-4 scroll-mt-24'>
             7. هل نجمع معلومات من القصر؟
           </h2>
           <p>باختصار: لا نقوم بجمع البيانات من القصر بصورة معلمة.</p>
           <p>باستخدامك لهذا الموقع / تطبيق الويب. فأنت توافق على أنك أكبر من سن 18 سنة</p>
-          <h2 id='section-8' className='text-lg font-semibold mt-4'>
+          <h2 id='section-8' className='text-lg font-semibold mt-4 scroll-mt-24'>
             8. ما هي حقوق الخصوصية لديك؟
           </h2>
           <p>باختصار: يمكنك مراجعة أو تغيير أو إنهاء حسابك في أي وقت.</p>
@@ -285,7 +285,7 @@ export default function PrivacyPage() {
             الوصول إلى حسابك. إذا كنت تمتلك حسابًا على هذا الموقع / التطبيق، فيمكنك طلب
             نسخة من المعلومات الشخصية التي نحتفظ بها عنك.
           </p>
-          <h2 id='section-9' className='text-lg font-semibold mt-4'>
+          <h2 id='section-9' className='text-lg font-semibold mt-4 scroll-mt-24'>
             9. تحكمات لميزة عدم التتبع
           </h2>
           <p>باختصار: لا يتبع هذا الموقع / التطبيق أو يستجيب لإشارات عدم التتبع.</p>
@@ -294,7 +294,7 @@ export default function PrivacyPage() {
             بك. إذا قمت بتعطيل ملفات تعريف الارتباط، قد لا تتمكن من استخدام كل ميزات
             الموقع / التطبيق.
           </p>
-          <h2 id='section-10' className='text-lg font-semibold mt-4'>
+          <h2 id='section-10' className='text-lg font-semibold mt-4 scroll-mt-24'>
             10. هل نقوم بتحديثات لهذا الإشعار؟
           </h2>
           <p>
@@ -307,7 +307,7 @@ export default function PrivacyPage() {
             طريق إعلان موضوعي على موقع الويب الخاص بنا، أو عن طريق إرسال إشعار لك عبر
             البريد الإلكتروني.
           </p>
-          <h2 id='section-11' className='text-lg font-semibold mt-4'>
+          <h2 id='section-11' className='text-lg font-semibold mt-4 scroll-mt-24'>
             11. كيف يمكنك الاتصال بنا حول هذا الإشعار؟
           </h2>
           <p>
@@ -320,7 +320,7 @@ export default function PrivacyPage() {
               info@shmsagricultural.com.
             </Link>
           </p>
-          <h2 id='section-12' className='text-lg font-semibold mt-4'>
+          <h2 id='section-12' className='text-lg font-semibold mt-4 scroll-mt-24'>
             12. كيف يمكنك مراجعة أو تحديث أو حذف البيانات التي نجمعها منك؟
           </h2>
           <p>باختصار: تحديد خيارات الحساب في حال كان لديك حساب.</p>

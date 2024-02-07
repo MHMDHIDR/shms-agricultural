@@ -31,14 +31,19 @@ export default function BuyStocks({
   // const [userStocks, setUserStocks] = useState<UserProps['shms_user_stocks']>()
   const [userStockLimit, setUserStockLimit] = useState(0)
   const [selectedStocks, setSelectedStocks] = useState(
-    JSON.parse(localStorage.getItem('shms_project')!)?.stocks ?? 0
+    JSON.parse(
+      typeof window !== 'undefined' ? localStorage.getItem('shms_project')! : '{}'
+    )?.stocks ?? 0
   )
-
   const [percentageCode, setPercentageCode] = useState<string>(
-    JSON.parse(localStorage.getItem('shms_project')!)?.percentageCode ?? ''
+    JSON.parse(
+      typeof window !== 'undefined' ? localStorage.getItem('shms_project')! : '{}'
+    )?.percentageCode ?? ''
   )
   const [newPercentage, setNewPercentage] = useState<number>(
-    JSON.parse(localStorage.getItem('shms_project')!)?.newPercentage ?? 0
+    JSON.parse(
+      typeof window !== 'undefined' ? localStorage.getItem('shms_project')! : '{}'
+    )?.newPercentage ?? 0
   )
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
@@ -51,16 +56,18 @@ export default function BuyStocks({
         const { data: shms_user_stocks }: { data: UserProps } = await axios.get(
           `${API_URL}/users/getUserStocks/${session?.token?.user?.shms_id}`
         )
-        const userStocks = JSON.parse(String(shms_user_stocks.shms_user_stocks))
+        const userStocks: stocksPurchesedProps[] = JSON.parse(
+          String(shms_user_stocks.shms_user_stocks)
+        )
 
         setUserStockLimit(
-          calculateStockLimit(session?.token!?.user!, userStocks!, projectId)
+          calculateStockLimit(session?.token!?.user!, userStocks, projectId)
         )
       }
 
       getUser()
     }
-  }, [projectId, session?.token])
+  }, [session?.token, projectId])
 
   useEffect(() => {
     const getProject = async () => {
@@ -229,7 +236,7 @@ export default function BuyStocks({
                 </div>
                 <div className='md:w-2/3'>
                   <UserStockSelect
-                    userStockLimit={userStockLimit ?? 100}
+                    userStockLimit={!session ? 100 : userStockLimit ?? 100}
                     setSelectedStocks={setSelectedStocks}
                     selectedStocks={selectedStocks}
                   />
@@ -350,20 +357,16 @@ export default function BuyStocks({
             </form>
           )}
         </CardWrapper>
-        <div className='flex justify-center items-center w-full m-5 space-x-4'>
+        <div className='flex items-center justify-center w-full m-5 space-x-4'>
           <Link
             href={
               !session
                 ? `/auth/signin?callbackUrl=/projects/${projectId}/buy`
                 : `/projects/${projectId}/personalData`
             }
-            aria-disabled={
-              !selectedStocks ||
-              selectedStocks === 0 ||
-              project?.shms_project_available_stocks === 0
-            }
+            aria-disabled={project?.shms_project_available_stocks === 0}
             className={`pressable ${
-              !selectedStocks || selectedStocks === 0
+              project?.shms_project_available_stocks === 0
                 ? 'pointer-events-none opacity-50 cursor-not-allowed'
                 : ''
             }`}
@@ -382,7 +385,7 @@ function calculateStockLimit(
   userStocks: stocksPurchesedProps[],
   projectId: string
 ) {
-  if (!user?.shms_user_stock_limit) return 100
+  if (!user || !user?.shms_user_stock_limit) return 100
 
   // check if the stock in the shms_user_stocks is equal to the projectId
   const userStocksForProject = userStocks?.reduce(
