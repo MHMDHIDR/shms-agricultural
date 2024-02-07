@@ -137,6 +137,10 @@ export default function Nav() {
                   <NavigationMenuContent className='rtl'>
                     <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] grid-rows-3 grid-cols-1 lg:w-[500px]'>
                       <NavigationListItem
+                        href='/profile/investments'
+                        title='استثماراتي'
+                      ></NavigationListItem>
+                      <NavigationListItem
                         href='/profile'
                         title='الملف الشخصي'
                       ></NavigationListItem>

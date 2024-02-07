@@ -1,7 +1,12 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
+import type {
+  ProjectProps,
+  UserLoggedInProps,
+  UserProps,
+  stocksPurchesedProps
+} from '@/types'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { CardWrapper } from '@/components/auth/card-wrapper'
@@ -23,6 +28,7 @@ export default function BuyStocks({
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [project, setProject] = useState<ProjectProps>()
+  // const [userStocks, setUserStocks] = useState<UserProps['shms_user_stocks']>()
   const [userStockLimit, setUserStockLimit] = useState(0)
   const [selectedStocks, setSelectedStocks] = useState(
     JSON.parse(localStorage.getItem('shms_project')!)?.selectedStocks ?? 0
@@ -40,7 +46,20 @@ export default function BuyStocks({
   const { data: session }: { data: UserLoggedInProps } = useSession()
 
   useEffect(() => {
-    setUserStockLimit(calculateStockLimit(session?.token?.user!, projectId))
+    if (session?.token?.user?.shms_id) {
+      const getUser = async () => {
+        const { data: shms_user_stocks }: { data: UserProps } = await axios.get(
+          `${API_URL}/users/getUserStocks/${session?.token?.user?.shms_id}`
+        )
+        const userStocks = JSON.parse(String(shms_user_stocks.shms_user_stocks))
+
+        setUserStockLimit(
+          calculateStockLimit(session?.token!?.user!, userStocks!, projectId)
+        )
+      }
+
+      getUser()
+    }
   }, [session?.token?.user])
 
   useEffect(() => {
@@ -88,7 +107,7 @@ export default function BuyStocks({
       'shms_project',
       JSON.stringify({
         shms_project: project?.shms_project_id,
-        selectedStocks,
+        stocks: selectedStocks,
         newPercentage,
         percentageCode
       })
@@ -149,7 +168,7 @@ export default function BuyStocks({
       'shms_project',
       JSON.stringify({
         shms_project: project?.shms_project_id,
-        selectedStocks,
+        stocks: selectedStocks,
         newPercentage,
         percentageCode
       })
@@ -338,7 +357,11 @@ export default function BuyStocks({
                 ? `/auth/signin?callbackUrl=/projects/${projectId}/buy`
                 : `/projects/${projectId}/personalData`
             }
-            aria-disabled={!selectedStocks || selectedStocks === 0}
+            aria-disabled={
+              !selectedStocks ||
+              selectedStocks === 0 ||
+              project?.shms_project_available_stocks === 0
+            }
             className={`pressable ${
               !selectedStocks || selectedStocks === 0
                 ? 'pointer-events-none opacity-50 cursor-not-allowed'
@@ -354,13 +377,18 @@ export default function BuyStocks({
   )
 }
 
-function calculateStockLimit(user: UserProps, projectId: string) {
-  if (!user || !user.shms_user_stock_limit) return 100
-  // check if the stock in the shms_user_stocks is equal to the projectId
-  const userStocks = JSON.parse(String(user.shms_user_stocks))
-  const userStocksForProject = userStocks
-    .filter((stock: { shms_project_id: string }) => stock.shms_project_id === projectId)
-    .reduce((acc: number, stock: { stocks: number }) => acc + stock.stocks, 0)
+function calculateStockLimit(
+  user: UserProps,
+  userStocks: stocksPurchesedProps[],
+  projectId: string
+) {
+  if (!user?.shms_user_stock_limit) return 100
 
-  return user.shms_user_stock_limit - userStocksForProject
+  // check if the stock in the shms_user_stocks is equal to the projectId
+  const userStocksForProject = userStocks?.reduce(
+    (acc, stock) => (stock.shms_project_id === projectId ? acc + stock.stocks : acc + 0),
+    0
+  )
+
+  return user.shms_user_stock_limit! - (userStocksForProject ?? 0)
 }

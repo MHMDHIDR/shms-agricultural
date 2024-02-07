@@ -144,12 +144,19 @@ export default async function ProjectDetailsPage({
         />
 
         {/* زر شراء السهم */}
-        <Link
-          href={`/projects/${projectId}/buy`}
-          className='p-4 mt-10 text-white bg-green-500 rounded-lg hover:bg-green-700'
-        >
-          شراء أسهم من المشروع
-        </Link>
+        {project.shms_project_available_stocks > 0 && (
+          <Link
+            href={`/projects/${projectId}/buy`}
+            className={`p-4 mt-10 text-white bg-green-500 rounded-lg hover:bg-green-700${
+              project.shms_project_available_stocks === 0
+                ? ' cursor-not-allowed pointer-events-none opacity-50'
+                : ''
+            }`}
+            aria-disabled={project.shms_project_available_stocks === 0}
+          >
+            شراء أسهم من المشروع
+          </Link>
+        )}
       </main>
     </Layout>
   )

@@ -212,7 +212,7 @@ export type stocksPurchesedProps = {
   stocks: number
   newPercentage: number
   percentageCode: string
-  createdAt: Date
+  createdAt: string
 }
 
 export type ModalProps = {

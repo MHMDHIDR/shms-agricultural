@@ -22,13 +22,6 @@ const ModalMessage = forwardRef(
       setTimeout(() => window.location.assign(redirectLink), redirectTime)
     }
 
-    // can not scroll when modal is open
-    if (modalHidden.includes('hidden')) {
-      document.body.style.overflow = 'auto'
-    } else {
-      document.body.style.overflow = 'hidden'
-    }
-
     return (
       <section
         ref={ref}

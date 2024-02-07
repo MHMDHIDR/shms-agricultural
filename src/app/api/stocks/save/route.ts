@@ -10,7 +10,8 @@ export async function PATCH(req: Request) {
     shms_project_id,
     stocks,
     newPercentage,
-    percentageCode
+    percentageCode,
+    createdAt
   }: stocksPurchesedProps = body
 
   if (!shms_id) throw new Error('User ID is required')
@@ -33,14 +34,15 @@ export async function PATCH(req: Request) {
     const { affectedRows: updateUserStocks } = (await connectDB(
       `UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`,
       [
+        //parse the previos stocks and add the new stocks
+        ...userPrevStocks,
         JSON.stringify([
-          ...(userPrevStocks || []),
           {
             shms_project_id,
             stocks,
             newPercentage,
             percentageCode,
-            createdAt: new Date().toISOString()
+            createdAt
           }
         ]),
         shms_id
@@ -57,20 +59,10 @@ export async function PATCH(req: Request) {
         JSON.stringify({
           stocksPurchesed: 1,
           message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
-         سيتم التواصل معك من فريق 
+         سيتم التواصل معك من فريق
          ${APP_TITLE}
          لتأكيد العملية ولإتمام باقي الإجراءات`
         })
-      )
-    } else {
-      return (
-        new Response(
-          JSON.stringify({
-            stocksPurchesed: 0,
-            message: 'لم يتم تأكيد عملية الشراء، حاول مرة أخرى'
-          })
-        ),
-        { status: 400 }
       )
     }
   } catch (error) {
@@ -85,7 +77,7 @@ export async function PATCH(req: Request) {
 }
 
 function getUserPrevStocks(user: UserProps) {
-  if (!user || !user.shms_user_stocks || user.shms_user_stocks.length === 0) return null
+  if (!user || !user.shms_user_stocks || user.shms_user_stocks.length === 0) return []
 
   return user.shms_user_stocks
 }

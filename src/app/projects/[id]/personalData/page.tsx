@@ -15,7 +15,8 @@ import axios from 'axios'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect, useState } from 'react'
 import ModalMessage from '@/components/custom/ModalMessage'
-import { redirect } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
 
 export default function PersonalData({
   params: { id: projectId /*, slug*/ }
@@ -27,10 +28,17 @@ export default function PersonalData({
   const [stocksPurchesed, setStocksPurchesed] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
+  const [stockItems, setStockItems] = useState<stocksPurchesedProps>()
+
+  const { push } = useRouter()
 
   useEffect(() => {
     if (session) {
       setUserId(session?.token?.user.shms_id ?? null)
+    }
+
+    if (localStorage.getItem('shms_project')) {
+      setStockItems(JSON.parse(localStorage.getItem('shms_project') as string))
     }
   }, [session])
 
@@ -54,16 +62,13 @@ export default function PersonalData({
   }
 
   const savePurchase = async () => {
-    const { selectedStocks, newPercentage, percentageCode } = JSON.parse(
-      localStorage.getItem('shms_project')!
-    )
     setLoading(true)
 
     toast('جاري إتمام عملية شراء الأسهم  ...', {
       icon: <Loading className='text-blue-300' />,
       position: 'bottom-center',
       className: 'text-right select-none rtl',
-      duration: DEFAULT_DURATION,
+      duration: DEFAULT_DURATION / 1.45,
       style: {
         backgroundColor: '#ccf0ff',
         color: '#00415c',
@@ -74,24 +79,27 @@ export default function PersonalData({
     })
 
     try {
+      const createdAt = new Date().toISOString()
       const {
         data: { stocksPurchesed, message }
       } = await axios.patch(`${API_URL}/stocks/save`, {
         userId,
         shms_project_id: projectId,
-        stocks: selectedStocks,
-        newPercentage,
-        percentageCode
+        stocks: stockItems?.stocks,
+        newPercentage: stockItems?.newPercentage,
+        percentageCode: stockItems?.percentageCode,
+        createdAt
       } as stocksPurchesedProps)
 
+      setMessage(message)
       setStocksPurchesed(stocksPurchesed)
       if (stocksPurchesed === 1) {
-        setMessage(message)
         localStorage.removeItem('shms_project')
-        redirect(`/`, DEFAULT_DURATION * 2)
+        setTimeout(() => push(`/profile/investments`), DEFAULT_DURATION)
       }
     } catch (error) {
-      toast('حدث خطأ أثناء إتمام عملية الشراء!', {
+      console.error('error -->', error)
+      toast('حدثت مشكلة أثناء إتمام عملية شراء الأسهم، حاول مرة أخرى لاحقا', {
         icon: <Error className='w-6 h-6 ml-3' />,
         position: 'bottom-center',
         className: 'text-right select-none rtl',
@@ -204,11 +212,11 @@ export default function PersonalData({
         </div>
 
         <div className='flex justify-center items-center w-full m-5 space-x-4'>
-          <Link
-            href={`/projects/${projectId}/personalData`}
+          <Button
             className={`pressable ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             onClick={handleConfirmation}
             aria-disabled={loading}
+            disabled={loading}
           >
             {loading ? (
               <span className='flex items-center justify-center space-x-2'>
@@ -218,9 +226,19 @@ export default function PersonalData({
             ) : (
               'تأكيد بيانات الشراء'
             )}
-          </Link>
-          <Link href={`/projects/${projectId}/buy`} className='pressable'>
-            تعديل البيانات
+          </Button>
+          <Link
+            href={`/projects/${projectId}/buy`}
+            className={`pressable ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {loading ? (
+              <span className='flex items-center justify-center space-x-2'>
+                <Loading className='w-6 h-6' />
+                <span>جاري إتمام عملية الشراء ...</span>
+              </span>
+            ) : (
+              'تعديل البيانات'
+            )}
           </Link>
         </div>
       </main>
