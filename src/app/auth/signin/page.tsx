@@ -151,7 +151,7 @@ const SigninPage = () => {
 
   return (
     <Layout>
-      <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24 mx-auto'>
+      <section className='min-h-screen h-screen mt-96 md:mt-[40rem] mx-auto'>
         <CardWrapper
           headerLabel='مرحبا بك'
           backButtonLabel='إنشاء حساب جديد'

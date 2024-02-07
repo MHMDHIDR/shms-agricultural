@@ -675,7 +675,7 @@ const SignupPage = () => {
             </div>
 
             {acceptedTermError && <FormMessage error>{acceptedTermError}</FormMessage>}
-            <div className='flex-col items-start w-full mb-6 gap-2 md:flex'>
+            <div className='flex-col items-start w-full mb-6 md:flex'>
               <label
                 htmlFor='accept_termsAndPrivacy'
                 className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
@@ -688,11 +688,17 @@ const SignupPage = () => {
                   required
                 />
                 أوافق على &nbsp;
-                <Link href='/terms' className='font-bold underline-hover'>
+                <Link
+                  href='/terms'
+                  className='font-bold underline md:no-underline md:underline-hover'
+                >
                   بنود الاستخدام
                 </Link>
                 &nbsp; و &nbsp;
-                <Link href='/privacy' className='font-bold underline-hover'>
+                <Link
+                  href='/privacy'
+                  className='font-bold underline md:decoration-transparent md:underline-hover'
+                >
                   سياسة الخصوصية
                 </Link>
                 <span className='text-red-500'>*</span>

@@ -29,16 +29,20 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
 export function MyTooltip({
   children,
-  text
+  text,
+  className
 }: {
   children: React.ReactNode
   text: string
+  className?: string
 }) {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent className='translate-x-14'>{text}</TooltipContent>
+        <TooltipContent className={cn(`translate-x-14`, className)}>
+          {text}
+        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   )

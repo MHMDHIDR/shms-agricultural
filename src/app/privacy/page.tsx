@@ -1,12 +1,13 @@
 import Layout from '@/components/custom/Layout'
+import { NavigateTop } from '@/components/custom/NavigateTop'
 import Link from 'next/link'
 
 export default function PrivacyPage() {
   return (
     <Layout>
-      <main className='flex flex-col min-h-screen p-24 rtl gap-y-10'>
+      <main className='flex flex-col min-h-screen px-5 pt-20 rtl gap-y-10'>
         <h1 className='text-xl font-bold select-none'>سياسة الخصوصية</h1>
-        <section className='leading-loose text-justify'>
+        <section className='leading-loose md:text-justify'>
           <h2 className='text-sm text-gray-600 font-semibold'>
             آخر تحديث في 6 فبراير 2024
           </h2>
@@ -47,46 +48,102 @@ export default function PrivacyPage() {
             بعد كل نقطة رئيسية أو باستخدام جدول المحتويات الخاص بنا أدناه للعثور على القسم
             الذي تبحث عنه.
           </p>
-          <ol className='list-decimal list-inside'>
+          <ol className='list-decimal list-inside text-blue-700 underline underline-offset-4 md:no-underline'>
             <li>
-              <a href='#section-1'>ما هي المعلومات الشخصية التي نقوم بمعالجتها؟</a>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-1'
+              >
+                ما هي المعلومات الشخصية التي نقوم بمعالجتها؟
+              </Link>
             </li>
             <li>
-              <a href='#section-2'>كيف نقوم بمعالجة معلوماتك؟</a>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-2'
+              >
+                كيف نقوم بمعالجة معلوماتك؟
+              </Link>
             </li>
             <li>
-              <a href='#section-3'>متى ومع من نشارك معلوماتك الشخصية؟</a>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-3'
+              >
+                متى ومع من نشارك معلوماتك الشخصية؟
+              </Link>
             </li>
             <li>
-              <a href='#section-4'>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-4'
+              >
                 هل نستخدم ملفات تعريف الارتباط وغيرها من تقنيات التتبع؟
-              </a>
+              </Link>
             </li>
             <li>
-              <a href='#section-5'>ما هو مدى الوقت الذي نحتفظ فيه بمعلوماتك؟</a>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-5'
+              >
+                ما هو مدى الوقت الذي نحتفظ فيه بمعلوماتك؟
+              </Link>
             </li>
             <li>
-              <a href='#section-6'>كيف نحافظ على سلامة معلوماتك؟</a>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-6'
+              >
+                كيف نحافظ على سلامة معلوماتك؟
+              </Link>
             </li>
             <li>
-              <a href='#section-7'>هل نجمع معلومات من القصر؟</a>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-7'
+              >
+                هل نجمع معلومات من القصر؟
+              </Link>
             </li>
             <li>
-              <a href='#section-8'>ما هي حقوق الخصوصية لديك؟</a>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-8'
+              >
+                ما هي حقوق الخصوصية لديك؟
+              </Link>
             </li>
             <li>
-              <a href='#section-9'>تحكمات لميزة عدم التتبع</a>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-9'
+              >
+                تحكمات لميزة عدم التتبع
+              </Link>
             </li>
             <li>
-              <a href='#section-10'>هل نقوم بتحديثات لهذا الإشعار؟</a>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-10'
+              >
+                هل نقوم بتحديثات لهذا الإشعار؟
+              </Link>
             </li>
             <li>
-              <a href='#section-11'>كيف يمكنك الاتصال بنا حول هذا الإشعار؟</a>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-11'
+              >
+                كيف يمكنك الاتصال بنا حول هذا الإشعار؟
+              </Link>
             </li>
             <li>
-              <a href='#section-12'>
+              <Link
+                className='md:underline-hover md:before:bg-blue-500'
+                href='#section-12'
+              >
                 كيف يمكنك مراجعة أو تحديث أو حذف البيانات التي نجمعها منك؟
-              </a>
+              </Link>
             </li>
           </ol>
           <h2 id='section-1' className='text-lg font-semibold mt-4'>
@@ -279,6 +336,7 @@ export default function PrivacyPage() {
             </Link>
           </p>
         </section>
+        <NavigateTop />
       </main>
     </Layout>
   )
