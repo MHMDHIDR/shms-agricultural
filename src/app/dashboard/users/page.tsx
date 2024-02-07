@@ -235,7 +235,7 @@ export default function Users() {
   }
 
   return (
-    <TabsContent dir='rtl' value='users'>
+    <TabsContent dir='rtl' value='users' className='mt-20 md:mt-5'>
       <div style={{ width: '100%', display: 'flex' }}>
         <Card className='min-w-full'>
           <CardHeader dir='rtl'>

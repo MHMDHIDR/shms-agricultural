@@ -205,3 +205,23 @@ export type ConfirmProps = {
   imageId?: string
   shmsProjectImages?: string
 }
+
+export type stocksPurchesedProps = {
+  userId: UserProps['shms_id']
+  shms_project_id: ProjectProps['shms_project_id']
+  selectedStocks: number
+  newPercentage: number
+  percentageCode: string
+}
+
+export type ModalProps = {
+  children?: string
+  extraComponents?: React.ReactNode
+  status?: React.ReactNode
+  modalHidden?: string
+  className?: string
+  redirectLink?: string
+  redirectTime?: number
+  btnName?: string
+  btnLink?: string
+}

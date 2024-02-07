@@ -464,17 +464,15 @@ export default function EditProjectPage({
 
             <div className='space-y-1'>
               <Label htmlFor='projectAvailableStocks'>عدد الأسهم المتاحة</Label>
+              <small className='mr-5 text-gray-600 select-none'>
+                عدد الأسهم المتبقية
+              </small>
               <div className='md:w-3/3'>
-                <input
-                  id='projectAvailableStocks'
-                  className='w-full px-4 py-2 font-bold leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
-                  type='number'
-                  inputMode='numeric'
-                  min={0}
-                  onChange={e => setProjectAvailableStocks(parseFloat(e.target.value))}
-                  value={projectAvailableStocks}
-                  disabled={true}
-                />
+                <span className='inline-block w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-gray-200 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'>
+                  {projectAvailableStocks ?? (
+                    <Skeleton className='w-full h-4 bg-gray-300' />
+                  )}
+                </span>
               </div>
             </div>
 

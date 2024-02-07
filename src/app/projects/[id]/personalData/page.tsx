@@ -5,9 +5,17 @@ import Layout from '@/components/custom/Layout'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import PaymentMetods from '@/components/custom/PaymentMetods'
 import Modal from '@/components/custom/Modal'
-import type { UserLoggedInProps } from '@/types'
+import type { UserLoggedInProps, stocksPurchesedProps } from '@/types'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { toast } from 'sonner'
+import { Error, Loading, Success } from '@/components/icons/Status'
+import { API_URL, DEFAULT_DURATION } from '@/data/constants'
+import axios from 'axios'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useEffect, useState } from 'react'
+import ModalMessage from '@/components/custom/ModalMessage'
+import { redirect } from '@/lib/utils'
 
 export default function PersonalData({
   params: { id: projectId /*, slug*/ }
@@ -15,9 +23,92 @@ export default function PersonalData({
   params: { id: string /*, slug: string*/ }
 }) {
   const { data: session }: { data: UserLoggedInProps } = useSession()
+  const [userId, setUserId] = useState<string | null>('')
+  const [stocksPurchesed, setStocksPurchesed] = useState<number>(0)
+  const [message, setMessage] = useState<string>('')
+
+  useEffect(() => {
+    if (session) {
+      setUserId(session?.token?.user.shms_id ?? null)
+    }
+  }, [session])
+
+  const handleConfirmation = () => {
+    if (!session) {
+      toast(JSON.stringify('يجب عليك تسجيل الدخول!'), {
+        icon: <Error className='w-6 h-6 ml-3' />,
+        position: 'bottom-center',
+        className: 'text-right select-none rtl',
+        style: {
+          backgroundColor: '#FFF0F0',
+          color: '#BE2A2A',
+          border: '1px solid #BE2A2A',
+          gap: '1.5rem',
+          textAlign: 'justify'
+        }
+      })
+    } else {
+      savePurchase()
+    }
+  }
+
+  const savePurchase = async () => {
+    const { selectedStocks, newPercentage, percentageCode } = JSON.parse(
+      localStorage.getItem('shms_project')!
+    )
+
+    toast('جاري إتمام عملية شراء الأسهم  ...', {
+      icon: <Loading className='text-blue-300' />,
+      position: 'bottom-center',
+      className: 'text-right select-none rtl',
+      duration: DEFAULT_DURATION,
+      style: {
+        backgroundColor: '#ccf0ff',
+        color: '#00415c',
+        border: '1px solid #00415c',
+        gap: '1.5rem',
+        textAlign: 'justify'
+      }
+    })
+
+    try {
+      const {
+        data: { stocksPurchesed, message }
+      } = await axios.patch(`${API_URL}/stocks/save`, {
+        userId,
+        shms_project_id: projectId,
+        selectedStocks,
+        newPercentage,
+        percentageCode
+      } as stocksPurchesedProps)
+
+      setStocksPurchesed(stocksPurchesed)
+      if (stocksPurchesed === 1) {
+        setMessage(message)
+        localStorage.removeItem('shms_project')
+        redirect(`/`, DEFAULT_DURATION * 2)
+      }
+    } catch (error) {
+      toast('حدث خطأ أثناء إتمام عملية الشراء!', {
+        icon: <Error className='w-6 h-6 ml-3' />,
+        position: 'bottom-center',
+        className: 'text-right select-none rtl',
+        style: {
+          backgroundColor: '#FFF0F0',
+          color: '#BE2A2A',
+          border: '1px solid #BE2A2A',
+          gap: '1.5rem',
+          textAlign: 'justify'
+        }
+      })
+    }
+  }
 
   return (
     <Layout>
+      {stocksPurchesed === 1 && (
+        <ModalMessage status={<Success className='w-24 h-24' />}>{message}</ModalMessage>
+      )}
       <main className='flex flex-col items-center justify-between min-h-screen sm:p-24'>
         <div dir='rtl' className='flex items-center justify-center w-full'>
           {/* Center the CardWrapper here */}
@@ -31,7 +122,9 @@ export default function PersonalData({
                 </div>
                 <div className='md:w-2/3'>
                   <span className='inline-block w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'>
-                    {session?.token?.user.shms_email}
+                    {session?.token?.user.shms_email ?? (
+                      <Skeleton className='w-full h-4 bg-gray-300' />
+                    )}
                   </span>
                 </div>
               </div>
@@ -44,7 +137,9 @@ export default function PersonalData({
                 </div>
                 <div className='md:w-2/3'>
                   <span className='inline-block w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'>
-                    {session?.token?.user.fullname}
+                    {session?.token?.user.fullname ?? (
+                      <Skeleton className='w-full h-4 bg-gray-300' />
+                    )}
                   </span>
                 </div>
               </div>
@@ -57,7 +152,9 @@ export default function PersonalData({
                 </div>
                 <div className='md:w-2/3'>
                   <span className='inline-block w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'>
-                    {session?.token?.user.shms_phone}
+                    {session?.token?.user.shms_phone ?? (
+                      <Skeleton className='w-full h-4 bg-gray-300' />
+                    )}
                   </span>
                 </div>
               </div>
@@ -86,6 +183,7 @@ export default function PersonalData({
                   </Modal>
                 </div>
               </div>
+
               <div className='mb-6 md:flex md:items-center'>
                 <div className='md:w-1/3'>
                   <label className='block pl-4 mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
@@ -102,7 +200,11 @@ export default function PersonalData({
         </div>
 
         <div className='flex justify-center items-center w-full m-5 space-x-4'>
-          <Link href={`/projects/${projectId}/personalData`} className='pressable'>
+          <Link
+            href={`/projects/${projectId}/personalData`}
+            className='pressable'
+            onClick={handleConfirmation}
+          >
             تأكيد بيانات الشراء
           </Link>
           <Link href={`/projects/${projectId}/buy`} className='pressable'>

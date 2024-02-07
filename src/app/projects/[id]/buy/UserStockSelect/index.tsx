@@ -8,26 +8,32 @@ import {
 
 export default function UserStockSelect({
   userStockLimit,
-  setSelectedStocks
+  setSelectedStocks,
+  selectedStocks
 }: {
   userStockLimit: number
   setSelectedStocks: (value: number) => void
+  selectedStocks: number
 }) {
   return (
-    <Select dir='rtl' onValueChange={value => setSelectedStocks(Number(value))}>
+    <Select
+      dir='rtl'
+      onValueChange={value => setSelectedStocks(Number(value))}
+      value={String(selectedStocks)}
+    >
       <SelectTrigger className='w-full'>
         <SelectValue placeholder='اختار عدد الأسهم' />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent avoidCollisions={false}>
         {/*
           الحصول على  عدد الأسهم من السيشن وحسابها من الحد الأقصى
            لمخزون المستخدم إلى 1
         */}
         {Array.from({ length: userStockLimit }, (_, userStockLimitCounter) => (
           <SelectItem
+            className='font-bold'
             key={userStockLimitCounter + 1}
             value={String(userStockLimitCounter + 1)}
-            className='font-bold'
           >
             {userStockLimitCounter + 1}
           </SelectItem>

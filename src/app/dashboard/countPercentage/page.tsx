@@ -28,6 +28,7 @@ import { Success, Error } from '@/components/icons/Status'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { scrollToView } from '@/lib/utils'
+import Divider from '@/components/custom/Divider'
 
 export default function CountPercentage() {
   const [projects, setProjects] = useState<ProjectProps[]>([])
@@ -172,11 +173,11 @@ export default function CountPercentage() {
 
   return (
     <TabsContent value='profits_percentage'>
-      <div className='flex flex-col gap-y-16 items-center justify-center h-screen'>
+      <div className='flex flex-col gap-y-16 items-center justify-center h-screen mt-10'>
         <CardWrapper
           heading='اضافة رمز زيادة ربح جديد '
           backButtonHref='/auth/signup'
-          className='md:w-[50rem]'
+          className='md:w-[55rem]'
         >
           <form
             className='container w-full min-w-max'
@@ -363,93 +364,96 @@ export default function CountPercentage() {
               </div>
             </div>
           </form>
-        </CardWrapper>
-        {/* Table showing the added pecentages codes and the project that belongs to it with the ability to delete each code invidually */}
-        <Table className='min-w-full text-center divide-y divide-gray-200 rtl'>
-          <TableHeader>
-            <TableRow>
-              <TableHead className='font-bold text-center select-none min-w-72'>
-                اسم المشروع
-              </TableHead>
-              <TableHead className='font-bold text-center select-none'>
-                رمز زيادة نسبة الربح
-              </TableHead>
-              <TableHead className='font-bold text-center select-none'>
-                النسبة المئوية
-              </TableHead>
-              <TableHead className='font-bold text-center select-none'>
-                الربح الحالي
-              </TableHead>
-              <TableHead className='font-bold text-center select-none'>
-                الربح الجديد
-              </TableHead>
-              <TableHead className='font-bold text-center select-none'>الاجراء</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {projects.filter(project => project.shms_project_special_percentage_code)
-              .length === 0 ? (
+          {/* Table showing the added pecentages codes and the project that belongs to it with the ability to delete each code invidually */}
+          <Divider className='my-10' />
+          <Table className='table min-h-full min-w-full mt-0 text-center divide-y divide-gray-200 rtl'>
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={10} className='space-y-6'>
-                  <span className='text-center text-gray-500'>
-                    لا يوجد اي رموز زيادة نسبة الربح
-                  </span>
-                  <br />
-                  <Button onClick={() => scrollToView(100)}>
-                    إضافة رمز زيادة نسبة الربح
-                  </Button>
-                </TableCell>
+                <TableHead className='font-bold text-center select-none min-w-72'>
+                  اسم المشروع
+                </TableHead>
+                <TableHead className='font-bold text-center select-none'>
+                  رمز زيادة نسبة الربح
+                </TableHead>
+                <TableHead className='font-bold text-center select-none'>
+                  النسبة المئوية
+                </TableHead>
+                <TableHead className='font-bold text-center select-none'>
+                  الربح الحالي
+                </TableHead>
+                <TableHead className='font-bold text-center select-none'>
+                  الربح الجديد
+                </TableHead>
+                <TableHead className='font-bold text-center select-none'>
+                  الاجراء
+                </TableHead>
               </TableRow>
-            ) : (
-              projects
-                .filter(project => project.shms_project_special_percentage_code)
-                .map(project => (
-                  <TableRow key={project.shms_project_id}>
-                    <TableCell className='min-w-72'>
-                      {project.shms_project_name}
-                    </TableCell>
-                    <TableCell className='min-w-40'>
-                      {project.shms_project_special_percentage_code}
-                    </TableCell>
-                    <TableCell className='min-w-40'>
-                      {project.shms_project_special_percentage}%
-                    </TableCell>
-                    <TableCell className='min-w-40'>
-                      {project.shms_project_stock_profits}
-                    </TableCell>
-                    <TableCell className='min-w-40'>
-                      {project.shms_project_stock_profits +
-                        (project.shms_project_stock_profits *
-                          project.shms_project_special_percentage) /
-                          100}
-                    </TableCell>
-                    <TableCell className='flex min-w-56 gap-x-2'>
-                      <Confirm
-                        variant={'destructive'}
-                        onClick={async () => {
-                          await deletePercentageCode(project.shms_project_id)
-                        }}
-                      >
-                        {isSubmittingForm ? (
-                          <>
-                            <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
-                            جاري الحذف ...
-                          </>
-                        ) : isDoneSubmitting ? (
-                          <>
-                            <Success className='ml-2' />
-                            تم الحذف
-                          </>
-                        ) : (
-                          'حذف'
-                        )}
-                      </Confirm>
-                    </TableCell>
-                  </TableRow>
-                ))
-            )}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {projects.filter(project => project.shms_project_special_percentage_code)
+                .length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={10} className='space-y-6'>
+                    <span className='text-center text-gray-500'>
+                      لا يوجد اي رموز زيادة نسبة الربح
+                    </span>
+                    <br />
+                    <Button onClick={() => scrollToView(100)}>
+                      إضافة رمز زيادة نسبة الربح
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                projects
+                  .filter(project => project.shms_project_special_percentage_code)
+                  .map(project => (
+                    <TableRow key={project.shms_project_id}>
+                      <TableCell className='min-w-72'>
+                        {project.shms_project_name}
+                      </TableCell>
+                      <TableCell className='min-w-40'>
+                        {project.shms_project_special_percentage_code}
+                      </TableCell>
+                      <TableCell className='min-w-40'>
+                        {project.shms_project_special_percentage}%
+                      </TableCell>
+                      <TableCell className='min-w-40'>
+                        {project.shms_project_stock_profits}
+                      </TableCell>
+                      <TableCell className='min-w-40'>
+                        {project.shms_project_stock_profits +
+                          (project.shms_project_stock_profits *
+                            project.shms_project_special_percentage) /
+                            100}
+                      </TableCell>
+                      <TableCell className='flex min-w-56 gap-x-2'>
+                        <Confirm
+                          variant={'destructive'}
+                          onClick={async () => {
+                            await deletePercentageCode(project.shms_project_id)
+                          }}
+                        >
+                          {isSubmittingForm ? (
+                            <>
+                              <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
+                              جاري الحذف ...
+                            </>
+                          ) : isDoneSubmitting ? (
+                            <>
+                              <Success className='ml-2' />
+                              تم الحذف
+                            </>
+                          ) : (
+                            'حذف'
+                          )}
+                        </Confirm>
+                      </TableCell>
+                    </TableRow>
+                  ))
+              )}
+            </TableBody>
+          </Table>
+        </CardWrapper>
       </div>
     </TabsContent>
   )

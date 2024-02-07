@@ -24,9 +24,16 @@ export default function BuyStocks({
   const [isLoading, setIsLoading] = useState(false)
   const [project, setProject] = useState<ProjectProps>()
   const [userStockLimit, setUserStockLimit] = useState(0)
-  const [selectedStocks, setSelectedStocks] = useState(0)
-  const [percentageCode, setPercentageCode] = useState<string>('')
-  const [newPercentage, setNewPercentage] = useState<number>(0)
+  const [selectedStocks, setSelectedStocks] = useState(
+    JSON.parse(localStorage.getItem('shms_project')!)?.selectedStocks ?? 0
+  )
+
+  const [percentageCode, setPercentageCode] = useState<string>(
+    JSON.parse(localStorage.getItem('shms_project')!)?.percentageCode ?? ''
+  )
+  const [newPercentage, setNewPercentage] = useState<number>(
+    JSON.parse(localStorage.getItem('shms_project')!)?.newPercentage ?? 0
+  )
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
@@ -58,22 +65,34 @@ export default function BuyStocks({
   const checkPercentageCode = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     // check if the user entered a percentage code
-    if (percentageCode === '') {
+    if (!percentageCode || percentageCode === '') {
       // if the user didn't enter a percentage code then we will just submit the form
-      toast('الرجاء إدخال رمز زيادة النسبة'),
-        {
-          icon: <Error className='w-6 h-6 ml-3' />,
-          position: 'bottom-center',
-          className: 'text-right select-none rtl',
-          style: {
-            backgroundColor: '#FFF0F0',
-            color: '#BE2A2A',
-            border: '1px solid #BE2A2A',
-            gap: '1.5rem',
-            textAlign: 'justify'
-          }
+      toast('الرجاء إدخال رمز زيادة النسبة', {
+        icon: <Error className='w-6 h-6 ml-3' />,
+        position: 'bottom-center',
+        className: 'text-right select-none rtl',
+        style: {
+          backgroundColor: '#FFF0F0',
+          color: '#BE2A2A',
+          border: '1px solid #BE2A2A',
+          gap: '1.5rem',
+          textAlign: 'justify'
         }
+      })
+
+      return
     }
+
+    // update shms_project with the percentageCode
+    localStorage.setItem(
+      'shms_project',
+      JSON.stringify({
+        shms_project: project?.shms_project_id,
+        selectedStocks,
+        newPercentage,
+        percentageCode
+      })
+    )
 
     try {
       setIsSubmittingForm(true)
@@ -103,7 +122,7 @@ export default function BuyStocks({
       }
     } catch (error: any) {
       toast(
-        error.response.data.message.length < 50
+        error.response.data.message?.length < 50
           ? error.response.data.message
           : 'حدث خطأ ما',
         {
@@ -122,6 +141,19 @@ export default function BuyStocks({
     } finally {
       setIsSubmittingForm(false)
     }
+  }
+
+  const handleNextClick = () => {
+    // Save form data to localStorage
+    localStorage.setItem(
+      'shms_project',
+      JSON.stringify({
+        shms_project: project?.shms_project_id,
+        selectedStocks,
+        newPercentage,
+        percentageCode
+      })
+    )
   }
 
   return (
@@ -180,6 +212,7 @@ export default function BuyStocks({
                   <UserStockSelect
                     userStockLimit={userStockLimit ?? 100}
                     setSelectedStocks={setSelectedStocks}
+                    selectedStocks={selectedStocks}
                   />
                 </div>
               </div>
@@ -268,6 +301,7 @@ export default function BuyStocks({
                     type='text'
                     placeholder='رمز خاص'
                     onChange={e => setPercentageCode(e.target.value)}
+                    defaultValue={percentageCode}
                   />
                   <Button
                     className={`mr-2 text-center dark:text-white dark:font-bold${
@@ -310,6 +344,7 @@ export default function BuyStocks({
                 ? 'pointer-events-none opacity-50 cursor-not-allowed'
                 : ''
             }`}
+            onClick={handleNextClick} // Call handleNextClick on link click
           >
             التالي
           </Link>

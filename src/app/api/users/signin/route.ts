@@ -51,6 +51,7 @@ export async function POST(req: Request) {
         JSON.stringify({
           loggedIn: 1,
           fullname: user.shms_fullname,
+          shms_id: user.shms_id,
           shms_email: user.shms_email,
           shms_phone: user.shms_phone,
           shms_doc: user.shms_doc,
