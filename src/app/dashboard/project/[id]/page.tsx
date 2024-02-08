@@ -506,7 +506,7 @@ export default function EditProjectPage({
               <Label htmlFor='projectDescription'>وصف المشروع</Label>
               <textarea
                 id='projectDescription'
-                className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                className='w-full px-4 py-2 leading-loose text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 placeholder='أدخل وصف المشروع'
                 rows={5}
                 onChange={e => setProjectDescription(e.target.value)}

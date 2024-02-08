@@ -113,20 +113,14 @@ export default async function ProjectDetailsPage({
         </div>
 
         {project.shms_project_study_case_visibility ? (
-          <div style={{ width: '50%', backgroundColor: 'gray' }}>
-            <div style={{ margin: 20 }} dir='rtl' className='flex items-center'>
-              <Modal
-                title={`دراسة الجدوى ${project.shms_project_name}`}
-                document={
-                  getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO
-                }
-                className='font-bold dark:text-white'
-                contentClassName='min-w-[90svw]'
-              >
-                عرض دراسة الجدوى
-              </Modal>
-            </div>
-          </div>
+          <Modal
+            title={`دراسة الجدوى ${project.shms_project_name}`}
+            document={getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO}
+            className='font-bold dark:text-white mb-20'
+            contentClassName='min-w-[90svw]'
+          >
+            عرض دراسة الجدوى
+          </Modal>
         ) : null}
 
         {/*  نسبة إكتمال المشروع */}
