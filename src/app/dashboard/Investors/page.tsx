@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { Tabs, TabsContent } from '@/components/ui/tabs'
+import { TabsContent } from '@/components/ui/tabs'
 import { API_URL, APP_LOGO } from '@/data/constants'
 import { arabicDate } from '@/lib/utils'
 import type { ProjectProps, UserProps, stocksPurchesedProps } from '@/types'
