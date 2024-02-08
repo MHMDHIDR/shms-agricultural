@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise'
 
-const { MYSQL_HOST, MYSQL_NAME, MYSQL_USER, MYSQL_PASSWORD /*, MYSQL_URL*/ } = process.env
+const { MYSQL_HOST, MYSQL_NAME, MYSQL_USER, MYSQL_PASSWORD } = process.env
 const CONNECTION_OPTIONS = {
   host: MYSQL_HOST,
   database: MYSQL_NAME,

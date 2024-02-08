@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { TabsContent } from '@/components/ui/tabs'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { API_URL, APP_LOGO } from '@/data/constants'
 import { arabicDate } from '@/lib/utils'
 import type { ProjectProps, UserProps, stocksPurchesedProps } from '@/types'
@@ -76,10 +76,10 @@ export default async function DashboardInvestors() {
             {!users || users.length === 0 ? (
               <NoRecords msg='لم يتم العثور على مستثمرين في الوقت الحالي!' />
             ) : (
-              <Table className='min-w-full divide-y divide-gray-200 overflow-x-auto'>
+              <Table className='min-w-full overflow-x-auto divide-y divide-gray-200'>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className='font-bold text-center select-none min-w-32'>
+                    <TableHead className='pt-10 font-bold text-center select-none min-w-32'>
                       الاسم
                     </TableHead>
                     <TableHead className='font-bold text-center select-none'>
@@ -88,26 +88,26 @@ export default async function DashboardInvestors() {
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead className='border border-gray-200 text-center select-none min-w-56'>
+                            <TableHead className='text-center border border-gray-200 select-none min-w-56'>
                               اسم المشروع
                             </TableHead>
-                            <TableHead className='border border-gray-200 text-center select-none min-w-28'>
+                            <TableHead className='text-center border border-gray-200 select-none min-w-28'>
                               عدد الاسهم
                             </TableHead>
-                            <TableHead className='border border-gray-200 text-center select-none min-w-36'>
+                            <TableHead className='text-center border border-gray-200 select-none min-w-36'>
                               نسبة زيادة الأرباح
                             </TableHead>
-                            <TableHead className='border border-gray-200 text-center select-none min-w-28'>
+                            <TableHead className='text-center border border-gray-200 select-none min-w-28'>
                               إجمالي الدفع
                             </TableHead>
-                            <TableHead className='border border-gray-200 text-center select-none min-w-60'>
+                            <TableHead className='text-center border border-gray-200 select-none min-w-60'>
                               تاريخ الشراء
                             </TableHead>
                           </TableRow>
                         </TableHeader>
                       </Table>
                     </TableHead>
-                    <TableHead className='font-bold text-center select-none'>
+                    <TableHead className='pt-10 font-bold text-center select-none'>
                       المستند الشخصي
                     </TableHead>
                   </TableRow>
