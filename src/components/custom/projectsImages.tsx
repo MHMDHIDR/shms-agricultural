@@ -35,8 +35,8 @@ const ProjectImages = ({ images }: { images: string[] }) => {
               key={index}
               src={imageUrl}
               alt={`Image ${index + 1}`}
-              width={350}
-              height={300}
+              width={600}
+              height={450}
               className='w-56 h-40 rounded-lg hover:cursor-zoom-in'
               onClick={() => openModal(index)}
             />
@@ -64,16 +64,16 @@ const ProjectImages = ({ images }: { images: string[] }) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: 50
+            zIndex: 9999 // Ensure modal is on top of everything
           }}
         >
           <div
             style={{
-              backgroundColor: 'white',
-              padding: 10,
-              borderRadius: 8,
-              width: '60%',
-              maxWidth: 600
+              position: 'relative',
+              maxWidth: '90vw', // Limit modal width to 90% of viewport width
+              maxHeight: '90vh', // Limit modal height to 90% of viewport height
+              overflow: 'auto',
+              padding: 10
             }}
           >
             <div
@@ -85,7 +85,6 @@ const ProjectImages = ({ images }: { images: string[] }) => {
               }}
               dir='rtl'
             >
-              {/* سهم الاغلاق - Close Button */}
               <button
                 style={{
                   background: 'none',
@@ -101,10 +100,10 @@ const ProjectImages = ({ images }: { images: string[] }) => {
               <Image
                 src={images[selectedImageIndex]!}
                 alt='Full Screen Image'
+                layout='responsive'
                 width={600}
                 height={450}
               />
-              {/* السهم اليسار - Arrow Left */}
               <button
                 style={{
                   position: 'absolute',
@@ -124,7 +123,6 @@ const ProjectImages = ({ images }: { images: string[] }) => {
               >
                 <FaArrowLeft size={24} color='#333' />
               </button>
-              {/* السهم اليمين - Arrow Right */}
               <button
                 style={{
                   position: 'absolute',

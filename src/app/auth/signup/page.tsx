@@ -13,17 +13,16 @@ import {
   validatePhone,
   scrollToView
 } from '@/lib/utils'
-import type { UserProps, shms_formSignupDataProps } from '@/types'
+import type { UserLoggedInProps, UserProps, shms_formSignupDataProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { Info } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { useEffect, useState, useRef } from 'react'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { toast } from 'sonner'
-
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import FormMessage from '@/components/custom/FormMessage'
 import Layout from '@/components/custom/Layout'
@@ -32,8 +31,10 @@ import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
+import { useSession } from 'next-auth/react'
 
 const SignupPage = () => {
+  const { data: session }: { data: UserLoggedInProps } = useSession()
   // Form States
   const [fName, setFName] = useState('')
   const [sName, setSName] = useState('')
@@ -259,7 +260,9 @@ const SignupPage = () => {
     setAcceptedTermError('')
   }
 
-  return (
+  return session ? (
+    redirect(`/`)
+  ) : (
     <Layout>
       <section className='mt-[55rem] md:mt-[50rem] mb-auto mx-auto'>
         <CardWrapper
@@ -289,19 +292,8 @@ const SignupPage = () => {
                     defaultValue={shms_formSignupData.fName}
                     type='text'
                     ref={fNameRef}
-                    onFocus={() =>
-                      ((
-                        document.getElementById('firstName') as HTMLInputElement
-                      ).placeholder = '')
-                    }
                     onChange={e => setFName(e.target.value)}
-                    onBlur={() => {
-                      ;(
-                        document.getElementById('firstName') as HTMLInputElement
-                      ).placeholder = 'محمد'
-                    }}
                     className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
-                    placeholder='محمد'
                     required
                   />
                 </div>
@@ -315,21 +307,10 @@ const SignupPage = () => {
                   </label>
                   <input
                     id='secondName'
-                    onFocus={() =>
-                      ((
-                        document.getElementById('secondName') as HTMLInputElement
-                      ).placeholder = '')
-                    }
                     onChange={e => setSName(e.target.value)}
-                    onBlur={() => {
-                      ;(
-                        document.getElementById('secondName') as HTMLInputElement
-                      ).placeholder = 'عبد الرحيم'
-                    }}
                     className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     defaultValue={shms_formSignupData.sName}
                     type='text'
-                    placeholder='عبدالرحيم'
                     required
                   />
                 </div>
@@ -343,21 +324,10 @@ const SignupPage = () => {
                   </label>
                   <input
                     id='thirdName'
-                    onFocus={() =>
-                      ((
-                        document.getElementById('thirdName') as HTMLInputElement
-                      ).placeholder = '')
-                    }
                     onChange={e => setTName(e.target.value)}
-                    onBlur={() => {
-                      ;(
-                        document.getElementById('thirdName') as HTMLInputElement
-                      ).placeholder = 'محمد'
-                    }}
                     className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     defaultValue={shms_formSignupData.tName}
                     type='text'
-                    placeholder='محمد'
                     required
                   />
                 </div>
@@ -370,21 +340,10 @@ const SignupPage = () => {
                   </label>
                   <input
                     id='lastName'
-                    onFocus={() =>
-                      ((
-                        document.getElementById('lastName') as HTMLInputElement
-                      ).placeholder = '')
-                    }
                     onChange={e => setFoName(e.target.value)}
-                    onBlur={() => {
-                      ;(
-                        document.getElementById('lastName') as HTMLInputElement
-                      ).placeholder = 'مكي'
-                    }}
                     className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                     defaultValue={shms_formSignupData.foName}
                     type='text'
-                    placeholder='مكي'
                   />
                 </div>
               </div>

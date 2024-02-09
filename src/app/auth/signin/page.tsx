@@ -3,21 +3,22 @@
 import { DEFAULT_DURATION } from '@/data/constants'
 import { getAuth } from '@/lib/actions/auth'
 import { validatePasswordStrength } from '@/lib/utils'
-import type { UserProps } from '@/types'
+import type { UserLoggedInProps, UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, redirect, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useState } from 'react'
 import { toast } from 'sonner'
-
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import FormMessage from '@/components/custom/FormMessage'
 import Layout from '@/components/custom/Layout'
 import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
+import { useSession } from 'next-auth/react'
 
 const SigninPage = () => {
+  const { data: session }: { data: UserLoggedInProps } = useSession()
   // Form States
   const [emailOrPhone, setEmailOrPhone] = useState('')
   const [password, setPassword] = useState('')
@@ -33,24 +34,6 @@ const SigninPage = () => {
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
-  }
-
-  const blurEmailOrPhone = (emailOrPhone: string) => {
-    if (emailOrPhone === '') {
-      setEmailOrPhoneError('الرجاء التأكد من صحة البيانات المدخلة')
-    } else {
-      setEmailOrPhoneError('')
-    }
-  }
-
-  const blurPassword = () => {
-    if (!validatePasswordStrength(password)) {
-      setPassError(
-        'كلمة المرور يجب ان تكون على الاقل 8 احرف وتحتوي على حرف كبير وحرف صغير ورقم وحرف خاص مثل !@#$%^&*()'
-      )
-    } else {
-      setPassError('')
-    }
   }
 
   const handelSigninForm = async (e: {
@@ -149,7 +132,9 @@ const SigninPage = () => {
     setPassError('')
   }
 
-  return (
+  return session ? (
+    redirect(`/`)
+  ) : (
     <Layout>
       <section className='min-h-screen h-screen mt-96 md:mt-[40rem] mx-auto'>
         <CardWrapper
@@ -173,7 +158,6 @@ const SigninPage = () => {
               <div className='md:w-2/3'>
                 <input
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
-                  onBlur={e => blurEmailOrPhone(e.target.value)}
                   onChange={e => setEmailOrPhone(e.target.value)}
                   id='inline-email'
                   type='text'
@@ -196,7 +180,6 @@ const SigninPage = () => {
                 <input
                   id='password'
                   onChange={handlePasswordChange}
-                  onBlur={blurPassword}
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='password'
                   placeholder='******'
