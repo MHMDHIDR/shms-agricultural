@@ -194,6 +194,19 @@ export function getProjectStudyCase(
 }
 
 /**
+ * A function to get the project duration in arabic
+ */
+export function getProjectDuration(projectStartDate: Date, projectEndDate: Date): string {
+  const startDate = new Date(projectStartDate)
+  const endDate = new Date(projectEndDate)
+
+  const diffTime = Math.abs(endDate.getTime() - startDate.getTime())
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+  return diffDays + ' يوم'
+}
+
+/**
  *  A function to scrollToView of an element
  * @param scrollY the y position to scroll to
  * @returns void

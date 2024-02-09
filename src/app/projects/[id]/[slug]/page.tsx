@@ -3,7 +3,7 @@ import Modal from '@/components/custom/Modal'
 import { PercentageSlider } from '@/components/custom/PercentageSlider'
 import ProjectImages from '@/components/custom/projectsImages'
 import { API_URL, APP_LOGO } from '@/data/constants'
-import { arabicDate, getProjectStudyCase } from '@/lib/utils'
+import { arabicDate, getProjectDuration, getProjectStudyCase } from '@/lib/utils'
 import type { ProjectProps, imgsProps } from '@/types'
 import axios from 'axios'
 import { BadgeDollarSign, LineChart, MapPin, TimerIcon, TimerReset } from 'lucide-react'
@@ -58,9 +58,12 @@ export default async function ProjectDetailsPage({
           {project.shms_project_description}
         </p>
 
-        <div dir='rtl' className='grid w-full grid-cols-3 grid-rows-3 gap-4 my-10'>
-          <div className='flex flex-col items-center gap-y-2 rtl'>
-            <MapPin className='w-24 h-24 stroke-1 stroke-red-500' />
+        <div
+          dir='rtl'
+          className='grid w-full grid-cols-3 grid-rows-3 my-10 place-items-center'
+        >
+          <div className='flex flex-col items-center text-center gap-y-1 rtl'>
+            <MapPin className='w-20 h-20 stroke-1 stroke-red-500' />
             <span>الموقع</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
               {project.shms_project_location}
@@ -69,8 +72,8 @@ export default async function ProjectDetailsPage({
 
           <div />
 
-          <div className='flex flex-col items-center gap-y-2 rtl'>
-            <BadgeDollarSign className='w-24 h-24 stroke-1 stroke-green-500' />
+          <div className='flex flex-col items-center text-center gap-y-1 rtl'>
+            <BadgeDollarSign className='w-20 h-20 stroke-1 stroke-green-500' />
             <span>قيمة السهم الواحد</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
               {project.shms_project_stock_price}
@@ -79,8 +82,8 @@ export default async function ProjectDetailsPage({
 
           <div />
 
-          <div className='flex flex-col items-center gap-y-2 rtl'>
-            <LineChart className='w-20 h-20' />
+          <div className='flex flex-col items-center text-center gap-y-1 rtl'>
+            <LineChart className='w-20 h-20 stroke-1' />
             <span>ارباح السهم الواحد</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
               {project.shms_project_stock_profits}
@@ -89,18 +92,21 @@ export default async function ProjectDetailsPage({
 
           <div />
 
-          <div className='flex flex-col items-center gap-y-2 rtl'>
-            <TimerReset className='w-20 h-20' />
+          <div className='flex flex-col items-center text-center gap-y-1 rtl'>
+            <TimerReset className='w-20 h-20 stroke-1' />
             <span>مدة المشروع</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
-              {project.shms_project_location}
+              {getProjectDuration(
+                new Date(project.shms_project_start_date),
+                new Date(project.shms_project_end_date)
+              )}
             </p>
           </div>
 
           <div />
 
-          <div className='flex flex-col items-center m-5 mt-10 gap-y-2 rtl'>
-            <TimerIcon className='w-20 h-20' />
+          <div className='flex flex-col items-center text-center gap-y-1 rtl'>
+            <TimerIcon className='w-20 h-20 stroke-1' />
             <span>موعد تسليم الأرباح</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
               {
@@ -116,7 +122,7 @@ export default async function ProjectDetailsPage({
           <Modal
             title={`دراسة الجدوى ${project.shms_project_name}`}
             document={getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO}
-            className='font-bold dark:text-white mb-20'
+            className='mb-20 font-bold dark:text-white'
             contentClassName='min-w-[90svw]'
           >
             عرض دراسة الجدوى

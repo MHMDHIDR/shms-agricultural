@@ -10,7 +10,7 @@ export default function Overlay({
   return (
     <div
       className={cn(
-        `w-full h-full absolute inset-0 z-40 bg-gradient-to-b from-green-900 to-green-500 ${opacity}`,
+        `w-full h-full absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-green-900 to-green-500 ${opacity}`,
         className
       )}
     />

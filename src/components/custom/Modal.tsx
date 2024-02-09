@@ -3,7 +3,13 @@
 import { DownloadIcon } from '@radix-ui/react-icons'
 import { saveAs } from 'file-saver'
 import Image from 'next/image'
-
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious
+} from '@/components/ui/carousel'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -25,6 +31,8 @@ export default function Modal({
   className,
   contentClassName,
   asModal,
+  asModalSlider,
+  images,
   children
 }: {
   title: string
@@ -33,6 +41,8 @@ export default function Modal({
   className?: string
   contentClassName?: string
   asModal?: boolean
+  asModalSlider?: boolean
+  images?: string[]
   children: string | React.ReactNode
 }) {
   return (
@@ -58,6 +68,24 @@ export default function Modal({
               <div className='w-full h-96'>
                 <iframe src={document} className='w-full h-full' title={title} />
               </div>
+            ) : asModalSlider ? (
+              <Carousel className='w-full'>
+                <CarouselContent>
+                  {images?.map((image, index) => (
+                    <CarouselItem key={index}>
+                      <Image
+                        src={image}
+                        alt={description ?? title}
+                        width={400}
+                        height={400}
+                        className='min-w-full min-h-full rounded-lg w-80 md:w-full h-60'
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
             ) : (
               <Image
                 src={document ?? APP_LOGO}

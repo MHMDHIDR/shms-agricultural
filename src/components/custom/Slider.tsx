@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 import Autoplay from 'embla-carousel-autoplay'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-// import Overlay from './Overlay'
+import Overlay from './Overlay'
 
 export default function CarouselDApiDemo({
   images,
@@ -41,7 +41,7 @@ export default function CarouselDApiDemo({
         className
       )}
     >
-      <CarouselContent /*overlay={<Overlay className='opacity-20' />}*/>
+      <CarouselContent overlay={<Overlay className='opacity-15' />}>
         {images.map((image, index) => (
           <CarouselItem key={index}>
             <Card>
@@ -59,8 +59,8 @@ export default function CarouselDApiDemo({
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className='z-[999]' />
+      <CarouselNext className='z-[999]' />
     </Carousel>
   )
 }
