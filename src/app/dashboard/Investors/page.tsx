@@ -19,8 +19,8 @@ import {
 } from '@/components/ui/table'
 import { TabsContent } from '@/components/ui/tabs'
 import { API_URL, APP_LOGO } from '@/data/constants'
-import { arabicDate } from '@/lib/utils'
-import type { ProjectProps, UserProps, stocksPurchesedProps } from '@/types'
+import { arabicDate, getProject } from '@/lib/utils'
+import type { UserProps, stocksPurchesedProps } from '@/types'
 import axios from 'axios'
 import { Suspense } from 'react'
 
@@ -185,14 +185,4 @@ export default async function DashboardInvestors() {
       </div>
     </TabsContent>
   )
-}
-
-async function getProject(projectId: ProjectProps['shms_project_id']) {
-  const {
-    data: { project }
-  }: { data: { project: ProjectProps } } = await axios.get(
-    `${API_URL}/projects/get/${projectId}`
-  )
-
-  return project
 }

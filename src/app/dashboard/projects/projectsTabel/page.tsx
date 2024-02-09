@@ -16,7 +16,7 @@ import Link from 'next/link'
 import Modal from '@/components/custom/Modal'
 import { Button } from '@/components/ui/button'
 import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
-import { arabicDate, cn, getProjectStatus, getProjectStudyCase } from '@/lib/utils'
+import { cn, getProjectDate, getProjectStatus, getProjectStudyCase } from '@/lib/utils'
 import type { ProjectProps } from '@/types'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -210,13 +210,4 @@ export default function ProjectsTable() {
       </TableBody>
     </Table>
   )
-}
-
-/**
- * A function to get the project date in arabic
- * @param {Date} date
- * @returns {string} arabic date
- */
-function getProjectDate(date: Date): string {
-  return arabicDate(String(date)).split('في')[0]?.trim() ?? 'غير معروف'
 }

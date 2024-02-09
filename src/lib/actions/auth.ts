@@ -9,12 +9,14 @@ import type { UserProps, UserLoggedInProps } from '@/types'
  * @returns {Promise<{ isAuth, userType: UserProps['shms_user_account_type'], loading: boolean }>}
  */
 export const getAuth = async (): Promise<{
+  userId: UserProps['shms_id']
   isAuth: UserProps['loggedIn'] | boolean
   userType: UserProps['shms_user_account_type']
   userName?: string
   loading: boolean
 }> => {
   let isAuth = false
+  let userId = ''
   let userType = ''
   let userName = ''
   let loading = true
@@ -23,6 +25,7 @@ export const getAuth = async (): Promise<{
     const user: UserLoggedInProps = await getServerSession(authOptions)
 
     if (user) {
+      userId = user?.token?.user.shms_id ?? ''
       isAuth = user?.token?.user.loggedIn ? true : false
       userType = user?.token?.user.shms_user_account_type ?? 'user' // default to user
       userName = user?.token?.user.shms_fullname ?? ''
@@ -34,6 +37,7 @@ export const getAuth = async (): Promise<{
   }
 
   return {
+    userId,
     isAuth,
     userType: userType as UserProps['shms_user_account_type'],
     userName,

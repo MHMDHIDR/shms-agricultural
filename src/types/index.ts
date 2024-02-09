@@ -226,3 +226,13 @@ export type ModalProps = {
   btnName?: string
   btnLink?: string
 }
+
+export type InverstorProjectData = {
+  projectId: string
+  projectName: string
+  projectStockPrice: number
+  stocks: number
+  totalPayment: number
+  profitCollectionDate: Date
+  totalProfit: number
+}

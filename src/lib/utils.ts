@@ -1,5 +1,6 @@
-import { DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
+import { API_URL, DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
 import type { ProjectProps, abstractWordsProps, validateFileProps } from '@/types'
+import axios from 'axios'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -108,6 +109,25 @@ export const arabicDate = (date: string) =>
     minute: 'numeric',
     second: 'numeric'
   })
+
+export async function getProject(projectId: ProjectProps['shms_project_id']) {
+  const {
+    data: { project }
+  }: { data: { project: ProjectProps } } = await axios.get(
+    `${API_URL}/projects/get/${projectId}`
+  )
+
+  return project
+}
+
+/**
+ * A function to get the project date in arabic
+ * @param {Date} date
+ * @returns {string} arabic date
+ */
+export function getProjectDate(date: Date): string {
+  return arabicDate(String(date)).split('في')[0]?.trim() ?? 'غير معروف'
+}
 
 /**
  * a function to abstract words, if and give me the amount of words i want

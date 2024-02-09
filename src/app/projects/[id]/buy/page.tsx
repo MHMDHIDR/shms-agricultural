@@ -370,7 +370,7 @@ export default function BuyStocks({
                 ? 'pointer-events-none opacity-50 cursor-not-allowed'
                 : ''
             }`}
-            onClick={handleNextClick} // Call handleNextClick on link click
+            onClick={handleNextClick}
           >
             التالي
           </Link>

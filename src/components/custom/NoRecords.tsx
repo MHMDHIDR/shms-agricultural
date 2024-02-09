@@ -11,7 +11,7 @@ import { Button } from '../ui/button'
  */
 export default function NoRecords({ msg, links, button }: NoItemsProps): JSX.Element {
   return (
-    <div className='flex flex-col items-center justify-center my-5 gap-6'>
+    <div className='flex flex-col items-center justify-center gap-6 my-5'>
       <div className='w-56 h-56 md:w-72 md:h-72 flex items-center justify-center rounded-full bg-gray-50 shadow-md md:shadow-lg shadow-[#e1e3ec]'>
         <Image
           width={176}
@@ -21,7 +21,7 @@ export default function NoRecords({ msg, links, button }: NoItemsProps): JSX.Ele
           alt='لم يتم العثور على أي مشاريع استثمارية في الوقت الحالي'
         />
       </div>
-      <p className='max-w-lg my-2 text-lg font-bold text-red-500 md:leading-10 md:tracking-wider'>
+      <p className='max-w-lg my-2 text-lg font-bold text-center text-red-500 md:leading-10 md:tracking-wider'>
         {msg ? msg : `لم يتم العثور على أي مشاريع استثمارية في الوقت الحالي`}
       </p>
       <div className='flex gap-3'>
