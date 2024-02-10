@@ -70,7 +70,7 @@ export async function PATCH(req: Request) {
     const buttonLink = APP_URL + `/profile/investments`
     const adminButtonLink = APP_URL + `/dashboard`
 
-    const emailData = {
+    const investorEmailData = {
       from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
       to: user?.shms_email,
       subject: `تم شراء أسهم من ${project?.shms_project_name} بنجاح | شمس للخدمات الزراعية`,
@@ -79,7 +79,7 @@ export async function PATCH(req: Request) {
         msg: `
             <h1 style="font-weight:bold">مرحباً ${user?.shms_fullname},</h1>
             <p>
-             شكراً لمساهمتك معنا في مشروع شمس ${project?.shms_project_name}،
+             شكراً لمساهمتك معنا في ${project?.shms_project_name}،
              تم شراء أسهم بنجاح، يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:
             </p>
             <br /><br />
@@ -106,7 +106,7 @@ export async function PATCH(req: Request) {
       })
     }
 
-    const { accepted, rejected } = await email(emailData)
+    const { accepted, rejected } = await email(investorEmailData)
     await email(adminEmailData)
     if (accepted.length > 0) {
       return new Response(
