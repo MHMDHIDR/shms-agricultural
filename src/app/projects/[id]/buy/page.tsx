@@ -377,7 +377,7 @@ export default function BuyStocks({
                       onCheckedChange={(isChecked: boolean) => setAcceptedTerm(isChecked)}
                       required
                     />
-                    بالضغط هنا فأنك توافق على
+                    <span className='text-red-500'>*</span> بالضغط هنا فأنك توافق على
                     <Modal
                       title={`شروط  ${project?.shms_project_name}`}
                       document={
@@ -385,12 +385,11 @@ export default function BuyStocks({
                         (project?.shms_project_description as string)
                       }
                       className='font-bold dark:text-white mr-2'
-                      contentClassName='min-w-[90svw]'
+                      contentClassName='w-[90vw] max-h-[85vh] overflow-y-auto dark:text-white'
                       asText
                     >
                       شروط المشــــروع
                     </Modal>
-                    <span className='text-red-500'>*</span>
                   </label>
                   <div className='md:w-1/3'></div>
                 </div>

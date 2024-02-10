@@ -57,7 +57,10 @@ export default function Modal({
         )}
       </DialogTrigger>
       <DialogContent
-        className={cn(`sm:max-w-md ${asModalSlider ? 'p-0' : ''}`, contentClassName)}
+        className={cn(
+          `sm:max-w-md ${asModalSlider ? 'p-0' : ''} ${asText ? 'sm:max-w-full' : ''}`,
+          contentClassName
+        )}
         asModalSlider={asModalSlider}
       >
         {!asModalSlider && (
@@ -100,7 +103,7 @@ export default function Modal({
               </Carousel>
             ) : asText ? (
               <section
-                className='rtl my-10 text-justify leading-loose text-lg'
+                className='rtl leading-loose text-lg'
                 dangerouslySetInnerHTML={{ __html: document }}
               />
             ) : (
