@@ -110,9 +110,9 @@ export default async function ProjectDetailsPage({
             <span>موعد تسليم الأرباح</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
               {
-                arabicDate(String(project.shms_project_profits_collect_date)).split(
-                  'في'
-                )[0]
+                arabicDate(String(project.shms_project_profits_collect_date))
+                  .split('في')[0]
+                  ?.split('،')[1]
               }
             </p>
           </div>

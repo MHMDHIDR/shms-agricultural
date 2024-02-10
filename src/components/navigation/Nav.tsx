@@ -94,9 +94,9 @@ export default function Nav() {
 
   return (
     <header
-      className={`container py-2 rtl h-auto w-full top-0 left-0 bg-gray-100 dark:bg-gray-900 z-[100] ${
+      className={`container rtl h-auto w-full top-0 left-0 bg-gray-100 dark:bg-gray-900 z-[999] ${
         sticky
-          ? 'fixed w-screen min-w-full animate-slidedown border-b md:py-0 border-white border-opacity-20 dark:bg-opacity-30 bg-opacity-70 backdrop-blur backdrop-filter'
+          ? 'fixed w-screen min-w-full animate-slidedown border-b py-0 border-white border-opacity-20 dark:bg-opacity-30 bg-opacity-70 backdrop-blur backdrop-filter'
           : 'absolute min-w-full'
       }`}
     >

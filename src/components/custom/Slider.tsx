@@ -41,7 +41,7 @@ export default function CarouselDApiDemo({
         className
       )}
     >
-      <CarouselContent overlay={<Overlay className='opacity-15' />}>
+      <CarouselContent overlay={<Overlay className='opacity-20' />}>
         {images.map((image, index) => (
           <CarouselItem key={index}>
             <Card>
@@ -59,8 +59,8 @@ export default function CarouselDApiDemo({
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className='z-[999]' />
-      <CarouselNext className='z-[999]' />
+      <CarouselPrevious className='z-[100]' />
+      <CarouselNext className='z-[100]' />
     </Carousel>
   )
 }

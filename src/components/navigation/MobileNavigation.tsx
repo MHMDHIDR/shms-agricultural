@@ -48,14 +48,14 @@ export default function MobileNavigation({
   return (
     <Accordion
       type='single'
-      collapsible
       className={cn(`w-full transition rtl ${isOpen ? 'block' : 'hidden'}`, className)}
+      collapsible
     >
       {/* الخدمات */}
       <AccordionItem value='item-4'>
         <AccordionTrigger>الخدمات</AccordionTrigger>
         <AccordionContent>
-          <ul className='grid min-w-screen w-dvw gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] right-0'>
+          <ul className='grid min-w-screen w-dvw gap-1 md:w-[500px] md:grid-cols-2 lg:w-[600px] right-0'>
             {MenuItems.map(component => (
               <NavigationListItem
                 key={component.title}
@@ -80,17 +80,19 @@ export default function MobileNavigation({
       <AccordionItem value='item-2'>
         <AccordionTrigger>عن شمس</AccordionTrigger>
         <AccordionContent>
-          <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
-            <NavigationListItem
-              href='/contact'
-              title='تواصل معنا'
-              onClick={() => setIsOpen(open => !open)}
-            ></NavigationListItem>
-            <NavigationListItem
-              href='/about'
-              title='من نحن'
-              onClick={() => setIsOpen(open => !open)}
-            ></NavigationListItem>
+          <ul className='grid gap-1 min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
+            <NavigationListItem href='/about' onClick={() => setIsOpen(open => !open)}>
+              من نحن
+            </NavigationListItem>
+            <NavigationListItem href='/contact' onClick={() => setIsOpen(open => !open)}>
+              تواصل معنا
+            </NavigationListItem>
+            <NavigationListItem href='/terms' onClick={() => setIsOpen(open => !open)}>
+              شروط الاستخدام
+            </NavigationListItem>
+            <NavigationListItem href='/privacy' onClick={() => setIsOpen(open => !open)}>
+              سياسة الخصوصية
+            </NavigationListItem>
           </ul>
         </AccordionContent>
       </AccordionItem>
@@ -101,6 +103,9 @@ export default function MobileNavigation({
           <ul className='grid min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
             <NavigationListItem href={isAuth ? `/profile` : `/auth/signin`}>
               {isAuth ? 'الملف الشخصي' : `تسجيل الدخول`}
+            </NavigationListItem>
+            <NavigationListItem href='/profile/investments'>
+              استثماراتي
             </NavigationListItem>
             {isUserAdmin ? (
               <NavigationListItem href='/dashboard'>لوحة التحكم</NavigationListItem>
