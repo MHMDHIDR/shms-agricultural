@@ -19,6 +19,8 @@ const ProjectImages = ({ images }: { images: string[] }) => {
           >
             <Image
               src={imageUrl}
+              priority={true}
+              property='og:image'
               alt='project image'
               width={300}
               height={300}

@@ -2,23 +2,38 @@ import Layout from '@/components/custom/Layout'
 import Modal from '@/components/custom/Modal'
 import { PercentageSlider } from '@/components/custom/PercentageSlider'
 import ProjectImages from '@/components/custom/projectsImages'
-import { API_URL, APP_LOGO } from '@/data/constants'
-import { arabicDate, getProjectDuration, getProjectStudyCase } from '@/lib/utils'
-import type { ProjectProps, imgsProps } from '@/types'
-import axios from 'axios'
+import { APP_DESCRIPTION, APP_LOGO, APP_TITLE } from '@/data/constants'
+import {
+  arabicDate,
+  getProject,
+  getProjectDuration,
+  getProjectStudyCase,
+  removeSlug
+} from '@/lib/utils'
 import { BadgeDollarSign, LineChart, MapPin, TimerIcon, TimerReset } from 'lucide-react'
 import Link from 'next/link'
+import type { imgsProps } from '@/types'
 
+export async function generateMetadata({
+  params: { id: projectId, slug }
+}: {
+  params: { id: string; slug: string }
+}) {
+  const project = await getProject(projectId)
+
+  return {
+    title: removeSlug(decodeURI(slug)) + ' | ' + APP_TITLE,
+    description: project.shms_project_description || APP_DESCRIPTION
+  }
+}
+
+//APP_TITLE, description: APP_DESCRIPTION }
 export default async function ProjectDetailsPage({
   params: { id: projectId }
 }: {
   params: { id: string }
 }) {
-  const {
-    data: { project }
-  }: { data: { project: ProjectProps } } = await axios.get(
-    `${API_URL}/projects/get/${projectId}`
-  )
+  const project = await getProject(projectId)
 
   const getProjectImages: imgsProps['imgDisplayPath'][] =
     project.shms_project_images &&

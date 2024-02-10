@@ -10,7 +10,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { Error, Loading, Success } from '@/components/icons/Status'
-import { API_URL, DEFAULT_DURATION } from '@/data/constants'
+import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
 import axios from 'axios'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect, useState } from 'react'
@@ -180,15 +180,15 @@ export default function PersonalData({
                 <div className='relative'>
                   <Modal
                     title={`صورة المستند لــ ${session?.token?.user.fullname}`}
-                    document={session?.token?.user.shms_doc ?? '/logo-slogan.png'}
+                    document={session?.token?.user.shms_doc ?? APP_LOGO}
                     className='font-bold dark:text-white'
                     asModal
                   >
                     <Image
-                      src='/logo-slogan.png'
+                      src={session?.token?.user.shms_doc ?? APP_LOGO}
                       alt='Your Image Alt Text'
                       style={{ borderRadius: 5 }}
-                      className='p-4 border border-gray-400 rounded-lg cursor-pointer w-72'
+                      className='p-4 border border-gray-600 dark:border dark:bg-gray-800 rounded-lg cursor-pointer w-72'
                       width={350}
                       height={350}
                     />
