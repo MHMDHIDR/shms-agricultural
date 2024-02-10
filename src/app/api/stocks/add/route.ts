@@ -91,7 +91,7 @@ export async function PATCH(req: Request) {
 
     const adminEmailData = {
       from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
-      to: 'mr.hamood.277@gmail.com' ?? ADMIN_EMAIL,
+      to: ADMIN_EMAIL,
       subject: `تم شراء عدد ${stocks} أسهم من ${project?.shms_project_name} بنجاح | شمس للخدمات الزراعية`,
       msg: customEmail({
         title: `تم شراء أسهم من ${project?.shms_project_name}`,

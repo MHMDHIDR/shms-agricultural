@@ -19,10 +19,11 @@ import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { ShmsIcon } from '../icons/Socials'
-import { Button } from '../ui/button'
+import { ShmsIcon } from '@/components/icons/Socials'
+import { Button } from '@/components/ui/button'
 import { MenuToggler } from './MenuToggler'
 import MobileNavigation from './MobileNavigation'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Nav() {
   const {
@@ -133,7 +134,9 @@ export default function Nav() {
                 </Link>
               ) : (
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>{userName}</NavigationMenuTrigger>
+                  <NavigationMenuTrigger>
+                    {!userName ? <Skeleton className='w-20 h-3' /> : userName}
+                  </NavigationMenuTrigger>
                   <NavigationMenuContent className='rtl'>
                     <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] grid-rows-3 grid-cols-1 lg:w-[500px]'>
                       <NavigationListItem
