@@ -1,6 +1,7 @@
 import { connectDB } from '@/app/api/utils/db'
-import { APP_TITLE } from '@/data/constants'
+import { ADMIN_EMAIL, APP_TITLE, APP_URL } from '@/data/constants'
 import type { ProjectProps, UserProps, stocksPurchesedProps } from '@/types'
+import email, { customEmail } from '@/app/api/utils/email'
 
 export async function PATCH(req: Request) {
   const body = await req.json()
@@ -29,34 +30,103 @@ export async function PATCH(req: Request) {
     const userPrevStocks = getUserPrevStocks(user as UserProps)
     const projectAvailableStocks = getProjectStocks(project as ProjectProps)
 
-    await connectDB(`UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`, [
-      JSON.stringify([
-        ...JSON.parse(String(userPrevStocks)),
-        {
-          shms_project_id,
-          stocks,
-          newPercentage,
-          percentageCode,
-          createdAt: new Date().toISOString()
-        }
-      ]),
-      shms_id
-    ])
+    console.log(' userPrevStocks -->', userPrevStocks)
+
+    if (userPrevStocks !== null) {
+      await connectDB(`UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`, [
+        JSON.stringify([
+          ...JSON.parse(String(userPrevStocks)),
+          {
+            shms_project_id,
+            stocks,
+            newPercentage,
+            percentageCode,
+            createdAt: new Date().toISOString()
+          }
+        ]),
+        shms_id
+      ])
+    } else {
+      await connectDB(`UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`, [
+        JSON.stringify([
+          {
+            shms_project_id,
+            stocks,
+            newPercentage,
+            percentageCode,
+            createdAt: new Date().toISOString()
+          }
+        ]),
+        shms_id
+      ])
+    }
 
     await connectDB(
       `UPDATE projects SET shms_project_available_stocks = ? WHERE shms_project_id = ?`,
       [projectAvailableStocks - stocks, shms_project_id]
     )
 
-    return new Response(
-      JSON.stringify({
-        stocksPurchesed: 1,
-        message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
+    //send the user an email with a link to activate his/her account
+    const buttonLink = APP_URL + `/profile/investments`
+    const adminButtonLink = APP_URL + `/dashboard`
+
+    const emailData = {
+      from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
+      to: user?.shms_email,
+      subject: `تم شراء أسهم من ${project?.shms_project_name} بنجاح | شمس للخدمات الزراعية`,
+      msg: customEmail({
+        title: 'مرحباً بك في شمس للخدمات الزراعية',
+        msg: `
+            <h1 style="font-weight:bold">مرحباً ${user?.shms_fullname},</h1>
+            <p>
+             شكراً لمساهمتك معنا في مشروع شمس ${project?.shms_project_name}،
+             تم شراء أسهم بنجاح، يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:
+            </p>
+            <br /><br />
+            <small>إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك مشكلة ما، يرجى تجاهل هذا البريد من فضلك!</small>`,
+        buttonLink,
+        buttonLabel: 'تصفح استثماراتك'
+      })
+    }
+
+    const adminEmailData = {
+      from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
+      to: 'mr.hamood.277@gmail.com' ?? ADMIN_EMAIL,
+      subject: `تم شراء عدد ${stocks} أسهم من ${project?.shms_project_name} بنجاح | شمس للخدمات الزراعية`,
+      msg: customEmail({
+        title: `تم شراء أسهم من ${project?.shms_project_name}`,
+        msg: `
+          <p>
+            تم شراء عدد ${stocks} أسهم من ${project?.shms_project_name}  بنجاح،
+            <br /><br />
+            بواسطة ${user?.shms_fullname} (${user?.shms_email})
+          </p>`,
+        buttonLink: adminButtonLink,
+        buttonLabel: 'تصفح الاستثمارات'
+      })
+    }
+
+    const { accepted, rejected } = await email(emailData)
+    await email(adminEmailData)
+    if (accepted.length > 0) {
+      return new Response(
+        JSON.stringify({
+          stocksPurchesed: 1,
+          message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
          سيتم التواصل معك من فريق 
          ${APP_TITLE}
          لتأكيد العملية ولإتمام باقي الإجراءات`
-      })
-    )
+        }),
+        { status: 200 }
+      )
+    } else if (rejected.length > 0) {
+      return new Response(
+        JSON.stringify({
+          stocksPurchesed: 0,
+          message: 'لم يتم تأكيد عملية الشراء، حاول مرة أخرى'
+        })
+      )
+    }
   } catch (error) {
     console.error(error)
     return new Response(
