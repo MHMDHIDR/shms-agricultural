@@ -12,11 +12,14 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { Error } from '@/components/icons/Status'
 import { toast } from 'sonner'
 import { Info } from 'lucide-react'
-import type { UserProps } from '@/types'
+import type { UserLoggedInProps, UserProps } from '@/types'
 import Layout from '@/components/custom/Layout'
+import { useSession } from 'next-auth/react'
+import { LoadingPage } from '@/components/custom/Loading'
 
 const ForgotPasswordPage = () => {
   const HEADING = 'إستعادة كلمة المرور'
+  const { data: session }: { data: UserLoggedInProps } = useSession()
 
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
@@ -105,7 +108,9 @@ const ForgotPasswordPage = () => {
     }
   }
 
-  return (
+  return session ? (
+    <LoadingPage />
+  ) : (
     <Layout>
       <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24'>
         <CardWrapper

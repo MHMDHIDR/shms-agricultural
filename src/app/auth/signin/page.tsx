@@ -7,7 +7,7 @@ import type { UserLoggedInProps, UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter, redirect, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useState } from 'react'
 import { toast } from 'sonner'
 import { CardWrapper } from '@/components/auth/card-wrapper'
@@ -16,9 +16,11 @@ import Layout from '@/components/custom/Layout'
 import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { useSession } from 'next-auth/react'
+import { LoadingPage } from '@/components/custom/Loading'
 
 const SigninPage = () => {
   const { data: session }: { data: UserLoggedInProps } = useSession()
+
   // Form States
   const [emailOrPhone, setEmailOrPhone] = useState('')
   const [password, setPassword] = useState('')
@@ -133,7 +135,7 @@ const SigninPage = () => {
   }
 
   return session ? (
-    redirect(`/`)
+    <LoadingPage />
   ) : (
     <Layout>
       <section className='min-h-screen h-screen mt-96 md:mt-[40rem] mx-auto'>

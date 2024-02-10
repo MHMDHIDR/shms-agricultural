@@ -18,7 +18,7 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { Info } from 'lucide-react'
 import Link from 'next/link'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState, useRef } from 'react'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
@@ -32,6 +32,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { useSession } from 'next-auth/react'
+import { LoadingPage } from '@/components/custom/Loading'
 
 const SignupPage = () => {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -261,7 +262,7 @@ const SignupPage = () => {
   }
 
   return session ? (
-    redirect(`/`)
+    <LoadingPage />
   ) : (
     <Layout>
       <section className='mt-[55rem] md:mt-[50rem] mb-auto mx-auto'>

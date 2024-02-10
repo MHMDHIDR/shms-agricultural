@@ -3,13 +3,15 @@
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import FormMessage from '@/components/custom/FormMessage'
 import Layout from '@/components/custom/Layout'
+import { LoadingPage } from '@/components/custom/Loading'
 import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { validatePasswordStrength, validateUUID } from '@/lib/utils'
-import type { UserProps } from '@/types'
+import type { UserLoggedInProps, UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -19,6 +21,7 @@ const ForgotPasswordPage = ({
 }: {
   params: { resetToken: string }
 }) => {
+  const { data: session }: { data: UserLoggedInProps } = useSession()
   const HEADING = 'إنشاء كلمة مرور جديدة'
 
   const [password, setPassword] = useState('')
@@ -126,7 +129,9 @@ const ForgotPasswordPage = ({
     }
   }
 
-  return !validateUUID(resetToken) ? null : (
+  return session ? (
+    <LoadingPage />
+  ) : !validateUUID(resetToken) ? null : (
     <Layout>
       <section className='h-screen min-h-screen mx-auto mt-32 mb-24'>
         <CardWrapper

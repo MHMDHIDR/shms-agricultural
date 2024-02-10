@@ -104,23 +104,26 @@ export default function MobileNavigation({
             <NavigationListItem href={isAuth ? `/profile` : `/auth/signin`}>
               {isAuth ? 'الملف الشخصي' : `تسجيل الدخول`}
             </NavigationListItem>
-            <NavigationListItem href='/profile/investments'>
-              استثماراتي
-            </NavigationListItem>
             {isUserAdmin ? (
               <NavigationListItem href='/dashboard'>لوحة التحكم</NavigationListItem>
             ) : null}
             {isAuth && (
-              <NavigationListItem
-                className='flex items-center justify-start md:gap-1'
-                onClick={async () => {
-                  await signOut({ redirect: false })
-                  replace('/auth/signin')
-                }}
-              >
-                <span className='inline md:hidden dark:text-white'>تسجيل الخروج</span>
-                <LogOut className='text-[#FDB813] inline-block dark:text-[#ffd87e] mr-2' />
-              </NavigationListItem>
+              <>
+                <NavigationListItem
+                  className='flex items-center justify-start md:gap-1'
+                  onClick={async () => {
+                    await signOut({ redirect: false })
+                    replace('/auth/signin')
+                  }}
+                >
+                  <span className='inline md:hidden dark:text-white'>تسجيل الخروج</span>
+                  <LogOut className='text-[#FDB813] inline-block dark:text-[#ffd87e] mr-2' />
+                </NavigationListItem>
+
+                <NavigationListItem href='/profile/investments'>
+                  استثماراتي
+                </NavigationListItem>
+              </>
             )}
           </ul>
         </AccordionContent>

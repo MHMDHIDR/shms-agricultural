@@ -1,13 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Error, Success } from '@/components/icons/Status'
 import type { UserLoggedInProps, UserProps } from '@/types'
-
 import {
   Card,
   CardContent,
@@ -260,7 +259,9 @@ export default function ProfilePage() {
     }
   }
 
-  return (
+  return !session ? (
+    redirect(`/`)
+  ) : (
     <Layout>
       <CardWrapper
         heading={''}
