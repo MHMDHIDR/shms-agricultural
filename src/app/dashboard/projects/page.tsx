@@ -31,6 +31,7 @@ import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import ProjectsTable from './projectsTabel/page'
+import MarkdownIt from 'markdown-it'
 
 export default function Projects() {
   const [_projects, setProjects] = useState<ProjectProps[]>([])
@@ -44,6 +45,7 @@ export default function Projects() {
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
   const [projectDescription, setProjectDescription] = useState('')
+  const [projectTerms, setProjectTerms] = useState('')
   const [caseStudyfile, setCaseStudyFile] = useState<File[]>([])
 
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
@@ -110,6 +112,17 @@ export default function Projects() {
       setCaseStudyFileError('')
       onCaseStudyFileAdd(e)
     }
+  }
+
+  // Initialize MarkdownIt
+  const md = new MarkdownIt()
+
+  // Function to handle textarea change
+  const handleProjectTermsChange = (e: { target: { value: string } }) => {
+    // Convert input text to Markdown format
+    const markdownText = md.render(e.target.value)
+    // Set the Markdown content to state
+    setProjectTerms(markdownText)
   }
 
   const handelAddProject = async (e: {
@@ -194,6 +207,7 @@ export default function Projects() {
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
             shms_project_description: projectDescription,
+            shms_project_terms: projectTerms,
             shms_project_images,
             shms_project_study_case
           }
@@ -455,6 +469,19 @@ export default function Projects() {
             {projectDescriptionError && (
               <FormMessage error>{projectDescriptionError}</FormMessage>
             )}
+
+            <div className='space-y-1'>
+              <Label htmlFor='projectDescription'>
+                شروط المشروع
+                <span className='text-red-500'>*</span>
+              </Label>
+              <textarea
+                onChange={handleProjectTermsChange}
+                className='w-full px-4 py-2 leading-10 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                placeholder='أدخل شروط المشروع'
+                rows={5}
+              />
+            </div>
 
             <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>

@@ -181,16 +181,14 @@ export function getProjectStatus(status: string): string {
 export function getProjectStudyCase(
   studyCase: ProjectProps['shms_project_study_case']
 ): string {
-  let imgDisplayPath = ''
+  let imgDisplayPath = null
   try {
-    const studyCaseArray = JSON.parse(String(studyCase))
-
-    imgDisplayPath = studyCaseArray[0]?.imgDisplayPath
-  } catch (error) {
-    console.error('Error parsing study case data:', error)
+    imgDisplayPath = JSON.parse(String(studyCase))
+  } catch (error: any) {
+    throw new Error('Error parsing study case data:', error.message)
   }
 
-  return imgDisplayPath
+  return imgDisplayPath[0] ? imgDisplayPath[0].imgDisplayPath : null
 }
 
 /**

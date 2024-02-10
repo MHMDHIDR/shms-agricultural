@@ -32,6 +32,7 @@ export default function Modal({
   contentClassName,
   asModal,
   asModalSlider,
+  asText,
   images,
   children
 }: {
@@ -42,6 +43,7 @@ export default function Modal({
   contentClassName?: string
   asModal?: boolean
   asModalSlider?: boolean
+  asText?: boolean
   images?: string[]
   children: string | React.ReactNode
 }) {
@@ -54,14 +56,24 @@ export default function Modal({
           <Button className={cn(className)}>{children ?? 'إجراء'}</Button>
         )}
       </DialogTrigger>
-      <DialogContent className={cn(`sm:max-w-md`, contentClassName)}>
-        <DialogHeader>
-          <DialogTitle className='font-bold text-center text-green-600 select-none'>
-            {title}
-          </DialogTitle>
-          <DialogDescription>{description ?? ''}</DialogDescription>
-        </DialogHeader>
-        <div className='flex flex-col items-center gap-y-6'>
+      <DialogContent
+        className={cn(`sm:max-w-md ${asModalSlider ? 'p-0' : ''}`, contentClassName)}
+        asModalSlider={asModalSlider}
+      >
+        {!asModalSlider && (
+          <DialogHeader>
+            <DialogTitle className='font-bold text-center text-green-600 select-none'>
+              {title}
+            </DialogTitle>
+
+            <DialogDescription>{description ?? ''}</DialogDescription>
+          </DialogHeader>
+        )}
+        <div
+          className={`flex flex-col items-center gap-y-6${
+            asModalSlider ? ' min-h-full min-w-full' : ''
+          }`}
+        >
           {
             // if document contains pdf in the path then render pdf
             document?.includes('pdf') ? (
@@ -86,6 +98,11 @@ export default function Modal({
                 <CarouselPrevious />
                 <CarouselNext />
               </Carousel>
+            ) : asText ? (
+              <section
+                className='rtl my-10 text-justify leading-loose text-lg'
+                dangerouslySetInnerHTML={{ __html: document }}
+              />
             ) : (
               <Image
                 src={document ?? APP_LOGO}
@@ -97,19 +114,20 @@ export default function Modal({
             )
           }
 
-          {!asModal && (
-            <Button
-              type='button'
-              size='sm'
-              className='w-32 px-3 md:w-full'
-              onClick={() => saveAs(document, title)}
-              variant={'pressable'}
-            >
-              <span className='sr-only'>تحميل مستند {title}</span>
-              <span className='hidden w-full md:inline-block'>تحميل المستند</span>
-              <DownloadIcon className='w-4 h-4' />
-            </Button>
-          )}
+          {!asModal ||
+            (!asText && (
+              <Button
+                type='button'
+                size='sm'
+                className='w-32 px-3 md:w-full'
+                onClick={() => saveAs(document, title)}
+                variant={'pressable'}
+              >
+                <span className='sr-only'>تحميل مستند {title}</span>
+                <span className='hidden w-full md:inline-block'>تحميل المستند</span>
+                <DownloadIcon className='w-4 h-4' />
+              </Button>
+            ))}
         </div>
         {!asModal && (
           <DialogFooter className='mx-auto sm:justify-start'>

@@ -23,6 +23,7 @@ export async function PATCH(
     shms_project_special_percentage,
     shms_project_special_percentage_code,
     shms_project_description,
+    shms_project_terms,
     shms_project_study_case,
     shms_project_study_case_visibility,
     shms_project_status,
@@ -84,6 +85,7 @@ export async function PATCH(
             shms_project_special_percentage = ?,
             shms_project_special_percentage_code = ?,
             shms_project_description = COALESCE(?, shms_project_description),
+            shms_project_terms = COALESCE(?, shms_project_terms),
             shms_project_study_case = COALESCE(?, shms_project_study_case),
             shms_project_study_case_visibility = COALESCE(?, shms_project_study_case_visibility),
             shms_project_status = COALESCE(?, shms_project_status)
@@ -103,6 +105,7 @@ export async function PATCH(
             shms_project_special_percentage || null,
             shms_project_special_percentage_code || null,
             shms_project_description,
+            shms_project_terms,
             JSON.stringify(shms_project_study_case),
             shms_project_study_case_visibility,
             shms_project_status,

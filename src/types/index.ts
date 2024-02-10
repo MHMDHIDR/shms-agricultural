@@ -59,6 +59,7 @@ export type ProjectProps = {
   shms_project_special_percentage: number
   shms_project_special_percentage_code: string
   shms_project_description: string
+  shms_project_terms: string
   shms_project_status: 'active' | 'pending'
   updateImg?: boolean
   // When project is added, this is set to 1

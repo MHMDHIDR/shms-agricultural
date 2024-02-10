@@ -20,6 +20,8 @@ import { toast } from 'sonner'
 import { Success, Error } from '@/components/icons/Status'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
+import { Checkbox } from '@/components/ui/checkbox'
+import Modal from '@/components/custom/Modal'
 
 export default function BuyStocks({
   params: { id: projectId }
@@ -45,6 +47,7 @@ export default function BuyStocks({
       typeof window !== 'undefined' ? localStorage.getItem('shms_project')! : '{}'
     )?.newPercentage ?? 0
   )
+  const [acceptedTerm, setAcceptedTerm] = useState(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
@@ -362,6 +365,35 @@ export default function BuyStocks({
                     </Button>
                   </div>
                 </div>
+
+                <div className='flex-col items-start w-full mb-6 md:flex'>
+                  <label
+                    htmlFor='accept_termsAndPrivacy'
+                    className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
+                  >
+                    <Checkbox
+                      id='accept_termsAndPrivacy'
+                      className='ml-2'
+                      onCheckedChange={(isChecked: boolean) => setAcceptedTerm(isChecked)}
+                      required
+                    />
+                    بالضغط هنا فأنك توافق على
+                    <Modal
+                      title={`شروط  ${project?.shms_project_name}`}
+                      document={
+                        project?.shms_project_terms ??
+                        (project?.shms_project_description as string)
+                      }
+                      className='font-bold dark:text-white mr-2'
+                      contentClassName='min-w-[90svw]'
+                      asText
+                    >
+                      شروط المشــــروع
+                    </Modal>
+                    <span className='text-red-500'>*</span>
+                  </label>
+                  <div className='md:w-1/3'></div>
+                </div>
               </form>
             )}
           </CardWrapper>
@@ -375,9 +407,9 @@ export default function BuyStocks({
                   ? `/auth/signin?callbackUrl=/projects/${projectId}/buy`
                   : `/projects/${projectId}/personalData`
               }
-              aria-disabled={selectedStocks === 0}
+              aria-disabled={selectedStocks === 0 || !acceptedTerm}
               className={`pressable ${
-                selectedStocks === 0
+                selectedStocks === 0 || !acceptedTerm
                   ? 'pointer-events-none opacity-50 cursor-not-allowed'
                   : ''
               }`}

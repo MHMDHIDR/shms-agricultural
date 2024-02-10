@@ -17,6 +17,7 @@ export async function POST(req: Request) {
     shms_project_stock_price,
     shms_project_stock_profits,
     shms_project_description,
+    shms_project_terms,
     shms_project_images,
     shms_project_study_case
   }: ProjectProps = body
@@ -37,8 +38,9 @@ export async function POST(req: Request) {
                           shms_project_total_stocks,
                           shms_project_stock_price,
                           shms_project_stock_profits,
-                          shms_project_description)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                          shms_project_description,
+                          shms_project_terms)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         shms_project_id,
         // To store in DB we need to stringify the array
@@ -54,7 +56,8 @@ export async function POST(req: Request) {
         shms_project_total_stocks,
         shms_project_stock_price,
         shms_project_stock_profits,
-        shms_project_description
+        shms_project_description,
+        shms_project_terms
       ]
     )
 

@@ -27,7 +27,6 @@ export async function generateMetadata({
   }
 }
 
-//APP_TITLE, description: APP_DESCRIPTION }
 export default async function ProjectDetailsPage({
   params: { id: projectId }
 }: {
@@ -65,9 +64,10 @@ export default async function ProjectDetailsPage({
         </h1>
         {/* Render images in a row */}
         <ProjectImages images={getProjectImages} />
+
         <p
           style={{ fontWeight: 'bold' }}
-          className='leading-loose text-justify'
+          className='text-justify container leading-10'
           dir='rtl'
         >
           {project.shms_project_description}
@@ -133,7 +133,8 @@ export default async function ProjectDetailsPage({
           </div>
         </div>
 
-        {project.shms_project_study_case_visibility ? (
+        {project.shms_project_study_case_visibility &&
+        getProjectStudyCase(project.shms_project_study_case) ? (
           <Modal
             title={`دراسة الجدوى ${project.shms_project_name}`}
             document={getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO}

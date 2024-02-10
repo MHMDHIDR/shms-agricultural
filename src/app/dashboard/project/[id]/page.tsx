@@ -17,7 +17,13 @@ import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { API_URL, DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
-import { abstractWords, cn, getProjectStatus, validateFile } from '@/lib/utils'
+import {
+  abstractWords,
+  cn,
+  getProject,
+  getProjectStatus,
+  validateFile
+} from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -26,6 +32,8 @@ import { ArrowBigRight } from 'lucide-react'
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import MarkdownIt from 'markdown-it'
+import htmlToMd from 'html-to-md'
 
 export default function EditProjectPage({
   params: { id: projectId }
@@ -46,6 +54,7 @@ export default function EditProjectPage({
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
   const [projectDescription, setProjectDescription] = useState('')
+  const [projectTerms, setProjectTerms] = useState('')
   const [caseStudyfile, setCaseStudyFile] = useState<File[]>([])
   const [_currentCaseStudyFile, setCurrentCaseStudyFile] = useState<
     ProjectProps['shms_project_study_case']
@@ -91,11 +100,7 @@ export default function EditProjectPage({
   // Get Project details and set the state
   useEffect(() => {
     const getProjectDetails = async () => {
-      const {
-        data: { project }
-      }: { data: { project: ProjectProps } } = await axios.get(
-        `${API_URL}/projects/get/${projectId}`
-      )
+      const project = await getProject(projectId)
       setProjectImages(JSON.parse(String(project.shms_project_images)))
       setProjectName(project.shms_project_name)
       setProjectLocation(project.shms_project_location)
@@ -108,6 +113,7 @@ export default function EditProjectPage({
       setStockPrice(project.shms_project_stock_price)
       setStockProfits(project.shms_project_stock_profits)
       setProjectDescription(project.shms_project_description)
+      setProjectTerms(htmlToMd(project.shms_project_terms))
       setCaseStudyIsVisible(project.shms_project_study_case_visibility ?? 0)
       setProjectStatus(project.shms_project_status)
       if (project.shms_project_study_case && project.shms_project_study_case !== null) {
@@ -134,6 +140,17 @@ export default function EditProjectPage({
       setCaseStudyFileError('')
       onCaseStudyFileAdd(e)
     }
+  }
+
+  // Initialize MarkdownIt
+  const md = new MarkdownIt()
+
+  // Function to handle textarea change
+  const handleProjectTermsChange = (e: { target: { value: string } }) => {
+    // Convert input text to Markdown format
+    const markdownText = md.render(e.target.value)
+    // Set the Markdown content to state
+    setProjectTerms(markdownText)
   }
 
   const handelEditProject = async (e: {
@@ -258,6 +275,7 @@ export default function EditProjectPage({
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
             shms_project_description: projectDescription,
+            shms_project_terms: projectTerms,
             shms_project_study_case: [...newCaseStudyFile],
             shms_project_study_case_visibility: caseStudyIsVisible,
             shms_project_status: projectStatus
@@ -516,6 +534,20 @@ export default function EditProjectPage({
             {projectDescriptionError && (
               <FormMessage error>{projectDescriptionError}</FormMessage>
             )}
+
+            <div className='space-y-1'>
+              <Label htmlFor='projectDescription'>
+                شروط المشروع
+                <span className='text-red-500'>*</span>
+              </Label>
+              <textarea
+                onChange={handleProjectTermsChange}
+                className='w-full px-4 py-2 leading-10 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                placeholder='أدخل شروط المشروع'
+                defaultValue={projectTerms}
+                rows={5}
+              />
+            </div>
 
             <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
