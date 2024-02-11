@@ -37,7 +37,7 @@ export function ConfirmDialog({
       <DialogContent className='sm:max-w-[425px] rtl'>
         <DialogHeader>
           <DialogTitle className='pb-4 font-bold text-center select-none'>
-            تعديل الاأسهم
+            تعديل الأسهم
           </DialogTitle>
           <DialogDescription className='text-right'>
             يمكنك تعديل الاسهم لهذا المستخدم، ثم الضغط على حفظ التغييرات
