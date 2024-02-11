@@ -11,10 +11,10 @@ const allowedOrigins = [
 export function middleware(request: Request) {
   // retrieve the current response
   const response = NextResponse.next()
-  request.headers.get('origin')
+  const origin = request.headers.get('origin')
 
   // Set the CORS headers
-  if (allowedOrigins.includes(origin)) {
+  if (origin && allowedOrigins.includes(origin)) {
     response.headers.append('Access-Control-Allow-Origin', origin)
   }
 
