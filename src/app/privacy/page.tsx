@@ -1,6 +1,13 @@
 import Layout from '@/components/custom/Layout'
 import { NavigateTop } from '@/components/custom/NavigateTop'
+import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'سياسة الخصوصية | ' + APP_TITLE,
+  description: APP_DESCRIPTION
+}
 
 export default function PrivacyPage() {
   return (

@@ -1,5 +1,12 @@
 import Layout from '@/components/custom/Layout'
 import Link from 'next/link'
+import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'شروط الاستخدام | ' + APP_TITLE,
+  description: APP_DESCRIPTION
+}
 
 export default function TermsPage() {
   return (
