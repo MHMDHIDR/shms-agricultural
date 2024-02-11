@@ -9,7 +9,6 @@ import type {
 } from '@/types'
 import { Suspense, useEffect, useState } from 'react'
 import axios from 'axios'
-import { CardWrapper } from '@/components/auth/card-wrapper'
 import Layout from '@/components/custom/Layout'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
