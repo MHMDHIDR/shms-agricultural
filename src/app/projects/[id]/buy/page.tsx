@@ -186,228 +186,218 @@ export default function BuyStocks({
 
   return (
     <Layout>
-      <section className='container min-h-screen pt-20 overflow-x-hidden rtl'>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100vh'
-          }}
-        >
-          <CardWrapper heading={'صفحة شراء الاسهم'} className='w-fit'>
-            {isLoading ? (
-              <div className='space-y-2'>
-                <Skeleton className='w-full h-12' />
-                <Skeleton className='w-full h-12' />
-                <Skeleton className='w-full h-12' />
-                <Skeleton className='w-full h-12' />
+      <section className='mt-32 mb-auto mx-auto flex flex-col'>
+        {isLoading ? (
+          <div className='space-y-2'>
+            <Skeleton className='w-full h-12' />
+            <Skeleton className='w-full h-12' />
+            <Skeleton className='w-full h-12' />
+            <Skeleton className='w-full h-12' />
+          </div>
+        ) : (
+          <form
+            className='w-full mx-auto pt-10 px-8 md:px-20 bg-white border shadow-md dark:bg-gray-700 mb-10 rtl'
+            onSubmit={checkPercentageCode}
+            noValidate
+          >
+            <div className='mb-6 md:flex md:items-center'>
+              <div className='md:w-1/3'>
+                <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
+                  اسم المشروع
+                </label>
               </div>
-            ) : (
-              <form
-                className='container w-full min-w-max'
-                dir='rtl'
-                onSubmit={checkPercentageCode}
-              >
-                <div className='mb-4'>
-                  <div className='md:w-1/3'>
-                    <label className='block font-bold text-gray-500 md:text-right'>
-                      اسم المشروع
-                    </label>
-                  </div>
-                  <div>
-                    <span className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'>
-                      {project?.shms_project_name}
-                    </span>
-                  </div>
-                </div>
+              <div className='md:w-2/3'>
+                <span className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'>
+                  {project?.shms_project_name}
+                </span>
+              </div>
+            </div>
 
-                <div className='mb-4'>
-                  <div className='md:w-1/3'>
-                    <label className='block font-bold text-gray-500 md:text-right'>
-                      قيمة السهم الواحد
-                    </label>
-                  </div>
-                  <div>
-                    <span
-                      className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
-                      data-price
-                    >
-                      {project?.shms_project_stock_price ?? 0}
-                    </span>
-                  </div>
-                </div>
+            <div className='mb-6 md:flex md:items-center'>
+              <div className='md:w-1/3'>
+                <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
+                  قيمة السهم الواحد
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <span
+                  className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
+                  data-price
+                >
+                  {project?.shms_project_stock_price ?? 0}
+                </span>
+              </div>
+            </div>
 
-                <div className='mb-4'>
-                  <div className='md:w-1/3'>
-                    <label className='block font-bold text-gray-500 md:text-right'>
-                      اختيار عدد الأسهم
-                    </label>
-                  </div>
-                  <div>
-                    <UserStockSelect
-                      userStockLimit={!session ? 100 : userStockLimit ?? 100}
-                      setSelectedStocks={setSelectedStocks}
-                      selectedStocks={selectedStocks}
-                    />
-                  </div>
-                </div>
+            <div className='mb-6 md:flex md:items-center'>
+              <div className='md:w-1/3'>
+                <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
+                  اختيار عدد الأسهم
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <UserStockSelect
+                  userStockLimit={!session ? 100 : userStockLimit ?? 100}
+                  setSelectedStocks={setSelectedStocks}
+                  selectedStocks={selectedStocks}
+                />
+              </div>
+            </div>
 
-                <div className='mb-4'>
-                  <div className='md:w-1/3'>
-                    <label className='block font-bold text-gray-500 md:text-right'>
-                      إجمالي الدفع
-                    </label>
-                  </div>
-                  <div>
-                    <span
-                      className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
-                      data-price
-                    >
-                      {selectedStocks * (project ? project.shms_project_stock_price : 0)}
-                    </span>
-                  </div>
-                </div>
+            <div className='mb-6 md:flex md:items-center'>
+              <div className='md:w-1/3'>
+                <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
+                  إجمالي الدفع
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <span
+                  className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
+                  data-price
+                >
+                  {selectedStocks * (project ? project.shms_project_stock_price : 0)}
+                </span>
+              </div>
+            </div>
 
-                <div className='mb-4'>
-                  <div className='md:w-1/3'>
-                    <label className='block font-bold text-gray-500 md:text-right'>
-                      الربح المتوقع
-                    </label>
-                  </div>
-                  <div>
-                    <span
-                      className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
-                      data-price
-                    >
-                      {newPercentage > 0
-                        ? selectedStocks *
-                            (project ? project.shms_project_stock_profits : 0) +
-                          (selectedStocks *
-                            (project ? project.shms_project_stock_profits : 0) *
-                            newPercentage) /
-                            100
-                        : selectedStocks *
-                          (project ? project.shms_project_stock_profits : 0)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className='mb-4'>
-                  <label className='block font-bold text-gray-500 md:text-right'>
-                    العائد الإجمالي مع راس المال
-                  </label>
-                  <div>
-                    <span
-                      className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
-                      data-price
-                    >
-                      {newPercentage > 0
-                        ? selectedStocks *
-                            (project ? project.shms_project_stock_profits : 0) +
-                          (selectedStocks *
-                            (project ? project.shms_project_stock_profits : 0) *
-                            newPercentage) /
-                            100 +
-                          selectedStocks *
-                            (project ? project.shms_project_stock_price : 0)
-                        : selectedStocks *
-                            (project ? project.shms_project_stock_profits : 0) +
-                          selectedStocks *
-                            (project ? project.shms_project_stock_price : 0)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className='mb-4'>
-                  <label className='block font-bold text-gray-500 md:text-right'>
-                    رمز خاص لزيادة النسبة <small>(اختياري)</small>
-                  </label>
-                  <div>
-                    <input
-                      className='w-64 px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none md:w-96 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
-                      type='text'
-                      placeholder='رمز خاص'
-                      onChange={e => setPercentageCode(e.target.value)}
-                      defaultValue={percentageCode}
-                    />
-                    <Button
-                      className={`mr-2 text-center dark:text-white dark:font-bold${
-                        isSubmittingForm
-                          ? ' pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
-                          : ''
-                      }`}
-                      disabled={isSubmittingForm || isDoneSubmitting}
-                      type='submit'
-                    >
-                      {isSubmittingForm ? (
-                        <>
-                          <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
-                          تأكيد الرمز ...
-                        </>
-                      ) : isDoneSubmitting ? (
-                        <>
-                          <Success className='ml-2' />
-                          تم إضافة النسبة بنجاح
-                        </>
-                      ) : (
-                        'تأكيد الرمز'
-                      )}
-                    </Button>
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor='accept_termsAndPrivacy'
-                    className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
+            <div className='mb-6 md:flex md:items-center'>
+              <div className='md:w-1/3'>
+                <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
+                  الربح المتوقع
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <span
+                    className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
+                    data-price
                   >
-                    <Checkbox
-                      id='accept_termsAndPrivacy'
-                      className='ml-2'
-                      onCheckedChange={(isChecked: boolean) => setAcceptedTerm(isChecked)}
-                      required
-                    />
-                    <span className='text-red-500'>*</span> بالضغط هنا فأنك توافق على
-                    <Modal
-                      title={`شروط  ${project?.shms_project_name}`}
-                      document={
-                        project?.shms_project_terms ??
-                        (project?.shms_project_description as string)
-                      }
-                      className='mr-2 font-bold dark:text-white'
-                      contentClassName='w-[90vw] max-h-[85vh] overflow-y-auto dark:text-white'
-                      asText
-                    >
-                      شروط المشــــروع
-                    </Modal>
-                  </label>
+                    {newPercentage > 0
+                      ? selectedStocks *
+                          (project ? project.shms_project_stock_profits : 0) +
+                        (selectedStocks *
+                          (project ? project.shms_project_stock_profits : 0) *
+                          newPercentage) /
+                          100
+                      : selectedStocks *
+                        (project ? project.shms_project_stock_profits : 0)}
+                  </span>
                 </div>
-              </form>
-            )}
-          </CardWrapper>
-        </div>
+              </div>
+            </div>
 
-        <div className='flex items-center justify-center w-full m-5 space-x-4'>
-          <Suspense fallback={<Skeleton className='w-5 h-1' />}>
-            <Link
-              href={
-                !session
-                  ? `/auth/signin?callbackUrl=/projects/${projectId}/buy`
-                  : `/projects/${projectId}/personalData`
-              }
-              aria-disabled={selectedStocks === 0 || !acceptedTerm}
-              className={`pressable ${
-                selectedStocks === 0 || !acceptedTerm
-                  ? 'pointer-events-none opacity-50 cursor-not-allowed'
-                  : ''
-              }`}
-              onClick={handleNextClick}
-            >
-              التالي
-            </Link>
-          </Suspense>
-        </div>
+            <div className='mb-6 md:flex md:items-center'>
+              <div className='md:w-1/3'>
+                <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
+                  العائد الإجمالي مع راس المال
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <span
+                  className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
+                  data-price
+                >
+                  {newPercentage > 0
+                    ? selectedStocks *
+                        (project ? project.shms_project_stock_profits : 0) +
+                      (selectedStocks *
+                        (project ? project.shms_project_stock_profits : 0) *
+                        newPercentage) /
+                        100 +
+                      selectedStocks * (project ? project.shms_project_stock_price : 0)
+                    : selectedStocks *
+                        (project ? project.shms_project_stock_profits : 0) +
+                      selectedStocks * (project ? project.shms_project_stock_price : 0)}
+                </span>
+              </div>
+            </div>
+
+            <div className='mb-6 md:flex md:items-center'>
+              <div className='md:w-1/3'>
+                <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
+                  رمز خاص لزيادة النسبة <small>(اختياري)</small>
+                </label>
+              </div>
+              <div className='md:w-2/3'>
+                <input
+                  className='w-64 px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none md:w-96 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  type='text'
+                  placeholder='رمز خاص'
+                  onChange={e => setPercentageCode(e.target.value)}
+                  defaultValue={percentageCode}
+                />
+                <Button
+                  className={`mr-2 text-center dark:text-white dark:font-bold${
+                    isSubmittingForm
+                      ? ' pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
+                      : ''
+                  }`}
+                  disabled={isSubmittingForm || isDoneSubmitting}
+                  type='submit'
+                >
+                  {isSubmittingForm ? (
+                    <>
+                      <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
+                      تأكيد الرمز ...
+                    </>
+                  ) : isDoneSubmitting ? (
+                    <>
+                      <Success className='ml-2' />
+                      تم إضافة النسبة بنجاح
+                    </>
+                  ) : (
+                    'تأكيد الرمز'
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            <div className='mb-6 md:flex md:items-center'>
+              <label
+                htmlFor='accept_termsAndPrivacy'
+                className='block mb-1 font-bold text-gray-500 cursor-pointer md:text-right md:mb-0'
+              >
+                <Checkbox
+                  id='accept_termsAndPrivacy'
+                  className='ml-2'
+                  onCheckedChange={(isChecked: boolean) => setAcceptedTerm(isChecked)}
+                  required
+                />
+                <span className='text-red-500'>*</span> بالضغط هنا فأنك توافق على
+                <Modal
+                  title={`شروط  ${project?.shms_project_name}`}
+                  document={
+                    project?.shms_project_terms ??
+                    (project?.shms_project_description as string)
+                  }
+                  className='mr-2 font-bold dark:text-white'
+                  contentClassName='w-[90vw] max-h-[85vh] overflow-y-auto dark:text-white'
+                  asText
+                >
+                  شروط المشــــروع
+                </Modal>
+              </label>
+            </div>
+          </form>
+        )}
+        <Suspense fallback={<Skeleton className='w-5 h-1' />}>
+          <Link
+            href={
+              !session
+                ? `/auth/signin?callbackUrl=/projects/${projectId}/buy`
+                : `/projects/${projectId}/personalData`
+            }
+            aria-disabled={selectedStocks === 0 || !acceptedTerm}
+            className={`pressable w-fit mx-auto ${
+              selectedStocks === 0 || !acceptedTerm
+                ? 'pointer-events-none opacity-50 cursor-not-allowed'
+                : ''
+            }`}
+            onClick={handleNextClick}
+          >
+            التالي
+          </Link>
+        </Suspense>
       </section>
     </Layout>
   )

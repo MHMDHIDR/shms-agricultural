@@ -123,7 +123,6 @@ export default function PersonalData({
       )}
       <main className='flex flex-col items-center justify-between min-h-screen sm:p-24'>
         <div dir='rtl' className='flex items-center justify-center w-full'>
-          {/* Center the CardWrapper here */}
           <CardWrapper heading='البيانات الشخصية'>
             <form dir='rtl' className='w-full max-w-fit md:m-5' noValidate>
               <div className='mb-6 md:flex md:items-center'>

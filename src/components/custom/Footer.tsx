@@ -42,7 +42,7 @@ export default function Footer() {
           <TwitterIcon className='w-5 h-5 md:w-6 md:h-6' />
         </Link>
       </section>
-      <section className='flex items-center justify-center w-full h-12 rtl gap-x-20'>
+      <section className='flex items-center justify-center w-full h-12 rtl gap-x-3 text-sm'>
         <Link href='/privacy' className='opacity-60 hover:opacity-90 transition'>
           سياسة الخصوصية
         </Link>
