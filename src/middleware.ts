@@ -9,18 +9,30 @@ const allowedOrigins = [
 ]
 
 export function middleware(request: Request) {
-  const origin = request.headers.get('Origin')
-  if ((origin && !allowedOrigins.includes(origin)) || !origin) {
-    return new NextResponse(null, {
-      status: 400,
-      statusText: 'Bad Request',
-      headers: { 'Content-Type': 'text/plain' }
-    })
+  // retrieve the current response
+  const response = NextResponse.next()
+  request.headers.get('origin')
+
+  // Set the CORS headers
+  if (allowedOrigins.includes(origin)) {
+    response.headers.append('Access-Control-Allow-Origin', origin)
   }
 
-  return NextResponse.next()
+  response.headers.append('Access-Control-Allow-Credentials', 'true')
+  response.headers.append('Access-Control-Allow-Methods', 'GET,DELETE,PATCH,POST,PUT')
+  response.headers.append(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  )
+
+  return response
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/profile', '/projects/:path*/personalData']
+  matcher: [
+    '/dashboard/:path*',
+    '/profile',
+    '/projects/:path*/personalData',
+    '/api/:path*'
+  ]
 }
