@@ -118,7 +118,8 @@ export default function Modal({
           }
 
           {!asModal ||
-            (!asText && (
+            !asText ||
+            (!asModalSlider && (
               <Button
                 type='button'
                 size='sm'
