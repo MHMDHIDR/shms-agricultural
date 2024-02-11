@@ -87,12 +87,6 @@ export default function MobileNavigation({
             <NavigationListItem href='/contact' onClick={() => setIsOpen(open => !open)}>
               تواصل معنا
             </NavigationListItem>
-            <NavigationListItem href='/terms' onClick={() => setIsOpen(open => !open)}>
-              شروط الاستخدام
-            </NavigationListItem>
-            <NavigationListItem href='/privacy' onClick={() => setIsOpen(open => !open)}>
-              سياسة الخصوصية
-            </NavigationListItem>
           </ul>
         </AccordionContent>
       </AccordionItem>

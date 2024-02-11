@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <footer className='w-screen mt-20'>
       <Divider />
-      <section className='flex items-center justify-center w-full h-24 rtl gap-x-20'>
+      <section className='flex items-center justify-center w-full h-12 rtl gap-x-20'>
         <Link
           className='opacity-60 hover:opacity-90 hover:-translate-y-1 transition'
           href='https://facebook.com'
@@ -40,6 +40,15 @@ export default function Footer() {
           target='_blank'
         >
           <TwitterIcon className='w-5 h-5 md:w-6 md:h-6' />
+        </Link>
+      </section>
+      <section className='flex items-center justify-center w-full h-12 rtl gap-x-20'>
+        <Link href='/privacy' className='opacity-60 hover:opacity-90 transition'>
+          سياسة الخصوصية
+        </Link>
+        <span className='opacity-60 select-none'>|</span>
+        <Link href='/terms' className='opacity-60 hover:opacity-90 transition'>
+          شروط الاستخدام
         </Link>
       </section>
       <p className='pb-6 text-center text-gray-400 select-none'>
