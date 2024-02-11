@@ -1,6 +1,6 @@
 import { connectDB } from '@/app/api/utils/db'
 import type { ProjectProps } from '@/types'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
   req: NextRequest,
@@ -12,7 +12,7 @@ export async function GET(
 
   try {
     if (!projectId) {
-      return new Response(
+      return new NextResponse(
         JSON.stringify({ project: null, message: 'عفواً لم يتم العثور على المشروع!' }),
         {
           status: 404,
@@ -33,7 +33,7 @@ export async function GET(
 
     // Return project
     return !project || !project.shms_project_id
-      ? new Response(
+      ? new NextResponse(
           JSON.stringify({ project: null, message: 'عفواً لم يتم العثور على المشروع!' }),
           {
             status: 404,
@@ -43,7 +43,7 @@ export async function GET(
             }
           }
         )
-      : new Response(JSON.stringify({ project }), {
+      : new NextResponse(JSON.stringify({ project }), {
           status: 200,
           headers: {
             'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
@@ -52,7 +52,7 @@ export async function GET(
         })
   } catch (err) {
     console.error(err)
-    return new Response(
+    return new NextResponse(
       JSON.stringify({
         project: null,
         message: `عفواً، لم يتم حذف المشروع! ${err}`
