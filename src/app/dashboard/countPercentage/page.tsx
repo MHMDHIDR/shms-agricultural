@@ -1,5 +1,4 @@
 'use client'
-
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { TabsContent } from '@/components/ui/tabs'
 import type { ProjectProps } from '@/types'
@@ -173,7 +172,7 @@ export default function CountPercentage() {
 
   return (
     <TabsContent value='profits_percentage'>
-      <div className='flex flex-col gap-y-16 items-center justify-center h-screen mt-10'>
+      <div className='flex flex-wrap justify-center gap-2.5 my-4'>
         <CardWrapper
           heading='اضافة رمز زيادة ربح جديد '
           backButtonHref='/auth/signup'
@@ -366,7 +365,7 @@ export default function CountPercentage() {
           </form>
           {/* Table showing the added pecentages codes and the project that belongs to it with the ability to delete each code invidually */}
           <Divider className='my-10' />
-          <Table className='table min-h-full min-w-full mt-0 text-center divide-y divide-gray-200 rtl'>
+          <Table className='table min-w-full min-h-full mt-0 text-center divide-y divide-gray-200 rtl'>
             <TableHeader>
               <TableRow>
                 <TableHead className='font-bold text-center select-none min-w-72'>

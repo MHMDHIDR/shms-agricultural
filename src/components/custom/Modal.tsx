@@ -84,7 +84,7 @@ export default function Modal({
                 <iframe src={document} className='w-full h-full' title={title} />
               </div>
             ) : asModalSlider ? (
-              <Carousel className='w-full'>
+              <Carousel className='w-full' opts={{ loop: true }}>
                 <CarouselContent>
                   {images?.map((image, index) => (
                     <CarouselItem key={index}>

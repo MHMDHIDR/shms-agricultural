@@ -21,7 +21,7 @@ export default function UserStockSelect({
       onValueChange={value => setSelectedStocks(Number(value))}
       value={String(selectedStocks)}
     >
-      <SelectTrigger className='w-full'>
+      <SelectTrigger className='w-full border-gray-900'>
         <SelectValue placeholder='اختار عدد الأسهم' />
       </SelectTrigger>
       <SelectContent avoidCollisions={false}>
