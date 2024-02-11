@@ -4,9 +4,8 @@ import email, { customEmail } from '@/app/api/utils/email'
 import type { UserProps } from '@/types'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import { ComparePasswords } from '../../utils/compare-password'
-import { NextRequest } from 'next/server'
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const body = await req.json()
   const {
     password: userNewPassword,
@@ -15,8 +14,6 @@ export async function POST(req: NextRequest) {
     userEmail,
     isRenewingPassword
   } = body
-
-  const origin = req.headers.get('origin')
 
   try {
     const user = isRenewingPassword
@@ -35,28 +32,14 @@ export async function POST(req: NextRequest) {
 
     if (!user) {
       return new Response(
-        JSON.stringify({ newPassSet: 0, message: `عفواً, لا يوجد مستخدم بهذا الحساب` }),
-        {
-          status: 404,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        JSON.stringify({ newPassSet: 0, message: `عفواً, لا يوجد مستخدم بهذا الحساب` })
       )
     } else if (user.shms_user_account_status === 'block') {
       return new Response(
         JSON.stringify({
           newPassSet: 0,
           message: `عفواً, حسابك محظور, يرجى التواصل مع الإدارة لإعادة تفعيل حسابك`
-        }),
-        {
-          status: 403,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        })
       )
     } else if (
       new Date() >= new Date(user.shms_user_reset_token_expires!) &&
@@ -66,14 +49,7 @@ export async function POST(req: NextRequest) {
         JSON.stringify({
           newPassSet: 0,
           message: `عفواً, رابط إعادة تعيين كلمة المرور منتهي الصلاحية, يرجى إعادة طلب إعادة تعيين كلمة المرور`
-        }),
-        {
-          status: 400,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        })
       )
     } else if (resetToken === user.shms_user_reset_token && !isRenewingPassword) {
       // Hash new password
@@ -127,13 +103,7 @@ export async function POST(req: NextRequest) {
             JSON.stringify({
               message: `تم إعادة تعيين كلمة المرور بنجاح, جاري تحويلك إلى صفحة تسجيل الدخول...`,
               newPassSet: 1
-            }),
-            {
-              headers: {
-                'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                'Content-Type': 'application/json'
-              }
-            }
+            })
           )
         } else if (rejected.length > 0) {
           return new Response(
@@ -142,13 +112,7 @@ export async function POST(req: NextRequest) {
               message: `عفواً, لم يتم إرسال رسالة إعادة تعيين كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة
                 ${rejected[0] /*.message*/}
               }`
-            }),
-            {
-              headers: {
-                'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                'Content-Type': 'application/json'
-              }
-            }
+            })
           )
         }
       } catch (error) {
@@ -156,13 +120,7 @@ export async function POST(req: NextRequest) {
           JSON.stringify({
             message: `Ooops!, something went wrong!: ${error} `,
             newPassSet: 0
-          }),
-          {
-            headers: {
-              'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-              'Content-Type': 'application/json'
-            }
-          }
+          })
         )
       }
 
@@ -170,13 +128,7 @@ export async function POST(req: NextRequest) {
         JSON.stringify({
           message: `تم إعادة كلمة المرور، وتم إرسال بريد الكتروني لتأكيد تغيير كلمة المرور الجديدة بنجاح جاري تحويلك إلى صفحة تسجيل الدخول ...`,
           newPassSet: 1
-        }),
-        {
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        })
       )
     } else if (
       isRenewingPassword &&
@@ -187,13 +139,7 @@ export async function POST(req: NextRequest) {
           newPassSet: 0,
           message: `عفواً, كلمة المرور القديمة غير صحيحة, يرجى إعادة المحاولة`
         }),
-        {
-          status: 400,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 400 }
       )
     } else if (
       isRenewingPassword &&
@@ -257,13 +203,7 @@ export async function POST(req: NextRequest) {
               message: `عفواً, لم يتم إرسال رسالة تأكيد تغيير كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة
                 ${rejected[0] /*.message*/}
               }`
-            }),
-            {
-              headers: {
-                'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                'Content-Type': 'application/json'
-              }
-            }
+            })
           )
         }
       } catch (error) {
@@ -279,13 +219,7 @@ export async function POST(req: NextRequest) {
         JSON.stringify({
           message: `تم إعادة كلمة المرور، وتم إرسال بريد الكتروني لتأكيد تغيير كلمة المرور الجديدة بنجاح جاري تحويلك إلى صفحة تسجيل الدخول ...`,
           newPassSet: 1
-        }),
-        {
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        })
       )
     } else {
       return new Response(
@@ -293,25 +227,13 @@ export async function POST(req: NextRequest) {
           newPassSet: 0,
           message: `عفواً, رابط إعادة تعيين كلمة المرور غير صالح, يرجى إعادة طلب إعادة تعيين كلمة المرور`
         }),
-        {
-          status: 400,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 400 }
       )
     }
   } catch (error) {
     return new Response(
       JSON.stringify({ message: `Ooops!, Server Error!: ${error}`, newPassSet: 0 }),
-      {
-        status: 500,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      }
+      { status: 500 }
     )
   }
 }

@@ -1,15 +1,12 @@
 import { connectDB } from '@/app/api/utils/db'
 import type { UserProps } from '@/types'
 import { ResultSetHeader } from 'mysql2/promise'
-import { NextRequest } from 'next/server'
 
 export async function PATCH(
-  req: NextRequest,
+  req: Request,
   { params: { userId } }: { params: { userId: string } }
 ) {
   if (!userId) throw new Error('User ID is required')
-
-  const origin = req.headers.get('origin')
 
   const body = await req.json()
   const { stocks } = body
@@ -24,13 +21,7 @@ export async function PATCH(
     if (!user) {
       return new Response(
         JSON.stringify({ userUpdated: 0, message: 'عفواً لم يتم العثور على الحساب!' }),
-        {
-          status: 404,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 404 }
       )
     }
 
@@ -46,13 +37,7 @@ export async function PATCH(
     if (userUpdated) {
       return new Response(
         JSON.stringify({ userUpdated, message: `تم تحديث أسهم المستثمر بنجاح!` }),
-        {
-          status: 200,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 200 }
       )
     }
 
@@ -61,13 +46,7 @@ export async function PATCH(
         userUpdated,
         message: `عفواً، لم يتم تحديث أسهم المستثمر بنجاح!`
       }),
-      {
-        status: 400,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      }
+      { status: 400 }
     )
   } catch (err) {
     console.error(err)
@@ -76,13 +55,7 @@ export async function PATCH(
         userUpdated: 0,
         message: `عفواً، حدثت مشكلة غير متوقعة، حاول مرة أخرى لاحقاً!`
       }),
-      {
-        status: 500,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      }
+      { status: 500 }
     )
   }
 }

@@ -3,13 +3,10 @@ import { randomUUID } from 'crypto'
 import email, { customEmail } from '@/app/api/utils/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'
-import { NextRequest } from 'next/server'
 
-export async function PUT(req: NextRequest) {
+export async function PUT(req: Request) {
   const body = await req.json()
   const { userEmail, oldEmail, fullname } = body
-
-  const origin = req.headers.get('origin')
 
   try {
     const user = (
@@ -24,13 +21,7 @@ export async function PUT(req: NextRequest) {
           resetEmail: 0,
           message: `عفواً, البريد الالكتروني الجديد مطابق للبريد الالكتروني القديم، يرجى إستخدام بريد الكتروني آخر`
         }),
-        {
-          status: 400,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 400 }
       )
     } else if (user) {
       return new Response(
@@ -38,13 +29,7 @@ export async function PUT(req: NextRequest) {
           resetEmail: 0,
           message: `عفواً, البريد الالكتروني مستخدم من قبل، يرجى إستخدام بريد الكتروني آخر`
         }),
-        {
-          status: 400,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 400 }
       )
     } else {
       const userResetPasswordToken = randomUUID()
@@ -103,14 +88,7 @@ export async function PUT(req: NextRequest) {
             JSON.stringify({
               message: `تم إرسال بريد الكتروني لتأكيد البريد الالكتروني الجديد، الرجاء إتباع التعليمات في البريد الالكتروني المرسل لكم في البريد الالكتروني الجديد...`,
               resetEmail: 1
-            }),
-            {
-              status: 200,
-              headers: {
-                'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                'Content-Type': 'application/json'
-              }
-            }
+            })
           )
         } else if (rejected.length > 0) {
           return new Response(
@@ -119,14 +97,7 @@ export async function PUT(req: NextRequest) {
               message: `عفواً, لم يتم إرسال رسالة تأكيد تغيير كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة
                 ${rejected[0] /*.message*/}
               }`
-            }),
-            {
-              status: 500,
-              headers: {
-                'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                'Content-Type': 'application/json'
-              }
-            }
+            })
           )
         }
       } catch (error) {
@@ -134,14 +105,7 @@ export async function PUT(req: NextRequest) {
           JSON.stringify({
             message: `عفواً, لم يتم إرسال رسالة تأكيد تغيير كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة`,
             resetEmail: 0
-          }),
-          {
-            status: 500,
-            headers: {
-              'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-              'Content-Type': 'application/json'
-            }
-          }
+          })
         )
       }
 
@@ -149,14 +113,7 @@ export async function PUT(req: NextRequest) {
         JSON.stringify({
           message: `تم إرسال بريد الكتروني لتأكيد البريد الالكتروني الجديد، الرجاء إتباع التعليمات في البريد الالكتروني المرسل لكم في البريد الالكتروني الجديد`,
           resetEmail: 1
-        }),
-        {
-          status: 200,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        })
       )
     }
   } catch (error) {
@@ -166,13 +123,7 @@ export async function PUT(req: NextRequest) {
         resetEmail: 0,
         message: `عفواً, حدث خطأ غير متوقع، لا يمكن تغيير البريد الالكتروني - يرجى التواصل مع الإدارة`
       }),
-      {
-        status: 500,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      }
+      { status: 500 }
     )
   }
 }

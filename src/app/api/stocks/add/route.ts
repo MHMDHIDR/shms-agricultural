@@ -2,9 +2,8 @@ import { connectDB } from '@/app/api/utils/db'
 import { ADMIN_EMAIL, APP_TITLE, APP_URL } from '@/data/constants'
 import type { ProjectProps, UserProps, stocksPurchasedProps } from '@/types'
 import email, { customEmail } from '@/app/api/utils/email'
-import { NextRequest } from 'next/server'
 
-export async function PATCH(req: NextRequest) {
+export async function PATCH(req: Request) {
   const body = await req.json()
   const {
     userId: shms_id,
@@ -15,8 +14,6 @@ export async function PATCH(req: NextRequest) {
   }: stocksPurchasedProps = body
 
   if (!shms_id) throw new Error('User ID is required')
-
-  const origin = req.headers.get('origin')
 
   try {
     // Check if the user has enough balance
@@ -118,26 +115,14 @@ export async function PATCH(req: NextRequest) {
          ${APP_TITLE}
          لتأكيد العملية ولإتمام باقي الإجراءات`
         }),
-        {
-          status: 200,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 200 }
       )
     } else if (rejected.length > 0) {
       return new Response(
         JSON.stringify({
           stocksPurchesed: 0,
           message: 'لم يتم تأكيد عملية الشراء، حاول مرة أخرى'
-        }),
-        {
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        })
       )
     }
   } catch (error) {
@@ -146,13 +131,7 @@ export async function PATCH(req: NextRequest) {
       JSON.stringify({
         stocksPurchesed: 0,
         message: 'لم يتم تأكيد عملية الشراء، حاول مرة أخرى'
-      }),
-      {
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      }
+      })
     )
   }
 }

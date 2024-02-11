@@ -6,7 +6,6 @@ import {
   ListObjectsV2Command,
   S3Client
 } from '@aws-sdk/client-s3'
-import { NextRequest } from 'next/server'
 
 const { AWS_ACCESS_ID, AWS_SECRET, AWS_BUCKET_NAME, AWS_REGION } = process.env
 
@@ -84,14 +83,12 @@ async function deleteFileFromS3(
 }
 
 export async function DELETE(
-  req: NextRequest,
+  _req: Request,
   { params: { S3docId } }: { params: { S3docId: string } }
 ) {
   if (!S3docId) {
     throw new Error('ID of the document or the folder is required!')
   }
-
-  const origin = req.headers.get('origin')
 
   if (S3docId.includes('projects')) {
     try {
@@ -104,32 +101,14 @@ export async function DELETE(
               docDeleted: false,
               message: 'حدث خطأ أثناء حذف صور المشروع! حاول مرة أخرى لاحقاً'
             }),
-            {
-              status: 400,
-              headers: {
-                'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                'Content-Type': 'application/json'
-              }
-            }
+            { status: 400 }
           )
         }
       })
 
-      return new Response(JSON.stringify({ docDeleted: true }), {
-        status: 200,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      })
+      return new Response(JSON.stringify({ docDeleted: true }), { status: 200 })
     } catch (error: any) {
-      return new Response(error.message, {
-        status: 500,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      })
+      return new Response(error.message, { status: 500 })
     }
   } else {
     try {
@@ -143,22 +122,10 @@ export async function DELETE(
 
       const { DeleteMarker: docDeleted } = await deleteFileFromS3(objectId)
 
-      return new Response(JSON.stringify({ docDeleted }), {
-        status: 200,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      })
+      return new Response(JSON.stringify({ docDeleted }), { status: 200 })
     } catch (error: any) {
       console.error(error)
-      return new Response(error.message, {
-        status: 500,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      })
+      return new Response(error.message, { status: 500 })
     }
   }
 }

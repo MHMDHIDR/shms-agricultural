@@ -3,11 +3,8 @@ import email, { customEmail } from '@/app/api/utils/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'
 import { ResultSetHeader } from 'mysql2/promise'
-import { NextRequest } from 'next/server'
 
-export async function PUT(req: NextRequest) {
-  const origin = req.headers.get('origin')
-
+export async function PUT(req: Request) {
   const body = await req.json()
   const { userId } = body
 
@@ -23,13 +20,7 @@ export async function PUT(req: NextRequest) {
     if (!user) {
       return new Response(
         JSON.stringify({ userAdded: 0, message: 'عفواً لم يتم العثور على الحساب!' }),
-        {
-          status: 404,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 404 }
       )
     }
 
@@ -37,13 +28,7 @@ export async function PUT(req: NextRequest) {
     if (user && new Date() >= new Date(user.shms_user_reset_token_expires!)) {
       return new Response(
         JSON.stringify({ userAdded: 0, message: 'انتهت صلاحية رابط تفعيل الحساب!' }),
-        {
-          status: 400,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 400 }
       )
     } else if (
       user.shms_user_reset_token_expires === null &&
@@ -52,13 +37,7 @@ export async function PUT(req: NextRequest) {
     ) {
       return new Response(
         JSON.stringify({ userAdded: 0, message: 'الحساب مفعل سابقاً' }),
-        {
-          status: 400,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 400 }
       )
     } else {
       // activate user
@@ -102,13 +81,7 @@ export async function PUT(req: NextRequest) {
               userActivated: 1,
               message: `تم إرسال بريد الكتروني لتأكيد تفعيل حساب المستخدم، يمكنك تسجيل الدخول بنجاح 👍🏼`
             }),
-            {
-              status: 201,
-              headers: {
-                'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                'Content-Type': 'application/json'
-              }
-            }
+            { status: 201 }
           )
         } else if (rejected.length > 0) {
           return new Response(
@@ -116,13 +89,7 @@ export async function PUT(req: NextRequest) {
               userActivated: 0,
               message: `عفواً، لم يتم إرسال بريد الكتروني لتأكيد تفعيل حساب المستخدم!`
             }),
-            {
-              status: 500,
-              headers: {
-                'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                'Content-Type': 'application/json'
-              }
-            }
+            { status: 500 }
           )
         }
       }
@@ -134,13 +101,7 @@ export async function PUT(req: NextRequest) {
         userActivated: 0,
         message: `عفواً، لم يتم تفعيل حساب المستخدم بنجاح!`
       }),
-      {
-        status: 500,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      }
+      { status: 500 }
     )
   }
 }

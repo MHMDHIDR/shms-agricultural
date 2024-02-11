@@ -1,9 +1,8 @@
 import { connectDB } from '@/app/api/utils/db'
 import type { ProjectProps } from '@/types'
 import { ResultSetHeader } from 'mysql2/promise'
-import { NextRequest } from 'next/server'
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const body = await req.json()
   const {
     shms_project_id,
@@ -22,8 +21,6 @@ export async function POST(req: NextRequest) {
     shms_project_images,
     shms_project_study_case
   }: ProjectProps = body
-
-  const origin = req.headers.get('origin')
 
   try {
     // add project to DB
@@ -69,35 +66,19 @@ export async function POST(req: NextRequest) {
     return projectAdded
       ? new Response(
           JSON.stringify({ projectAdded, message: `تم إضافة المشروع بنجاح` }),
-          {
-            status: 201,
-            headers: {
-              'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-              'Content-Type': 'application/json'
-            }
-          }
+          { status: 201 }
         )
       : new Response(
           JSON.stringify({
             projectAdded,
             message: `عفواً، لم يتم إضافة المشروع، يرجى المحاولة مرة أخرى`
           }),
-          {
-            status: 500,
-            headers: {
-              'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-              'Content-Type': 'application/json'
-            }
-          }
+          { status: 500 }
         )
   } catch (err) {
     console.error(err)
     return new Response(JSON.stringify({ projectAdded: 0, message: err }), {
-      status: 500,
-      headers: {
-        'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-        'Content-Type': 'application/json'
-      }
+      status: 500
     })
   }
 }

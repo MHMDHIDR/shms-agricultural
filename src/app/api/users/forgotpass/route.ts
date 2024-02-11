@@ -3,13 +3,10 @@ import { connectDB } from '@/app/api/utils/db'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import email, { customEmail } from '@/app/api/utils/email'
 import type { UserProps } from '@/types'
-import { NextRequest } from 'next/server'
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const body = await req.json()
   const { email: userResetEmail } = body
-
-  const origin = req.headers.get('origin')
 
   try {
     // Check for user by using his/her email or Phoneephone number
@@ -22,13 +19,7 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return new Response(
         JSON.stringify({ forgotPassSent: 0, message: `عفواً، لم يتم العثور على حسابك!` }),
-        {
-          status: 404,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 404 }
       )
     } else {
       if (user.shms_user_account_status === 'block') {
@@ -37,13 +28,7 @@ export async function POST(req: NextRequest) {
             forgotPassSent: 0,
             message: `عفواً! حسابك محظور! لا يمكنك إعادة تعيين كلمة المرور!`
           }),
-          {
-            status: 403,
-            headers: {
-              'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-              'Content-Type': 'application/json'
-            }
-          }
+          { status: 403 }
         )
       } else if (new Date() < new Date(user.shms_user_reset_token_expires!)) {
         return new Response(
@@ -51,13 +36,7 @@ export async function POST(req: NextRequest) {
             forgotPassSent: 0,
             message: `عفواً! لديك بالفعل طلب معلق لإعادة تعيين كلمة المرور، يرجى التحقق من صندوق البريد الإلكتروني الخاص بك`
           }),
-          {
-            status: 403,
-            headers: {
-              'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-              'Content-Type': 'application/json'
-            }
-          }
+          { status: 403 }
         )
       } else if (user.shms_user_account_status === 'active') {
         const userResetPasswordToken = randomUUID()
@@ -90,13 +69,7 @@ export async function POST(req: NextRequest) {
               JSON.stringify({
                 message: `تم إرسال رابط إعادة تعيين كلمة المرور إلى  ${user.shms_email} بنجاح! مع تعليمات إعادة تعيين كلمة المرور`,
                 forgotPassSent: 1
-              }),
-              {
-                headers: {
-                  'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                  'Content-Type': 'application/json'
-                }
-              }
+              })
             )
           } else if (rejected.length > 0) {
             return new Response(
@@ -106,13 +79,7 @@ export async function POST(req: NextRequest) {
                   user.shms_email
                 }!
                  ${rejected[0] /*.message*/}`
-              }),
-              {
-                headers: {
-                  'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                  'Content-Type': 'application/json'
-                }
-              }
+              })
             )
           }
         } catch (error) {
@@ -120,13 +87,7 @@ export async function POST(req: NextRequest) {
             JSON.stringify({
               message: `Ooops!, something went wrong!: ${error} `,
               forgotPassSent: 0
-            }),
-            {
-              headers: {
-                'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-                'Content-Type': 'application/json'
-              }
-            }
+            })
           )
         }
       }
@@ -136,13 +97,7 @@ export async function POST(req: NextRequest) {
       JSON.stringify({
         message: `Ooops!, something went wrong!: ${error}`,
         forgotPassSent: 0
-      }),
-      {
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      }
+      })
     )
   }
 }

@@ -1,15 +1,12 @@
 import { connectDB } from '@/app/api/utils/db'
 import type { UserProps } from '@/types'
 import { ResultSetHeader } from 'mysql2/promise'
-import { NextRequest } from 'next/server'
 
 export async function DELETE(
-  req: NextRequest,
+  _request: Request,
   { params: { userId } }: { params: { userId: string } }
 ) {
   if (!userId) throw new Error('User ID is required')
-
-  const origin = req.headers.get('origin')
 
   try {
     // Check if user exists
@@ -21,13 +18,7 @@ export async function DELETE(
     if (!user) {
       return new Response(
         JSON.stringify({ userDeleted: 0, message: 'عفواً لم يتم العثور على الحساب!' }),
-        {
-          status: 404,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 404 }
       )
     }
 
@@ -41,25 +32,13 @@ export async function DELETE(
     if (userDeleted) {
       return new Response(
         JSON.stringify({ userDeleted, message: `تم حذف حساب المستخدم بنجاح!` }),
-        {
-          status: 200,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 200 }
       )
     }
 
     return new Response(
       JSON.stringify({ userDeleted, message: `عفواً، لم يتم حذف حساب المستخدم بنجاح!` }),
-      {
-        status: 400,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      }
+      { status: 400 }
     )
   } catch (err) {
     console.error(err)
@@ -68,13 +47,7 @@ export async function DELETE(
         userDeleted: 0,
         message: `عفواً، حدثت مشكلة غير متوقعة، حاول مرة أخرى لاحقاً!`
       }),
-      {
-        status: 500,
-        headers: {
-          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-          'Content-Type': 'application/json'
-        }
-      }
+      { status: 500 }
     )
   }
 }

@@ -1,13 +1,10 @@
 import { connectDB } from '@/app/api/utils/db'
 import type { UserProps } from '@/types'
 import { ComparePasswords } from '../../utils/compare-password'
-import { NextRequest } from 'next/server'
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const body = await req.json()
   const { email, phone, password, emailOrPhone } = body
-
-  const origin = req.headers.get('origin')
 
   if (email === '' || phone === '') {
     return new Response(
@@ -28,14 +25,7 @@ export async function POST(req: NextRequest) {
 
     if (!user) {
       return new Response(
-        JSON.stringify({ loggedIn: 0, message: 'لم يتم العثور على المستخدم' }),
-        {
-          status: 404,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        JSON.stringify({ loggedIn: 0, message: 'لم يتم العثور على المستخدم' })
       )
     }
 
@@ -45,13 +35,7 @@ export async function POST(req: NextRequest) {
           loggedIn: 0,
           message: 'حسابك محظور، يرجى التواصل مع الإدارة'
         }),
-        {
-          status: 403,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 403 }
       )
     } else if (user.shms_user_account_status === 'pending') {
       return new Response(
@@ -60,13 +44,7 @@ export async function POST(req: NextRequest) {
           message:
             'حسابك غير مفعل بعد، يرجى تفعيل حسابك عن طريق الرابط المرسل إلى بريدك الإلكتروني'
         }),
-        {
-          status: 403,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 403 }
       )
     } else if (user && (await ComparePasswords(user.shms_password ?? '', password))) {
       return new Response(
@@ -81,14 +59,7 @@ export async function POST(req: NextRequest) {
           shms_user_stock_limit: user.shms_user_stock_limit,
           shms_user_stocks: user.shms_user_stocks,
           message: 'تم تسجيل الدخول بنجاح'
-        }),
-        {
-          status: 200,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        })
       )
     } else {
       return new Response(
@@ -96,13 +67,7 @@ export async function POST(req: NextRequest) {
           loggedIn: 0,
           message: 'Invalid Email/Telephone Number Or Password'
         }),
-        {
-          status: 401,
-          headers: {
-            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
-            'Content-Type': 'application/json'
-          }
-        }
+        { status: 401 }
       )
     }
   } catch (error) {
