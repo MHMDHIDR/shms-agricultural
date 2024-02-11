@@ -1,7 +1,8 @@
 import { connectDB } from '@/app/api/utils/db'
-import { type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 
 export async function GET(req: NextRequest) {
+  const origin = req.headers.get('origin')
   const searchParams = req.nextUrl.searchParams
   const role = searchParams.get('role')
 
@@ -11,5 +12,10 @@ export async function GET(req: NextRequest) {
       ? await connectDB(`SELECT * FROM users WHERE shms_user_stocks is not null`)
       : await connectDB(`SELECT * FROM users`)
 
-  return new Response(JSON.stringify(users))
+  return new NextResponse(JSON.stringify(users), {
+    headers: {
+      'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+      'Content-Type': 'application/json'
+    }
+  })
 }

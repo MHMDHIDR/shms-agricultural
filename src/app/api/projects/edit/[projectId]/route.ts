@@ -1,9 +1,10 @@
 import { connectDB } from '@/app/api/utils/db'
 import type { ProjectProps } from '@/types'
 import { ResultSetHeader } from 'mysql2/promise'
+import { NextRequest } from 'next/server'
 
 export async function PATCH(
-  request: Request,
+  request: NextRequest,
   { params: { projectId } }: { params: { projectId: string } }
 ) {
   if (!projectId) throw new Error('Project ID is required')
@@ -30,13 +31,21 @@ export async function PATCH(
     updateImg
   }: ProjectProps = await request.json()
 
+  const origin = request.headers.get('origin')
+
   if (!projectId) {
     return new Response(
       JSON.stringify({
         projectUpdated: 0,
         message: 'الرقم التعريفي الـ ID مطلوب لتحديث المشروع!'
       }),
-      { status: 404 }
+      {
+        status: 404,
+        headers: {
+          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+          'Content-Type': 'application/json'
+        }
+      }
     )
   }
 
@@ -54,7 +63,13 @@ export async function PATCH(
           projectUpdated: 0,
           message: 'عفواً لم يتم العثور على المشروع!'
         }),
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+            'Content-Type': 'application/json'
+          }
+        }
       )
     }
 
@@ -133,14 +148,26 @@ export async function PATCH(
             projectUpdated,
             message: `تم تعديل المشروع بنجاح .. جاري تحويلك`
           }),
-          { status: 200 }
+          {
+            status: 200,
+            headers: {
+              'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+              'Content-Type': 'application/json'
+            }
+          }
         )
       : new Response(
           JSON.stringify({
             projectUpdated,
             message: `عفواً، لم يتم تعديل المشروع، يرجى المحاولة مرة أخرى`
           }),
-          { status: 500 }
+          {
+            status: 500,
+            headers: {
+              'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+              'Content-Type': 'application/json'
+            }
+          }
         )
   } catch (error) {
     console.error('Error in projects/edit/[projectId]/route.ts', error)
@@ -150,7 +177,13 @@ export async function PATCH(
         projectUpdated: 0,
         message: `عفواً، لم يتم تعديل المشروع! ${error}`
       }),
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+          'Content-Type': 'application/json'
+        }
+      }
     )
   }
 }

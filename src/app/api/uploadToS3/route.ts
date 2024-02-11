@@ -68,6 +68,8 @@ async function uploadFileToS3({
 }
 
 export async function POST(request: any) {
+  const origin = request.headers.get('origin')
+
   try {
     const formData = await request.formData()
     const fullname: string = formData.get('fullname')
@@ -90,13 +92,26 @@ export async function POST(request: any) {
     }
 
     if ((!files || !caseStudyfile) && multiple) {
-      return new Response('No file found', { status: 400 })
+      return new Response('No file found', {
+        status: 400,
+        headers: {
+          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+          'Content-Type': 'application/json'
+        }
+      })
     }
 
     // if single file
     if (!multiple) {
       const file: File = files[0] ?? formData.get('file')
-      if (!file) return new Response('No file found', { status: 400 })
+      if (!file)
+        return new Response('No file found', {
+          status: 400,
+          headers: {
+            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+            'Content-Type': 'application/json'
+          }
+        })
 
       const key = await uploadFileToS3({
         file: Buffer.from(await file.arrayBuffer()),
@@ -109,7 +124,11 @@ export async function POST(request: any) {
       const fileUrl = `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}`
 
       return new Response(JSON.stringify({ shms_id: projectId, shms_doc: fileUrl }), {
-        status: 200
+        status: 200,
+        headers: {
+          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+          'Content-Type': 'application/json'
+        }
       })
     } else {
       const fileURLs: string[] = []
@@ -160,11 +179,23 @@ export async function POST(request: any) {
             } satisfies imgsProps
           })
         }),
-        { status: 200 }
+        {
+          status: 200,
+          headers: {
+            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+            'Content-Type': 'application/json'
+          }
+        }
       )
     }
   } catch (error: any) {
     console.error(error)
-    return new Response(error.message, { status: 500 })
+    return new Response(error.message, {
+      status: 500,
+      headers: {
+        'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+        'Content-Type': 'application/json'
+      }
+    })
   }
 }

@@ -4,8 +4,9 @@ import { ResultSetHeader } from 'mysql2/promise'
 import email, { customEmail } from '@/app/api/utils/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'
+import { NextRequest } from 'next/server'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const body = await req.json()
   const {
     shms_id,
@@ -19,10 +20,18 @@ export async function POST(req: Request) {
     shms_doc
   } = body
 
+  const origin = req.headers.get('origin')
+
   if (newUserEmail === '' || phone === '') {
     return new Response(
       JSON.stringify({ userAdded: 0, message: 'Please Fill In  All The Fields' }),
-      { status: 400 }
+      {
+        status: 400,
+        headers: {
+          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+          'Content-Type': 'application/json'
+        }
+      }
     )
   }
 
@@ -38,7 +47,13 @@ export async function POST(req: Request) {
           userAdded: 0,
           message: `المستخدم مسجل بالفعل، إذا كنت أنت صاحب الحساب يرجى تسجيل الدخول، إذا كنت تواجه مشكلة في تسجيل الدخول يرجى التواصل مع الإدارة على ${ADMIN_EMAIL}`
         }),
-        { status: 409 }
+        {
+          status: 409,
+          headers: {
+            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+            'Content-Type': 'application/json'
+          }
+        }
       )
     }
 
@@ -99,7 +114,13 @@ export async function POST(req: Request) {
             userAdded: 1,
             message: 'User Successfully Registered You Can Login 👍🏼'
           }),
-          { status: 201 }
+          {
+            status: 201,
+            headers: {
+              'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+              'Content-Type': 'application/json'
+            }
+          }
         )
       } else if (rejected.length > 0) {
         return new Response(
@@ -107,7 +128,13 @@ export async function POST(req: Request) {
             userAdded: 0,
             message: 'User Not Added!, Please Try Again Later'
           }),
-          { status: 500 }
+          {
+            status: 500,
+            headers: {
+              'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+              'Content-Type': 'application/json'
+            }
+          }
         )
       }
     }
@@ -118,7 +145,13 @@ export async function POST(req: Request) {
         userAdded: 0,
         message: 'User Not Added!, Please Try Again Later'
       }),
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+          'Content-Type': 'application/json'
+        }
+      }
     )
   }
 }

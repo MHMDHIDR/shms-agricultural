@@ -1,14 +1,23 @@
 import email, { customEmail } from '@/app/api/utils/email'
 import { ADMIN_EMAIL } from '@/data/constants'
+import { NextRequest } from 'next/server'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const body = await req.json()
   const { emailOrPhone, address, message } = body
+
+  const origin = req.headers.get('origin')
 
   if (!emailOrPhone || !address || !message) {
     return new Response(
       JSON.stringify({ message: 'يجب تعبئة جميع الحقول', mailSent: 0 }),
-      { status: 400 }
+      {
+        status: 400,
+        headers: {
+          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+          'Content-Type': 'application/json'
+        }
+      }
     )
   }
 
@@ -37,20 +46,39 @@ export async function POST(req: Request) {
         JSON.stringify({
           message: `تم إرسال رسالتك بنجاح، سيتم الرد في أقرب وقت ممكن!`,
           mailSent: 1
-        })
+        }),
+        {
+          headers: {
+            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+            'Content-Type': 'application/json'
+          }
+        }
       )
     } else if (rejected.length > 0) {
       return new Response(
         JSON.stringify({
           message: `عفواً! حدث خطأ أثناء إرسال رسالتك لنا!: ${rejected[0]}`,
           mailSent: 0
-        })
+        }),
+        {
+          headers: {
+            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+            'Content-Type': 'application/json'
+          }
+        }
       )
     }
   } catch (error) {
     console.error(error)
     return new Response(
-      JSON.stringify({ message: `عفواً، حدث خطأ غير متوقع`, mailSent: 0 })
+      JSON.stringify({ message: `عفواً، حدث خطأ غير متوقع`, mailSent: 0 }),
+      {
+        status: 500,
+        headers: {
+          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+          'Content-Type': 'application/json'
+        }
+      }
     )
   }
 }

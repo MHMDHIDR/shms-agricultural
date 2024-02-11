@@ -1,12 +1,15 @@
 import { connectDB } from '@/app/api/utils/db'
 import type { UserProps } from '@/types'
 import { ResultSetHeader } from 'mysql2/promise'
+import { NextRequest } from 'next/server'
 
 export async function DELETE(
-  _request: Request,
+  req: NextRequest,
   { params: { userId } }: { params: { userId: string } }
 ) {
   if (!userId) throw new Error('User ID is required')
+
+  const origin = req.headers.get('origin')
 
   try {
     // Check if user exists
@@ -18,7 +21,13 @@ export async function DELETE(
     if (!user) {
       return new Response(
         JSON.stringify({ userDeleted: 0, message: 'عفواً لم يتم العثور على الحساب!' }),
-        { status: 404 }
+        {
+          status: 404,
+          headers: {
+            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+            'Content-Type': 'application/json'
+          }
+        }
       )
     }
 
@@ -32,13 +41,25 @@ export async function DELETE(
     if (userDeleted) {
       return new Response(
         JSON.stringify({ userDeleted, message: `تم حذف حساب المستخدم بنجاح!` }),
-        { status: 200 }
+        {
+          status: 200,
+          headers: {
+            'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+            'Content-Type': 'application/json'
+          }
+        }
       )
     }
 
     return new Response(
       JSON.stringify({ userDeleted, message: `عفواً، لم يتم حذف حساب المستخدم بنجاح!` }),
-      { status: 400 }
+      {
+        status: 400,
+        headers: {
+          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+          'Content-Type': 'application/json'
+        }
+      }
     )
   } catch (err) {
     console.error(err)
@@ -47,7 +68,13 @@ export async function DELETE(
         userDeleted: 0,
         message: `عفواً، حدثت مشكلة غير متوقعة، حاول مرة أخرى لاحقاً!`
       }),
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          'Access-Control-Allow-Origin': origin || 'http://localhost:3000',
+          'Content-Type': 'application/json'
+        }
+      }
     )
   }
 }
