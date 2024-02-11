@@ -20,13 +20,34 @@ import {
 import { TabsContent } from '@/components/ui/tabs'
 import { API_URL, APP_LOGO } from '@/data/constants'
 import { arabicDate, getProject } from '@/lib/utils'
-import type { UserProps, stocksPurchesedProps } from '@/types'
+import type { UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 import { Suspense } from 'react'
+import PurchesedStocks from './_PurchesedStocks'
 
 export default async function DashboardInvestors() {
   const { data: users }: { data: UserProps[] } = await axios.get(
     `${API_URL}/users/all?role=investor`
+  )
+
+  // Fetch project details for all users
+  const fetchUserProjectDetails = async (userStocks: stocksPurchasedProps[]) => {
+    const promises = userStocks.map(async (item: stocksPurchasedProps) => ({
+      projectStockPrice: (await getProject(item.shms_project_id))
+        .shms_project_stock_price,
+      stocks: item.stocks
+    }))
+    return Promise.all(promises)
+  }
+
+  // Iterate through users to fetch project details for each
+  const usersWithProjectDetails = await Promise.all(
+    users.map(async user => {
+      const userStocks: stocksPurchasedProps[] = JSON.parse(String(user.shms_user_stocks))
+      const projectsDetails = await fetchUserProjectDetails(userStocks)
+
+      return { ...user, projectsDetails }
+    })
   )
 
   return (
@@ -45,7 +66,12 @@ export default async function DashboardInvestors() {
           <CardHeader>
             <CardTitle>مجموع المبالغ المستثمرة</CardTitle>
             <CardDescription className='pt-4 text-2xl'>
-              <strong>153</strong>
+              <strong>
+                {usersWithProjectDetails
+                  .map(user => user.projectsDetails)
+                  .flat()
+                  .reduce((acc, cur) => acc + cur.stocks * cur.projectStockPrice, 0)}
+              </strong>
             </CardDescription>
           </CardHeader>
         </Card>
@@ -54,7 +80,12 @@ export default async function DashboardInvestors() {
           <CardHeader>
             <CardTitle>عدد الاسهم</CardTitle>
             <CardDescription className='pt-4 text-2xl'>
-              <strong>153</strong>
+              <strong>
+                {usersWithProjectDetails
+                  .map(user => user.projectsDetails)
+                  .flat()
+                  .reduce((acc, cur) => acc + cur.stocks, 0)}
+              </strong>
             </CardDescription>
           </CardHeader>
         </Card>
@@ -79,7 +110,7 @@ export default async function DashboardInvestors() {
               <Table className='min-w-full overflow-x-auto divide-y divide-gray-200'>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className='pt-10 font-bold text-center select-none min-w-32'>
+                    <TableHead className='pt-10 font-bold text-center select-none min-w-56'>
                       الاسم
                     </TableHead>
                     <TableHead className='font-bold text-center select-none'>
@@ -102,6 +133,9 @@ export default async function DashboardInvestors() {
                             </TableHead>
                             <TableHead className='text-center border border-gray-200 select-none min-w-60'>
                               تاريخ الشراء
+                            </TableHead>
+                            <TableHead className='text-center border border-gray-200 select-none min-w-60'>
+                              تعديل الأسهم
                             </TableHead>
                           </TableRow>
                         </TableHeader>
@@ -128,7 +162,7 @@ export default async function DashboardInvestors() {
                           }
                         >
                           {JSON.parse(String(user.shms_user_stocks)).map(
-                            async (item: stocksPurchesedProps) => {
+                            async (item: stocksPurchasedProps) => {
                               const projectName = (await getProject(item.shms_project_id))
                                 .shms_project_name
                               const projectStockPrice = (
@@ -156,6 +190,16 @@ export default async function DashboardInvestors() {
                                         </TableCell>
                                         <TableCell className='text-center min-w-60'>
                                           {arabicDate(item.createdAt)}
+                                        </TableCell>
+                                        <TableCell className='text-center'>
+                                          <PurchesedStocks
+                                            purchesedStocks={{
+                                              item,
+                                              userId: user.shms_id
+                                            }}
+                                          >
+                                            تعديل أسهم المستثمر
+                                          </PurchesedStocks>
                                         </TableCell>
                                       </TableRow>
                                     </TableBody>

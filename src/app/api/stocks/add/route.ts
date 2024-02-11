@@ -1,6 +1,6 @@
 import { connectDB } from '@/app/api/utils/db'
 import { ADMIN_EMAIL, APP_TITLE, APP_URL } from '@/data/constants'
-import type { ProjectProps, UserProps, stocksPurchesedProps } from '@/types'
+import type { ProjectProps, UserProps, stocksPurchasedProps } from '@/types'
 import email, { customEmail } from '@/app/api/utils/email'
 
 export async function PATCH(req: Request) {
@@ -11,7 +11,7 @@ export async function PATCH(req: Request) {
     stocks,
     newPercentage,
     percentageCode
-  }: stocksPurchesedProps = body
+  }: stocksPurchasedProps = body
 
   if (!shms_id) throw new Error('User ID is required')
 

@@ -34,6 +34,7 @@ import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import MarkdownIt from 'markdown-it'
 import htmlToMd from 'html-to-md'
+import Drawer from '@/components/custom/Drawer'
 
 export default function EditProjectPage({
   params: { id: projectId }
@@ -539,6 +540,7 @@ export default function EditProjectPage({
               <Label htmlFor='projectDescription'>
                 شروط المشروع
                 <span className='text-red-500'>*</span>
+                <Drawer>تعليمات شروط المشروع</Drawer>
               </Label>
               <textarea
                 onChange={handleProjectTermsChange}

@@ -14,7 +14,7 @@ export type UserProps = {
   shms_phone?: string
   shms_address?: string
   shms_doc?: string
-  shms_user_stocks?: stocksPurchesedProps[]
+  shms_user_stocks?: stocksPurchasedProps[]
   shms_user_stock_limit?: number
   shms_created_at?: string
   shms_user_account_type?: 'admin' | 'user'
@@ -207,7 +207,7 @@ export type ConfirmProps = {
   shmsProjectImages?: string
 }
 
-export type stocksPurchesedProps = {
+export type stocksPurchasedProps = {
   userId?: UserProps['shms_id']
   shms_project_id: ProjectProps['shms_project_id']
   stocks: number

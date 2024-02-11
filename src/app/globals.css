@@ -68,42 +68,44 @@
     direction: rtl;
   }
 
-  h1 {
-    font-size: 2.5rem;
-  }
+  [role='dialog'] {
+    h1 {
+      font-size: 2.5rem;
+    }
 
-  h2 {
-    font-size: 2.15rem;
-  }
+    h2 {
+      font-size: 2.15rem;
+    }
 
-  h3 {
-    font-size: 1.85rem;
-  }
+    h3 {
+      font-size: 1.85rem;
+    }
 
-  h4 {
-    font-size: 1.5rem;
-  }
+    h4 {
+      font-size: 1.5rem;
+    }
 
-  h5 {
-    font-size: 1.25rem;
-  }
+    h5 {
+      font-size: 1.25rem;
+    }
 
-  h6 {
-    font-size: 1rem;
-  }
+    h6 {
+      font-size: 1rem;
+    }
 
-  ol {
-    list-style-type: decimal;
-    list-style-position: inside;
-  }
+    ol {
+      list-style-type: decimal;
+      list-style-position: inside;
+    }
 
-  blockquote {
-    background: #f9f9f9;
-    border-right: 0.35em solid #ccc;
-    margin: 1em;
-    padding: 0.2em 1em;
-    quotes: '\201C''\201D''\2018''\2019';
-    direction: rtl;
+    blockquote {
+      background: #f9f9f9;
+      border-right: 0.35em solid #ccc;
+      margin: 1em;
+      padding: 0.2em 1em;
+      quotes: '\201C''\201D''\2018''\2019';
+      direction: rtl;
+    }
   }
 }
 

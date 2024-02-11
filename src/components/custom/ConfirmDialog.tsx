@@ -37,16 +37,16 @@ export function ConfirmDialog({
       <DialogContent className='sm:max-w-[425px] rtl'>
         <DialogHeader>
           <DialogTitle className='pb-4 font-bold text-center select-none'>
-            تعديل حد شراء الاأسهم
+            تعديل الاأسهم
           </DialogTitle>
           <DialogDescription className='text-right'>
-            يمكنك تعديل حد شراء الاسهم لهذا المستخدم، ثم الضغط على حفظ التغييرات
+            يمكنك تعديل الاسهم لهذا المستخدم، ثم الضغط على حفظ التغييرات
           </DialogDescription>
         </DialogHeader>
         <div className='py-4 grid gap-4'>
           <div className='items-center grid grid-cols-4 gap-4'>
             <Label htmlFor='stocks_limit' className='text-right'>
-              عدد الاأسهم
+              عدد الأسهم
             </Label>
             <Input
               id='stocks_limit'

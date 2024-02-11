@@ -5,7 +5,7 @@ import type {
   ProjectProps,
   UserLoggedInProps,
   UserProps,
-  stocksPurchesedProps
+  stocksPurchasedProps
 } from '@/types'
 import { Suspense, useEffect, useState } from 'react'
 import axios from 'axios'
@@ -59,7 +59,7 @@ export default function BuyStocks({
         const { data: shms_user_stocks }: { data: UserProps } = await axios.get(
           `${API_URL}/users/getUserStocks/${session?.token?.user?.shms_id}`
         )
-        const userStocks: stocksPurchesedProps[] = JSON.parse(
+        const userStocks: stocksPurchasedProps[] = JSON.parse(
           String(shms_user_stocks.shms_user_stocks)
         )
 
@@ -425,7 +425,7 @@ export default function BuyStocks({
 
 function calculateStockLimit(
   user: UserProps,
-  userStocks: stocksPurchesedProps[],
+  userStocks: stocksPurchasedProps[],
   projectId: string
 ) {
   if (!user || !user?.shms_user_stock_limit) return 100

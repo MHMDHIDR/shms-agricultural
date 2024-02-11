@@ -27,7 +27,7 @@ import {
 import { TabsContent } from '@/components/ui/tabs'
 import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
 import { arabicDate, cn, redirect } from '@/lib/utils'
-import type { UserProps, stocksPurchesedProps } from '@/types'
+import type { UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -237,7 +237,7 @@ export default function Users() {
   const getUserStokcs = (user: UserProps) => {
     const USER_STOCKS = JSON.parse(
       String(user.shms_user_stocks)
-    ) as stocksPurchesedProps[]
+    ) as stocksPurchasedProps[]
     // count the stock in the USER_STOCKS array
     return USER_STOCKS && USER_STOCKS.reduce((acc, stock) => acc + stock.stocks, 0)
   }

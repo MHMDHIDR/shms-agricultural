@@ -40,7 +40,7 @@ export function MenuToggler({
           strokeLinecap='round'
           strokeLinejoin='round'
           strokeWidth='1'
-          d='M4 6h16M4'
+          d='M4 6h16'
         />
         <path
           className={`${
@@ -49,7 +49,7 @@ export function MenuToggler({
           strokeLinecap='round'
           strokeLinejoin='round'
           strokeWidth='1'
-          d='M4 12h16M4'
+          d='M4 12h16'
         />
         <path
           className={`${

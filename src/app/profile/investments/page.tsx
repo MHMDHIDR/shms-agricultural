@@ -13,7 +13,7 @@ import {
 import { API_URL } from '@/data/constants'
 import { getAuth } from '@/lib/actions/auth'
 import { getProject, getProjectDate } from '@/lib/utils'
-import type { InverstorProjectData, UserProps, stocksPurchesedProps } from '@/types'
+import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 
 export default async function DashboardInvestors() {
@@ -24,14 +24,14 @@ export default async function DashboardInvestors() {
 
   // To make sure the user is the investor -- للتأكد من ان المستخدم هو المستثمر المطلوب
   const InvestmentCurrentUser = users.filter(user => user.shms_id === userId)
-  const projectsData: stocksPurchesedProps[][] = InvestmentCurrentUser.map(
+  const projectsData: stocksPurchasedProps[][] = InvestmentCurrentUser.map(
     InvestmentData => JSON.parse(String(InvestmentData.shms_user_stocks))
   )
 
   const projectDataFilter: InverstorProjectData[][] = await Promise.all(
     projectsData.map(async projectData => {
       return Promise.all(
-        projectData.map(async (project: stocksPurchesedProps) => {
+        projectData.map(async (project: stocksPurchasedProps) => {
           const projectName = (await getProject(project.shms_project_id))
             .shms_project_name
           const projectStockPrice = (await getProject(project.shms_project_id))

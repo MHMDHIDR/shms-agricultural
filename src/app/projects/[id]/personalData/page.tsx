@@ -5,7 +5,7 @@ import Layout from '@/components/custom/Layout'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import PaymentMetods from '@/components/custom/PaymentMetods'
 import Modal from '@/components/custom/Modal'
-import type { UserLoggedInProps, stocksPurchesedProps } from '@/types'
+import type { UserLoggedInProps, stocksPurchasedProps } from '@/types'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { toast } from 'sonner'
@@ -28,7 +28,7 @@ export default function PersonalData({
   const [stocksPurchesed, setStocksPurchesed] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
-  const [stockItems, setStockItems] = useState<stocksPurchesedProps>()
+  const [stockItems, setStockItems] = useState<stocksPurchasedProps>()
 
   const { push } = useRouter()
 
