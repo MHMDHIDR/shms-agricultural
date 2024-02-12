@@ -198,7 +198,7 @@ export default async function DashboardInvestors() {
                                               userId: user.shms_id
                                             }}
                                           >
-                                            تعديل أسهم المستثمر
+                                            تعديل الأسهم
                                           </PurchesedStocks>
                                         </TableCell>
                                       </TableRow>

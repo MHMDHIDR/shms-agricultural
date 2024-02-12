@@ -725,12 +725,12 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-green-100;
+    @apply bg-green-600;
   }
 
   ::-webkit-scrollbar-track:hover,
   ::-webkit-scrollbar-track:active {
-    @apply bg-green-600;
+    @apply bg-green-300;
   }
 
   ::-webkit-scrollbar-thumb {
