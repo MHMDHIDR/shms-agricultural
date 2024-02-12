@@ -69,6 +69,7 @@ export async function PATCH(
 
     // Update the project's shms_project_available_stocks accordingly
     let updatedAvailableStocks = projectDetails?.shms_project_available_stocks ?? 0
+    updatedAvailableStocks += stocksDifference
 
     // Update the project's shms_project_available_stocks in the database
     await connectDB(

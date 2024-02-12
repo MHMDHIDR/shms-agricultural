@@ -129,7 +129,7 @@ export default function PurchasedStocks({
         })
       }
 
-      // redirect('/dashboard', 1000)
+      redirect('/dashboard', 1000)
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
