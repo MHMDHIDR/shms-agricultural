@@ -1,6 +1,6 @@
 import { connectDB } from '@/app/api/utils/db'
-import type { UserProps } from '@/types'
 import { ResultSetHeader } from 'mysql2/promise'
+import type { ProjectProps, stocksPurchasedProps, UserProps } from '@/types'
 
 export async function PATCH(
   req: Request,
@@ -9,7 +9,13 @@ export async function PATCH(
   if (!userId) throw new Error('User ID is required')
 
   const body = await req.json()
-  const { stocks } = body
+  const {
+    stocks,
+    dateOfPurchase
+  }: {
+    stocks: stocksPurchasedProps['stocks']
+    dateOfPurchase: stocksPurchasedProps['createdAt']
+  } = body
 
   try {
     // Check if user exists
@@ -25,15 +31,68 @@ export async function PATCH(
       )
     }
 
-    const updateUser = (await connectDB(
-      `UPDATE users
-          SET shms_user_stock_limit = ?
-            WHERE shms_id = ?`,
-      [stocks, userId]
-    )) as ResultSetHeader
+    const prevStockValue: stocksPurchasedProps[] = JSON.parse(
+      String(user.shms_user_stocks)
+    )
+    let projectStocksToUpdate = ''
+
+    // Filter the user.shms_user_stocks array to find the object with matching createdAt date
+    const stockValueToEdit = prevStockValue.map((stock: stocksPurchasedProps) => {
+      if (stock.createdAt === dateOfPurchase) {
+        projectStocksToUpdate = stock.shms_project_id
+        return { ...stock, stocks }
+      }
+
+      return stock
+    })
+
+    // Update user's shms_user_stocks array with the modified stockValueToEdit
+    user.shms_user_stocks = stockValueToEdit
+
+    // Then proceed with updating the user stocks in the database
+    const updateUser = await connectDB(
+      `UPDATE users SET shms_user_stocks = ?
+        WHERE shms_id = ?`,
+      [JSON.stringify(stockValueToEdit), userId]
+    )
 
     const { affectedRows: userUpdated } = updateUser as ResultSetHeader
 
+    // Fetch the project details associated with the projectStocksToUpdate
+    const projectDetails = (
+      (await connectDB(`SELECT * FROM projects WHERE shms_project_id = ?`, [
+        projectStocksToUpdate
+      ])) as ProjectProps[]
+    )[0]
+
+    // Calculate the difference between the new and old stock values
+    const oldStocks =
+      prevStockValue.find(stock => stock.shms_project_id === projectStocksToUpdate)
+        ?.stocks || 0
+    const newStocks =
+      stockValueToEdit.find(stock => stock.shms_project_id === projectStocksToUpdate)
+        ?.stocks || 0
+    const stocksDifference = newStocks - oldStocks
+
+    // Update the project's shms_project_available_stocks accordingly
+    let updatedAvailableStocks = projectDetails?.shms_project_available_stocks ?? 0
+
+    if (stocksDifference > 0) {
+      // Increase shms_project_available_stocks if new stocks are added
+      updatedAvailableStocks -= stocksDifference
+    } else if (stocksDifference < 0) {
+      // Decrease shms_project_available_stocks if stocks are sold
+      updatedAvailableStocks += Math.abs(stocksDifference)
+    }
+
+    // Update the project's shms_project_available_stocks in the database
+    await connectDB(
+      `UPDATE projects SET shms_project_available_stocks = ?
+        WHERE shms_project_id = ?`,
+      [updatedAvailableStocks, projectStocksToUpdate]
+    )
+
+    // const userUpdated = true
     if (userUpdated) {
       return new Response(
         JSON.stringify({ userUpdated, message: `تم تحديث أسهم المستثمر بنجاح!` }),

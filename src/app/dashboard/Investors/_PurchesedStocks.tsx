@@ -24,12 +24,17 @@ export default function PurchasedStocks({
     isSubmittingDone: false
   })
 
-  const updateUserPurchasedStocks = async (id: string, stocks: number) => {
+  const updateUserPurchasedStocks = async (
+    userId: string,
+    // use dateOfPurchase to determine which stocks to edit, since it's a unique value
+    dateOfPurchase: string,
+    stocks: number
+  ) => {
     try {
       setFormStatus({ ...formStatus, isSubmitting: true })
       const { data }: { data: UserProps } = await axios.patch(
-        `${API_URL}/users/updatePurchasedStocks/${id}`,
-        { stocks }
+        `${API_URL}/users/updatePurchasedStocks/${userId}`,
+        { dateOfPurchase, stocks }
       )
 
       if (data.userUpdated === 1) {
@@ -61,7 +66,7 @@ export default function PurchasedStocks({
         })
       }
 
-      redirect('/dashboard', 1500)
+      redirect('/dashboard', 1000)
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -85,7 +90,7 @@ export default function PurchasedStocks({
     <ConfirmDialog
       StockLimit={item.stocks}
       onClick={async () => {
-        await updateUserPurchasedStocks(userId, userPurchasedStocks ?? 0)
+        await updateUserPurchasedStocks(userId, item.createdAt, userPurchasedStocks ?? 0)
       }}
       onChange={e => setUserPurchasedStocks(Number(e.target.value))}
       formStatus={formStatus}
