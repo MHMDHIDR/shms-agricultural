@@ -9,10 +9,20 @@ const CONNECTION_OPTIONS = {
   connectionLimit: 10
 }
 
+let connectionPool: mysql.Pool | null = null
+
+async function getConnectionPool() {
+  if (!connectionPool) {
+    connectionPool = await mysql.createPool(CONNECTION_OPTIONS)
+    console.log('✅ Connected to MySQL')
+  }
+  return connectionPool
+}
+
 export async function connectDB(query: string, data: any[] | undefined = []) {
   try {
-    const connection = await mysql.createPool(CONNECTION_OPTIONS).getConnection()
-    console.log('✅ Connected to MySQL')
+    const pool = await getConnectionPool()
+    const connection = await pool.getConnection()
 
     const [rows] = data.length
       ? await connection.execute(query, data)

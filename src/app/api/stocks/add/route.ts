@@ -100,8 +100,11 @@ export async function PATCH(req: Request) {
       }
     }
 
-    const data = await email(investorEmailData)
-    await email(adminEmailData)
+    // Promoise.all
+    const data = await Promise.all([
+      await email(investorEmailData),
+      await email(adminEmailData)
+    ])
     if (data) {
       return new Response(
         JSON.stringify({

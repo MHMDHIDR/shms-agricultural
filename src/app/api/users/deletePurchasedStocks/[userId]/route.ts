@@ -47,7 +47,7 @@ export async function PATCH(
     const updateUserStocks = await connectDB(
       `UPDATE users SET shms_user_stocks = ?
         WHERE shms_id = ?`,
-      [JSON.stringify(newUserStocks), userId]
+      [newUserStocks.length === 0 ? null : JSON.stringify(newUserStocks), userId]
     )
     const { affectedRows: userUpdated } = updateUserStocks as ResultSetHeader
 
@@ -65,7 +65,7 @@ export async function PATCH(
     const newStocks =
       newUserStocks.find(stock => stock.shms_project_id === projectStocksToUpdate)
         ?.stocks || 0
-    const stocksDifference = newStocks - prevStocks
+    const stocksDifference = prevStocks - newStocks
 
     // Update the project's shms_project_available_stocks accordingly
     let updatedAvailableStocks = projectDetails?.shms_project_available_stocks ?? 0
@@ -75,7 +75,7 @@ export async function PATCH(
     await connectDB(
       `UPDATE projects SET shms_project_available_stocks = ?
         WHERE shms_project_id = ?`,
-      [updatedAvailableStocks + stocksDifference, projectStocksToUpdate]
+      [updatedAvailableStocks, projectStocksToUpdate]
     )
 
     if (userUpdated) {
