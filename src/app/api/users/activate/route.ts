@@ -74,8 +74,8 @@ export async function PUT(req: Request) {
           }
         }
 
-        const { accepted, rejected } = await email(emailData)
-        if (accepted.length > 0) {
+        const data = await email(emailData)
+        if (data) {
           return new Response(
             JSON.stringify({
               userActivated: 1,
@@ -83,7 +83,7 @@ export async function PUT(req: Request) {
             }),
             { status: 201 }
           )
-        } else if (rejected.length > 0) {
+        } else {
           return new Response(
             JSON.stringify({
               userActivated: 0,

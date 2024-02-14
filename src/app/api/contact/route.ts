@@ -26,7 +26,6 @@ export async function POST(req: Request) {
     }
 
     const data = await email(emailData)
-
     if (data) {
       return new Response(
         JSON.stringify({

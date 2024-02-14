@@ -81,22 +81,19 @@ export async function PUT(req: Request) {
 
       // try to send the email
       try {
-        const { accepted, rejected } = await email(emailData)
-
-        if (accepted.length > 0) {
+        const data = await email(emailData)
+        if (data) {
           return new Response(
             JSON.stringify({
               message: `تم إرسال بريد الكتروني لتأكيد البريد الالكتروني الجديد، الرجاء إتباع التعليمات في البريد الالكتروني المرسل لكم في البريد الالكتروني الجديد...`,
               resetEmail: 1
             })
           )
-        } else if (rejected.length > 0) {
+        } else {
           return new Response(
             JSON.stringify({
               resetEmail: 0,
-              message: `عفواً, لم يتم إرسال رسالة تأكيد تغيير كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة
-                ${rejected[0] /*.message*/}
-              }`
+              message: `عفواً, لم يتم إرسال رسالة تأكيد تغيير كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة`
             })
           )
         }

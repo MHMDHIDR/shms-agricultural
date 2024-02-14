@@ -96,22 +96,19 @@ export async function POST(req: Request) {
 
       // try to send the email
       try {
-        const { accepted, rejected } = await email(emailData)
-
-        if (accepted.length > 0) {
+        const data = await email(emailData)
+        if (data) {
           return new Response(
             JSON.stringify({
               message: `تم إعادة تعيين كلمة المرور بنجاح, جاري تحويلك إلى صفحة تسجيل الدخول...`,
               newPassSet: 1
             })
           )
-        } else if (rejected.length > 0) {
+        } else {
           return new Response(
             JSON.stringify({
               newPassSet: 0,
-              message: `عفواً, لم يتم إرسال رسالة إعادة تعيين كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة
-                ${rejected[0] /*.message*/}
-              }`
+              message: `عفواً, لم يتم إرسال رسالة إعادة تعيين كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدار`
             })
           )
         }
@@ -187,22 +184,19 @@ export async function POST(req: Request) {
 
       // try to send the email
       try {
-        const { accepted, rejected } = await email(emailData)
-
-        if (accepted.length > 0) {
+        const data = await email(emailData)
+        if (data) {
           return new Response(
             JSON.stringify({
               message: `تم تغيير كلمة المرور بنجاح، سيتم تطبيق كلمة المرور الجديدة في تسجيل الدخول القادم...`,
               newPassSet: 1
             })
           )
-        } else if (rejected.length > 0) {
+        } else {
           return new Response(
             JSON.stringify({
               newPassSet: 0,
-              message: `عفواً, لم يتم إرسال رسالة تأكيد تغيير كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة
-                ${rejected[0] /*.message*/}
-              }`
+              message: `عفواً, لم يتم إرسال رسالة تأكيد تغيير كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة`
             })
           )
         }

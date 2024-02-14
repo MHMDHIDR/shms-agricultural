@@ -62,23 +62,19 @@ export async function POST(req: Request) {
 
         // try to send the email
         try {
-          const { accepted, rejected } = await email(emailData)
-
-          if (accepted.length > 0) {
+          const data = await email(emailData)
+          if (data) {
             return new Response(
               JSON.stringify({
                 message: `تم إرسال رابط إعادة تعيين كلمة المرور إلى  ${user.shms_email} بنجاح! مع تعليمات إعادة تعيين كلمة المرور`,
                 forgotPassSent: 1
               })
             )
-          } else if (rejected.length > 0) {
+          } else {
             return new Response(
               JSON.stringify({
                 forgotPassSent: 0,
-                message: `عفواً حدث خطأ ما!، لم يتم إرسال رابط إعادة تعيين كلمة المرور إلى  ${
-                  user.shms_email
-                }!
-                 ${rejected[0] /*.message*/}`
+                message: `عفواً حدث خطأ ما!، لم يتم إرسال رابط إعادة تعيين كلمة المرور إلى  ${user.shms_email}`
               })
             )
           }

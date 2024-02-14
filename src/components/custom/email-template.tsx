@@ -2,7 +2,6 @@ import { APP_TITLE } from '@/data/constants'
 import { customEmailProps } from '@/types'
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
@@ -12,7 +11,6 @@ import {
   Text,
   Tailwind
 } from '@react-email/components'
-import Link from 'next/link'
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_PUBLIC_URL ?? ''
 
@@ -31,23 +29,11 @@ export const EmailTemplate = ({
   return (
     <Html>
       <Tailwind>
-        <Head>
-          <link
-            href='https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap'
-            rel='stylesheet'
-          />
-          <style>
-            {`
-              body {
-                font-family: 'Cairo', sans-serif;
-              }
-            `}
-          </style>
-        </Head>
+        <Head />
         <Body>
           <Container
             className='max-w-2xl px-6 py-8 mx-auto bg-white dark:bg-gray-900'
-            style={{ direction: 'rtl' }}
+            style={{ direction: 'rtl', fontFamily: 'Cairo, sans-serif' }}
           >
             <Section key='section1' className='text-center'>
               <Img
@@ -67,7 +53,7 @@ export const EmailTemplate = ({
 
                 <Text
                   key='msg'
-                  className='mt-4 rtl leading-loose text-gray-600 dark:text-gray-300 text-right'
+                  className='mt-4 rtl leading-loose text-gray-700 dark:text-gray-300 text-right'
                 >
                   {/* Use the formatted message with HTML line breaks */}
                   {msg ? (
@@ -80,12 +66,14 @@ export const EmailTemplate = ({
                 </Text>
 
                 {buttonLink && (
-                  <div className='text-center mt-6' key='buttonDiv'>
-                    <Button className='px-6 py-2 text-sm font-medium tracking-wider text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'>
-                      <Link href={buttonLink} target='_blank'>
-                        {buttonLabel ?? 'إعادة تعيين كلمة المرور'}
-                      </Link>
-                    </Button>
+                  <div className='text-center my-7' key='buttonDiv'>
+                    <a
+                      className='px-6 no-underline rounded-lg bg-blue-500 hover:bg-blue-700 hover:-translate-y-1.5 py-2 text-sm font-medium tracking-wider text-white capitalize transition-colors duration-300 transform focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'
+                      href={buttonLink}
+                      target='_blank'
+                    >
+                      {buttonLabel ?? 'إعادة تعيين كلمة المرور'}
+                    </a>
                   </div>
                 )}
 
