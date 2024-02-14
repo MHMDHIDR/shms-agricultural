@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 import { connectDB } from '@/app/api/utils/db'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import email, { customEmail } from '@/lib/actions/email'
+import email from '@/lib/actions/email'
 import type { UserProps } from '@/types'
 
 export async function POST(req: Request) {
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
           from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
           to: user.shms_email,
           subject: 'إعادة تعيين كلمة المرور | شمس للخدمات الزراعية',
-          msg: customEmail({ buttonLink })
+          msg: { buttonLink }
         }
 
         // try to send the email

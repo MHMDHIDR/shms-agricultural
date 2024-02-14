@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       name: emailOrPhone,
       subject: 'رسالة جديدة من شمس للخدمات الزراعية',
       from: emailOrPhone,
-      to: 'mr.hamood277@gmail.com', //ADMIN_EMAIL,
+      to: ADMIN_EMAIL,
       msg: {
         title: address,
         msg: `عزيزي ${ADMIN_EMAIL}،

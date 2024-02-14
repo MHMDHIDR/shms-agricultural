@@ -151,7 +151,7 @@ export type uploadToS3DataProps = {
 
 // User Email
 export type emailMethodProps = {
-  name: string
+  name?: string
   subject: string
   from: string
   to: string
@@ -160,7 +160,7 @@ export type emailMethodProps = {
 
 export type customEmailProps = {
   title?: string
-  msg?: string
+  msg?: string | HTMLElement
   buttonLink?: string
   buttonLabel?: string
 }

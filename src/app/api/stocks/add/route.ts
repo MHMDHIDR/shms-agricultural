@@ -1,7 +1,7 @@
 import { connectDB } from '@/app/api/utils/db'
 import { ADMIN_EMAIL, APP_TITLE, APP_URL } from '@/data/constants'
 import type { ProjectProps, UserProps, stocksPurchasedProps } from '@/types'
-import email, { customEmail } from '@/lib/actions/email'
+import email from '@/lib/actions/email'
 
 export async function PATCH(req: Request) {
   const body = await req.json()
@@ -69,44 +69,40 @@ export async function PATCH(req: Request) {
     const adminButtonLink = APP_URL + `/dashboard`
 
     const investorEmailData = {
-      from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
-      to: user?.shms_email,
       subject: `تم شراء أسهم من ${project?.shms_project_name} بنجاح | شمس للخدمات الزراعية`,
-      msg: customEmail({
+      from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
+      to: user?.shms_email ?? '',
+      msg: {
         title: 'مرحباً بك في شمس للخدمات الزراعية',
         msg: `
-            <h1 style="font-weight:bold">مرحباً ${user?.shms_fullname},</h1>
-            <p>
-             شكراً لمساهمتك معنا في ${project?.shms_project_name}،
-             تم شراء أسهم بنجاح، يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:
-            </p>
-            <br /><br />
-            <small>إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك مشكلة ما، يرجى تجاهل هذا البريد من فضلك!</small>`,
+        مرحباً ${user?.shms_fullname},
+
+          شكراً لمساهمتك معنا في ${project?.shms_project_name}،
+          تم شراء أسهم بنجاح، يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:
+
+        <small>إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك مشكلة ما، يرجى تجاهل هذا البريد من فضلك!</small>`,
         buttonLink,
         buttonLabel: 'تصفح استثماراتك'
-      })
+      }
     }
 
     const adminEmailData = {
       from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
       to: ADMIN_EMAIL,
       subject: `تم شراء عدد ${stocks} أسهم من ${project?.shms_project_name} بنجاح | شمس للخدمات الزراعية`,
-      msg: customEmail({
-        title: `تم شراء أسهم من ${project?.shms_project_name}`,
+      msg: {
+        title: 'مرحباً بك في شمس للخدمات الزراعية',
         msg: `
-          <p>
-            تم شراء عدد ${stocks} أسهم من ${project?.shms_project_name}  بنجاح،
-            <br /><br />
-            بواسطة ${user?.shms_fullname} (${user?.shms_email})
-          </p>`,
+        تم شراء عدد ${stocks} أسهم من ${project?.shms_project_name}  بنجاح،
+        بواسطة ${user?.shms_fullname} (${user?.shms_email})`,
         buttonLink: adminButtonLink,
         buttonLabel: 'تصفح الاستثمارات'
-      })
+      }
     }
 
-    const { accepted, rejected } = await email(investorEmailData)
+    const data = await email(investorEmailData)
     await email(adminEmailData)
-    if (accepted.length > 0) {
+    if (data) {
       return new Response(
         JSON.stringify({
           stocksPurchesed: 1,
@@ -117,7 +113,7 @@ export async function PATCH(req: Request) {
         }),
         { status: 200 }
       )
-    } else if (rejected.length > 0) {
+    } else {
       return new Response(
         JSON.stringify({
           stocksPurchesed: 0,

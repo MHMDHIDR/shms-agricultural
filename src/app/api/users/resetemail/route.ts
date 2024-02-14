@@ -1,6 +1,6 @@
 import { connectDB } from '@/app/api/utils/db'
 import { randomUUID } from 'crypto'
-import email, { customEmail } from '@/lib/actions/email'
+import email from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'
 
@@ -56,7 +56,7 @@ export async function PUT(req: Request) {
         from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
         to: userEmail,
         subject: 'تأكيد البريد الالكتروني الجديد | شمس للخدمات الزراعية',
-        msg: customEmail({
+        msg: {
           title: `تأكيد البريد الالكتروني الجديد`,
           msg: `عزيزي ${fullname ?? 'المستخدم'}،
             <br /><br />
@@ -76,7 +76,7 @@ export async function PUT(req: Request) {
             شكراً لك.
             <br /><br />
             <small>لا حاجة للرد على هذا البريد الإلكتروني.</small>`
-        })
+        }
       }
 
       // try to send the email

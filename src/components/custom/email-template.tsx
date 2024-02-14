@@ -22,7 +22,11 @@ export const EmailTemplate = ({
   buttonLink,
   buttonLabel
 }: customEmailProps) => {
-  const formattedMsg = msg ? msg.replace(/\n/g, '<br>') : ''
+  const formattedMsg = msg
+    ? typeof msg === 'string'
+      ? msg.replace(/\n/g, '<br>')
+      : msg
+    : ''
 
   return (
     <Html>
@@ -32,9 +36,19 @@ export const EmailTemplate = ({
             href='https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap'
             rel='stylesheet'
           />
+          <style>
+            {`
+              body {
+                font-family: 'Cairo', sans-serif;
+              }
+            `}
+          </style>
         </Head>
         <Body>
-          <Container className='max-w-2xl px-6 py-8 mx-auto bg-white dark:bg-gray-900 rtl font-[Cairo,_sans-serif]'>
+          <Container
+            className='max-w-2xl px-6 py-8 mx-auto bg-white dark:bg-gray-900'
+            style={{ direction: 'rtl' }}
+          >
             <Section key='section1' className='text-center'>
               <Img
                 src={`${baseUrl}/logo-slogan.png`}
@@ -52,7 +66,7 @@ export const EmailTemplate = ({
                 <br />
 
                 <Text
-                  key='text'
+                  key='msg'
                   className='mt-4 rtl leading-loose text-gray-600 dark:text-gray-300 text-right'
                 >
                   {/* Use the formatted message with HTML line breaks */}
@@ -66,7 +80,7 @@ export const EmailTemplate = ({
                 </Text>
 
                 {buttonLink && (
-                  <div key='buttonLabel' className='text-center mt-6'>
+                  <div className='text-center mt-6' key='buttonDiv'>
                     <Button className='px-6 py-2 text-sm font-medium tracking-wider text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'>
                       <Link href={buttonLink} target='_blank'>
                         {buttonLabel ?? 'إعادة تعيين كلمة المرور'}
@@ -89,7 +103,10 @@ export const EmailTemplate = ({
             </Section>
 
             <Section key='section3' className='mt-8'>
-              <Text className='text-gray-500 dark:text-gray-400 text-center'>
+              <Text
+                key='section3rights'
+                className='text-gray-500 dark:text-gray-400 text-center'
+              >
                 {APP_TITLE}
                 <br />
                 جميع الحقوق محفوظة © {new Date().getFullYear()}
@@ -98,7 +115,10 @@ export const EmailTemplate = ({
               {buttonLink &&
                 (buttonLink.includes('reset-password') ||
                   buttonLink.includes('activate')) && (
-                  <Text className='mt-2 text-sm text-gray-500 dark:text-gray-400 text-center'>
+                  <Text
+                    className='mt-2 text-sm text-gray-500 dark:text-gray-400 text-center'
+                    key='note'
+                  >
                     <br />
                     <small>ملاحظة: هذا الرابط سيتنهي خلال ساعة واحدة</small>
                   </Text>

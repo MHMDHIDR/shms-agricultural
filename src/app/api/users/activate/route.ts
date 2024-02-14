@@ -1,5 +1,5 @@
 import { connectDB } from '@/app/api/utils/db'
-import email, { customEmail } from '@/lib/actions/email'
+import email from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'
 import { ResultSetHeader } from 'mysql2/promise'
@@ -59,7 +59,7 @@ export async function PUT(req: Request) {
           from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
           to: user?.shms_email,
           subject: 'تم تفعيل حسابك بنجاح | شمس للخدمات الزراعية',
-          msg: customEmail({
+          msg: {
             title: 'مرحباً بك في شمس للخدمات الزراعية',
             msg: `
             <h1 style="font-weight:bold">مرحباً ${user?.shms_fullname},</h1>
@@ -71,7 +71,7 @@ export async function PUT(req: Request) {
             <small>إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك مشكلة ما، يرجى تجاهل هذا البريد من فضلك!</small>`,
             buttonLink,
             buttonLabel: 'تسجيل الدخول'
-          })
+          }
         }
 
         const { accepted, rejected } = await email(emailData)

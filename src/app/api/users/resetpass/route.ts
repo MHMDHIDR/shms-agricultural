@@ -1,6 +1,6 @@
 import { connectDB } from '@/app/api/utils/db'
 import { genSalt, hash } from 'bcryptjs'
-import email, { customEmail } from '@/lib/actions/email'
+import email from '@/lib/actions/email'
 import type { UserProps } from '@/types'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import { ComparePasswords } from '../../utils/compare-password'
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
         from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
         to: user.shms_email,
         subject: 'تم إعادة تعيين كلمة المرور بنجاح | شمس للخدمات الزراعية',
-        msg: customEmail({
+        msg: {
           title: `تم إعادة تعيين كلمة المرور بنجاح`,
           msg: `عزيزي ${user.shms_fullname}،
             <br />
@@ -91,7 +91,7 @@ export async function POST(req: Request) {
             شكراً لك.
             <br /><br />
             <small>لا حاجة للرد على هذا البريد الإلكتروني.</small>`
-        })
+        }
       }
 
       // try to send the email
@@ -161,7 +161,7 @@ export async function POST(req: Request) {
         from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
         to: user.shms_email,
         subject: 'تم تغيير كلمة المرور بنجاح | شمس للخدمات الزراعية',
-        msg: customEmail({
+        msg: {
           title: `تم تغيير كلمة المرور بنجاح`,
           msg: `عزيزي ${user.shms_fullname}،
             <br />
@@ -182,7 +182,7 @@ export async function POST(req: Request) {
             شكراً لك.
             <br /><br />
             <small>لا حاجة للرد على هذا البريد الإلكتروني.</small>`
-        })
+        }
       }
 
       // try to send the email

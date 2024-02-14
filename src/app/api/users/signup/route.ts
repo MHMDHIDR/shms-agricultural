@@ -1,7 +1,7 @@
 import { connectDB } from '@/app/api/utils/db'
 import { genSalt, hash } from 'bcryptjs'
 import { ResultSetHeader } from 'mysql2/promise'
-import email, { customEmail } from '@/lib/actions/email'
+import email from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'
 
@@ -77,19 +77,19 @@ export async function POST(req: Request) {
         from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
         to: newUserEmail,
         subject: 'تفعيل حسابك | شمس للخدمات الزراعية',
-        msg: customEmail({
+        msg: {
           title: 'مرحباً بك في شمس للخدمات الزراعية',
           msg: `
-            <h1 style="font-weight:bold; color: #008f1f;">مرحباً، ${userFullName}</h1>
-            <p>
+            مرحباً، ${userFullName}
+
              شكراً لتسجيلك في شمس للخدمات الزراعي،
              اذا كنت ترغب في تفعيل حسابك، يرجى الضغط على الرابط أدناه لتأكيد عنوان بريدك الإلكتروني:
-            </p>
-            <br /><br />
-            <small>إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك مشكلة ما، يرجى تجاهل هذا البريد من فضلك!</small>`,
+
+          إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك مشكلة ما، يرجى تجاهل هذا البريد من فضلك!
+            `,
           buttonLink,
           buttonLabel: 'تفعيل حسابك'
-        })
+        }
       }
 
       const { accepted, rejected } = await email(emailData)
