@@ -1,18 +1,19 @@
 'use server'
 
-import { Resend } from 'resend'
-import { ADMIN_EMAIL } from '@/data/constants'
-import type { emailMethodProps } from '@/types'
+import { Resend, type CreateEmailResponse } from 'resend'
+import { ADMIN_EMAIL, SHMS_EMAIL as shmsEmail } from '@/data/constants'
 import { EmailTemplate } from '@/components/custom/email-template'
+import type { emailMethodProps } from '@/types'
+
+const { RESEND_API_KEY, SHMS_EMAIL } = process.env
 
 async function email({ name, subject, from, to, msg }: emailMethodProps) {
-  const resend = new Resend(process.env.RESEND_API_KEY)
-  const { data, error: cause }: any = await resend.emails.send({
+  const resend = new Resend(RESEND_API_KEY)
+  const { data, error: cause }: CreateEmailResponse = await resend.emails.send({
     to,
-    //info@shmsagricultural.com
-    from: `"${
-      name ?? 'شمس للخدمات الزراعية | SHMS Agriculture'
-    }" <onboarding@resend.dev>`,
+    from: `"${name ?? 'شمس للخدمات الزراعية | SHMS Agriculture'}" <${
+      SHMS_EMAIL ?? shmsEmail
+    }>`,
     subject,
     reply_to: from ?? ADMIN_EMAIL,
     react: EmailTemplate({

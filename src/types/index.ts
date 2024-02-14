@@ -242,5 +242,6 @@ export type InverstorProjectData = {
   stocks: number
   totalPayment: number
   profitCollectionDate: Date
+  purchaseDate: string
   totalProfit: number
 }

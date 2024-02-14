@@ -65,7 +65,7 @@ export default function Modal({
       >
         {!asModalSlider && (
           <DialogHeader>
-            <DialogTitle className='font-bold text-center text-green-600 select-none'>
+            <DialogTitle className='font-bold [font-size:1rem_!important] text-center text-green-600 select-none'>
               {title}
             </DialogTitle>
 

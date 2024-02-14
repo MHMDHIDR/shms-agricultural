@@ -38,8 +38,8 @@ export const EmailTemplate = ({
             <Section key='section1' className='text-center'>
               <Img
                 src={`${baseUrl}/logo-slogan.png`}
-                width={250}
-                className='w-auto h-7 sm:h-8 mx-auto rtl'
+                width={150}
+                className='w-auto h-20 sm:h-16 mx-auto rtl'
               />
             </Section>
 
@@ -78,14 +78,21 @@ export const EmailTemplate = ({
                 )}
 
                 {buttonLink && (
-                  <Text
-                    key='buttonLink'
-                    className='mt-4 text-gray-600 dark:text-gray-300 text-right'
-                  >
-                    يمكنك أيضًا نسخ ولصق عنوان URL أدناه:
-                    <br /> <br />
-                    <strong>{buttonLink}</strong>
-                  </Text>
+                  <>
+                    <Text
+                      key='buttonLink'
+                      className='mt-4 text-gray-400 dark:text-gray-300 text-right'
+                    >
+                      يمكنك أيضًا نسخ ولصق عنوان URL أدناه:
+                      <br /> <br />
+                      <strong>{buttonLink}</strong>
+                    </Text>
+
+                    <small className='inline-block w-full text-center text-xxs text-gray-400 dark:text-white'>
+                      إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك
+                      مشكلة ما، يرجى تجاهل هذا البريد من فضلك!
+                    </small>
+                  </>
                 )}
               </div>
             </Section>

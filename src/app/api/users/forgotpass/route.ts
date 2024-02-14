@@ -63,7 +63,7 @@ export async function POST(req: Request) {
         // try to send the email
         try {
           const data = await email(emailData)
-          if (data) {
+          if (data?.id) {
             return new Response(
               JSON.stringify({
                 message: `تم إرسال رابط إعادة تعيين كلمة المرور إلى  ${user.shms_email} بنجاح! مع تعليمات إعادة تعيين كلمة المرور`,

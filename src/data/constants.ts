@@ -7,6 +7,8 @@ export const APP_LOGO = 'https://shmsagricultural.com/logo-slogan.png'
 
 export const APP_LOGO_sm = 'https://shmsagricultural.com/logo.svg'
 
+export const SHMS_EMAIL = `info@shmsagricultural.com`
+
 export const ITEMS_PER_PAGE = 5
 
 export const FILE_UPLOAD_IMG_SIZE = 122

@@ -185,7 +185,7 @@ export default function BuyStocks({
 
   return (
     <Layout>
-      <section className='mt-32 mb-auto mx-auto flex flex-col'>
+      <section className='mt-20 mb-auto mx-auto flex flex-col'>
         {isLoading ? (
           <div className='space-y-2'>
             <Skeleton className='w-full h-12' />

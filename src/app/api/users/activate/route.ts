@@ -75,7 +75,7 @@ export async function PUT(req: Request) {
         }
 
         const data = await email(emailData)
-        if (data) {
+        if (data?.id) {
           return new Response(
             JSON.stringify({
               userActivated: 1,

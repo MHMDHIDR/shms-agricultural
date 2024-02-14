@@ -95,17 +95,17 @@ export default function Nav() {
 
   return (
     <header
-      className={`container rtl h-auto w-full top-0 left-0 bg-gray-100 dark:bg-gray-900 z-[999] ${
-        sticky
-          ? 'fixed w-screen min-w-full animate-slidedown border-b py-0 border-white border-opacity-20 dark:bg-opacity-30 bg-opacity-70 backdrop-blur backdrop-filter'
-          : 'absolute min-w-full'
-      }`}
+      className={`container sticky rtl bg-gray-100 dark:bg-gray-900 z-[999] w-screen min-w-full animate-slidedown border-b py-0 border-white border-opacity-20 dark:bg-opacity-30 bg-opacity-70 backdrop-blur backdrop-filter`}
     >
       <NavigationMenu className='items-center justify-start w-full max-w-full md:flex rtl'>
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />
         {/* شعار الموقع */}
         <Link href={'/'} onClick={() => setIsOpen(false)}>
-          <ShmsIcon className={`ml-10 ${sticky ? 'w-20 h-20' : 'w-24 h-24'}`} />
+          <ShmsIcon
+            className={`ml-10 transition duration-500 w-16 h-16 ${
+              sticky ? 'scale-150' : 'scale-100'
+            }`}
+          />
         </Link>
         {onMobileScreen ? (
           <MobileNavigation

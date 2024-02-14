@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     }
 
     const data = await email(emailData)
-    if (data) {
+    if (data?.id) {
       return new Response(
         JSON.stringify({
           message: `تم إرسال رسالتك بنجاح، سيتم الرد في أقرب وقت ممكن!`,

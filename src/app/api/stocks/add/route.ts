@@ -78,9 +78,7 @@ export async function PATCH(req: Request) {
         مرحباً ${user?.shms_fullname},
 
           شكراً لمساهمتك معنا في ${project?.shms_project_name}،
-          تم شراء أسهم بنجاح، يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:
-
-        <small>إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك مشكلة ما، يرجى تجاهل هذا البريد من فضلك!</small>`,
+          تم شراء أسهم بنجاح، يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:`,
         buttonLink,
         buttonLabel: 'تصفح استثماراتك'
       }
@@ -105,7 +103,8 @@ export async function PATCH(req: Request) {
       await email(investorEmailData),
       await email(adminEmailData)
     ])
-    if (data) {
+
+    if (data[0] && data[1]) {
       return new Response(
         JSON.stringify({
           stocksPurchesed: 1,
@@ -121,7 +120,8 @@ export async function PATCH(req: Request) {
         JSON.stringify({
           stocksPurchesed: 0,
           message: 'لم يتم تأكيد عملية الشراء، حاول مرة أخرى'
-        })
+        }),
+        { status: 500 }
       )
     }
   } catch (error) {

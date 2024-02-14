@@ -40,6 +40,7 @@ export default async function DashboardInvestors() {
             .shms_project_stock_profits
           const profitCollectionDate = (await getProject(project.shms_project_id))
             .shms_project_profits_collect_date
+          const purchaseDate = project.createdAt
 
           return {
             projectId: project.shms_project_id,
@@ -48,6 +49,7 @@ export default async function DashboardInvestors() {
             stocks: project.stocks,
             totalPayment: project.stocks * projectStockPrice,
             profitCollectionDate,
+            purchaseDate,
             totalProfit:
               project.newPercentage > 0
                 ? project.stocks * projectProfit +
@@ -96,6 +98,9 @@ export default async function DashboardInvestors() {
                       الإجمالي من ربح الأسهم ورأس المال
                     </TableHead>
                     <TableHead className='text-center border border-gray-200 select-none min-w-60'>
+                      تاريخ الشراء
+                    </TableHead>
+                    <TableHead className='text-center border border-gray-200 select-none min-w-60'>
                       تاريخ تسليم الأرباح
                     </TableHead>
                   </TableRow>
@@ -110,6 +115,7 @@ export default async function DashboardInvestors() {
                         stocks,
                         totalPayment,
                         profitCollectionDate,
+                        purchaseDate,
                         totalProfit
                       }) => (
                         <TableRow key={projectId}>
@@ -142,6 +148,9 @@ export default async function DashboardInvestors() {
                             data-price
                           >
                             {totalProfit + totalPayment}
+                          </TableCell>
+                          <TableCell className='text-center border border-gray-200'>
+                            {getProjectDate(new Date(purchaseDate))}
                           </TableCell>
                           <TableCell className='text-center border border-gray-200'>
                             {getProjectDate(new Date(profitCollectionDate))}

@@ -82,7 +82,7 @@ export async function PUT(req: Request) {
       // try to send the email
       try {
         const data = await email(emailData)
-        if (data) {
+        if (data?.id) {
           return new Response(
             JSON.stringify({
               message: `تم إرسال بريد الكتروني لتأكيد البريد الالكتروني الجديد، الرجاء إتباع التعليمات في البريد الالكتروني المرسل لكم في البريد الالكتروني الجديد...`,

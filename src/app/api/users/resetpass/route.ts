@@ -185,7 +185,7 @@ export async function POST(req: Request) {
       // try to send the email
       try {
         const data = await email(emailData)
-        if (data) {
+        if (data?.id) {
           return new Response(
             JSON.stringify({
               message: `تم تغيير كلمة المرور بنجاح، سيتم تطبيق كلمة المرور الجديدة في تسجيل الدخول القادم...`,
