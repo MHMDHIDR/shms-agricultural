@@ -1,4 +1,4 @@
-import email, { customEmail } from '@/app/api/utils/email'
+import email from '@/lib/actions/email'
 import { ADMIN_EMAIL } from '@/data/constants'
 
 export async function POST(req: Request) {
@@ -14,35 +14,31 @@ export async function POST(req: Request) {
 
   try {
     const emailData = {
-      name: `رسالة جديدة ${emailOrPhone}`,
+      name: emailOrPhone,
       subject: 'رسالة جديدة من شمس للخدمات الزراعية',
       from: emailOrPhone,
-      to: ADMIN_EMAIL,
-      msg: customEmail({
-        title: `رسالة جديدة من شمس للخدمات الزراعية ${address}`,
+      to: 'mr.hamood277@gmail.com', //ADMIN_EMAIL,
+      msg: {
+        title: address,
         msg: `عزيزي ${ADMIN_EMAIL}،
-        <br />
-          <pre>
-            ${message}
-          </pre>
-        <br /><br />
+        ${message}
         شكراً لك.`
-      })
+      }
     }
 
-    const { accepted, rejected } = await email(emailData)
+    const data = await email(emailData)
 
-    if (accepted.length > 0) {
+    if (data) {
       return new Response(
         JSON.stringify({
           message: `تم إرسال رسالتك بنجاح، سيتم الرد في أقرب وقت ممكن!`,
           mailSent: 1
         })
       )
-    } else if (rejected.length > 0) {
+    } else {
       return new Response(
         JSON.stringify({
-          message: `عفواً! حدث خطأ أثناء إرسال رسالتك لنا!: ${rejected[0]}`,
+          message: `عفواً! حدث خطأ أثناء إرسال رسالتك لنا!`,
           mailSent: 0
         })
       )

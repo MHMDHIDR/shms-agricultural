@@ -150,13 +150,20 @@ export type uploadToS3DataProps = {
 }
 
 // User Email
-export type customEmailProps = (props: {
+export type emailMethodProps = {
+  name: string
+  subject: string
+  from: string
+  to: string
+  msg: customEmailProps
+}
+
+export type customEmailProps = {
   title?: string
   msg?: string
   buttonLink?: string
   buttonLabel?: string
-  logoSrc?: string
-}) => string
+}
 
 export type emailProps = {
   emailOrPhone: string

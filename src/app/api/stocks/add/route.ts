@@ -1,7 +1,7 @@
 import { connectDB } from '@/app/api/utils/db'
 import { ADMIN_EMAIL, APP_TITLE, APP_URL } from '@/data/constants'
 import type { ProjectProps, UserProps, stocksPurchasedProps } from '@/types'
-import email, { customEmail } from '@/app/api/utils/email'
+import email, { customEmail } from '@/lib/actions/email'
 
 export async function PATCH(req: Request) {
   const body = await req.json()

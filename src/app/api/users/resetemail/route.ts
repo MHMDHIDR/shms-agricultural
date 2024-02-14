@@ -1,6 +1,6 @@
 import { connectDB } from '@/app/api/utils/db'
 import { randomUUID } from 'crypto'
-import email, { customEmail } from '@/app/api/utils/email'
+import email, { customEmail } from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'
 

@@ -1,7 +1,7 @@
 import { connectDB } from '@/app/api/utils/db'
 import { genSalt, hash } from 'bcryptjs'
 import { ResultSetHeader } from 'mysql2/promise'
-import email, { customEmail } from '@/app/api/utils/email'
+import email, { customEmail } from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'
 
