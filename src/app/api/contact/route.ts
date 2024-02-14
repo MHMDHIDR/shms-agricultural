@@ -21,8 +21,7 @@ export async function POST(req: Request) {
       msg: {
         title: address,
         msg: `عزيزي ${ADMIN_EMAIL}،
-        ${message}
-        شكراً لك.`
+        ${message}`
       }
     }
 
