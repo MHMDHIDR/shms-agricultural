@@ -130,7 +130,9 @@ const ForgotPasswordPage = ({
     }
   }
 
-  return session ? (
+  return session?.expires ? (
+    replace('/')
+  ) : session?.user ? (
     <LoadingPage />
   ) : validateUUID(resetToken) ? null : (
     <Layout>

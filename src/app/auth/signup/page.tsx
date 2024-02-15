@@ -261,7 +261,9 @@ const SignupPage = () => {
     setAcceptedTermError('')
   }
 
-  return session ? (
+  return session?.expires ? (
+    replace('/')
+  ) : session?.user ? (
     <LoadingPage />
   ) : (
     <Layout>

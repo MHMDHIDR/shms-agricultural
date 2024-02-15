@@ -11,13 +11,19 @@ import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Button } from '@/components/ui/button'
 import { cn, validateUUID } from '@/lib/utils'
 import { Info } from 'lucide-react'
-import type { UserProps } from '@/types'
+import type { UserLoggedInProps, UserProps } from '@/types'
+import { LoadingPage } from '@/components/custom/Loading'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 export default function ActivateAccount({
   params: { tokenId }
 }: {
   params: { tokenId: string }
 }) {
+  const { data: session }: { data: UserLoggedInProps } = useSession()
+  const { replace } = useRouter()
+
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isAccountActivated, setIsAccountActivated] = useState(false)
 
@@ -83,7 +89,11 @@ export default function ActivateAccount({
     </p>
   )
 
-  return !validateUUID(tokenId) ? null : (
+  return session?.expires ? (
+    replace('/')
+  ) : session?.user ? (
+    <LoadingPage />
+  ) : !validateUUID(tokenId) ? null : (
     <section className='mt-48 md:mt-32'>
       <CardWrapper
         heading={HEADING}

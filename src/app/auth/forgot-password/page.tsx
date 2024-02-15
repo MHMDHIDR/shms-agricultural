@@ -108,7 +108,9 @@ const ForgotPasswordPage = () => {
     }
   }
 
-  return session ? (
+  return session?.expires ? (
+    replace('/')
+  ) : session?.user ? (
     <LoadingPage />
   ) : (
     <Layout>
