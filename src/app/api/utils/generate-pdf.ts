@@ -1,4 +1,4 @@
-import { APP_LOGO, APP_TITLE, SHMS_EMAIL, SHMS_PHONE } from '@/data/constants'
+import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL, SHMS_PHONE } from '@/data/constants'
 import { getProjectDate } from '@/lib/utils'
 import type { generatePDFProps } from '@/types'
 import puppeteer from 'puppeteer'
@@ -14,143 +14,89 @@ function generatePDFContent({
   referenceCode
 }: generatePDFProps) {
   return `
-    <div class="max-w-3xl p-20 mx-auto my-10 bg-white rounded shadow-sm" id="invoice">
-      <div class="items-center grid grid-cols-2"
-        style="direction: rtl; text-align: right; color: #333; user-select: none;"
-      >
-        <div>
-          <!-- Company logo -->
-          <img
-            src="${APP_LOGO}"
-            height={150}
-            width={150}
-            alt="${APP_TITLE}"
-            style="width: 150px; height: 150px; margin-inline: auto;"
-          />
-        </div>
-
-        <div class="text-center">
-          <h1>
-            ${APP_TITLE}
-          </h1>
-          <p class="text-xs text-gray-500" style="color:#ccc">
-            ${SHMS_EMAIL}
-          </p>
-          <p class="text-xs text-gray-500" style="color:#ccc">
-            ${SHMS_PHONE}
-          </p>
-        </div>
-      </div>
-
-      <!-- Client info -->
-      <div class="items-center mt-8 grid grid-cols-2">
-        <div>
-          <p class="font-bold text-gray-800">
-            عقد الاستثمار:
-          </p>
-          <p class="text-gray-500">
-            ${investorName}
-          </p>
-          <p class="font-bold text-gray-500 text-green-600">
-            ${projectName}
-          </p>
-        </div>
-
-        <div class="text-right">
-          <p>
-            تاريخ الإنشاء: <span class="text-gray-500">
-              ${getProjectDate(new Date())}
-            </span>
-          </p>
-        </div>
-      </div>
-
-      <!-- Invoice Items -->
-      <div class="mt-8 -mx-4 flow-root sm:mx-0">
-        <table class="table min-w-full">
-          <!-- Table Headers -->
-          <colgroup>
-            <col class="w-full sm:w-1/2">
-            <col class="sm:w-1/6">
-            <col class="sm:w-1/6">
-            <col class="sm:w-1/6">
-          </colgroup>
-          <thead class="text-gray-900 border-b border-gray-300">
-            <tr>
-              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                اســــــــــــم المشـــــــــــــــروع
-              </th>
-              <th scope="col" class="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900 sm:table-cell">
-                عدد الأسهم
-              </th>
-              <th scope="col" class="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900 sm:table-cell">
-                إجمالي الدفع
-              </th>
-              <th scope="col" class="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-0">
-                الأرباح
-              </th>
-              <th scope="col" class="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-0">
-                تاريخ استلام الأرباح
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Invoice Items -->
-            <tr class="border-b border-gray-200">
-              <td class="py-5 pl-4 pr-3 text-sm max-w-0 leading-10 sm:pl-0">
-               ${projectName}
-              </td>
-              <td class="px-3 py-5 text-sm text-right max-w-0 leading-10">
-                ${stocksPurchased}
-              </td>
-              <td class="px-3 py-5 text-sm text-right max-w-0 leading-10">
-                ${totalAmount}
-              </td>
-              <td class="px-3 py-5 text-sm text-right max-w-0 leading-10">
-                ${totalProfit}
-              </td>
-              <td class="px-3 py-5 text-sm text-right max-w-0 leading-10">
-                ${getProjectDate(new Date(profitsCollectDate))}
-              </td>
-            </tr>
-          </tbody>
-          <br><br><br><br>
-          <p style="margin-top: 50px; text-align: justify; font-size: 15px; color: #666;">
-            هذا العقد يشهد على شراء عدد ${stocksPurchased} من أسهم مشروع ${projectName}
-          </p>
-          <p class="text-gray-500">
-            تم شراء الأسهم بمبلغ ${totalAmount} ريال قطري فقط، وتم ذلك في تاريخ ${getProjectDate(
-    new Date()
-  )}
-          </p>
-          <p class="text-gray-500">
-            وسيتم تسليم الأرباح في تاريخ ${
-              profitsCollectDate
-                ? getProjectDate(new Date(profitsCollectDate))
-                : 'غير محدد'
-            }
-          </p>
-        </table>
-      </div>
-
-      <!-- Reference Code -->
-      <div style="direction: rtl; text-align: right; margin-top: 2rem;">
-        <p style="color: #666; font-size: 15px;">
-          رقم العقد
-          <br>
-          <span class="text-gray-900">${referenceCode}</span>
-        </p>
-      </div>
-
-      <!-- Footer -->
-      <div style="color: #ccc; border-top: 1px solid #ccc; padding-top: 1rem; font-size: 12px">
-        <p style="display:block;width: 100%; text-align: center; margin-top: 5rem; color: #666; font-size: 15px;">
-          <span>&copy; ${new Date().getFullYear()} </span>
-          <span>${APP_TITLE}</span>
-        </p>
-      </div>
-
+<div style="max-width: 750px; padding: 10px; margin: 0 auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+  <div style="display: flex; justify-content: space-between; align-items: center; direction: rtl; text-align: right; color: #333; user-select: none;">
+    <div>
+      <!-- Company logo -->
+      <img src="${APP_LOGO}" height="100" width="150" alt="${APP_TITLE}" style="width: 150px; height: 100px; margin-inline: auto;">
     </div>
+
+    <div style="text-align: center;">
+      <h1>${APP_TITLE}</h1>
+      <p style="font-size: 12px; color: #ccc;">${SHMS_EMAIL}</p>
+      <p style="font-size: 12px; color: #ccc;direction: rtl">${SHMS_PHONE}</p>
+    </div>
+  </div>
+
+  <!-- Client info -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; direction: rtl; text-align: right;">
+    <div>
+      <p style="font-weight: bold; color: #333;">عقد استثمار شراء أسهم</p>
+      <p style="color: #333;">${investorName}</p>
+      <p style="font-weight: bold; color: #2a9d8f;">${projectName}</p>
+    </div>
+
+    <div style="text-align: right;">
+      <p style="color: #333;">تاريخ الإنشاء: <span style="color: #333;">${getProjectDate(
+        new Date()
+      )}</span></p>
+    </div>
+  </div>
+
+  <!-- Invoice Items -->
+  <div style="margin-top: 20px;">
+    <table style="width: 100%; border-collapse: collapse; border-radius: 10px; border: 1px solid #ccc;">
+      <!-- Table Headers -->
+      <thead style="background-color: #f8f9fa;">
+        <tr>
+          <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">اسم المشروع</th>
+          <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">عدد الأسهم</th>
+          <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">إجمالي الدفع</th>
+          <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">الأرباح</th>
+          <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">تاريخ استلام الأرباح</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Invoice Items -->
+        <tr>
+          <td style="padding: 10px; text-align: right; color: #333;">${projectName}</td>
+          <td style="padding: 10px; text-align: right; color: #333;">${stocksPurchased}</td>
+          <td style="padding: 10px; text-align: right; color: #333;">${totalAmount}</td>
+          <td style="padding: 10px; text-align: right; color: #333;">${totalProfit}</td>
+          <td style="padding: 10px; text-align: right; color: #333;">${getProjectDate(
+            new Date(profitsCollectDate)
+          )}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-block: 20px; padding-top: 20px; text-align: right; font-size: 15px; color: #666;">هذا العقد يشهد على شراء عدد <strong>${stocksPurchased}</strong> من أسهم مشروع ${projectName}</p>
+    <p style="margin-block: 20px; padding-top: 20px; text-align: right; font-size: 15px; color: #333;">تم شراء الأسهم بمبلغ
+     <strong style="color: #2a9d01;font-weight: bold;text-decoration: underline;">${totalAmount} ريال قطري فقط</strong>
+     وتم ذلك في تاريخ ${getProjectDate(new Date())}</p>
+    <p style="margin-block: 20px; padding-top: 20px; text-align: right; font-size: 15px; color: #333;">وسيتم تسليم الأرباح في تاريخ ${
+      profitsCollectDate ? getProjectDate(new Date(profitsCollectDate)) : 'غير محدد'
+    }</p>
+  </div>
+
+  <!-- Reference Code -->
+  <div style="direction: rtl; text-align: right; margin-top: 200px;">
+    <p style="color: #666; font-size: 10px;">
+      الرقم المرجعي
+      <br>
+      <span style="color: #ccc;">
+        ${referenceCode}
+      </span>
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <div style="border-top: 1px solid #ccc; padding-top: 7px; font-size: 12px; color: #ccc; text-align: center;">
+    <p style="margin-top: 30px; color: #666; font-size: 15px;">&copy; ${new Date().getFullYear()} ${APP_TITLE}</p>
+    <span style="color: #999; font-size: 15px;">${APP_URL}</span>
+    <span style="color: #666; font-size: 15px;">جميع الحقوق محفوظة</span>
+  </div>
+
+</div>
   `
 }
 
