@@ -1,7 +1,7 @@
 import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL, SHMS_PHONE } from '@/data/constants'
 import { getProjectDate } from '@/lib/utils'
 import type { generatePDFProps } from '@/types'
-import puppeteer from 'puppeteer'
+import pdfCreator from 'pdf-creator-node'
 
 function generatePDFContent({
   investorName,
@@ -118,19 +118,21 @@ export async function generatePDF({
     referenceCode
   })
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'] // Necessary for running Puppeteer in Lambda
-  })
-  const page = await browser.newPage()
-  await page.setContent(htmlContent)
+  const template = {
+    content: htmlContent
+  }
 
-  const pdfBuffer = await page.pdf({
+  const options = {
     format: 'A4',
-    printBackground: true
-  })
+    orientation: 'portrait',
+    border: '10mm'
+  }
 
-  await browser.close()
-
-  return pdfBuffer
+  try {
+    const pdfBuffer = await pdfCreator.create(template, options)
+    return pdfBuffer
+  } catch (error) {
+    console.error('Error generating PDF:', error)
+    throw error
+  }
 }
