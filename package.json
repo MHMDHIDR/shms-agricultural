@@ -49,6 +49,7 @@
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
     "puppeteer": "^22.0.0",
+    "puppeteer-core": "^22.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",

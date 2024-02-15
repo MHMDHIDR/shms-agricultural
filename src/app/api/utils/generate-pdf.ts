@@ -3,7 +3,6 @@ import { getProjectDate } from '@/lib/utils'
 import type { generatePDFProps } from '@/types'
 import puppeteer from 'puppeteer'
 
-// generatePDFContent.js
 function generatePDFContent({
   investorName,
   projectName,
@@ -79,7 +78,7 @@ function generatePDFContent({
   </div>
 
   <!-- Reference Code -->
-  <div style="direction: rtl; text-align: right; margin-top: 200px;">
+  <div style="direction: rtl; text-align: right; margin-top: 400px;">
     <p style="color: #666; font-size: 10px;">
       الرقم المرجعي
       <br>
@@ -108,7 +107,7 @@ export async function generatePDF({
   totalProfit,
   profitsCollectDate,
   referenceCode
-}: generatePDFProps): Promise<Buffer> {
+}: generatePDFProps) {
   const htmlContent = generatePDFContent({
     investorName,
     projectName,
@@ -119,12 +118,17 @@ export async function generatePDF({
     referenceCode
   })
 
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'] // Necessary for running Puppeteer in Lambda
+  })
   const page = await browser.newPage()
   await page.setContent(htmlContent)
 
-  // Generate PDF buffer
-  const pdfBuffer = await page.pdf({ format: 'A4' })
+  const pdfBuffer = await page.pdf({
+    format: 'A4',
+    printBackground: true
+  })
 
   await browser.close()
 
