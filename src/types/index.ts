@@ -173,6 +173,16 @@ export type emailProps = {
   mailSent?: number
 }
 
+export interface CreateEmailResponse {
+  data: {
+    id: string
+  } | null
+  error: {
+    message: string
+    name: any
+  } | null
+}
+
 export type generatePDFProps = {
   investorName: string
   projectName: string

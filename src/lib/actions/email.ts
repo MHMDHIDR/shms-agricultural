@@ -1,9 +1,9 @@
 'use server'
 
-import { Resend, type CreateEmailResponse } from 'resend'
+import { Resend } from 'resend'
 import { ADMIN_EMAIL, APP_TITLE, SHMS_EMAIL as shmsEmail } from '@/data/constants'
 import { EmailTemplate } from '@/components/custom/email-template'
-import type { emailMethodProps } from '@/types'
+import type { CreateEmailResponse, emailMethodProps } from '@/types'
 import { arabicDate } from '../utils'
 
 const { RESEND_API_KEY, SHMS_EMAIL } = process.env
