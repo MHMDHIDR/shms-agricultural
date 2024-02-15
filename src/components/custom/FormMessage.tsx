@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils'
 export default function FormMessage({
   error,
   success,
+  info,
   className = '',
   children
 }: {
@@ -15,6 +16,10 @@ export default function FormMessage({
    */
   success?: boolean
   /**
+   * رسالة الخطأ باللون الأخضر
+   */
+  info?: boolean
+  /**
    * الكلاسات الإضافية
    */
   className?: string
@@ -26,8 +31,14 @@ export default function FormMessage({
   return (
     <p
       className={cn(
-        `text-center my-2 animate-pulse text-sm ${
-          error ? `text-red-600` : success ? `text-green-600` : ''
+        `text-center my-2 max-w-80 md:max-w-max animate-pulse text-sm ${
+          error
+            ? `text-red-600`
+            : success
+            ? `text-green-600`
+            : info
+            ? `text-blue-600`
+            : ''
         }`,
         className
       )}

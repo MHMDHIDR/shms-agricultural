@@ -10,6 +10,18 @@ const { RESEND_API_KEY, SHMS_EMAIL } = process.env
 
 async function email({ name, subject, from, to, msg, pdfToSend }: emailMethodProps) {
   const resend = new Resend(RESEND_API_KEY)
+  const attachments = []
+
+  // if we have a pdf to send, add it to the attachments
+  if (pdfToSend) {
+    attachments.push({
+      content: pdfToSend,
+      filename: `${APP_TITLE}-Invoice-Investment-${arabicDate(
+        new Date().toLocaleDateString()
+      )}.pdf`
+    })
+  }
+
   const { data, error: cause }: CreateEmailResponse = await resend.emails.send({
     to,
     from: `"${name ?? 'شمس للخدمات الزراعية | SHMS Agriculture'}" <${
@@ -23,14 +35,7 @@ async function email({ name, subject, from, to, msg, pdfToSend }: emailMethodPro
       buttonLink: msg.buttonLink ?? '',
       buttonLabel: msg.buttonLabel ?? ''
     }) as React.ReactElement,
-    attachments: [
-      {
-        content: pdfToSend,
-        filename: `${APP_TITLE}-Invoice-Investment-${arabicDate(
-          new Date().toLocaleDateString()
-        )}.pdf`
-      }
-    ]
+    attachments
   })
 
   if (cause) {

@@ -611,6 +611,7 @@ const SignupPage = () => {
                 أوافق على &nbsp;
                 <Link
                   href='/terms'
+                  target='_blank'
                   className='font-bold underline md:no-underline md:underline-hover'
                 >
                   بنود الاستخدام
@@ -618,6 +619,7 @@ const SignupPage = () => {
                 &nbsp; و &nbsp;
                 <Link
                   href='/privacy'
+                  target='_blank'
                   className='font-bold underline md:decoration-transparent md:underline-hover'
                 >
                   سياسة الخصوصية
