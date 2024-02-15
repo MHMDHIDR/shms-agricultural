@@ -23,7 +23,7 @@ function generatePDFContent({
     <div style="text-align: center;">
       <h1>${APP_TITLE}</h1>
       <p style="font-size: 12px; color: #ccc;">${SHMS_EMAIL}</p>
-      <p style="font-size: 12px; color: #ccc;direction: rtl">${SHMS_PHONE}</p>
+      <p style="font-size: 12px; color: #ccc; direction: ltr;">${SHMS_PHONE}</p>
     </div>
   </div>
 
