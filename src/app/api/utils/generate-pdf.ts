@@ -1,9 +1,28 @@
 import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL, SHMS_PHONE } from '@/data/constants'
 import { getProjectDate } from '@/lib/utils'
 import type { generatePDFProps } from '@/types'
-import puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer-core'
 
-// generatePDFContent.js
+async function launchBrowser() {
+  let browser
+
+  if (process.env.NODE_ENV !== 'development') {
+    const chromium = require('@sparticuz/chromium')
+    chromium.setGraphicsMode = false
+
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless
+    })
+  } else {
+    browser = await puppeteer.launch({ headless: true })
+  }
+
+  return browser
+}
+
 function generatePDFContent({
   investorName,
   projectName,
@@ -119,7 +138,7 @@ export async function generatePDF({
     referenceCode
   })
 
-  const browser = await puppeteer.launch()
+  const browser = await launchBrowser()
   const page = await browser.newPage()
   await page.setContent(htmlContent)
 
