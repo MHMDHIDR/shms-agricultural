@@ -178,6 +178,9 @@ export type generatePDFProps = {
   projectName: string
   stocksPurchased: string
   totalAmount: string
+  totalProfit: string
+  profitsCollectDate: string
+  referenceCode: string
 }
 
 export type MenuItemsProps = {

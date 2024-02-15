@@ -42,11 +42,11 @@ export default function Footer() {
           <TwitterIcon className='w-5 h-5 md:w-6 md:h-6' />
         </Link>
       </section>
-      <section className='flex items-center justify-center w-full h-12 rtl gap-x-3 text-sm'>
+      <section className='flex items-center justify-center w-full h-12 text-sm rtl gap-x-3'>
         <Link href='/privacy' className='opacity-60 hover:opacity-90 transition'>
           سياسة الخصوصية
         </Link>
-        <span className='opacity-60 select-none'>|</span>
+        <span className='select-none opacity-60'>|</span>
         <Link href='/terms' className='opacity-60 hover:opacity-90 transition'>
           شروط الاستخدام
         </Link>

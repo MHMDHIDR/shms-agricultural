@@ -103,7 +103,7 @@ export default function Modal({
               </Carousel>
             ) : asText ? (
               <section
-                className='rtl leading-loose text-lg'
+                className='text-lg leading-loose rtl'
                 dangerouslySetInnerHTML={{ __html: document }}
               />
             ) : (

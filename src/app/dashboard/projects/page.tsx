@@ -461,7 +461,7 @@ export default function Projects() {
               <textarea
                 id='projectDescription'
                 onChange={e => setProjectDescription(e.target.value)}
-                className='w-full px-4 py-2 leading-10 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                className='w-full px-4 py-2 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded leading-10 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 placeholder='أدخل وصف المشروع'
                 rows={5}
               />
@@ -477,7 +477,7 @@ export default function Projects() {
               </Label>
               <textarea
                 onChange={handleProjectTermsChange}
-                className='w-full px-4 py-2 leading-10 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                className='w-full px-4 py-2 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded leading-10 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 placeholder='أدخل شروط المشروع'
                 rows={5}
               />

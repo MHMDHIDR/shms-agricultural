@@ -1,4 +1,6 @@
+import { cn } from '@/lib/utils'
 import { ShmsIcon } from '../icons/Socials'
+import { Skeleton } from '../ui/skeleton'
 
 export const LoadingPage = () => (
   <div
@@ -11,5 +13,14 @@ export const LoadingPage = () => (
   '
   >
     <ShmsIcon className='w-20 h-20 animate-bounce' />
+  </div>
+)
+
+export const LoadingCard = ({ className }: { className?: string }) => (
+  <div className='space-y-2'>
+    <Skeleton className={cn(`w-full h-12`, className)} />
+    <Skeleton className={cn(`w-full h-12`, className)} />
+    <Skeleton className={cn(`w-full h-12`, className)} />
+    <Skeleton className={cn(`w-full h-12`, className)} />
   </div>
 )

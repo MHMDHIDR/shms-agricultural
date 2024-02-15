@@ -36,7 +36,7 @@ const ModalMessage = forwardRef(
             aria-modal='true'
           >
             <div className='flex justify-center'>{status}</div>
-            <pre className='py-8 leading-9 whitespace-pre-line' dir='auto'>
+            <pre className='py-8 whitespace-pre-line leading-9' dir='auto'>
               <p className={className}>{children}</p>
             </pre>
             {extraComponents && extraComponents}

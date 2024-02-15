@@ -187,7 +187,7 @@ export default function PersonalData({
                       src={session?.token?.user.shms_doc ?? APP_LOGO}
                       alt='Your Image Alt Text'
                       style={{ borderRadius: 5 }}
-                      className='p-4 border border-gray-600 dark:border dark:bg-gray-800 rounded-lg cursor-pointer w-72'
+                      className='p-4 border border-gray-600 rounded-lg cursor-pointer dark:border dark:bg-gray-800 w-72'
                       width={350}
                       height={350}
                     />

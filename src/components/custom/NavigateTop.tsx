@@ -25,7 +25,7 @@ export function NavigateTop({ scrolledHeight = 200 }: { scrolledHeight?: number 
       >
         <ChevronUp
           strokeWidth={1.5}
-          className='stroke-green-600 opacity-75 group-hover:opacity-100 group-hover:scale-110 group-hover:-translate-y-1 transition-transform'
+          className='opacity-75 stroke-green-600 group-hover:opacity-100 group-hover:scale-110 group-hover:-translate-y-1 transition-transform'
         />
       </Button>
     </MyTooltip>

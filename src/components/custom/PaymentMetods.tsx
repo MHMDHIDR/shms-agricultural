@@ -11,7 +11,7 @@ export default function PaymentMetods() {
   }
 
   return (
-    <div className='rtl flex flex-col gap-y-2'>
+    <div className='flex flex-col rtl gap-y-2'>
       {/* فيزا   -- Visa */}
       <MyTooltip text='غير متاح حاليا'>
         <label className='opacity-50 cursor-not-allowed'>

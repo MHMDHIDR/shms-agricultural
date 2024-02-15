@@ -127,6 +127,7 @@ export default function PurchasedStocks({
             textAlign: 'justify'
           }
         })
+        setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
       }
 
       redirect('/dashboard', 1000)
@@ -144,8 +145,6 @@ export default function PurchasedStocks({
         }
       })
       console.error('Error =>', error)
-    } finally {
-      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
     }
   }
 

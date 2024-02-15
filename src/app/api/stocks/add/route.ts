@@ -73,7 +73,15 @@ export async function PATCH(req: Request) {
       investorName: String(user?.shms_fullname),
       projectName: String(project?.shms_project_name!),
       stocksPurchased: String(stocks),
-      totalAmount: String(stocks * project?.shms_project_stock_price!)
+      totalAmount: String(stocks * project?.shms_project_stock_price!),
+      totalProfit: String(
+        newPercentage > 0
+          ? stocks * project?.shms_project_stock_profits! +
+              (stocks * project?.shms_project_stock_profits! * newPercentage) / 100
+          : stocks * project?.shms_project_stock_profits!
+      ),
+      profitsCollectDate: String(project?.shms_project_profits_collect_date),
+      referenceCode: `#${shms_id}#${shms_project_id}#${new Date().getTime()}`
     })
 
     const investorEmailData = {
@@ -86,7 +94,9 @@ export async function PATCH(req: Request) {
         مرحباً ${user?.shms_fullname},
 
           شكراً لمساهمتك معنا في ${project?.shms_project_name}،
-          تم شراء أسهم بنجاح، يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:`,
+          تم شراء
+          ${stocks} أسهم بنجاح.
+          يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:`,
         buttonLink,
         buttonLabel: 'تصفح استثماراتك'
       },

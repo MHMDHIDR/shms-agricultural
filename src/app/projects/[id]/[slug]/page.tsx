@@ -67,7 +67,7 @@ export default async function ProjectDetailsPage({
 
         <p
           style={{ fontWeight: 'bold' }}
-          className='text-justify container leading-10'
+          className='container text-justify leading-10'
           dir='rtl'
         >
           {project.shms_project_description}
@@ -75,7 +75,7 @@ export default async function ProjectDetailsPage({
 
         <div
           dir='rtl'
-          className='grid w-full grid-cols-3 grid-rows-3 my-10 place-items-center'
+          className='w-full my-10 grid grid-cols-3 grid-rows-3 place-items-center'
         >
           <div className='flex flex-col items-center text-center gap-y-1 rtl'>
             <MapPin className='w-20 h-20 stroke-1 stroke-red-500' />

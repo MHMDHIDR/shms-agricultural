@@ -5,7 +5,7 @@ const ProjectImages = ({ images }: { images: string[] }) => {
   return (
     <main className={`my-10`}>
       <div
-        className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 col-rows-4 gap-4 lg:gap-x-56`}
+        className={`grid grid-cols-2 sm:grid-cols-${images.length - 1} gap-4 md:gap-x-10`}
       >
         {images.map((imageUrl, index) => (
           <Modal

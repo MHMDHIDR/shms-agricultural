@@ -21,7 +21,7 @@ export default function MyDrawer({ children }: { children: React.ReactNode }) {
           <DrawerTitle className='text-right rtl'>
             <h4>تعليمات توضيحة كيفية استخدام الــMarkdown</h4>
           </DrawerTitle>
-          <DrawerDescription className='text-right rtl leading-10 mt-4 container max-h-56 overflow-y-auto'>
+          <DrawerDescription className='container mt-4 overflow-y-auto text-right rtl leading-10 max-h-56'>
             <p>
               إنّ لغة ماركداون (Markdown) هي لغة وب تنسيقية. فبدلاً من الكتابة بلغة HTML
               يمكن الكتابة بهذه اللغة وهي أبسط بكثير من html وسهلة القراءة والكتابة،

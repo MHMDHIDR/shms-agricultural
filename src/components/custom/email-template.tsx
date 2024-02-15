@@ -1,4 +1,4 @@
-import { APP_TITLE } from '@/data/constants'
+import { APP_LOGO, APP_TITLE } from '@/data/constants'
 import { customEmailProps } from '@/types'
 import {
   Body,
@@ -11,8 +11,6 @@ import {
   Text,
   Tailwind
 } from '@react-email/components'
-
-const baseUrl = process.env.NEXT_PUBLIC_APP_PUBLIC_URL ?? ''
 
 export const EmailTemplate = ({
   title,
@@ -37,14 +35,14 @@ export const EmailTemplate = ({
           >
             <Section key='section1' className='text-center'>
               <Img
-                src={`${baseUrl}/logo-slogan.png`}
+                src={APP_LOGO}
                 width={150}
-                className='w-auto h-20 sm:h-16 mx-auto rtl'
+                className='w-auto h-20 mx-auto sm:h-16 rtl'
               />
             </Section>
 
             <Section key='section2' className='mt-8'>
-              <div className='bg-gray-50 rtl dark:bg-gray-700 shadow-md rounded-lg p-6'>
+              <div className='p-6 rounded-lg shadow-md bg-gray-50 rtl dark:bg-gray-700'>
                 <Heading as='h2' className='text-center' key='h2'>
                   {title ?? 'طلب استعادة كلمة المرور'}
                 </Heading>
@@ -53,7 +51,7 @@ export const EmailTemplate = ({
 
                 <Text
                   key='msg'
-                  className='mt-4 rtl leading-loose text-gray-700 dark:text-gray-300 text-right'
+                  className='mt-4 leading-loose text-right text-gray-700 rtl dark:text-gray-300'
                 >
                   {/* Use the formatted message with HTML line breaks */}
                   {msg ? (
@@ -84,14 +82,14 @@ export const EmailTemplate = ({
                   <>
                     <Text
                       key='buttonLink'
-                      className='mt-4 text-gray-400 dark:text-gray-300 text-right'
+                      className='mt-4 text-right text-gray-400 dark:text-gray-300'
                     >
                       يمكنك أيضًا نسخ ولصق عنوان URL أدناه:
                       <br /> <br />
                       <strong>{buttonLink}</strong>
                     </Text>
 
-                    <small className='inline-block w-full text-center text-xxs text-gray-400 dark:text-white'>
+                    <small className='inline-block w-full text-center text-gray-400 text-xxs dark:text-white'>
                       إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك
                       مشكلة ما، يرجى تجاهل هذا البريد من فضلك!
                     </small>
@@ -103,7 +101,7 @@ export const EmailTemplate = ({
             <Section key='section3' className='mt-8'>
               <Text
                 key='section3rights'
-                className='text-gray-500 dark:text-gray-400 text-center'
+                className='text-center text-gray-500 dark:text-gray-400'
               >
                 {APP_TITLE}
                 <br />
@@ -114,7 +112,7 @@ export const EmailTemplate = ({
                 (buttonLink.includes('reset-password') ||
                   buttonLink.includes('activate')) && (
                   <Text
-                    className='mt-2 text-sm text-gray-500 dark:text-gray-400 text-center'
+                    className='mt-2 text-sm text-center text-gray-500 dark:text-gray-400'
                     key='note'
                   >
                     <br />

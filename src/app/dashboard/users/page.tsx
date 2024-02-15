@@ -115,9 +115,8 @@ export default function Users() {
           textAlign: 'justify'
         }
       })
-      console.error('Error =>', error)
-    } finally {
       setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
+      console.error('Error =>', error)
     }
   }
 

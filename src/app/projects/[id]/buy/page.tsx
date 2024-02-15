@@ -20,6 +20,7 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import { Checkbox } from '@/components/ui/checkbox'
 import Modal from '@/components/custom/Modal'
+import { LoadingCard } from '@/components/custom/Loading'
 
 export default function BuyStocks({
   params: { id: projectId }
@@ -185,17 +186,17 @@ export default function BuyStocks({
 
   return (
     <Layout>
-      <section className='mt-20 mb-auto mx-auto flex flex-col'>
+      <section className='flex flex-col mx-auto mt-20 mb-auto'>
         {isLoading ? (
-          <div className='space-y-2'>
-            <Skeleton className='w-full h-12' />
-            <Skeleton className='w-full h-12' />
-            <Skeleton className='w-full h-12' />
-            <Skeleton className='w-full h-12' />
-          </div>
+          <>
+            <LoadingCard className='w-5/6 mx-auto bg-white border border-gray-400' />
+            <br />
+            <LoadingCard className='w-5/6 mx-auto bg-white border border-gray-400' />
+            <br />
+          </>
         ) : (
           <form
-            className='w-full mx-auto pt-10 px-8 md:px-20 bg-white border shadow-md dark:bg-gray-700 mb-10 rtl'
+            className='w-full px-8 pt-10 mx-auto mb-10 bg-white border shadow-md md:px-20 dark:bg-gray-700 rtl'
             onSubmit={checkPercentageCode}
             noValidate
           >
@@ -211,7 +212,6 @@ export default function BuyStocks({
                 </span>
               </div>
             </div>
-
             <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
@@ -227,7 +227,6 @@ export default function BuyStocks({
                 </span>
               </div>
             </div>
-
             <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
@@ -242,7 +241,6 @@ export default function BuyStocks({
                 />
               </div>
             </div>
-
             <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
@@ -258,7 +256,6 @@ export default function BuyStocks({
                 </span>
               </div>
             </div>
-
             <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
@@ -284,7 +281,6 @@ export default function BuyStocks({
                 </div>
               </div>
             </div>
-
             <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
@@ -310,7 +306,6 @@ export default function BuyStocks({
                 </span>
               </div>
             </div>
-
             <div className='mb-6 md:flex md:items-center'>
               <div className='md:w-1/3'>
                 <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
@@ -350,7 +345,6 @@ export default function BuyStocks({
                 </Button>
               </div>
             </div>
-
             <div className='mb-6 md:flex md:items-center'>
               <label
                 htmlFor='accept_termsAndPrivacy'

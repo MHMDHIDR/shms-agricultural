@@ -18,7 +18,7 @@ export function PercentageSlider({
         disabled
         {...props}
       />
-      <span className='text-2xl font-bold text-green-600 mt-4 select-none'>{value}%</span>
+      <span className='mt-4 text-2xl font-bold text-green-600 select-none'>{value}%</span>
     </div>
   )
 }
