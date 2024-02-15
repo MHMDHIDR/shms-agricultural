@@ -1,28 +1,9 @@
 import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL, SHMS_PHONE } from '@/data/constants'
 import { getProjectDate } from '@/lib/utils'
 import type { generatePDFProps } from '@/types'
-import puppeteer from 'puppeteer-core'
+import puppeteer from 'puppeteer'
 
-async function launchBrowser() {
-  let browser
-
-  if (process.env.NODE_ENV !== 'development') {
-    const chromium = require('@sparticuz/chromium')
-    chromium.setGraphicsMode = false
-
-    browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless
-    })
-  } else {
-    browser = await puppeteer.launch({ headless: true })
-  }
-
-  return browser
-}
-
+// generatePDFContent.js
 function generatePDFContent({
   investorName,
   projectName,
@@ -35,15 +16,15 @@ function generatePDFContent({
   return `
 <div style="max-width: 750px; padding: 10px; margin: 0 auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
   <div style="display: flex; justify-content: space-between; align-items: center; direction: rtl; text-align: right; color: #333; user-select: none;">
+    <div>
+      <!-- Company logo -->
+      <img src="${APP_LOGO}" height="100" width="150" alt="${APP_TITLE}" style="width: 150px; height: 100px; margin-inline: auto;">
+    </div>
+
     <div style="text-align: center;">
       <h1>${APP_TITLE}</h1>
       <p style="font-size: 12px; color: #ccc;">${SHMS_EMAIL}</p>
       <p style="font-size: 12px; color: #ccc;direction: rtl">${SHMS_PHONE}</p>
-    </div>
-
-    <div>
-      <!-- Company logo -->
-      <img src="${APP_LOGO}" height="100" width="150" alt="${APP_TITLE}" style="width: 150px; height: 100px; margin-inline: auto;">
     </div>
   </div>
 
@@ -56,7 +37,7 @@ function generatePDFContent({
     </div>
 
     <div style="text-align: right;">
-      <p style="color: #333;">تاريخ الشراء: <span style="color: #333;">${getProjectDate(
+      <p style="color: #333;">تاريخ الإنشاء: <span style="color: #333;">${getProjectDate(
         new Date()
       )}</span></p>
     </div>
@@ -68,23 +49,23 @@ function generatePDFContent({
       <!-- Table Headers -->
       <thead style="background-color: #f8f9fa;">
         <tr>
-        <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">تاريخ استلام الأرباح</th>
-        <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">الأرباح</th>
-        <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">إجمالي الدفع</th>
-        <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">عدد الأسهم</th>
-        <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">اسم المشروع</th>
+          <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">اسم المشروع</th>
+          <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">عدد الأسهم</th>
+          <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">إجمالي الدفع</th>
+          <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">الأرباح</th>
+          <th style="padding: 10px; text-align: right; font-weight: bold; color: #333;">تاريخ استلام الأرباح</th>
         </tr>
       </thead>
       <tbody>
         <!-- Invoice Items -->
         <tr>
+          <td style="padding: 10px; text-align: right; color: #333;">${projectName}</td>
+          <td style="padding: 10px; text-align: right; color: #333;">${stocksPurchased}</td>
+          <td style="padding: 10px; text-align: right; color: #333;">${totalAmount}</td>
+          <td style="padding: 10px; text-align: right; color: #333;">${totalProfit}</td>
           <td style="padding: 10px; text-align: right; color: #333;">${getProjectDate(
             new Date(profitsCollectDate)
           )}</td>
-          <td style="padding: 10px; text-align: right; color: #333;">${totalProfit}</td>
-          <td style="padding: 10px; text-align: right; color: #333;">${totalAmount}</td>
-          <td style="padding: 10px; text-align: right; color: #333;">${stocksPurchased}</td>
-          <td style="padding: 10px; text-align: right; color: #333;">${projectName}</td>
         </tr>
       </tbody>
     </table>
@@ -98,7 +79,7 @@ function generatePDFContent({
   </div>
 
   <!-- Reference Code -->
-  <div style="direction: rtl; text-align: right; margin-top: 400px;">
+  <div style="direction: rtl; text-align: right; margin-top: 200px;">
     <p style="color: #666; font-size: 10px;">
       الرقم المرجعي
       <br>
@@ -138,7 +119,7 @@ export async function generatePDF({
     referenceCode
   })
 
-  const browser = await launchBrowser()
+  const browser = await puppeteer.launch()
   const page = await browser.newPage()
   await page.setContent(htmlContent)
 

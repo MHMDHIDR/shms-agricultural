@@ -3,6 +3,7 @@ import { ADMIN_EMAIL, APP_TITLE, APP_URL } from '@/data/constants'
 import type { ProjectProps, UserProps, stocksPurchasedProps } from '@/types'
 import email from '@/lib/actions/email'
 import { generatePDF } from '@/api/utils/generate-pdf'
+import { ResultSetHeader } from 'mysql2/promise'
 
 export async function PATCH(req: Request) {
   const body = await req.json()
@@ -60,10 +61,11 @@ export async function PATCH(req: Request) {
       ])
     }
 
-    await connectDB(
+    const updateProjectAvaStocks = await connectDB(
       `UPDATE projects SET shms_project_available_stocks = ? WHERE shms_project_id = ?`,
       [projectAvailableStocks - stocks, shms_project_id]
     )
+    const { affectedRows: projectUpdated } = updateProjectAvaStocks as ResultSetHeader
 
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments`
@@ -124,7 +126,7 @@ export async function PATCH(req: Request) {
       await email(adminEmailData)
     ])
 
-    if (data[0] && data[1]) {
+    if (projectUpdated || (data[0] && data[1])) {
       return new Response(
         JSON.stringify({
           stocksPurchesed: 1,
