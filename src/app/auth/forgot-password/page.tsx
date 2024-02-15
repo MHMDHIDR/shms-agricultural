@@ -112,7 +112,7 @@ const ForgotPasswordPage = () => {
     <LoadingPage />
   ) : (
     <Layout>
-      <section className='min-h-screen h-screen mt-64 md:mt-[25rem] mb-24'>
+      <section className='min-h-screen h-screen mt-32 md:mt-20 mb-24'>
         <CardWrapper
           heading={HEADING}
           backButtonLabel='تذكرت كلمة المرور؟ سجل دخولك'

@@ -84,7 +84,7 @@ export default function ActivateAccount({
   )
 
   return !validateUUID(tokenId) ? null : (
-    <section>
+    <section className='mt-48 md:mt-32'>
       <CardWrapper
         heading={HEADING}
         headerLabel='لتفعيل الحساب الرجاء الضغط على الزر أدناه'

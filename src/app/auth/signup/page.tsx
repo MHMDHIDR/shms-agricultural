@@ -265,7 +265,7 @@ const SignupPage = () => {
     <LoadingPage />
   ) : (
     <Layout>
-      <section className='mt-[55rem] md:mt-[50rem] mb-auto mx-auto'>
+      <section className='mt-10 md:mt-20 mb-auto mx-auto'>
         <CardWrapper
           headerLabel='إنضم إلينا'
           backButtonLabel='لديك حساب بالفعل؟ تسجيل الدخول'
