@@ -1,4 +1,4 @@
-import { connectDB } from '@/app/api/utils/db'
+import { connectDB } from '@/api/utils/db'
 import { ResultSetHeader } from 'mysql2/promise'
 import type { ProjectProps, stocksPurchasedProps, UserProps } from '@/types'
 
@@ -30,6 +30,7 @@ export async function PATCH(
     )
     let projectStocksToUpdate = ''
     let newUserStocks: stocksPurchasedProps[] = []
+    let stocksToReturnBack: number = 0
 
     // Filter out the stock object with the matching createdAt date
     // projectStocksToUpdate = stock.shms_project_id
@@ -37,11 +38,19 @@ export async function PATCH(
     newUserStocks = currentUserStocks.filter((stock: stocksPurchasedProps) => {
       if (stock.createdAt === dateOfPurchase) {
         projectStocksToUpdate = stock.shms_project_id
+        stocksToReturnBack = stock.stocks
         return false
       }
 
       return true
     })
+
+    // Fetch the project details associated with the projectStocksToUpdate
+    const projectDetails = (
+      (await connectDB(`SELECT * FROM projects WHERE shms_project_id = ?`, [
+        projectStocksToUpdate
+      ])) as ProjectProps[]
+    )[0]
 
     // Update the user's shms_user_stocks array in the database
     const updateUserStocks = await connectDB(
@@ -51,31 +60,19 @@ export async function PATCH(
     )
     const { affectedRows: userUpdated } = updateUserStocks as ResultSetHeader
 
-    // Fetch the project details associated with the projectStocksToUpdate
-    const projectDetails = (
-      (await connectDB(`SELECT * FROM projects WHERE shms_project_id = ?`, [
-        projectStocksToUpdate
-      ])) as ProjectProps[]
-    )[0]
-
     // Calculate the difference between the new and old stock values
     const prevStocks =
       currentUserStocks.find(stock => stock.shms_project_id === projectStocksToUpdate)
         ?.stocks || 0
-    const newStocks =
-      newUserStocks.find(stock => stock.shms_project_id === projectStocksToUpdate)
-        ?.stocks || 0
-    const stocksDifference = prevStocks - newStocks
-
-    // Update the project's shms_project_available_stocks accordingly
-    let updatedAvailableStocks = projectDetails?.shms_project_available_stocks ?? 0
-    updatedAvailableStocks += stocksDifference
 
     // Update the project's shms_project_available_stocks in the database
     await connectDB(
       `UPDATE projects SET shms_project_available_stocks = ?
         WHERE shms_project_id = ?`,
-      [updatedAvailableStocks, projectStocksToUpdate]
+      [
+        (projectDetails?.shms_project_available_stocks ?? 0) + prevStocks,
+        projectStocksToUpdate
+      ]
     )
 
     if (userUpdated) {

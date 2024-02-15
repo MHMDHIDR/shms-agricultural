@@ -9,6 +9,8 @@ export const APP_LOGO_sm = 'https://shmsagricultural.com/logo.svg'
 
 export const SHMS_EMAIL = `info@shmsagricultural.com`
 
+export const SHMS_PHONE = `+974 6602 7723`
+
 export const ITEMS_PER_PAGE = 5
 
 export const FILE_UPLOAD_IMG_SIZE = 122

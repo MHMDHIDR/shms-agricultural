@@ -1,4 +1,4 @@
-import { connectDB } from '@/app/api/utils/db'
+import { connectDB } from '@/api/utils/db'
 import { genSalt, hash } from 'bcryptjs'
 import { ResultSetHeader } from 'mysql2/promise'
 import email from '@/lib/actions/email'

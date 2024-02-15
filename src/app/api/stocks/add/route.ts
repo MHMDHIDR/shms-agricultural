@@ -1,7 +1,8 @@
-import { connectDB } from '@/app/api/utils/db'
+import { connectDB } from '@/api/utils/db'
 import { ADMIN_EMAIL, APP_TITLE, APP_URL } from '@/data/constants'
 import type { ProjectProps, UserProps, stocksPurchasedProps } from '@/types'
 import email from '@/lib/actions/email'
+import { generatePDF } from '@/api/utils/generate-pdf'
 
 export async function PATCH(req: Request) {
   const body = await req.json()
@@ -68,6 +69,13 @@ export async function PATCH(req: Request) {
     const buttonLink = APP_URL + `/profile/investments`
     const adminButtonLink = APP_URL + `/dashboard`
 
+    const pdfToSend = await generatePDF({
+      investorName: String(user?.shms_fullname),
+      projectName: String(project?.shms_project_name!),
+      stocksPurchased: String(stocks),
+      totalAmount: String(stocks * project?.shms_project_stock_price!)
+    })
+
     const investorEmailData = {
       subject: `تم شراء أسهم من ${project?.shms_project_name} بنجاح | شمس للخدمات الزراعية`,
       from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
@@ -81,7 +89,8 @@ export async function PATCH(req: Request) {
           تم شراء أسهم بنجاح، يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:`,
         buttonLink,
         buttonLabel: 'تصفح استثماراتك'
-      }
+      },
+      pdfToSend
     }
 
     const adminEmailData = {
@@ -95,7 +104,8 @@ export async function PATCH(req: Request) {
         بواسطة ${user?.shms_fullname} (${user?.shms_email})`,
         buttonLink: adminButtonLink,
         buttonLabel: 'تصفح الاستثمارات'
-      }
+      },
+      pdfToSend
     }
 
     // Promoise.all
@@ -111,7 +121,8 @@ export async function PATCH(req: Request) {
           message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
          سيتم التواصل معك من فريق 
          ${APP_TITLE}
-         لتأكيد العملية ولإتمام باقي الإجراءات`
+         لتأكيد العملية ولإتمام باقي الإجراءات`,
+          pdfToSend
         }),
         { status: 200 }
       )

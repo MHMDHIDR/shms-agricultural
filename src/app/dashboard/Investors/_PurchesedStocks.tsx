@@ -164,6 +164,7 @@ export default function PurchasedStocks({
             await deleteUserPurchasedStocks(userId, item.createdAt)
           }}
           className='w-full'
+          isLoading={formStatus.isSubmitting}
         >
           حذف الأسهم
         </Confirm>

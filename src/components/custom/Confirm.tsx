@@ -14,6 +14,7 @@ import type { ConfirmProps } from '@/types'
 
 export default function Confirm({
   message,
+  isLoading,
   onClick,
   variant,
   className,
@@ -23,7 +24,10 @@ export default function Confirm({
 }: ConfirmProps) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger className='w-full'>
+      <AlertDialogTrigger
+        className={`w-full${isLoading ? ' cursor-progress' : ''}`}
+        disabled={isLoading}
+      >
         <Button variant={variant} asSpan className={className}>
           {children ?? 'إجراء'}
         </Button>

@@ -1,4 +1,4 @@
-import { connectDB } from '@/app/api/utils/db'
+import { connectDB } from '@/api/utils/db'
 import email from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'

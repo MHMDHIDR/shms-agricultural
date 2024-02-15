@@ -156,6 +156,7 @@ export type emailMethodProps = {
   from: string
   to: string
   msg: customEmailProps
+  pdfToSend?: Buffer
 }
 
 export type customEmailProps = {
@@ -170,6 +171,13 @@ export type emailProps = {
   address: string
   message: string
   mailSent?: number
+}
+
+export type generatePDFProps = {
+  investorName: string
+  projectName: string
+  stocksPurchased: string
+  totalAmount: string
 }
 
 export type MenuItemsProps = {
@@ -206,6 +214,7 @@ export type abstractWordsProps = (props: {
 
 export type ConfirmProps = {
   message?: string
+  isLoading?: boolean
   onClick: (() => void) | ((e: React.MouseEvent<HTMLButtonElement>) => Promise<void>)
   variant?: ButtonProps['variant']
   className?: string

@@ -1,4 +1,4 @@
-import { connectDB } from '@/app/api/utils/db'
+import { connectDB } from '@/api/utils/db'
 
 export async function GET() {
   const projects = await connectDB(`SELECT * FROM projects`)

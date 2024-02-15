@@ -58,6 +58,7 @@ export default function Users() {
 
   const deleteUser = async (id: string, S3docId: string) => {
     try {
+      setFormStatus({ ...formStatus, isSubmitting: true })
       const { data }: { data: UserProps } = await axios.delete(
         `${API_URL}/users/delete/${id}`
       )
@@ -115,6 +116,8 @@ export default function Users() {
         }
       })
       console.error('Error =>', error)
+    } finally {
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
     }
   }
 
@@ -336,6 +339,7 @@ export default function Users() {
                                 )
                               }}
                               className='w-full'
+                              isLoading={formStatus.isSubmitting}
                             >
                               حذف
                             </Confirm>

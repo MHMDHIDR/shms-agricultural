@@ -1,4 +1,4 @@
-import { connectDB } from '@/app/api/utils/db'
+import { connectDB } from '@/api/utils/db'
 import { randomUUID } from 'crypto'
 import email from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'

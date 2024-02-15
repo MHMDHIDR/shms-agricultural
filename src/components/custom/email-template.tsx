@@ -57,7 +57,10 @@ export const EmailTemplate = ({
                 >
                   {/* Use the formatted message with HTML line breaks */}
                   {msg ? (
-                    <div dangerouslySetInnerHTML={{ __html: formattedMsg }} />
+                    <div
+                      dangerouslySetInnerHTML={{ __html: formattedMsg }}
+                      className='leading-10'
+                    />
                   ) : (
                     `لا يمكننا ببساطة أن نرسل لك كلمة المرور القديمة.
                     رابط فريد تم إنشاؤه لك. لإعادة تعيين كلمة المرور الخاصة بك، انقر على

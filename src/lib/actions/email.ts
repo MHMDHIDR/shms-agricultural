@@ -1,13 +1,14 @@
 'use server'
 
 import { Resend, type CreateEmailResponse } from 'resend'
-import { ADMIN_EMAIL, SHMS_EMAIL as shmsEmail } from '@/data/constants'
+import { ADMIN_EMAIL, APP_TITLE, SHMS_EMAIL as shmsEmail } from '@/data/constants'
 import { EmailTemplate } from '@/components/custom/email-template'
 import type { emailMethodProps } from '@/types'
+import { arabicDate } from '../utils'
 
 const { RESEND_API_KEY, SHMS_EMAIL } = process.env
 
-async function email({ name, subject, from, to, msg }: emailMethodProps) {
+async function email({ name, subject, from, to, msg, pdfToSend }: emailMethodProps) {
   const resend = new Resend(RESEND_API_KEY)
   const { data, error: cause }: CreateEmailResponse = await resend.emails.send({
     to,
@@ -21,7 +22,15 @@ async function email({ name, subject, from, to, msg }: emailMethodProps) {
       msg: msg.msg ?? '',
       buttonLink: msg.buttonLink ?? '',
       buttonLabel: msg.buttonLabel ?? ''
-    }) as React.ReactElement
+    }) as React.ReactElement,
+    attachments: [
+      {
+        content: pdfToSend,
+        filename: `${APP_TITLE}-Invoice-Investment-${arabicDate(
+          new Date().toLocaleDateString()
+        )}.pdf`
+      }
+    ]
   })
 
   if (cause) {

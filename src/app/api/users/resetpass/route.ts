@@ -1,9 +1,9 @@
-import { connectDB } from '@/app/api/utils/db'
+import { connectDB } from '@/api/utils/db'
 import { genSalt, hash } from 'bcryptjs'
 import email from '@/lib/actions/email'
 import type { UserProps } from '@/types'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import { ComparePasswords } from '../../utils/compare-password'
+import { ComparePasswords } from '@/api/utils/compare-password'
 
 export async function POST(req: Request) {
   const body = await req.json()

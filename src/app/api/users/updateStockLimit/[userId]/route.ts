@@ -1,4 +1,4 @@
-import { connectDB } from '@/app/api/utils/db'
+import { connectDB } from '@/api/utils/db'
 import type { UserProps } from '@/types'
 import { ResultSetHeader } from 'mysql2/promise'
 

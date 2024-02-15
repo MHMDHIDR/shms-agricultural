@@ -1,4 +1,4 @@
-import { connectDB } from '@/app/api/utils/db'
+import { connectDB } from '@/api/utils/db'
 import { type NextRequest } from 'next/server'
 
 export async function GET(req: NextRequest) {
