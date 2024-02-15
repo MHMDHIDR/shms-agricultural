@@ -30,7 +30,8 @@ export async function PATCH(
     )
     let projectStocksToUpdate = ''
     let newUserStocks: stocksPurchasedProps[] = []
-    let stocksToReturnBack: number = 0
+    // @ts-ignore
+    let stocksToReturnBack: number
 
     // Filter out the stock object with the matching createdAt date
     // projectStocksToUpdate = stock.shms_project_id
