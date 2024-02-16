@@ -1,7 +1,7 @@
 import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL, SHMS_PHONE } from '@/data/constants'
 import { getProjectDate } from '@/lib/utils'
 import type { generatePDFProps } from '@/types'
-import pdfCreator from 'pdf-creator-node'
+import pdf from 'html-pdf'
 
 function generatePDFContent({
   investorName,
@@ -107,7 +107,7 @@ export async function generatePDF({
   totalProfit,
   profitsCollectDate,
   referenceCode
-}: generatePDFProps) {
+}: generatePDFProps): Promise<Buffer> {
   const htmlContent = generatePDFContent({
     investorName,
     projectName,
@@ -118,21 +118,14 @@ export async function generatePDF({
     referenceCode
   })
 
-  const template = {
-    content: htmlContent
-  }
-
-  const options = {
-    format: 'A4',
-    orientation: 'portrait',
-    border: '10mm'
-  }
-
-  try {
-    const pdfBuffer = await pdfCreator.create(template, options)
-    return pdfBuffer
-  } catch (error) {
-    console.error('Error generating PDF:', error)
-    throw error
-  }
+  return new Promise<Buffer>((resolve, reject) => {
+    pdf.create(htmlContent, { format: 'A4' }).toBuffer((err, buffer) => {
+      if (err) {
+        console.error('Error generating PDF:', err)
+        reject(err)
+      } else {
+        resolve(buffer)
+      }
+    })
+  })
 }

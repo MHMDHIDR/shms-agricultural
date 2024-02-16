@@ -67,10 +67,7 @@ export async function PATCH(req: Request) {
     )
     const { affectedRows: projectUpdated } = updateProjectAvaStocks as ResultSetHeader
 
-    //send the user an email with a link to activate his/her account
-    const buttonLink = APP_URL + `/profile/investments`
-    const adminButtonLink = APP_URL + `/dashboard`
-
+    // Generate PDF
     const pdfToSend = await generatePDF({
       investorName: String(user?.shms_fullname),
       projectName: String(project?.shms_project_name!),
@@ -85,6 +82,10 @@ export async function PATCH(req: Request) {
       profitsCollectDate: String(project?.shms_project_profits_collect_date),
       referenceCode: `#${shms_id}#${shms_project_id}#${new Date().getTime()}`
     })
+
+    //send the user an email with a link to activate his/her account
+    const buttonLink = APP_URL + `/profile/investments`
+    const adminButtonLink = APP_URL + `/dashboard`
 
     const investorEmailData = {
       subject: `تم شراء أسهم من ${project?.shms_project_name} بنجاح | شمس للخدمات الزراعية`,
@@ -120,7 +121,7 @@ export async function PATCH(req: Request) {
       pdfToSend
     }
 
-    // Promoise.all
+    // Promise.all
     const data = await Promise.all([
       await email(investorEmailData),
       await email(adminEmailData)
@@ -153,7 +154,8 @@ export async function PATCH(req: Request) {
       JSON.stringify({
         stocksPurchesed: 0,
         message: 'لم يتم تأكيد عملية الشراء، حاول مرة أخرى'
-      })
+      }),
+      { status: 500 }
     )
   }
 }

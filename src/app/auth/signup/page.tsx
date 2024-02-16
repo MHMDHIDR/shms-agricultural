@@ -228,7 +228,7 @@ const SignupPage = () => {
         setTimeout(() => replace(`/`), DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
-        toast(JSON.stringify(error ?? 'حدث خطأ ما'), {
+        toast(JSON.stringify('عفواً حدث خطأ ما أثتاء التسجيل'), {
           icon: <Error className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
           className: 'text-right select-none rtl',
