@@ -27,7 +27,9 @@ export const EmailTemplate = ({
   return (
     <Html>
       <Tailwind>
-        <Head />
+        <Head>
+          <meta charSet='UTF-8' />
+        </Head>
         <Body>
           <Container
             className='max-w-2xl px-6 py-8 mx-auto bg-white dark:bg-gray-900'
