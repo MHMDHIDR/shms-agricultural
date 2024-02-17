@@ -27,9 +27,9 @@ export const EmailTemplate = ({
     <Html>
       <Head>
         <meta charSet='UTF-8' />
-        <style>
-          {`.button-link:hover {
-            backgroundColor: #2563eb;
+        <style type='text/css'>
+          {`
+            a:hover {background-color: #2563eb !important;}
           }`}
         </style>
       </Head>
@@ -105,7 +105,6 @@ export const EmailTemplate = ({
                   key='buttonDiv'
                 >
                   <a
-                    className='button-link'
                     style={{
                       padding: '0.5rem 1.5rem',
                       borderRadius: '0.375rem',
