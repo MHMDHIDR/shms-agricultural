@@ -1,6 +1,6 @@
 import { connectDB } from '@/api/utils/db'
 import type { UserProps } from '@/types'
-// import { ResultSetHeader } from 'mysql2/promise'
+import { ResultSetHeader } from 'mysql2/promise'
 
 export async function DELETE(
   _request: Request,
@@ -23,12 +23,11 @@ export async function DELETE(
     }
 
     // activate user
-    // const deleteUser = (await connectDB(`DELETE FROM users WHERE shms_id = ?`, [
-    //   userId
-    // ])) as ResultSetHeader
-    // const { affectedRows: userDeleted } = deleteUser as ResultSetHeader
+    const deleteUser = (await connectDB(`DELETE FROM users WHERE shms_id = ?`, [
+      userId
+    ])) as ResultSetHeader
+    const { affectedRows: userDeleted } = deleteUser as ResultSetHeader
 
-    const userDeleted = 1
     if (userDeleted) {
       return new Response(
         JSON.stringify({ userDeleted, message: `تم حذف حساب المستخدم بنجاح!` }),

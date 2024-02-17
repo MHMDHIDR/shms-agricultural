@@ -17,6 +17,36 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'source.unsplash.com',
         pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'abudhabienv.ae',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'modo3.com',
+        pathname: '/**'
+      },
+      {
+        protocol: 'http',
+        hostname: 'media.kenanaonline.com',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'mqalla.com',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'maan.gov.ae',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets.raya.com',
+        pathname: '/**'
       }
     ]
   }

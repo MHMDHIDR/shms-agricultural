@@ -35,6 +35,8 @@ export default function Home() {
               <Image
                 src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
                 alt='Image 1'
+                width={500}
+                height={500}
                 className='w-full h-full object-cover'
                 style={{
                   width: '80%',
@@ -83,6 +85,8 @@ export default function Home() {
                 <Image
                   src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
                   alt='Image 1'
+                  width={500}
+                  height={500}
                   className='w-full h-full object-cover'
                   style={{
                     aspectRatio: '1/1',
@@ -116,6 +120,8 @@ export default function Home() {
                 <Image
                   src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
                   alt='Image 2'
+                  width={500}
+                  height={500}
                   className='w-full h-full object-cover'
                   style={{
                     aspectRatio: '1/1',
@@ -149,6 +155,8 @@ export default function Home() {
                 <Image
                   src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
                   alt='Image 3'
+                  width={500}
+                  height={500}
                   className='w-full h-full object-cover'
                   style={{
                     aspectRatio: '1/1',
@@ -177,6 +185,8 @@ export default function Home() {
             <Image
               src='https://modo3.com/thumbs/fit630x300/142458/1478984574/%D9%85%D8%B1%D8%A7%D8%AD%D9%84_%D8%A7%D9%84%D8%B2%D8%B1%D8%A7%D8%B9%D8%A9.jpg'
               alt='Image 1'
+              width={500}
+              height={500}
               className='w-full h-full object-cover'
               style={{
                 aspectRatio: '1/1',
@@ -195,6 +205,8 @@ export default function Home() {
             <Image
               src='http://media.kenanaonline.com/photos/1238365/1238365363/large_1238365363.jpg?1394703600'
               alt='Image 1'
+              width={500}
+              height={500}
               className='w-full h-full object-cover'
               style={{
                 aspectRatio: '1/1',
@@ -213,6 +225,8 @@ export default function Home() {
             <Image
               src='https://mqalla.com/wp-content/uploads/%D8%AD%D8%B5%D8%A7%D8%AF-%D8%A7%D9%84%D9%82%D9%85%D8%AD.jpg'
               alt='Image 1'
+              width={500}
+              height={500}
               className='w-full h-full object-cover'
               style={{
                 aspectRatio: '1/1',
@@ -231,6 +245,8 @@ export default function Home() {
             <Image
               src='https://maan.gov.ae/wp-content/uploads/2021/02/Social-Investment-Fund-2048x1365.jpg'
               alt='Image 1'
+              width={500}
+              height={500}
               className='w-full h-full object-cover'
               style={{
                 aspectRatio: '1/1',
