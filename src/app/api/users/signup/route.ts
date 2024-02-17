@@ -99,8 +99,8 @@ export async function POST(req: Request) {
         { status: 201 }
       )
     }
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
     return new Response(
       JSON.stringify({
         userAdded: 0,
