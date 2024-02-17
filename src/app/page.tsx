@@ -1,6 +1,7 @@
 import Layout from '@/components/custom/Layout'
 import Slider from '@/components/custom/Slider'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Home() {
   // get images from backend api (uploaded to dashboard by admin stored in AWS S3)
@@ -31,7 +32,7 @@ export default function Home() {
         <div className='flex justify-center md:gap-8 items-center'>
           <Link href={'#'}>
             <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
-              <img
+              <Image
                 src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
                 alt='Image 1'
                 className='w-full h-full object-cover'
@@ -79,7 +80,7 @@ export default function Home() {
                   {' '}
                   وهية مرحلة تجهيز الارض من نظافة و عزق و حراثة{' '}
                 </p>
-                <img
+                <Image
                   src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
                   alt='Image 1'
                   className='w-full h-full object-cover'
@@ -112,7 +113,7 @@ export default function Home() {
                   {' '}
                   وهية مرحلة تجهيز الارض من نظافة و عزق و حراثة{' '}
                 </p>
-                <img
+                <Image
                   src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
                   alt='Image 2'
                   className='w-full h-full object-cover'
@@ -145,7 +146,7 @@ export default function Home() {
                   {' '}
                   وهية مرحلة تجهيز الارض من نظافة و عزق و حراثة{' '}
                 </p>
-                <img
+                <Image
                   src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
                   alt='Image 3'
                   className='w-full h-full object-cover'
@@ -173,7 +174,7 @@ export default function Home() {
         >
           <div>
             <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}> الزراعة </h3>
-            <img
+            <Image
               src='https://modo3.com/thumbs/fit630x300/142458/1478984574/%D9%85%D8%B1%D8%A7%D8%AD%D9%84_%D8%A7%D9%84%D8%B2%D8%B1%D8%A7%D8%B9%D8%A9.jpg'
               alt='Image 1'
               className='w-full h-full object-cover'
@@ -191,7 +192,7 @@ export default function Home() {
 
           <div>
             <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}> تجهيز </h3>
-            <img
+            <Image
               src='http://media.kenanaonline.com/photos/1238365/1238365363/large_1238365363.jpg?1394703600'
               alt='Image 1'
               className='w-full h-full object-cover'
@@ -209,7 +210,7 @@ export default function Home() {
 
           <div style={{ marginTop: 30 }}>
             <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}> الحصاد </h3>
-            <img
+            <Image
               src='https://mqalla.com/wp-content/uploads/%D8%AD%D8%B5%D8%A7%D8%AF-%D8%A7%D9%84%D9%82%D9%85%D8%AD.jpg'
               alt='Image 1'
               className='w-full h-full object-cover'
@@ -227,7 +228,7 @@ export default function Home() {
 
           <div style={{ marginTop: 30 }}>
             <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}> الاستثمار </h3>
-            <img
+            <Image
               src='https://maan.gov.ae/wp-content/uploads/2021/02/Social-Investment-Fund-2048x1365.jpg'
               alt='Image 1'
               className='w-full h-full object-cover'

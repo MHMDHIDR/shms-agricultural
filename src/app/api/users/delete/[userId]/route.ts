@@ -1,6 +1,6 @@
 import { connectDB } from '@/api/utils/db'
 import type { UserProps } from '@/types'
-import { ResultSetHeader } from 'mysql2/promise'
+// import { ResultSetHeader } from 'mysql2/promise'
 
 export async function DELETE(
   _request: Request,
