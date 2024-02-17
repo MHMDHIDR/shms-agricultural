@@ -27,6 +27,11 @@ export const EmailTemplate = ({
     <Html>
       <Head>
         <meta charSet='UTF-8' />
+        <style>
+          {`.button-link:hover {
+            backgroundColor: #2563eb;
+          }`}
+        </style>
       </Head>
       <Body>
         <Container
@@ -62,7 +67,11 @@ export const EmailTemplate = ({
                 direction: 'rtl'
               }}
             >
-              <Heading as='h2' style={{ textAlign: 'center' }} key='h2'>
+              <Heading
+                as='h2'
+                style={{ textAlign: 'center', userSelect: 'none' }}
+                key='h2'
+              >
                 {title ?? 'طلب استعادة كلمة المرور'}
               </Heading>
 
@@ -96,6 +105,7 @@ export const EmailTemplate = ({
                   key='buttonDiv'
                 >
                   <a
+                    className='button-link'
                     style={{
                       padding: '0.5rem 1.5rem',
                       borderRadius: '0.375rem',
