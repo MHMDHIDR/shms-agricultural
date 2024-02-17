@@ -28,30 +28,29 @@ export default function Home() {
           رؤيتنا{' '}
         </h1>
 
-        <div className='flex justify-center gap-8 items-center'>
+        <div className='flex justify-center md:gap-8 items-center'>
           <Link href={'#'}>
             <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
-              <div>
-                <img
-                  src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
-                  alt='Image 1'
-                  className='w-full h-full object-cover'
-                  style={{
-                    width: '80%',
-                    aspectRatio: '1/1',
-                    borderWidth: 5,
-                    borderColor: 'darkgreen',
-                    borderRadius: '100%',
-                    marginTop: 15
-                  }}
-                />
-              </div>
-              <div>{/* Content for تحضير */}</div>
+              <img
+                src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
+                alt='Image 1'
+                className='w-full h-full object-cover'
+                style={{
+                  width: '80%',
+                  aspectRatio: '1/1',
+                  borderWidth: 5,
+                  borderColor: 'darkgreen',
+                  borderRadius: '100%',
+                  marginTop: 15
+                }}
+              />
             </div>
           </Link>
           <div style={{ marginTop: 0 }}>
-            <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
-              {' '}
+            <p
+              className='text-right md:text-center'
+              style={{ color: 'gray', fontSize: 15 }}
+            >
               ان يكون السودان هو فعليا سلة غذاء العالم وان يكون رائدا بين الدول العربية في
               مجال الزراعة وتطوير الادوات الزراعية وتحسين جودة المزروعات مما يسهم بشكل
               كبير في النمو الاقتصادي للفرد وللدولة على حد سواء{' '}
@@ -62,7 +61,7 @@ export default function Home() {
         <div
           style={{ margin: 30 }}
           dir='rtl'
-          className='grid grid-cols-1 md:grid-cols-3 gap-8 '
+          className='grid grid-cols-1 md:grid-cols-3 gap-8'
         >
           <Link href={'#'}>
             <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>

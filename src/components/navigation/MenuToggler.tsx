@@ -16,7 +16,7 @@ export function MenuToggler({
       {/* Nav toggler */}
       <input
         className={cn(
-          `absolute left-0 top-6 md:pointer-events-none opacity-0 cursor-pointer w-10 h-10 z-20`,
+          `absolute left-0 top-3 md:pointer-events-none opacity-0 cursor-pointer w-10 h-10 z-20`,
           position
         )}
         type='checkbox'
@@ -28,7 +28,7 @@ export function MenuToggler({
       <svg
         xmlns='http://www.w3.org/2000/svg'
         className={cn(
-          `absolute left-0 top-6 w-10 h-10 md:hidden transition-colors stroke-gray-800 dark:stroke-white z-10`,
+          `absolute left-0 top-3 w-10 h-10 md:hidden transition-colors stroke-gray-800 dark:stroke-white z-10`,
           position
         )}
         viewBox='0 0 24 24'
