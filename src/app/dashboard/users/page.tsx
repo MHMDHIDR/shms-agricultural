@@ -101,7 +101,7 @@ export default function Users() {
       }
 
       setUserDeleted(data.userDeleted ?? 0)
-      redirect('/dashboard')
+      // redirect('/dashboard')
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,

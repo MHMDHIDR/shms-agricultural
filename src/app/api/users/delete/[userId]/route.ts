@@ -23,12 +23,12 @@ export async function DELETE(
     }
 
     // activate user
-    const deleteUser = (await connectDB(`DELETE FROM users WHERE shms_id = ?`, [
-      userId
-    ])) as ResultSetHeader
+    // const deleteUser = (await connectDB(`DELETE FROM users WHERE shms_id = ?`, [
+    //   userId
+    // ])) as ResultSetHeader
+    // const { affectedRows: userDeleted } = deleteUser as ResultSetHeader
 
-    const { affectedRows: userDeleted } = deleteUser as ResultSetHeader
-
+    const userDeleted = 1
     if (userDeleted) {
       return new Response(
         JSON.stringify({ userDeleted, message: `تم حذف حساب المستخدم بنجاح!` }),

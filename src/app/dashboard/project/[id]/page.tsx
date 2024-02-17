@@ -25,7 +25,7 @@ import {
   validateFile
 } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
-import type { ProjectProps } from '@/types'
+import type { ProjectProps, UserLoggedInProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { ArrowBigRight } from 'lucide-react'
@@ -35,12 +35,17 @@ import { toast } from 'sonner'
 import MarkdownIt from 'markdown-it'
 import htmlToMd from 'html-to-md'
 import Drawer from '@/components/custom/Drawer'
+import { LoadingPage } from '@/components/custom/Loading'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 export default function EditProjectPage({
   params: { id: projectId }
 }: {
   params: { id: string }
 }) {
+  const { data: session }: { data: UserLoggedInProps } = useSession()
+
   const [projectImages, setProjectImages] = useState<ProjectProps['shms_project_images']>(
     []
   )
@@ -340,7 +345,13 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
-  return (
+  const { replace } = useRouter()
+
+  return session?.user ? (
+    <LoadingPage />
+  ) : !session ? (
+    replace('/')
+  ) : (
     <Layout>
       <Card className='mt-56 rtl'>
         <Link

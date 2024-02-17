@@ -27,11 +27,6 @@ export const EmailTemplate = ({
     <Html>
       <Head>
         <meta charSet='UTF-8' />
-        <style type='text/css'>
-          {`
-            a:hover {background-color: #2563eb !important;}
-          }`}
-        </style>
       </Head>
       <Body>
         <Container
