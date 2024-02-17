@@ -582,6 +582,10 @@ const SignupPage = () => {
                 >
                   صورة المستند الرسمي
                   <span className='text-red-500'>*</span>
+                  <br />
+                  <small className='font-normal'>
+                    صورة من الهوية الوطنية أو جواز السفر أو الإقامة
+                  </small>
                 </label>
               </div>
               <div className='md:w-2/3'>

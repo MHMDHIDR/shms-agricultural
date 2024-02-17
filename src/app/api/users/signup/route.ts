@@ -116,7 +116,7 @@ export async function POST(req: Request) {
     return new Response(
       JSON.stringify({
         userAdded: 0,
-        message: 'User Not Added!, Please Try Again Later'
+        message: err //'User Not Added!, Please Try Again Later'
       }),
       { status: 500 }
     )
