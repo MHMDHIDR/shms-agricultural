@@ -34,6 +34,7 @@ export default function Modal({
   asModalSlider,
   asText,
   images,
+  startIndex,
   children
 }: {
   title: string
@@ -45,6 +46,7 @@ export default function Modal({
   asModalSlider?: boolean
   asText?: boolean
   images?: string[]
+  startIndex?: number
   children: string | React.ReactNode
 }) {
   return (
@@ -89,7 +91,16 @@ export default function Modal({
                   {images?.map((image, index) => (
                     <CarouselItem key={index}>
                       <Image
-                        src={image}
+                        src={
+                          startIndex
+                            ? // swap the first image with the selected image
+                              // to start the carousel from the selected image
+                              // then reset the startIndex to 0
+                              images[startIndex] && index === 0
+                              ? images[startIndex] ?? image
+                              : images[index - 1] ?? image
+                            : image
+                        }
                         alt={description ?? title}
                         width={400}
                         height={400}

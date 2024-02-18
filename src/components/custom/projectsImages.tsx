@@ -9,13 +9,14 @@ const ProjectImages = ({ images }: { images: string[] }) => {
       >
         {images.map((imageUrl, index) => (
           <Modal
+            key={index}
             title=''
             document={imageUrl}
             className='font-bold dark:text-white'
-            key={index}
             asModal
             asModalSlider
             images={images}
+            startIndex={index}
           >
             <Image
               src={imageUrl}
