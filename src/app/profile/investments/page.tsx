@@ -42,6 +42,8 @@ export default async function DashboardInvestors() {
           const profitCollectionDate = (await getProject(project.shms_project_id))
             .shms_project_profits_collect_date
           const purchaseDate = project.createdAt
+          const projectTerms = (await getProject(project.shms_project_id))
+            .shms_project_terms
 
           return {
             projectId: project.shms_project_id,
@@ -51,6 +53,7 @@ export default async function DashboardInvestors() {
             totalPayment: project.stocks * projectStockPrice,
             profitCollectionDate,
             purchaseDate,
+            projectTerms,
             totalProfit:
               project.newPercentage > 0
                 ? project.stocks * projectProfit +
@@ -120,6 +123,7 @@ export default async function DashboardInvestors() {
                         totalPayment,
                         profitCollectionDate,
                         purchaseDate,
+                        projectTerms,
                         totalProfit
                       }) => {
                         const dataToShow = {
@@ -129,10 +133,12 @@ export default async function DashboardInvestors() {
                           totalAmount: totalPayment,
                           totalProfit,
                           profitsCollectDate: profitCollectionDate,
+                          projectTerms,
                           referenceCode: `#${
                             InvestmentCurrentUser[0]?.shms_id
                           }#${projectId}#${new Date().getTime()}`
                         }
+
                         return (
                           <TableRow key={projectId}>
                             <TableCell className='text-center border border-gray-200'>
@@ -177,9 +183,7 @@ export default async function DashboardInvestors() {
                                   ...dataToShow,
                                   investorName: dataToShow.investorName || ''
                                 }}
-                              >
-                                عرض العقد
-                              </Contract>
+                              />
                             </TableCell>
                           </TableRow>
                         )

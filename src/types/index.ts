@@ -183,16 +183,6 @@ export interface CreateEmailResponse {
   } | null
 }
 
-export type generatePDFProps = {
-  investorName: string
-  projectName: string
-  stocksPurchased: number
-  totalAmount: number
-  totalProfit: number
-  profitsCollectDate: Date
-  referenceCode: string
-}
-
 export type MenuItemsProps = {
   title: string
   href: string
@@ -274,6 +264,18 @@ export type InverstorProjectData = {
   stocks: number
   totalPayment: number
   profitCollectionDate: Date
+  projectTerms: string
   purchaseDate: string
   totalProfit: number
+}
+
+export type generatePDFProps = {
+  investorName: string
+  projectName: string
+  stocksPurchased: number
+  totalAmount: number
+  totalProfit: number
+  profitsCollectDate: Date
+  projectTerms?: string
+  referenceCode: string
 }

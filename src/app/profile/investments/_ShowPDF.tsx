@@ -1,39 +1,41 @@
 'use client'
 
+import Divider from '@/components/custom/Divider'
+import {
+  FacebookIcon,
+  InstagramIcon,
+  TwitterIcon,
+  YouTubeIcon
+} from '@/components/icons/Socials'
 import { Button } from '@/components/ui/button'
 import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL, SHMS_PHONE } from '@/data/constants'
 import { getProjectDate } from '@/lib/utils'
 import { generatePDFProps } from '@/types'
+import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRef, useCallback, useEffect, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 
-export default function Contract({
-  children,
-  dataToShow
-}: {
-  children: string
-  dataToShow: generatePDFProps
-}) {
-  const [isLoading, setIsLoading] = useState(false)
+export default function Contract({ dataToShow }: { dataToShow: generatePDFProps }) {
+  const [isLoadingPDF, setIsLoadingPDF] = useState(false)
 
   const componentRef = useRef(null)
   const onBeforeGetContentResolve = useRef<any>(null)
   const handleOnBeforeGetContent = useCallback(() => {
-    setIsLoading(true)
+    setIsLoadingPDF(true)
 
     return new Promise<void>(resolve => {
       onBeforeGetContentResolve.current = resolve
       setTimeout(() => {
-        setIsLoading(false)
+        setIsLoadingPDF(false)
         resolve()
       }, 2000)
     })
-  }, [setIsLoading])
+  }, [setIsLoadingPDF])
   const reactToPrintContent = useCallback(() => componentRef.current, [])
 
   const handlePrint = useReactToPrint({
     content: reactToPrintContent,
-    documentTitle: 'Invoice',
+    documentTitle: dataToShow.referenceCode,
     onBeforeGetContent: handleOnBeforeGetContent
   })
 
@@ -41,13 +43,24 @@ export default function Contract({
     if (typeof onBeforeGetContentResolve.current === 'function') {
       onBeforeGetContentResolve.current()
     }
-  }, [setIsLoading])
+  }, [setIsLoadingPDF])
 
   return (
     <>
-      {isLoading && <Invoice dataToShow={dataToShow} forwardedRef={componentRef} />}
-      <Button variant={'pressable'} onClick={handlePrint}>
-        {children}
+      {isLoadingPDF && <Invoice dataToShow={dataToShow} forwardedRef={componentRef} />}
+      <Button
+        variant={'pressable'}
+        onClick={handlePrint}
+        className={isLoadingPDF ? 'cursor-progress opcacity-50 pointer-events-none' : ''}
+      >
+        {isLoadingPDF ? (
+          <>
+            <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
+            جاري العرض ...
+          </>
+        ) : (
+          'عرض عقد الشراء'
+        )}
       </Button>
     </>
   )
@@ -67,6 +80,7 @@ const Invoice = ({
     totalAmount,
     totalProfit,
     profitsCollectDate,
+    projectTerms,
     referenceCode
   } = dataToShow
 
@@ -78,7 +92,8 @@ const Invoice = ({
       >
         <div
           style={{
-            maxWidth: '750px',
+            width: '1000px',
+            height: '1500px',
             padding: '10px',
             margin: '0 auto',
             backgroundColor: '#fff',
@@ -146,7 +161,8 @@ const Invoice = ({
                 width: '100%',
                 borderCollapse: 'collapse',
                 borderRadius: '10px',
-                border: '1px solid #ccc'
+                border: '1px solid #ccc',
+                direction: 'rtl'
               }}
             >
               <thead style={{ backgroundColor: '#f8f9fa' }}>
@@ -272,7 +288,20 @@ const Invoice = ({
             </p>
           </div>
 
-          <div style={{ direction: 'rtl', textAlign: 'right', marginTop: '400px' }}>
+          {/* projectTerms */}
+          <div className='mt-10 p-5 border border-gray-200 rounded-lg rtl text-right'>
+            <h4>
+              <strong>شروط المشروع</strong>
+            </h4>
+            <p
+              className='text-justify text-gray-600 leading-10'
+              dangerouslySetInnerHTML={{
+                __html: projectTerms || 'لا توجد شروط خاصة لهذا المشروع'
+              }}
+            />
+          </div>
+
+          <div style={{ direction: 'rtl', textAlign: 'right', marginTop: '300px' }}>
             <p style={{ color: '#666', fontSize: '10px' }}>
               الرقم المرجعي
               <br />
@@ -280,21 +309,35 @@ const Invoice = ({
             </p>
           </div>
 
-          <div
-            style={{
-              borderTop: '1px solid #ccc',
-              paddingTop: '7px',
-              fontSize: '12px',
-              color: '#ccc',
-              textAlign: 'center'
-            }}
-          >
-            <p style={{ marginTop: '30px', color: '#666', fontSize: '15px' }}>
-              &copy; {new Date().getFullYear()} {APP_TITLE}
-            </p>
-            <span style={{ color: '#999', fontSize: '15px' }}>{APP_URL}</span>
-            <span style={{ color: '#666', fontSize: '15px' }}>جميع الحقوق محفوظة</span>
-          </div>
+          <Divider className='my-10' />
+
+          <section className='flex w-full justify-between pt-7 text-xs text-gray-400 text-center'>
+            <div className='flex flex-col gap-y-3 items-start'>
+              <div className='flex items-center opacity-80'>
+                <FacebookIcon className='w-5 h-5 md:w-6 md:h-6' />
+                <span className='ml-3'>facebook.com/shmsagri</span>
+              </div>
+              <div className='flex items-center opacity-80'>
+                <InstagramIcon className='w-5 h-5 md:w-6 md:h-6' />
+                <span className='ml-3'>instagram.com/shmsagri</span>
+              </div>
+              <div className='flex items-center opacity-80'>
+                <YouTubeIcon className='w-5 h-5 md:w-6 md:h-6' />
+                <span className='ml-3'>youtube.com/@shmsagri</span>
+              </div>
+              <div className='flex items-center opacity-80'>
+                <TwitterIcon className='w-5 h-5 md:w-6 md:h-6' />
+                <span className='ml-3'>twitter.com/@shmsagri</span>
+              </div>
+            </div>
+            <div className='flex flex-col gap-y-3 items-end'>
+              <span className='text-gray-900 text-sm'>{APP_URL}</span>
+              <span className='text-gray-600 text-sm'>جميع الحقوق محفوظة</span>
+              <p className='text-gray-600 text-sm'>
+                &copy; {new Date().getFullYear()} {APP_TITLE}
+              </p>
+            </div>
+          </section>
         </div>
       </div>
     </div>
