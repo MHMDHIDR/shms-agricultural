@@ -186,10 +186,10 @@ export interface CreateEmailResponse {
 export type generatePDFProps = {
   investorName: string
   projectName: string
-  stocksPurchased: string
-  totalAmount: string
-  totalProfit: string
-  profitsCollectDate: string
+  stocksPurchased: number
+  totalAmount: number
+  totalProfit: number
+  profitsCollectDate: Date
   referenceCode: string
 }
 
@@ -234,6 +234,16 @@ export type ConfirmProps = {
   children: string | React.ReactNode
   imageId?: string
   shmsProjectImages?: string
+}
+
+export type purchasedStocksData = {
+  investorName: string
+  projectName: string
+  stocksPurchased: number
+  totalAmount: number
+  totalProfit: number
+  profitsCollectDate: Date
+  referenceCode: string
 }
 
 export type stocksPurchasedProps = {

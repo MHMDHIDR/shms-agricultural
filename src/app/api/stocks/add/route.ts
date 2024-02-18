@@ -2,7 +2,6 @@ import { connectDB } from '@/api/utils/db'
 import { ADMIN_EMAIL, APP_TITLE, APP_URL } from '@/data/constants'
 import type { ProjectProps, UserProps, stocksPurchasedProps } from '@/types'
 import email from '@/lib/actions/email'
-import { generatePDF } from '@/api/utils/generate-pdf'
 import { ResultSetHeader } from 'mysql2/promise'
 
 export async function PATCH(req: Request) {
@@ -67,22 +66,6 @@ export async function PATCH(req: Request) {
     )
     const { affectedRows: projectUpdated } = updateProjectAvaStocks as ResultSetHeader
 
-    // Generate PDF
-    const pdfToSend = await generatePDF({
-      investorName: String(user?.shms_fullname),
-      projectName: String(project?.shms_project_name!),
-      stocksPurchased: String(stocks),
-      totalAmount: String(stocks * project?.shms_project_stock_price!),
-      totalProfit: String(
-        newPercentage > 0
-          ? stocks * project?.shms_project_stock_profits! +
-              (stocks * project?.shms_project_stock_profits! * newPercentage) / 100
-          : stocks * project?.shms_project_stock_profits!
-      ),
-      profitsCollectDate: String(project?.shms_project_profits_collect_date),
-      referenceCode: `#${shms_id}#${shms_project_id}#${new Date().getTime()}`
-    })
-
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments`
     const adminButtonLink = APP_URL + `/dashboard`
@@ -102,8 +85,7 @@ export async function PATCH(req: Request) {
           يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:`,
         buttonLink,
         buttonLabel: 'تصفح استثماراتك'
-      },
-      pdfToSend
+      }
     }
 
     const adminEmailData = {
@@ -117,8 +99,7 @@ export async function PATCH(req: Request) {
         بواسطة ${user?.shms_fullname} (${user?.shms_email})`,
         buttonLink: adminButtonLink,
         buttonLabel: 'تصفح الاستثمارات'
-      },
-      pdfToSend
+      }
     }
 
     // Promise.all
@@ -134,8 +115,7 @@ export async function PATCH(req: Request) {
           message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
          سيتم التواصل معك من فريق 
          ${APP_TITLE}
-         لتأكيد العملية ولإتمام باقي الإجراءات`,
-          pdfToSend
+         لتأكيد العملية ولإتمام باقي الإجراءات`
         }),
         { status: 200 }
       )

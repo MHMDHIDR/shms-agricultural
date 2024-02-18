@@ -1,26 +1,14 @@
 'use server'
 
 import { Resend } from 'resend'
-import { ADMIN_EMAIL, APP_TITLE, SHMS_EMAIL as shmsEmail } from '@/data/constants'
+import { ADMIN_EMAIL, SHMS_EMAIL as shmsEmail } from '@/data/constants'
 import { EmailTemplate } from '@/components/custom/email-template'
 import type { CreateEmailResponse, emailMethodProps } from '@/types'
-import { arabicDate } from '../utils'
 
 const { RESEND_API_KEY, SHMS_EMAIL } = process.env
 
-async function email({ name, subject, from, to, msg, pdfToSend }: emailMethodProps) {
+async function email({ name, subject, from, to, msg }: emailMethodProps) {
   const resend = new Resend(RESEND_API_KEY)
-  const attachments = []
-
-  // if we have a pdf to send, add it to the attachments
-  if (pdfToSend) {
-    attachments.push({
-      content: pdfToSend,
-      filename: `${APP_TITLE}-Invoice-Investment-${arabicDate(
-        new Date().toLocaleDateString()
-      )}.pdf`
-    })
-  }
 
   const { data, error: cause }: CreateEmailResponse = await resend.emails.send({
     to,
@@ -34,8 +22,7 @@ async function email({ name, subject, from, to, msg, pdfToSend }: emailMethodPro
       msg: msg.msg ?? '',
       buttonLink: msg.buttonLink ?? '',
       buttonLabel: msg.buttonLabel ?? ''
-    }) as React.ReactElement,
-    attachments
+    }) as React.ReactElement
   })
 
   if (cause) {

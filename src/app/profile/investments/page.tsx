@@ -15,6 +15,7 @@ import { getAuth } from '@/lib/actions/auth'
 import { getProject, getProjectDate } from '@/lib/utils'
 import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
+import ShowInvestment from './_ShowInvestment'
 
 export default async function DashboardInvestors() {
   const { userId } = await getAuth()
@@ -103,6 +104,9 @@ export default async function DashboardInvestors() {
                     <TableHead className='text-center border border-gray-200 select-none min-w-60'>
                       تاريخ تسليم الأرباح
                     </TableHead>
+                    <TableHead className='text-center border border-gray-200 select-none min-w-60'>
+                      عرض العقد
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -154,6 +158,19 @@ export default async function DashboardInvestors() {
                           </TableCell>
                           <TableCell className='text-center border border-gray-200'>
                             {getProjectDate(new Date(profitCollectionDate))}
+                          </TableCell>
+                          <TableCell className='text-center border border-gray-200'>
+                            <ShowInvestment
+                              investorName={InvestmentCurrentUser[0]?.shms_fullname!}
+                              projectName={projectName}
+                              stocksPurchased={stocks}
+                              totalAmount={totalPayment}
+                              totalProfit={totalProfit}
+                              profitsCollectDate={profitCollectionDate}
+                              referenceCode={`#${
+                                InvestmentCurrentUser[0]?.shms_id
+                              }#${projectId}#${new Date().getTime()}`}
+                            />
                           </TableCell>
                         </TableRow>
                       )
