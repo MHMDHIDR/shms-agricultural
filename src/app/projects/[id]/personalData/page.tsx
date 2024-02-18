@@ -68,7 +68,7 @@ export default function PersonalData({
       icon: <Loading className='text-blue-300' />,
       position: 'bottom-center',
       className: 'text-right select-none rtl',
-      duration: DEFAULT_DURATION * 2,
+      duration: DEFAULT_DURATION,
       style: {
         backgroundColor: '#ccf0ff',
         color: '#00415c',
