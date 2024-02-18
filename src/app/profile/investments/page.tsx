@@ -15,7 +15,7 @@ import { getAuth } from '@/lib/actions/auth'
 import { getProject, getProjectDate } from '@/lib/utils'
 import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
-import ShowInvestment from './_ShowInvestment'
+import Contract from './_ShowPDF'
 
 export default async function DashboardInvestors() {
   const { userId } = await getAuth()
@@ -121,59 +121,69 @@ export default async function DashboardInvestors() {
                         profitCollectionDate,
                         purchaseDate,
                         totalProfit
-                      }) => (
-                        <TableRow key={projectId}>
-                          <TableCell className='text-center border border-gray-200'>
-                            {projectName}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            {stocks}
-                          </TableCell>
-                          <TableCell
-                            className='text-center border border-gray-200'
-                            data-price
-                          >
-                            {projectStockPrice}
-                          </TableCell>
-                          <TableCell
-                            className='text-center border border-gray-200'
-                            data-price
-                          >
-                            {totalPayment}
-                          </TableCell>
-                          <TableCell
-                            className='text-center border border-gray-200'
-                            data-price
-                          >
-                            {totalProfit}
-                          </TableCell>
-                          <TableCell
-                            className='text-center border border-gray-200'
-                            data-price
-                          >
-                            {totalProfit + totalPayment}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            {getProjectDate(new Date(purchaseDate))}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            {getProjectDate(new Date(profitCollectionDate))}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            <ShowInvestment
-                              investorName={InvestmentCurrentUser[0]?.shms_fullname!}
-                              projectName={projectName}
-                              stocksPurchased={stocks}
-                              totalAmount={totalPayment}
-                              totalProfit={totalProfit}
-                              profitsCollectDate={profitCollectionDate}
-                              referenceCode={`#${
-                                InvestmentCurrentUser[0]?.shms_id
-                              }#${projectId}#${new Date().getTime()}`}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      )
+                      }) => {
+                        const dataToShow = {
+                          investorName: InvestmentCurrentUser[0]?.shms_fullname,
+                          projectName,
+                          stocksPurchased: stocks,
+                          totalAmount: totalPayment,
+                          totalProfit,
+                          profitsCollectDate: profitCollectionDate,
+                          referenceCode: `#${
+                            InvestmentCurrentUser[0]?.shms_id
+                          }#${projectId}#${new Date().getTime()}`
+                        }
+                        return (
+                          <TableRow key={projectId}>
+                            <TableCell className='text-center border border-gray-200'>
+                              {projectName}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              {stocks}
+                            </TableCell>
+                            <TableCell
+                              className='text-center border border-gray-200'
+                              data-price
+                            >
+                              {projectStockPrice}
+                            </TableCell>
+                            <TableCell
+                              className='text-center border border-gray-200'
+                              data-price
+                            >
+                              {totalPayment}
+                            </TableCell>
+                            <TableCell
+                              className='text-center border border-gray-200'
+                              data-price
+                            >
+                              {totalProfit}
+                            </TableCell>
+                            <TableCell
+                              className='text-center border border-gray-200'
+                              data-price
+                            >
+                              {totalProfit + totalPayment}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              {getProjectDate(new Date(purchaseDate))}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              {getProjectDate(new Date(profitCollectionDate))}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              <Contract
+                                dataToShow={{
+                                  ...dataToShow,
+                                  investorName: dataToShow.investorName || ''
+                                }}
+                              >
+                                عرض العقد
+                              </Contract>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      }
                     )
                   })}
                 </TableBody>
