@@ -44,7 +44,7 @@ export type UserProps = {
 export type ProjectProps = {
   shms_project_id: string
   shms_project_images: imgsProps[]
-  shms_project_study_case: imgsProps
+  shms_project_study_case: imgsProps[]
   shms_project_study_case_visibility: number
   shms_project_name: string
   shms_project_location: string

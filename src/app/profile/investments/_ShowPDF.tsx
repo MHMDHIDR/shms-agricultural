@@ -14,6 +14,7 @@ import { generatePDFProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRef, useCallback, useEffect, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
+import Image from 'next/image'
 
 export default function Contract({ dataToShow }: { dataToShow: generatePDFProps }) {
   const [isLoadingPDF, setIsLoadingPDF] = useState(false)
@@ -113,7 +114,7 @@ const Invoice = ({
             }}
           >
             <div>
-              <img
+              <Image
                 src={APP_LOGO}
                 height='100'
                 width='150'
