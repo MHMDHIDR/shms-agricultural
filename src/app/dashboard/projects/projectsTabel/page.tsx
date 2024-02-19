@@ -12,12 +12,11 @@ import {
   TableRow
 } from '@/components/ui/table'
 import Link from 'next/link'
-
 import Modal from '@/components/custom/Modal'
 import { Button } from '@/components/ui/button'
 import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
 import { cn, getProjectDate, getProjectStatus, getProjectStudyCase } from '@/lib/utils'
-import type { ProjectProps } from '@/types'
+import type { ProjectProps, imgsProps } from '@/types'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -173,7 +172,8 @@ export default function ProjectsTable() {
                   <Modal
                     title={`دراسة الجدوى ${project.shms_project_name}`}
                     document={
-                      getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO
+                      JSON.parse(String(project.shms_project_study_case))[0]
+                        .imgDisplayPath
                     }
                     className='font-bold dark:text-white'
                   >

@@ -3,16 +3,16 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import DashboardInvestors from './Investors/page'
 import AddProjects from './projects/page'
 import Users from './users/page'
-import { redirect } from 'next/navigation'
 import CountPercentagePage from './countPercentage/page'
 import { LoadingPage } from '@/components/custom/Loading'
 import { getAuth } from '@/lib/actions/auth'
+import NotFound from '@/app/not-found'
 
 export default async function DashboardPage() {
   const { userType, loading } = await getAuth()
 
-  return userType !== 'admin' ? (
-    redirect('/')
+  return !loading && userType !== 'admin' ? (
+    <NotFound />
   ) : loading ? (
     <LoadingPage />
   ) : (

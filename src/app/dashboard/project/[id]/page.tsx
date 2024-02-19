@@ -36,8 +36,8 @@ import MarkdownIt from 'markdown-it'
 import htmlToMd from 'html-to-md'
 import Drawer from '@/components/custom/Drawer'
 import { LoadingPage } from '@/components/custom/Loading'
-import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import NotFound from '@/app/not-found'
 
 export default function EditProjectPage({
   params: { id: projectId }
@@ -345,12 +345,10 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
-  const { replace } = useRouter()
-
   return session?.user ? (
     <LoadingPage />
   ) : !session ? (
-    replace('/')
+    <NotFound />
   ) : (
     <Layout>
       <Card className='mt-56 rtl'>

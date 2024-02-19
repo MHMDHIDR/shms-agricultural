@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { CardWrapper } from '@/components/auth/card-wrapper'
@@ -30,6 +30,7 @@ import FormMessage from '@/components/custom/FormMessage'
 import { revalidatePath } from 'next/cache'
 import Layout from '@/components/custom/Layout'
 import { getAuth } from '@/lib/actions/auth'
+import NotFound from '@/app/not-found'
 
 export default function ProfilePage() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -260,7 +261,7 @@ export default function ProfilePage() {
   }
 
   return !session ? (
-    redirect(`/`)
+    <NotFound />
   ) : (
     <Layout>
       <CardWrapper
