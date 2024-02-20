@@ -29,34 +29,28 @@ export default function Home() {
           رؤيتنا{' '}
         </h1>
 
-        <div className='flex justify-center md:gap-8 items-center'>
+        <div className='flex flex-col items-center md:flex-row md:gap-8'>
           <Link href={'#'}>
-            <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
-              <Image
-                src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
-                alt='Image 1'
-                width={500}
-                height={500}
-                className='w-full h-full object-cover'
-                style={{
-                  width: '80%',
-                  aspectRatio: '1/1',
-                  borderWidth: 5,
-                  borderColor: 'darkgreen',
-                  borderRadius: '100%',
-                  marginTop: 15
-                }}
-              />
+            <div className='flex items-center justify-center md:flex-row md:gap-8'>
+              <Link href={'#'}>
+                <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition flex items-center justify-center'>
+                  <Image
+                    src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
+                    alt='Image 1'
+                    width={500}
+                    height={500}
+                    className='w-full h-full object-cover rounded-full border-4 border-darkgreen'
+                    style={{ maxWidth: '80%' }}
+                  />
+                </div>
+              </Link>
             </div>
           </Link>
-          <div style={{ marginTop: 0 }}>
-            <p
-              className='text-right md:text-center'
-              style={{ color: 'gray', fontSize: 15 }}
-            >
+          <div className='mt-4 md:mt-0'>
+            <p className='text-center' style={{ color: 'gray', fontSize: 15 }}>
               ان يكون السودان هو فعليا سلة غذاء العالم وان يكون رائدا بين الدول العربية في
               مجال الزراعة وتطوير الادوات الزراعية وتحسين جودة المزروعات مما يسهم بشكل
-              كبير في النمو الاقتصادي للفرد وللدولة على حد سواء{' '}
+              كبير في النمو الاقتصادي للفرد وللدولة على حد سواء
             </p>
           </div>
         </div>
@@ -64,9 +58,44 @@ export default function Home() {
         <div
           style={{ margin: 30 }}
           dir='rtl'
-          className='grid grid-cols-1 md:grid-cols-3 gap-8'
+          className='grid grid-cols-1 md:grid-cols-4 gap-8'
         >
-          <Link href={'#'}>
+          <Link href={'/projects'}>
+            <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
+              <div>
+                <h2
+                  style={{
+                    textAlign: 'center',
+                    fontSize: 30,
+                    fontWeight: 'bold'
+                  }}
+                >
+                  استثمار
+                </h2>
+                <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
+                  {' '}
+                  وهي مرحلة تصفح المشاريع المتاحة و شراء الاسهم{' '}
+                </p>
+                <Image
+                  src='https://www.agroinvestspain.com/wp-content/uploads/2020/05/agricultural-investment.jpeg'
+                  alt='Image 1'
+                  width={500}
+                  height={500}
+                  className='w-full h-full object-cover'
+                  style={{
+                    aspectRatio: '1/1',
+                    borderWidth: 2.5,
+                    borderColor: 'darkgreen',
+                    borderRadius: 20,
+                    marginTop: 15
+                  }}
+                />
+              </div>
+              <div>{/* Content for تحضير */}</div>
+            </div>
+          </Link>
+
+          <Link href={'/preparation'}>
             <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
               <div>
                 <h2
@@ -101,7 +130,7 @@ export default function Home() {
             </div>
           </Link>
 
-          <Link href={'#'}>
+          <Link href={'/farming'}>
             <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
               <div>
                 <h2
@@ -115,7 +144,7 @@ export default function Home() {
                 </h2>
                 <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
                   {' '}
-                  وهية مرحلة تجهيز الارض من نظافة و عزق و حراثة{' '}
+                  وهي مرحلة رمي البذور في الارض ومتابعة الري وسير الزراعة{' '}
                 </p>
                 <Image
                   src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
@@ -136,7 +165,7 @@ export default function Home() {
             </div>
           </Link>
 
-          <Link href={'#'}>
+          <Link href={'/harvest'}>
             <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
               <div>
                 <h2
@@ -150,7 +179,7 @@ export default function Home() {
                 </h2>
                 <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
                   {' '}
-                  وهية مرحلة تجهيز الارض من نظافة و عزق و حراثة{' '}
+                  وهية مرحلة جمع المحصول من الارض والبدء بتجهيزه للتخزين{' '}
                 </p>
                 <Image
                   src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
@@ -172,6 +201,10 @@ export default function Home() {
           </Link>
         </div>
 
+        <h1 style={{ marginTop: 30 }} className='text-2xl md:text-4xl mb-8 md:mb-12'>
+          معرض الصور{' '}
+        </h1>
+
         <div
           style={{
             display: 'grid',
@@ -181,7 +214,6 @@ export default function Home() {
           }}
         >
           <div>
-            <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}> الزراعة </h3>
             <Image
               src='https://modo3.com/thumbs/fit630x300/142458/1478984574/%D9%85%D8%B1%D8%A7%D8%AD%D9%84_%D8%A7%D9%84%D8%B2%D8%B1%D8%A7%D8%B9%D8%A9.jpg'
               alt='Image 1'
@@ -201,7 +233,6 @@ export default function Home() {
           </div>
 
           <div>
-            <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}> تجهيز </h3>
             <Image
               src='http://media.kenanaonline.com/photos/1238365/1238365363/large_1238365363.jpg?1394703600'
               alt='Image 1'
@@ -221,7 +252,6 @@ export default function Home() {
           </div>
 
           <div style={{ marginTop: 30 }}>
-            <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}> الحصاد </h3>
             <Image
               src='https://mqalla.com/wp-content/uploads/%D8%AD%D8%B5%D8%A7%D8%AF-%D8%A7%D9%84%D9%82%D9%85%D8%AD.jpg'
               alt='Image 1'
@@ -241,7 +271,6 @@ export default function Home() {
           </div>
 
           <div style={{ marginTop: 30 }}>
-            <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}> الاستثمار </h3>
             <Image
               src='https://maan.gov.ae/wp-content/uploads/2021/02/Social-Investment-Fund-2048x1365.jpg'
               alt='Image 1'
