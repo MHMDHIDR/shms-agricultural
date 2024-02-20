@@ -1,8 +1,7 @@
 import Layout from '@/components/custom/Layout'
-import Modal from '@/components/custom/Modal'
 import { PercentageSlider } from '@/components/custom/PercentageSlider'
 import ProjectImages from '@/components/custom/projectsImages'
-import { APP_DESCRIPTION, APP_LOGO, APP_TITLE } from '@/data/constants'
+import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import {
   arabicDate,
   getProject,
@@ -13,6 +12,7 @@ import {
 import { BadgeDollarSign, LineChart, MapPin, TimerIcon, TimerReset } from 'lucide-react'
 import Link from 'next/link'
 import type { imgsProps } from '@/types'
+import ShowCaseStudy from './_ShowCaseStudy'
 
 export async function generateMetadata({
   params: { id: projectId, slug }
@@ -135,14 +135,7 @@ export default async function ProjectDetailsPage({
 
         {project.shms_project_study_case_visibility &&
         getProjectStudyCase(project.shms_project_study_case) ? (
-          <Modal
-            title={`دراسة الجدوى ${project.shms_project_name}`}
-            document={getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO}
-            className='mb-20 font-bold dark:text-white'
-            contentClassName='min-w-[90svw]'
-          >
-            عرض دراسة الجدوى
-          </Modal>
+          <ShowCaseStudy project={project} />
         ) : null}
 
         {/*  نسبة إكتمال المشروع */}

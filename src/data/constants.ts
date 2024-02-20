@@ -18,6 +18,9 @@ export const FILE_UPLOAD_IMG_SIZE = 122
 //  max file upload size in MB = 5 MB
 export const MAX_FILE_UPLOAD_SIZE = 5
 
+export const WINDOW_WIDTH = typeof window !== 'undefined' ? window.innerWidth : 0
+export const MOBILE_SCREEN = 768
+
 export const NAV_HEIGHT =
   typeof window === 'undefined' ||
   (document.querySelector('header') as HTMLElement) === null

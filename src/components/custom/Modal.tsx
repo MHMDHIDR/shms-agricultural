@@ -82,8 +82,8 @@ export default function Modal({
           {
             // if document contains pdf in the path then render pdf
             document?.includes('pdf') ? (
-              <div className='w-full h-96'>
-                <iframe src={document} className='w-full h-full' title={title} />
+              <div className='w-full min-h-[20rem]'>
+                <iframe src={document} className='w-full' height={700} title={title} />
               </div>
             ) : asModalSlider ? (
               <Carousel className='w-full' opts={{ loop: true }}>
