@@ -37,6 +37,7 @@ import htmlToMd from 'html-to-md'
 import Drawer from '@/components/custom/Drawer'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
+import { LoadingPage } from '@/components/custom/Loading'
 
 export default function EditProjectPage({
   params: { id: projectId }
@@ -58,18 +59,23 @@ export default function EditProjectPage({
   const [projectAvailableStocks, setProjectAvailableStocks] = useState<number>(0)
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
+  const [specialPercentage, setProjectSpecialPercentage] =
+    useState<ProjectProps['shms_project_special_percentage']>(0)
+  const [specialPercentageCode, setProjectSpecialPercentageCode] =
+    useState<ProjectProps['shms_project_special_percentage_code']>('')
   const [projectDescription, setProjectDescription] = useState('')
   const [projectTerms, setProjectTerms] = useState('')
   const [caseStudyfile, setCaseStudyFile] = useState<File[]>([])
   const [_currentCaseStudyFile, setCurrentCaseStudyFile] = useState<
     ProjectProps['shms_project_study_case']
   >([])
+  const [caseStudy, setCaseStudy] = useState<ProjectProps['shms_project_study_case']>([])
   const [caseStudyIsVisible, setCaseStudyIsVisible] = useState<number>(0)
   const [projectStatus, setProjectStatus] =
     useState<ProjectProps['shms_project_status']>('pending')
-
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const onCaseStudyFileAdd = (e: { target: { files: any } }) => {
     setCaseStudyFile(Array.from(e.target.files))
@@ -117,13 +123,17 @@ export default function EditProjectPage({
       setProjectAvailableStocks(project.shms_project_available_stocks)
       setStockPrice(project.shms_project_stock_price)
       setStockProfits(project.shms_project_stock_profits)
+      setProjectSpecialPercentage(project.shms_project_special_percentage)
+      setProjectSpecialPercentageCode(project.shms_project_special_percentage_code)
       setProjectDescription(project.shms_project_description)
       setProjectTerms(htmlToMd(project.shms_project_terms))
+      setCaseStudy(project.shms_project_study_case ?? 0)
       setCaseStudyIsVisible(project.shms_project_study_case_visibility ?? 0)
       setProjectStatus(project.shms_project_status)
       if (project.shms_project_study_case && project.shms_project_study_case !== null) {
         setCurrentCaseStudyFile(JSON.parse(String(project.shms_project_study_case)))
       }
+      setIsLoading(false)
     }
 
     getProjectDetails()
@@ -280,8 +290,13 @@ export default function EditProjectPage({
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
             shms_project_description: projectDescription,
+            shms_project_special_percentage: specialPercentage,
+            shms_project_special_percentage_code: specialPercentageCode,
             shms_project_terms: projectTerms,
-            shms_project_study_case: [...newCaseStudyFile],
+            shms_project_study_case:
+              newCaseStudyFile.length > 0
+                ? [...newCaseStudyFile]
+                : [...JSON.parse(String(caseStudy))],
             shms_project_study_case_visibility: caseStudyIsVisible,
             shms_project_status: projectStatus
           } as ProjectProps
@@ -306,9 +321,9 @@ export default function EditProjectPage({
           })
 
         data.projectUpdated === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
-        setTimeout(() => {
-          window.location.href = `/dashboard`
-        }, DEFAULT_DURATION)
+        // setTimeout(() => {
+        //   window.location.href = `/dashboard`
+        // }, DEFAULT_DURATION)
       } catch (error: any) {
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
           {
@@ -349,6 +364,8 @@ export default function EditProjectPage({
 
   return !session && userType !== 'admin' ? (
     <NotFound />
+  ) : isLoading ? (
+    <LoadingPage />
   ) : (
     <Layout>
       <Card className='mt-56 rtl'>

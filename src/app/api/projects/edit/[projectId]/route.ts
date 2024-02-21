@@ -16,7 +16,6 @@ export async function PATCH(
     shms_project_end_date,
     shms_project_invest_date,
     shms_project_profits_collect_date,
-    shms_project_available_stocks,
     shms_project_total_stocks,
     shms_project_stock_price,
     shms_project_stock_profits,
@@ -71,24 +70,23 @@ export async function PATCH(
         )) as ResultSetHeader)
       : ((await connectDB(
           `UPDATE projects SET
-            shms_project_images = COALESCE(?, shms_project_images),
-            shms_project_name = COALESCE(?, shms_project_name),
-            shms_project_location = COALESCE(?, shms_project_location),
-            shms_project_start_date = COALESCE(?, shms_project_start_date),
-            shms_project_end_date = COALESCE(?, shms_project_end_date),
-            shms_project_invest_date = COALESCE(?, shms_project_invest_date),
-            shms_project_profits_collect_date = COALESCE(?, shms_project_profits_collect_date),
-            shms_project_available_stocks = COALESCE(?, shms_project_available_stocks),
-            shms_project_total_stocks = COALESCE(?, shms_project_total_stocks),
-            shms_project_stock_price = COALESCE(?, shms_project_stock_price),
-            shms_project_stock_profits = COALESCE(?, shms_project_stock_profits),
+            shms_project_images = ?,
+            shms_project_name = ?,
+            shms_project_location = ?,
+            shms_project_start_date = ?,
+            shms_project_end_date = ?,
+            shms_project_invest_date = ?,
+            shms_project_profits_collect_date = ?,
+            shms_project_total_stocks = ?,
+            shms_project_stock_price = ?,
+            shms_project_stock_profits = ?,
             shms_project_special_percentage = ?,
             shms_project_special_percentage_code = ?,
-            shms_project_description = COALESCE(?, shms_project_description),
-            shms_project_terms = COALESCE(?, shms_project_terms),
-            shms_project_study_case = COALESCE(?, shms_project_study_case),
-            shms_project_study_case_visibility = COALESCE(?, shms_project_study_case_visibility),
-            shms_project_status = COALESCE(?, shms_project_status)
+            shms_project_description = ?,
+            shms_project_terms = ?,
+            shms_project_study_case = ?,
+            shms_project_study_case_visibility = ?,
+            shms_project_status = ?
           WHERE shms_project_id = ?`,
           [
             JSON.stringify(shms_project_images),
@@ -98,7 +96,6 @@ export async function PATCH(
             shms_project_end_date,
             shms_project_invest_date,
             shms_project_profits_collect_date,
-            shms_project_available_stocks,
             shms_project_total_stocks,
             shms_project_stock_price,
             shms_project_stock_profits,
@@ -110,8 +107,9 @@ export async function PATCH(
             shms_project_study_case_visibility,
             shms_project_status,
             projectId
-          ].map(param => (param === undefined ? null : param === 'null' ? null : param))
+          ]
         )) as ResultSetHeader)
+    const { affectedRows: projectUpdated } = updateProject as ResultSetHeader
 
     // Step 2: Calculate the difference between the old and new values
     const stocksDifference = oldTotalStocks - shms_project_total_stocks
@@ -124,8 +122,6 @@ export async function PATCH(
       `UPDATE projects SET shms_project_available_stocks = ? WHERE shms_project_id = ?`,
       [newAvailableStocks, projectId]
     )
-
-    const { affectedRows: projectUpdated } = updateProject as ResultSetHeader
 
     return projectUpdated
       ? new Response(
