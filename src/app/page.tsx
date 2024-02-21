@@ -25,27 +25,20 @@ export default function Home() {
         <h1 className='text-2xl md:text-4xl mb-8 md:mb-12'>مرحباً بكم في شمــس</h1>
 
         <h1 style={{ marginTop: 50 }} className='text-2xl md:text-4xl mb-8 md:mb-12'>
-          {' '}
-          رؤيتنا{' '}
+          رؤيتنا
         </h1>
 
         <div className='flex flex-col items-center md:flex-row md:gap-8'>
-          <Link href={'#'}>
-            <div className='flex items-center justify-center md:flex-row md:gap-8'>
-              <Link href={'#'}>
-                <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition flex items-center justify-center'>
-                  <Image
-                    src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
-                    alt='Image 1'
-                    width={500}
-                    height={500}
-                    className='w-full h-full object-cover rounded-full border-4 border-darkgreen'
-                    style={{ maxWidth: '80%' }}
-                  />
-                </div>
-              </Link>
-            </div>
-          </Link>
+          <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition flex items-center justify-center'>
+            <Image
+              src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
+              alt='Image 1'
+              width={500}
+              height={500}
+              className='w-full h-full object-cover rounded-full border-4 border-darkgreen'
+              style={{ maxWidth: '80%' }}
+            />
+          </div>
           <div className='mt-4 md:mt-0'>
             <p className='text-center' style={{ color: 'gray', fontSize: 15 }}>
               ان يكون السودان هو فعليا سلة غذاء العالم وان يكون رائدا بين الدول العربية في
@@ -73,8 +66,7 @@ export default function Home() {
                   استثمار
                 </h2>
                 <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
-                  {' '}
-                  وهي مرحلة تصفح المشاريع المتاحة و شراء الاسهم{' '}
+                  وهي مرحلة تصفح المشاريع المتاحة و شراء الاسهم
                 </p>
                 <Image
                   src='https://www.agroinvestspain.com/wp-content/uploads/2020/05/agricultural-investment.jpeg'
@@ -91,7 +83,6 @@ export default function Home() {
                   }}
                 />
               </div>
-              <div>{/* Content for تحضير */}</div>
             </div>
           </Link>
 
@@ -108,8 +99,7 @@ export default function Home() {
                   تحضير
                 </h2>
                 <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
-                  {' '}
-                  وهية مرحلة تجهيز الارض من نظافة و عزق و حراثة{' '}
+                  وهية مرحلة تجهيز الارض من نظافة و عزق و حراثة
                 </p>
                 <Image
                   src='/preparation.jpg'
@@ -126,7 +116,6 @@ export default function Home() {
                   }}
                 />
               </div>
-              <div>{/* Content for تحضير */}</div>
             </div>
           </Link>
 
@@ -143,8 +132,7 @@ export default function Home() {
                   زراعة
                 </h2>
                 <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
-                  {' '}
-                  وهي مرحلة رمي البذور في الارض ومتابعة الري وسير الزراعة{' '}
+                  وهي مرحلة رمي البذور في الارض ومتابعة الري وسير الزراعة
                 </p>
                 <Image
                   src='/farming.png'
@@ -161,7 +149,6 @@ export default function Home() {
                   }}
                 />
               </div>
-              <div>{/* Content for زراعية */}</div>
             </div>
           </Link>
 
@@ -178,8 +165,7 @@ export default function Home() {
                   حصاد
                 </h2>
                 <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
-                  {' '}
-                  وهية مرحلة جمع المحصول من الارض والبدء بتجهيزه للتخزين{' '}
+                  وهية مرحلة جمع المحصول من الارض والبدء بتجهيزه للتخزين
                 </p>
                 <Image
                   src='/harvest.webp'
@@ -196,13 +182,12 @@ export default function Home() {
                   }}
                 />
               </div>
-              <div>{/* Content for حصاد */}</div>
             </div>
           </Link>
         </div>
 
         <h1 style={{ marginTop: 30 }} className='text-2xl md:text-4xl mb-8 md:mb-12'>
-          معرض الصور{' '}
+          معرض الصور
         </h1>
 
         <div
