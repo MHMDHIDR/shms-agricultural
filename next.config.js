@@ -24,6 +24,21 @@ const nextConfig = {
         pathname: '/**'
       },
       {
+        protocol: 'https',
+        hostname: 'cdn.wikifarmer.com',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.alweb.com',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'banassa.info',
+        pathname: '/**'
+      },
+      {
         protocol: 'http',
         hostname: 'media.kenanaonline.com',
         pathname: '/**'

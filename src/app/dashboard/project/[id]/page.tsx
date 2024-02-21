@@ -347,11 +347,7 @@ export default function EditProjectPage({
   const userType =
     typeof window !== 'undefined' && JSON.parse(String(localStorage.getItem('shms_type')))
 
-  console.log('session -->', session)
-
-  console.log('userType -->', userType)
-
-  return userType !== 'admin' ? (
+  return !session && userType !== 'admin' ? (
     <NotFound />
   ) : (
     <Layout>
@@ -365,8 +361,7 @@ export default function EditProjectPage({
         </Link>
         <form onSubmit={e => handelEditProject(e)}>
           <CardHeader>
-            <CardTitle className='text-center select-none'>
-              تعديل مشروع{' '}
+            <CardTitle className='text-center select-none sm:mb-10 mb-6'>
               <strong>
                 {projectName && projectName.length > 0 ? (
                   abstractWords({ words: projectName, wordsLength: 4, ellipsis: true })
