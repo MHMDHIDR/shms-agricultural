@@ -20,11 +20,6 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'abudhabienv.ae',
-        pathname: '/**'
-      },
-      {
-        protocol: 'https',
         hostname: 'modo3.com',
         pathname: '/**'
       },
@@ -36,6 +31,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'mqalla.com',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.agroinvestspain.com',
         pathname: '/**'
       },
       {

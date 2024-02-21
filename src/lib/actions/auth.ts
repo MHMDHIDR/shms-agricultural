@@ -2,23 +2,18 @@
 
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
-import type { UserProps, UserLoggedInProps } from '@/types'
+import type { UserProps, UserLoggedInProps, getAuthProps, getAuthType } from '@/types'
 
 /**
  * Custom method to check if user is authenticated
  * @returns {Promise<{ isAuth, userType: UserProps['shms_user_account_type'], loading: boolean }>}
  */
-export const getAuth = async (): Promise<{
-  userId: UserProps['shms_id']
-  isAuth: UserProps['loggedIn'] | boolean
-  userType: UserProps['shms_user_account_type']
-  userName?: string
-  loading: boolean
-}> => {
+export const getAuth: getAuthProps = async (): Promise<getAuthType> => {
   let isAuth = false
   let userId = ''
   let userType = ''
   let userName = ''
+  let userStockLimit = 0
   let loading = true
 
   try {
@@ -29,6 +24,7 @@ export const getAuth = async (): Promise<{
       isAuth = user?.token?.user.loggedIn ? true : false
       userType = user?.token?.user.shms_user_account_type ?? 'user' // default to user
       userName = user?.token?.user.shms_fullname ?? ''
+      userStockLimit = user?.token?.user.shms_user_stock_limit ?? 0
     }
     loading = false
   } catch (error) {
@@ -41,6 +37,7 @@ export const getAuth = async (): Promise<{
     isAuth,
     userType: userType as UserProps['shms_user_account_type'],
     userName,
+    userStockLimit,
     loading
   }
 }

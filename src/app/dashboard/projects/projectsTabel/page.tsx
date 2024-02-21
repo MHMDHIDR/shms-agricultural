@@ -143,69 +143,78 @@ export default function ProjectsTable() {
             </TableCell>
           </TableRow>
         ) : (
-          projects.map(project => (
-            <TableRow key={project.shms_project_id}>
-              <TableCell className='min-w-40'>{project.shms_project_name}</TableCell>
-              <TableCell className='min-w-40'>{project.shms_project_location}</TableCell>
-              <TableCell className='min-w-40'>
-                {getProjectDate(project.shms_project_start_date)}
-              </TableCell>
-              <TableCell className='min-w-40'>
-                {getProjectDate(project.shms_project_end_date)}
-              </TableCell>
-              <TableCell className='min-w-40'>
-                {getProjectDate(project.shms_project_invest_date)}
-              </TableCell>
-              <TableCell className='min-w-40'>
-                {project.shms_project_total_stocks}
-              </TableCell>
-              <TableCell className='min-w-40'>
-                {project.shms_project_stock_price}
-              </TableCell>
-              <TableCell className='min-w-40'>
-                {project.shms_project_stock_profits}
-              </TableCell>
-              <TableCell className='min-w-40'>
-                {!project.shms_project_study_case ? (
-                  <span className='text-red-500'>لا يوجد</span>
-                ) : (
-                  <Modal
-                    title={`دراسة الجدوى ${project.shms_project_name}`}
-                    document={
-                      JSON.parse(String(project.shms_project_study_case))[0]
-                        .imgDisplayPath
-                    }
-                    className='font-bold dark:text-white'
-                  >
-                    عرض دراسة الجدوى
-                  </Modal>
-                )}
-              </TableCell>
-              <TableCell
-                className={cn(
-                  'min-w-40',
-                  project.shms_project_status === 'active'
-                    ? 'text-green-500'
-                    : 'text-red-500'
-                )}
-              >
-                {getProjectStatus(project.shms_project_status)}
-              </TableCell>
-              <TableCell className='flex min-w-56 gap-x-2'>
-                <Confirm
-                  variant={'destructive'}
-                  onClick={async () => {
-                    await deleteProject(project.shms_project_id)
-                  }}
+          projects.map(project => {
+            // console.log(
+            //   'Case Study',
+            //   JSON.parse(String(project.shms_project_study_case))[0]?.imgDisplayPath
+            // )
+
+            return (
+              <TableRow key={project.shms_project_id}>
+                <TableCell className='min-w-40'>{project.shms_project_name}</TableCell>
+                <TableCell className='min-w-40'>
+                  {project.shms_project_location}
+                </TableCell>
+                <TableCell className='min-w-40'>
+                  {getProjectDate(project.shms_project_start_date)}
+                </TableCell>
+                <TableCell className='min-w-40'>
+                  {getProjectDate(project.shms_project_end_date)}
+                </TableCell>
+                <TableCell className='min-w-40'>
+                  {getProjectDate(project.shms_project_invest_date)}
+                </TableCell>
+                <TableCell className='min-w-40'>
+                  {project.shms_project_total_stocks}
+                </TableCell>
+                <TableCell className='min-w-40'>
+                  {project.shms_project_stock_price}
+                </TableCell>
+                <TableCell className='min-w-40'>
+                  {project.shms_project_stock_profits}
+                </TableCell>
+                <TableCell className='min-w-40'>
+                  {!project.shms_project_study_case ? (
+                    <span className='text-red-500'>لا يوجد</span>
+                  ) : (
+                    <Modal
+                      title={`دراسة الجدوى ${project.shms_project_name}`}
+                      document={
+                        JSON.parse(String(project.shms_project_study_case))[0]
+                          ?.imgDisplayPath
+                      }
+                      className='font-bold dark:text-white'
+                    >
+                      عرض دراسة الجدوى
+                    </Modal>
+                  )}
+                </TableCell>
+                <TableCell
+                  className={cn(
+                    'min-w-40',
+                    project.shms_project_status === 'active'
+                      ? 'text-green-500'
+                      : 'text-red-500'
+                  )}
                 >
-                  حذف
-                </Confirm>
-                <Link href={'/dashboard/project/' + project.shms_project_id}>
-                  <Button variant={'outline'}>تعديل المشروع</Button>
-                </Link>
-              </TableCell>
-            </TableRow>
-          ))
+                  {getProjectStatus(project.shms_project_status)}
+                </TableCell>
+                <TableCell className='flex min-w-56 gap-x-2'>
+                  <Confirm
+                    variant={'destructive'}
+                    onClick={async () => {
+                      await deleteProject(project.shms_project_id)
+                    }}
+                  >
+                    حذف
+                  </Confirm>
+                  <Link href={'/dashboard/project/' + project.shms_project_id}>
+                    <Button variant={'outline'}>تعديل المشروع</Button>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            )
+          })
         )}
       </TableBody>
     </Table>

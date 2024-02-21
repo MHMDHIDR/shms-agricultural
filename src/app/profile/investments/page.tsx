@@ -16,6 +16,7 @@ import { getProject, getProjectDate } from '@/lib/utils'
 import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 import Contract from './_ShowPDF'
+import Account from '@/app/profile/investments/account/page'
 
 export default async function DashboardInvestors() {
   const { userId } = await getAuth()
@@ -68,6 +69,7 @@ export default async function DashboardInvestors() {
   return (
     <Layout>
       <section className='container mx-auto'>
+        <Account />
         <Card className='min-w-full md:w-[300px] rtl mt-40'>
           <CardContent>
             <CardHeader className='font-bold text-center'>

@@ -192,16 +192,16 @@ export function getProjectStudyCase(
 }
 
 /**
- * A function to get the project duration in arabic
+ * A function to get the project duration in Months
  */
 export function getProjectDuration(projectStartDate: Date, projectEndDate: Date): string {
   const startDate = new Date(projectStartDate)
   const endDate = new Date(projectEndDate)
 
   const diffTime = Math.abs(endDate.getTime() - startDate.getTime())
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  const diffMonths = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 30))
 
-  return diffDays + ' يوم'
+  return diffMonths > 2 ? `${diffMonths} أشهر` : `${diffMonths} شهر`
 }
 
 /**

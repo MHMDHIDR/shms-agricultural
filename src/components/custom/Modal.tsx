@@ -82,8 +82,8 @@ export default function Modal({
           {
             // if document contains pdf in the path then render pdf
             document?.includes('pdf') ? (
-              <div className='w-full min-h-[20rem]'>
-                <iframe src={document} className='w-full' height={700} title={title} />
+              <div className='w-full min-h-[15rem]'>
+                <iframe src={document} className='w-full' height={600} title={title} />
               </div>
             ) : asModalSlider ? (
               <Carousel className='w-full' opts={{ loop: true }}>
@@ -147,8 +147,9 @@ export default function Modal({
         {!asModal && (
           <DialogFooter className='mx-auto sm:justify-start'>
             <DialogClose asChild>
-              <Button type='button' variant='outline'>
-                غلق
+              <Button type='button' variant='outline' className='flex gap-x-2'>
+                <strong>غلق</strong>
+                <span className='text-xl'>&times;</span>
               </Button>
             </DialogClose>
           </DialogFooter>

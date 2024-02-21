@@ -106,6 +106,7 @@ export default function MobileNavigation({
                 <NavigationListItem
                   className='flex items-center justify-start md:gap-1'
                   onClick={async () => {
+                    localStorage.removeItem('shms_stock_limit')
                     await signOut({ redirect: false })
                     replace('/auth/signin')
                   }}

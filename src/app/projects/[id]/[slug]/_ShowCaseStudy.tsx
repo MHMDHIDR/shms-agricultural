@@ -26,7 +26,7 @@ export default function ShowCaseStudy({ project }: { project: ProjectProps }) {
       title={`دراسة الجدوى ${project.shms_project_name}`}
       document={getProjectStudyCase(project.shms_project_study_case) ?? APP_LOGO}
       className='mb-20 font-bold dark:text-white'
-      contentClassName='min-w-[95svw] min-h-[100svh]'
+      contentClassName='min-w-[95svw] min-h-[90svh]'
     >
       عرض دراسة الجدوى
     </Modal>

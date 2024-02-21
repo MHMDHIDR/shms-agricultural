@@ -415,8 +415,10 @@ export default function EditProjectPage({
                   id='projectStartDate'
                   className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
-                  onChange={e => setProjectStartDate(new Date(e.target.value))}
                   defaultValue={projectStartDate?.toISOString().split('T')[0]}
+                  onChange={e => {
+                    e.target.value && setProjectStartDate(new Date(e.target.value))
+                  }}
                 />
               </div>
             </div>
@@ -431,8 +433,10 @@ export default function EditProjectPage({
                   id='projectEndDate'
                   className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
-                  onChange={e => setProjectEndDate(new Date(e.target.value))}
                   defaultValue={projectEndDate?.toISOString().split('T')[0]}
+                  onChange={e => {
+                    e.target.value && setProjectEndDate(new Date(e.target.value))
+                  }}
                 />
               </div>
             </div>
@@ -447,8 +451,10 @@ export default function EditProjectPage({
                   id='projectInvestEndDate'
                   className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
-                  onChange={e => setProjectInvestEndDate(new Date(e.target.value))}
                   defaultValue={projectInvestEndDate?.toISOString().split('T')[0]}
+                  onChange={e => {
+                    e.target.value && setProjectInvestEndDate(new Date(e.target.value))
+                  }}
                 />
               </div>
             </div>
@@ -463,8 +469,10 @@ export default function EditProjectPage({
                   id='projectProfitCollectDate'
                   className='w-full px-4 py-2 leading-tight text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='date'
-                  onChange={e => setProjectInvestEndDate(new Date(e.target.value))}
                   defaultValue={projectProfitCollectDate?.toISOString().split('T')[0]}
+                  onChange={e => {
+                    e.target.value && setProjectInvestEndDate(new Date(e.target.value))
+                  }}
                 />
               </div>
             </div>

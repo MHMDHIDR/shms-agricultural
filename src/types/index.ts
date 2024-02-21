@@ -41,6 +41,16 @@ export type UserProps = {
   userDeleted?: number
 }
 
+export type getAuthType = {
+  userId: UserProps['shms_id']
+  isAuth: UserProps['loggedIn'] | boolean
+  userType: UserProps['shms_user_account_type']
+  userName?: string
+  userStockLimit?: number
+  loading: boolean
+}
+export type getAuthProps = () => Promise<getAuthType>
+
 export type ProjectProps = {
   shms_project_id: string
   shms_project_images: imgsProps[]

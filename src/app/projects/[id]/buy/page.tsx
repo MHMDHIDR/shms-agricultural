@@ -30,7 +30,7 @@ export default function BuyStocks({
   const [isLoading, setIsLoading] = useState(false)
   const [project, setProject] = useState<ProjectProps>()
   // const [userStocks, setUserStocks] = useState<UserProps['shms_user_stocks']>()
-  const [userStockLimit, setUserStockLimit] = useState(0)
+  const [userStockLimit, setUserStockLimit] = useState<number | null>(null)
   const [selectedStocks, setSelectedStocks] = useState(
     JSON.parse(
       typeof window !== 'undefined' ? localStorage.getItem('shms_project')! : '{}'
@@ -187,7 +187,7 @@ export default function BuyStocks({
   return (
     <Layout>
       <section className='flex flex-col mx-auto mt-20 mb-auto'>
-        {isLoading ? (
+        {isLoading || !userStockLimit ? (
           <>
             <LoadingCard className='w-5/6 mx-auto bg-white border border-gray-400' />
             <br />

@@ -112,7 +112,7 @@ export default function Home() {
                   وهية مرحلة تجهيز الارض من نظافة و عزق و حراثة{' '}
                 </p>
                 <Image
-                  src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
+                  src='/preparation.jpg'
                   alt='Image 1'
                   width={500}
                   height={500}
@@ -147,7 +147,7 @@ export default function Home() {
                   وهي مرحلة رمي البذور في الارض ومتابعة الري وسير الزراعة{' '}
                 </p>
                 <Image
-                  src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
+                  src='/farming.png'
                   alt='Image 2'
                   width={500}
                   height={500}
@@ -182,7 +182,7 @@ export default function Home() {
                   وهية مرحلة جمع المحصول من الارض والبدء بتجهيزه للتخزين{' '}
                 </p>
                 <Image
-                  src='https://abudhabienv.ae/wp-content/uploads/2023/05/e239d7db-3eda-4cdb-82b6-1329b2b6a2b8-1050x525.jpg'
+                  src='/harvest.webp'
                   alt='Image 3'
                   width={500}
                   height={500}
