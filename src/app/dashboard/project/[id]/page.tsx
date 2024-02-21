@@ -344,9 +344,14 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
+  const userType =
+    typeof window !== 'undefined' && JSON.parse(String(localStorage.getItem('shms_type')))
+
   console.log('session -->', session)
 
-  return session?.token?.user.shms_user_account_type !== 'admin' ? (
+  console.log('userType -->', userType)
+
+  return userType !== 'admin' ? (
     <NotFound />
   ) : (
     <Layout>
