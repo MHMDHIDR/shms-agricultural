@@ -345,9 +345,9 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
-  return !session || !session.token ? (
-    <LoadingPage />
-  ) : session?.token?.user.shms_user_account_type !== 'admin' ? (
+  console.log('session -->', session)
+
+  return session?.token?.user.shms_user_account_type !== 'admin' ? (
     <NotFound />
   ) : (
     <Layout>
