@@ -26,7 +26,8 @@ export async function PATCH(
     shms_project_study_case,
     shms_project_study_case_visibility,
     shms_project_status,
-    updateImg
+    updateImg,
+    updatePercentage
   }: ProjectProps = await request.json()
 
   if (!projectId) {
@@ -67,6 +68,18 @@ export async function PATCH(
         shms_project_images = ?
       WHERE shms_project_id = ?`,
           [JSON.stringify(shms_project_images), projectId]
+        )) as ResultSetHeader)
+      : updatePercentage
+      ? ((await connectDB(
+          `UPDATE projects SET
+            shms_project_special_percentage = ?,
+            shms_project_special_percentage_code = ?
+          WHERE shms_project_id = ?`,
+          [
+            shms_project_special_percentage,
+            shms_project_special_percentage_code,
+            projectId
+          ]
         )) as ResultSetHeader)
       : ((await connectDB(
           `UPDATE projects SET

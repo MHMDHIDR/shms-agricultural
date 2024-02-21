@@ -141,17 +141,13 @@ export default function Nav() {
                     <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] grid-rows-3 grid-cols-1 lg:w-[500px]'>
                       <NavigationListItem
                         href='/profile/investments'
-                        title='استثماراتي'
-                      ></NavigationListItem>
-                      <NavigationListItem
-                        href='/profile'
-                        title='الملف الشخصي'
+                        title='لوحة التحكم'
                       ></NavigationListItem>
                       {isUserAdmin ? (
                         <NavigationListItem
                           className={`w-full`}
                           href='/dashboard'
-                          title='لوحة التحكم'
+                          title='الإدارة'
                         ></NavigationListItem>
                       ) : null}
                       <NavigationListItem

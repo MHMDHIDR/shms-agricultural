@@ -70,7 +70,8 @@ export default function CountPercentage() {
 
       const { data } = await axios.patch(`${API_URL}/projects/edit/${selectedProject}`, {
         shms_project_special_percentage: percentage,
-        shms_project_special_percentage_code: percentageCode
+        shms_project_special_percentage_code: percentageCode,
+        updatePercentage: true
       })
 
       // make sure to view the response from the data

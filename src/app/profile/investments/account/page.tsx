@@ -52,7 +52,6 @@ export default function Account() {
         <div style={{ marginTop: 20 }} className='flex'>
           {/* First Card */}
           <Card style={{ width: '70%' }} className='rtl p-14 mr-10'>
-            {' '}
             {/* Added mr-4 for margin */}
             <CardContent className='text-center'>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
@@ -85,10 +84,9 @@ export default function Account() {
 
           {/* Second Card (Smaller Card) */}
           <Card style={{ width: '30%' }} className='rtl p-10'>
-            {' '}
             {/* Reduced padding to make it smaller */}
             <CardContent className='text-center'>
-              <h1> personal information </h1>
+              <h1>الملف الشخصي</h1>
             </CardContent>
           </Card>
         </div>

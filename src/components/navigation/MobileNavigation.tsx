@@ -95,11 +95,11 @@ export default function MobileNavigation({
         <AccordionTrigger>{userName}</AccordionTrigger>
         <AccordionContent>
           <ul className='grid min-w-screen w-dvw md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
-            <NavigationListItem href={isAuth ? `/profile` : `/auth/signin`}>
-              {isAuth ? 'الملف الشخصي' : `تسجيل الدخول`}
+            <NavigationListItem href={isAuth ? `/profile/investments` : `/auth/signin`}>
+              {isAuth ? 'لوحة التحكم' : `تسجيل الدخول`}
             </NavigationListItem>
             {isUserAdmin ? (
-              <NavigationListItem href='/dashboard'>لوحة التحكم</NavigationListItem>
+              <NavigationListItem href='/dashboard'>الإدارة</NavigationListItem>
             ) : null}
             {isAuth && (
               <>
@@ -113,10 +113,6 @@ export default function MobileNavigation({
                 >
                   <span className='inline md:hidden dark:text-white'>تسجيل الخروج</span>
                   <LogOut className='text-[#FDB813] inline-block dark:text-[#ffd87e] mr-2' />
-                </NavigationListItem>
-
-                <NavigationListItem href='/profile/investments'>
-                  استثماراتي
                 </NavigationListItem>
               </>
             )}

@@ -71,7 +71,10 @@ export type ProjectProps = {
   shms_project_description: string
   shms_project_terms: string
   shms_project_status: 'active' | 'pending'
+  // only update Image
   updateImg?: boolean
+  // only update Percentage
+  updatePercentage?: boolean
   // When project is added, this is set to 1
   projectAdded?: number
   // When project is updated, this is set to 1
