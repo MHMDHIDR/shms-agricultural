@@ -126,7 +126,7 @@ export default function EditProjectPage({
       setProjectSpecialPercentage(project.shms_project_special_percentage)
       setProjectSpecialPercentageCode(project.shms_project_special_percentage_code)
       setProjectDescription(project.shms_project_description)
-      setProjectTerms(htmlToMd(project.shms_project_terms))
+      setProjectTerms(project.shms_project_terms)
       setCaseStudy(project.shms_project_study_case ?? 0)
       setCaseStudyIsVisible(project.shms_project_study_case_visibility ?? 0)
       setProjectStatus(project.shms_project_status)
@@ -321,9 +321,9 @@ export default function EditProjectPage({
           })
 
         data.projectUpdated === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
-        // setTimeout(() => {
-        //   window.location.href = `/dashboard`
-        // }, DEFAULT_DURATION)
+        setTimeout(() => {
+          window.location.href = `/dashboard`
+        }, DEFAULT_DURATION)
       } catch (error: any) {
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
           {
@@ -580,7 +580,7 @@ export default function EditProjectPage({
                 onChange={handleProjectTermsChange}
                 className='w-full px-4 py-2 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded leading-10 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 placeholder='أدخل شروط المشروع'
-                defaultValue={projectTerms}
+                defaultValue={htmlToMd(projectTerms)}
                 rows={5}
               />
             </div>
