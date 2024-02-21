@@ -187,7 +187,7 @@ export default function BuyStocks({
   return (
     <Layout>
       <section className='flex flex-col mx-auto mt-20 mb-auto'>
-        {isLoading || !userStockLimit ? (
+        {isLoading ? (
           <>
             <LoadingCard className='w-5/6 mx-auto bg-white border border-gray-400' />
             <br />
@@ -235,7 +235,7 @@ export default function BuyStocks({
               </div>
               <div className='md:w-2/3'>
                 <UserStockSelect
-                  userStockLimit={!session ? 100 : userStockLimit ?? 100}
+                  userStockLimit={userStockLimit ?? 100}
                   setSelectedStocks={setSelectedStocks}
                   selectedStocks={selectedStocks}
                 />

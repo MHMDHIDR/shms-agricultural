@@ -62,7 +62,8 @@ const SigninPage = () => {
         setIsSubmittingForm(true)
 
         const results = await signIn('credentials', {
-          redirect: false,
+          redirect: true,
+          callbackUrl: redirectUrl ?? '/',
           emailOrPhone: emailOrPhone.trim().toLowerCase(),
           password
         })
@@ -87,8 +88,6 @@ const SigninPage = () => {
           const { loading } = await getAuth()
           loading ? setIsDoneSubmitting(false) : setIsDoneSubmitting(true)
 
-          const REDIRECT_TO = redirectUrl ?? '/'
-
           toast('تم تسجيل دخولك بنجاح', {
             icon: <Success />,
             position: 'bottom-center',
@@ -102,8 +101,6 @@ const SigninPage = () => {
               textAlign: 'justify'
             }
           })
-          //redirect to the home page if sign in successfully
-          setTimeout(() => replace(REDIRECT_TO), DEFAULT_DURATION / 2)
         }
       } catch (error: any) {
         const message: UserProps['message'] =
