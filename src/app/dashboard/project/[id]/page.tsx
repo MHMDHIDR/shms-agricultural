@@ -470,7 +470,8 @@ export default function EditProjectPage({
                   type='date'
                   defaultValue={projectProfitCollectDate?.toISOString().split('T')[0]}
                   onChange={e => {
-                    e.target.value && setProjectInvestEndDate(new Date(e.target.value))
+                    e.target.value &&
+                      setProjectProfitCollectDate(new Date(e.target.value))
                   }}
                 />
               </div>
