@@ -8,7 +8,7 @@ import {
   YouTubeIcon
 } from '@/components/icons/Socials'
 import { Button } from '@/components/ui/button'
-import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL, SHMS_PHONE } from '@/data/constants'
+import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL } from '@/data/constants'
 import { getProjectDate } from '@/lib/utils'
 import { generatePDFProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -77,6 +77,8 @@ const Invoice = ({
   const {
     investorName,
     projectName,
+    investorPhone,
+    investorEmail,
     stocksPurchased,
     totalAmount,
     totalProfit,
@@ -113,7 +115,7 @@ const Invoice = ({
               userSelect: 'none'
             }}
           >
-            <div>
+            <div className='mx-auto h-40 w-32'>
               <Image
                 src={APP_LOGO}
                 height='100'
@@ -121,14 +123,6 @@ const Invoice = ({
                 alt={APP_TITLE}
                 style={{ width: '150px', height: '100px', marginInline: 'auto' }}
               />
-            </div>
-
-            <div style={{ textAlign: 'center' }}>
-              <h1>{APP_TITLE}</h1>
-              <p style={{ fontSize: '12px', color: '#ccc' }}>{SHMS_EMAIL}</p>
-              <p style={{ fontSize: '12px', color: '#ccc', direction: 'ltr' }}>
-                {SHMS_PHONE}
-              </p>
             </div>
           </div>
 
@@ -143,15 +137,26 @@ const Invoice = ({
             }}
           >
             <div>
-              <p style={{ fontWeight: 'bold', color: '#333' }}>عقد استثمار شراء أسهم</p>
-              <p style={{ color: '#333' }}>{investorName}</p>
-              <p style={{ fontWeight: 'bold', color: '#2a9d8f' }}>{projectName}</p>
+              <p style={{ fontWeight: 'bold', color: '#333' }}>
+                الطرف الأول:
+                <br />
+                <span style={{ fontWeight: 'bold', color: '#333' }}>
+                  شركة {APP_TITLE}
+                </span>
+                <br />
+                <span style={{ fontWeight: 'bold', color: '#333' }}>{SHMS_EMAIL}</span>
+              </p>
             </div>
 
             <div style={{ textAlign: 'right' }}>
-              <p style={{ color: '#333' }}>
-                تاريخ الإنشاء:{' '}
-                <span style={{ color: '#333' }}>{getProjectDate(new Date())}</span>
+              <p style={{ fontWeight: 'bold', color: '#333' }}>
+                الطرف الثاني:
+                <br />
+                <span style={{ fontWeight: 'bold', color: '#333' }}>{investorName}</span>
+                <br />
+                <span style={{ fontWeight: 'bold', color: '#333' }}>{investorPhone}</span>
+                <br />
+                <span style={{ fontWeight: 'bold', color: '#333' }}>{investorEmail}</span>
               </p>
             </div>
           </div>
@@ -222,7 +227,14 @@ const Invoice = ({
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ padding: '10px', textAlign: 'right', color: '#333' }}>
+                  <td
+                    style={{
+                      padding: '10px',
+                      textAlign: 'right',
+                      fontWeight: 'bold',
+                      color: '#2a9d8f'
+                    }}
+                  >
                     {projectName}
                   </td>
                   <td style={{ padding: '10px', textAlign: 'right', color: '#333' }}>
@@ -292,7 +304,7 @@ const Invoice = ({
           {/* projectTerms */}
           <div className='mt-10 p-5 border border-gray-200 rounded-lg rtl text-right'>
             <h4>
-              <strong>شروط المشروع</strong>
+              <strong>شروط العقد</strong>
             </h4>
             <p
               className='text-justify text-gray-600 leading-10'

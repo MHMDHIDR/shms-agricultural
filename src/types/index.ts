@@ -282,6 +282,8 @@ export type InverstorProjectData = {
 export type generatePDFProps = {
   investorName: string
   projectName: string
+  investorPhone?: string
+  investorEmail?: string
   stocksPurchased: number
   totalAmount: number
   totalProfit: number

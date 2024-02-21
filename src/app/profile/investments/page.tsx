@@ -130,6 +130,8 @@ export default async function DashboardInvestors() {
                       }) => {
                         const dataToShow = {
                           investorName: InvestmentCurrentUser[0]?.shms_fullname,
+                          investorPhone: InvestmentCurrentUser[0]?.shms_phone,
+                          investorEmail: InvestmentCurrentUser[0]?.shms_email,
                           projectName,
                           stocksPurchased: stocks,
                           totalAmount: totalPayment,
