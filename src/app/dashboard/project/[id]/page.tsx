@@ -345,6 +345,10 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
+  console.log('session =>', session)
+
+  console.log('!session?.expires =>', !session?.expires)
+
   return session?.user ? (
     <LoadingPage />
   ) : !session?.expires ? (
