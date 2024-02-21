@@ -6,8 +6,6 @@ import Image from 'next/image'
 export default function Home() {
   // get images from backend api (uploaded to dashboard by admin stored in AWS S3)
   const images = [
-    'https://source.unsplash.com/featured/?plants',
-    'https://source.unsplash.com/featured/?nature',
     'https://source.unsplash.com/featured/?flowers',
     'https://source.unsplash.com/featured/?plants',
     'https://source.unsplash.com/featured/?apples',
