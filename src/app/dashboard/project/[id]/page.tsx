@@ -35,7 +35,6 @@ import { toast } from 'sonner'
 import MarkdownIt from 'markdown-it'
 import htmlToMd from 'html-to-md'
 import Drawer from '@/components/custom/Drawer'
-import { LoadingPage } from '@/components/custom/Loading'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
 
