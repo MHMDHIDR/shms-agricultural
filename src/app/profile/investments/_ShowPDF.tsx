@@ -302,7 +302,10 @@ const Invoice = ({
             />
           </div>
 
-          <div style={{ direction: 'rtl', textAlign: 'right', marginTop: '300px' }}>
+          <div
+            style={{ direction: 'rtl', textAlign: 'right' }}
+            className='mt-32 md:mt-80'
+          >
             <p style={{ color: '#666', fontSize: '10px' }}>
               الرقم المرجعي
               <br />
