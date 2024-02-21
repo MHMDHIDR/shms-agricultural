@@ -345,13 +345,9 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
-  console.log('session =>', session)
-
-  console.log('!session?.expires =>', !session?.expires)
-
-  return session?.user ? (
+  return !session || !session.token ? (
     <LoadingPage />
-  ) : !session?.expires ? (
+  ) : session?.token?.user.shms_user_account_type !== 'admin' ? (
     <NotFound />
   ) : (
     <Layout>
