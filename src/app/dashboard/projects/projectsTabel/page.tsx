@@ -144,11 +144,6 @@ export default function ProjectsTable() {
           </TableRow>
         ) : (
           projects.map(project => {
-            // console.log(
-            //   'Case Study',
-            //   JSON.parse(String(project.shms_project_study_case))[0]?.imgDisplayPath
-            // )
-
             return (
               <TableRow key={project.shms_project_id}>
                 <TableCell className='min-w-40'>{project.shms_project_name}</TableCell>

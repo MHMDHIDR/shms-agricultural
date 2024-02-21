@@ -1,12 +1,7 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type {
-  ProjectProps,
-  UserLoggedInProps,
-  UserProps,
-  stocksPurchasedProps
-} from '@/types'
+import type { ProjectProps, UserLoggedInProps } from '@/types'
 import { Suspense, useEffect, useState } from 'react'
 import axios from 'axios'
 import Layout from '@/components/custom/Layout'
@@ -29,8 +24,6 @@ export default function BuyStocks({
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [project, setProject] = useState<ProjectProps>()
-  // const [userStocks, setUserStocks] = useState<UserProps['shms_user_stocks']>()
-  const [userStockLimit, setUserStockLimit] = useState<number | null>(null)
   const [selectedStocks, setSelectedStocks] = useState(
     JSON.parse(
       typeof window !== 'undefined' ? localStorage.getItem('shms_project')! : '{}'
@@ -51,25 +44,6 @@ export default function BuyStocks({
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
   const { data: session }: { data: UserLoggedInProps } = useSession()
-
-  useEffect(() => {
-    if (session?.token?.user?.shms_id) {
-      const getUser = async () => {
-        const { data: shms_user_stocks }: { data: UserProps } = await axios.get(
-          `${API_URL}/users/getUserStocks/${session?.token?.user?.shms_id}`
-        )
-        const userStocks: stocksPurchasedProps[] = JSON.parse(
-          String(shms_user_stocks.shms_user_stocks)
-        )
-
-        setUserStockLimit(
-          calculateStockLimit(session?.token!?.user!, userStocks, projectId)
-        )
-      }
-
-      getUser()
-    }
-  }, [session?.token, projectId])
 
   useEffect(() => {
     const getProject = async () => {
@@ -235,7 +209,11 @@ export default function BuyStocks({
               </div>
               <div className='md:w-2/3'>
                 <UserStockSelect
-                  userStockLimit={userStockLimit ?? 100}
+                  userStockLimit={
+                    (typeof window !== 'undefined' &&
+                      JSON.parse(String(localStorage.getItem('shms_stock_limit')))) ||
+                    100
+                  }
                   setSelectedStocks={setSelectedStocks}
                   selectedStocks={selectedStocks}
                 />
@@ -394,20 +372,4 @@ export default function BuyStocks({
       </section>
     </Layout>
   )
-}
-
-function calculateStockLimit(
-  user: UserProps,
-  userStocks: stocksPurchasedProps[],
-  projectId: string
-) {
-  if (!user || !user?.shms_user_stock_limit) return 100
-
-  // check if the stock in the shms_user_stocks is equal to the projectId
-  const userStocksForProject = userStocks?.reduce(
-    (acc, stock) => (stock.shms_project_id === projectId ? acc + stock.stocks : acc + 0),
-    0
-  )
-
-  return user.shms_user_stock_limit! - (userStocksForProject ?? 0)
 }

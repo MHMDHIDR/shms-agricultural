@@ -8,7 +8,7 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import FormMessage from '@/components/custom/FormMessage'
@@ -38,6 +38,18 @@ const SigninPage = () => {
     setPassword(e.target.value)
   }
 
+  // Refetch the session after sign in
+  useEffect(() => {
+    async function refetchSession() {
+      const { loading, userStockLimit } = await getAuth()
+
+      loading
+        ? setIsDoneSubmitting(false)
+        : localStorage.setItem('shms_stock_limit', JSON.stringify(userStockLimit))
+    }
+    refetchSession()
+  }, [session])
+
   const handelSigninForm = async (e: {
     target: any
     key?: string
@@ -62,8 +74,8 @@ const SigninPage = () => {
         setIsSubmittingForm(true)
 
         const results = await signIn('credentials', {
-          redirect: true,
-          callbackUrl: redirectUrl ?? '/',
+          redirect: false,
+          // callbackUrl: redirectUrl ?? '/',
           emailOrPhone: emailOrPhone.trim().toLowerCase(),
           password
         })
@@ -84,10 +96,6 @@ const SigninPage = () => {
           })
           setIsSubmittingForm(false)
         } else {
-          // check is auth from useSession
-          const { loading } = await getAuth()
-          loading ? setIsDoneSubmitting(false) : setIsDoneSubmitting(true)
-
           toast('تم تسجيل دخولك بنجاح', {
             icon: <Success />,
             position: 'bottom-center',
@@ -101,6 +109,12 @@ const SigninPage = () => {
               textAlign: 'justify'
             }
           })
+
+          if (redirectUrl) {
+            setTimeout(() => {
+              replace(redirectUrl)
+            }, 200)
+          }
         }
       } catch (error: any) {
         const message: UserProps['message'] =
