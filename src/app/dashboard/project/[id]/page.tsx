@@ -347,7 +347,7 @@ export default function EditProjectPage({
 
   return session?.user ? (
     <LoadingPage />
-  ) : !session ? (
+  ) : !session?.expires ? (
     <NotFound />
   ) : (
     <Layout>
@@ -599,7 +599,9 @@ export default function EditProjectPage({
                 id='caseStudyIsVisible'
                 dir='ltr'
                 checked={caseStudyIsVisible === 1}
-                onCheckedChange={isVisible => setCaseStudyIsVisible(isVisible ? 1 : 0)}
+                onCheckedChange={(isVisible: boolean) =>
+                  setCaseStudyIsVisible(isVisible ? 1 : 0)
+                }
               />
               <strong
                 className={cn(
@@ -619,7 +621,9 @@ export default function EditProjectPage({
                 id='projectStatus'
                 dir='ltr'
                 checked={projectStatus === 'active'}
-                onCheckedChange={e => setProjectStatus(e ? 'active' : 'pending')}
+                onCheckedChange={(e: boolean) =>
+                  setProjectStatus(e ? 'active' : 'pending')
+                }
               />
               <strong
                 className={cn(
