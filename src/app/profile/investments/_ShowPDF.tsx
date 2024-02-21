@@ -115,7 +115,7 @@ const Invoice = ({
               userSelect: 'none'
             }}
           >
-            <div className='mx-auto h-40 w-32'>
+            <div className='w-32 h-40 mx-auto'>
               <Image
                 src={APP_LOGO}
                 height='100'
@@ -302,7 +302,7 @@ const Invoice = ({
           </div>
 
           {/* projectTerms */}
-          <div className='mt-10 p-5 border border-gray-200 rounded-lg rtl text-right'>
+          <div className='p-5 mt-10 text-right border border-gray-200 rounded-lg rtl'>
             <h4>
               <strong>شروط العقد</strong>
             </h4>
@@ -327,8 +327,8 @@ const Invoice = ({
 
           <Divider className='my-10' />
 
-          <section className='flex w-full justify-between pt-7 text-xs text-gray-400 text-center'>
-            <div className='flex flex-col gap-y-3 items-start'>
+          <section className='flex justify-between w-full text-xs text-center text-gray-400 pt-7'>
+            <div className='flex flex-col items-start gap-y-3'>
               <div className='flex items-center opacity-80'>
                 <FacebookIcon className='w-5 h-5 md:w-6 md:h-6' />
                 <span className='ml-3'>facebook.com/shmsagri</span>
@@ -346,10 +346,10 @@ const Invoice = ({
                 <span className='ml-3'>twitter.com/@shmsagri</span>
               </div>
             </div>
-            <div className='flex flex-col gap-y-3 items-end'>
-              <span className='text-gray-900 text-sm'>{APP_URL}</span>
-              <span className='text-gray-600 text-sm'>جميع الحقوق محفوظة</span>
-              <p className='text-gray-600 text-sm'>
+            <div className='flex flex-col items-end gap-y-3'>
+              <span className='text-sm text-gray-900'>{APP_URL}</span>
+              <span className='text-sm text-gray-600'>جميع الحقوق محفوظة</span>
+              <p className='text-sm text-gray-600'>
                 &copy; {new Date().getFullYear()} {APP_TITLE}
               </p>
             </div>

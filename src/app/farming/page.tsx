@@ -5,7 +5,7 @@ export default function Farming() {
   return (
     <Layout>
       <main className='flex flex-col items-center justify-center min-h-screen p-24'>
-        <h1 className='text-3xl mb-8'>الزراعة</h1>
+        <h1 className='mb-8 text-3xl'>الزراعة</h1>
 
         <div dir='rtl' style={{ marginTop: 100, justifyContent: 'center' }}>
           <div style={{ margin: 50 }}>

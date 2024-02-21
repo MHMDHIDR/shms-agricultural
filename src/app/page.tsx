@@ -20,20 +20,20 @@ export default function Home() {
     <Layout>
       <Slider images={images} />
       <section className='flex flex-col items-center justify-between min-h-screen p-8 md:p-24'>
-        <h1 className='text-2xl md:text-4xl mb-8 md:mb-12'>مرحباً بكم في شمــس</h1>
+        <h1 className='mb-8 text-2xl md:text-4xl md:mb-12'>مرحباً بكم في شمــس</h1>
 
-        <h1 style={{ marginTop: 50 }} className='text-2xl md:text-4xl mb-8 md:mb-12'>
+        <h1 style={{ marginTop: 50 }} className='mb-8 text-2xl md:text-4xl md:mb-12'>
           رؤيتنا
         </h1>
 
         <div className='flex flex-col items-center md:flex-row md:gap-8'>
-          <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition flex items-center justify-center'>
+          <div className='flex items-center justify-center w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition'>
             <Image
               src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
               alt='Image 1'
               width={500}
               height={500}
-              className='w-full h-full object-cover rounded-full border-4 border-darkgreen'
+              className='object-cover w-full h-full border-4 rounded-full border-darkgreen'
               style={{ maxWidth: '80%' }}
             />
           </div>
@@ -52,7 +52,7 @@ export default function Home() {
           className='grid grid-cols-1 md:grid-cols-4 gap-8'
         >
           <Link href={'/projects'}>
-            <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
+            <div className='w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition'>
               <div>
                 <h2
                   style={{
@@ -71,7 +71,7 @@ export default function Home() {
                   alt='Image 1'
                   width={500}
                   height={500}
-                  className='w-full h-full object-cover'
+                  className='object-cover w-full h-full'
                   style={{
                     aspectRatio: '1/1',
                     borderWidth: 2.5,
@@ -85,7 +85,7 @@ export default function Home() {
           </Link>
 
           <Link href={'/preparation'}>
-            <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
+            <div className='w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition'>
               <div>
                 <h2
                   style={{
@@ -104,7 +104,7 @@ export default function Home() {
                   alt='Image 1'
                   width={500}
                   height={500}
-                  className='w-full h-full object-cover'
+                  className='object-cover w-full h-full'
                   style={{
                     aspectRatio: '1/1',
                     borderWidth: 2.5,
@@ -118,7 +118,7 @@ export default function Home() {
           </Link>
 
           <Link href={'/farming'}>
-            <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
+            <div className='w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition'>
               <div>
                 <h2
                   style={{
@@ -137,7 +137,7 @@ export default function Home() {
                   alt='Image 2'
                   width={500}
                   height={500}
-                  className='w-full h-full object-cover'
+                  className='object-cover w-full h-full'
                   style={{
                     aspectRatio: '1/1',
                     borderWidth: 2.5,
@@ -151,7 +151,7 @@ export default function Home() {
           </Link>
 
           <Link href={'/harvest'}>
-            <div className='w-full md:w-500 md:h-500 bg-transparent hover:opacity-90 hover:-translate-y-1 transition'>
+            <div className='w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition'>
               <div>
                 <h2
                   style={{
@@ -170,7 +170,7 @@ export default function Home() {
                   alt='Image 3'
                   width={500}
                   height={500}
-                  className='w-full h-full object-cover'
+                  className='object-cover w-full h-full'
                   style={{
                     aspectRatio: '1/1',
                     borderWidth: 2.5,
@@ -184,7 +184,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <h1 style={{ marginTop: 30 }} className='text-2xl md:text-4xl mb-8 md:mb-12'>
+        <h1 style={{ marginTop: 30 }} className='mb-8 text-2xl md:text-4xl md:mb-12'>
           معرض الصور
         </h1>
 
@@ -202,7 +202,7 @@ export default function Home() {
               alt='Image 1'
               width={500}
               height={500}
-              className='w-full h-full object-cover'
+              className='object-cover w-full h-full'
               style={{
                 aspectRatio: '1/1',
                 borderWidth: 2.5,
@@ -221,7 +221,7 @@ export default function Home() {
               alt='Image 1'
               width={500}
               height={500}
-              className='w-full h-full object-cover'
+              className='object-cover w-full h-full'
               style={{
                 aspectRatio: '1/1',
                 borderWidth: 2.5,
@@ -240,7 +240,7 @@ export default function Home() {
               alt='Image 1'
               width={500}
               height={500}
-              className='w-full h-full object-cover'
+              className='object-cover w-full h-full'
               style={{
                 aspectRatio: '1/1',
                 borderWidth: 2.5,
@@ -259,7 +259,7 @@ export default function Home() {
               alt='Image 1'
               width={500}
               height={500}
-              className='w-full h-full object-cover'
+              className='object-cover w-full h-full'
               style={{
                 aspectRatio: '1/1',
                 borderWidth: 2.5,

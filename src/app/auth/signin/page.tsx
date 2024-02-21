@@ -155,7 +155,7 @@ const SigninPage = () => {
     <LoadingPage />
   ) : (
     <Layout>
-      <section className='h-screen min-h-screen mt-32 mb-24 w-full'>
+      <section className='w-full h-screen min-h-screen mt-32 mb-24'>
         <CardWrapper
           headerLabel='مرحبا بك'
           backButtonLabel='إنشاء حساب جديد'

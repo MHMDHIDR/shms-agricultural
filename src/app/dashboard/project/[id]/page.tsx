@@ -378,7 +378,7 @@ export default function EditProjectPage({
         </Link>
         <form onSubmit={e => handelEditProject(e)}>
           <CardHeader>
-            <CardTitle className='text-center select-none sm:mb-10 mb-6'>
+            <CardTitle className='mb-6 text-center select-none sm:mb-10'>
               <strong>
                 {projectName && projectName.length > 0 ? (
                   abstractWords({ words: projectName, wordsLength: 4, ellipsis: true })

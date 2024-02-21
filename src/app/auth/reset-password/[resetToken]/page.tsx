@@ -136,7 +136,7 @@ const ForgotPasswordPage = ({
     <LoadingPage />
   ) : validateUUID(resetToken) ? null : (
     <Layout>
-      <section className='h-screen min-h-screen mt-32 mb-24 w-full'>
+      <section className='w-full h-screen min-h-screen mt-32 mb-24'>
         <CardWrapper
           heading={HEADING}
           backButtonLabel='تسجيل الدخول'
