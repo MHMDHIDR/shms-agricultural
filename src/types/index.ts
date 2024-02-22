@@ -54,6 +54,7 @@ export type getAuthType = {
   withdrawableAmount?: UserProps['shms_user_withdrawable_balance']
   loading: boolean
 }
+
 export type getAuthProps = () => Promise<getAuthType>
 
 export type ProjectProps = {
@@ -88,6 +89,15 @@ export type ProjectProps = {
   projectDeleted?: number
   // When a project action happens
   message?: string
+}
+
+export type withdrawActionsProps = {
+  shms_withdraw_id: string
+  shms_created_at: string
+  shms_user_id: UserProps['shms_id']
+  shms_withdraw_amount: number
+  shms_action_type: 'withdraw' | 'deposit'
+  withdraw_withdraw_status: 'pending' | 'completed' | 'rejected'
 }
 
 export type shms_formSignupDataProps = {

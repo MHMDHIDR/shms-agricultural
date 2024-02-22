@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import axios from 'axios'
 import { Info } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { Error, Success } from '@/components/icons/Status'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import type { UserProps, getAuthType } from '@/types'
@@ -25,6 +26,7 @@ export default function NewWithdraw() {
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+  const { replace } = useRouter()
 
   useEffect(() => {
     setWithdrawAmountLimit(withdrawableAmount)
@@ -72,6 +74,7 @@ export default function NewWithdraw() {
               textAlign: 'justify'
             }
           })
+        setTimeout(() => replace(`/profile/investments`), DEFAULT_DURATION)
       } catch (error: any) {
         const message: UserProps['message'] =
           error?.response?.data?.message ?? 'حدث خطأ ما'

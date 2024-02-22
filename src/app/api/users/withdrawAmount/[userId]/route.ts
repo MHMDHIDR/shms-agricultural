@@ -37,12 +37,12 @@ export async function POST(
   try {
     // create new user
     await connectDB(
-      `INSERT INTO withdraw_actions (shms_withdraw_amount) WHERE shms_user_id = ? VALUES (?, ?)`,
+      `INSERT INTO withdraw_actions (shms_withdraw_amount, shms_user_id) VALUES (?, ?)`,
       [withdrawAmount, userId]
     )
 
     //send the user an email with a link to activate his/her account
-    const buttonLink = APP_URL + `/investments/withdraw`
+    const buttonLink = APP_URL + `/profile/investments/withdraw`
 
     const emailData = {
       from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
@@ -51,13 +51,13 @@ export async function POST(
       msg: {
         title: 'طلب سحب رصيد من حسابك في شمس للخدمات الزراعية',
         msg: `
-            مرحباً، ${userExists.shms_fullname}!
+          مرحباً، ${userExists.shms_fullname}!
 
-             شكراً لإرسال طلب سحب الرصيد من شمس.
-             سيتم مراجعة طلبك وإشعارك بالرد عليه في أقرب وقت ممكن.
+          شكراً لإرسال طلب سحب الرصيد من شمس.
 
-          إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك مشكلة ما، يرجى تجاهل هذا البريد من فضلك!
-            `,
+          مبلغ السحب: ${withdrawAmount} ريال قطري فقط.
+
+          بمجرد مراجعة طلبك، سيتم إشعارك بحالة الطلب.`,
         buttonLink,
         buttonLabel: 'مراجعة الطلب'
       }

@@ -17,7 +17,7 @@ export default async function Account() {
       <Card className='flex-1 pt-10 pb-0 rtl'>
         {/* Added mr-4 for margin */}
         <CardContent className='text-center'>
-          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+          <div className='grid grid-cols-1 gap-4 select-none md:grid-cols-2'>
             {/* First Grid Item */}
             <div className='space-y-2 divide-y divide-gray-300'>
               <h1 className='text-lg font-bold'>الرصيد الكلي</h1>

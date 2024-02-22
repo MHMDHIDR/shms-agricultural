@@ -3,7 +3,8 @@ import type {
   ProjectProps,
   UserProps,
   abstractWordsProps,
-  validateFileProps
+  validateFileProps,
+  withdrawActionsProps
 } from '@/types'
 import axios from 'axios'
 import { clsx, type ClassValue } from 'clsx'
@@ -143,6 +144,26 @@ export async function getUser(
 }
 
 /**
+ * A function to get the user money operations (for a single user)
+ * Example of usage:
+ * getting the user withdrawable balance
+ * also getting the deposit balance
+ * @param userId
+ * @returns Promise<withdrawActionsProps | undefined>
+ */
+export async function getUserMoneyOperations(
+  userId: withdrawActionsProps['shms_user_id']
+): Promise<withdrawActionsProps[] | undefined> {
+  const {
+    data: withdrawActions
+  }: {
+    data: withdrawActionsProps[]
+  } = await axios.get(`${API_URL}/withdrawActions/get/${userId}`)
+
+  return withdrawActions
+}
+
+/**
  * A function to get the project date in arabic
  * @param {Date} date
  * @returns {string} arabic date
@@ -192,7 +213,15 @@ export const removeSlug = (txt: string) => txt?.replace(/-/g, ' ')
  * @returns {string} arabic status
  */
 export function getProjectStatus(status: string): string {
-  return status === 'active' ? 'مفعل' : status === 'pending' ? 'قيد التفعيل' : status
+  return status === 'active'
+    ? 'مفعل'
+    : status === 'pending'
+    ? 'قيد التفعيل'
+    : status === 'withdraw'
+    ? 'ســـحب رصيد'
+    : status === 'deposit'
+    ? 'إيـــــــداع رصيد'
+    : status
 }
 
 /**
@@ -250,3 +279,16 @@ export const redirect = (url: string, time: number = DEFAULT_DURATION) =>
   window.location
     ? setTimeout(() => ((window as any).location = url), time)
     : setTimeout(() => ((window as any).location.replace = url), time)
+
+/*
+ * A function to copy a string to the clipboard
+ * @param code the string to be copied to the clipboard
+ * @returns void
+ * */
+export const handleCopyToClipboard = async (code: string) => {
+  try {
+    await navigator.clipboard.writeText(code)
+  } catch (error) {
+    console.error('Failed to copy:', error)
+  }
+}

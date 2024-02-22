@@ -29,7 +29,7 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { scrollToView } from '@/lib/utils'
 import Divider from '@/components/custom/Divider'
-import { Copy } from 'lucide-react'
+import Copy from '@/components/custom/Copy'
 
 export default function CountPercentage() {
   const [projects, setProjects] = useState<ProjectProps[]>([])
@@ -54,14 +54,6 @@ export default function CountPercentage() {
   useEffect(() => {
     getProjects()
   }, [percentageCodeDeleted])
-
-  const handleCopyToClipboard = async (code: string) => {
-    try {
-      await navigator.clipboard.writeText(code)
-    } catch (error) {
-      console.error('Failed to copy:', error)
-    }
-  }
 
   const handleSubmitPercentage = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -418,14 +410,7 @@ export default function CountPercentage() {
                         {project.shms_project_name}
                       </TableCell>
                       <TableCell className='min-w-40 flex justify-center items-center gap-x-1.5'>
-                        <Copy
-                          className='cursor-pointer opacity-70 hover:opacity-100'
-                          onClick={() =>
-                            handleCopyToClipboard(
-                              project.shms_project_special_percentage_code
-                            )
-                          }
-                        />
+                        <Copy text={project.shms_project_special_percentage_code} />
                         {project.shms_project_special_percentage_code}
                       </TableCell>
                       <TableCell className='min-w-40'>
