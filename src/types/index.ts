@@ -34,6 +34,8 @@ export type UserProps = {
   // When user is activated, this is set to 1
   userActivated?: number
   // When user forgot password, this is set to 1
+  userWithdrawnBalance?: number
+  // When user forgot password, this is set to 1
   forgotPassSent?: number
   // When user reset password, this is set to 1
   newPassSet?: number

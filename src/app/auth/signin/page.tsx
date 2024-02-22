@@ -41,13 +41,15 @@ const SigninPage = () => {
   // Refetch the session after sign in
   useEffect(() => {
     async function refetchSession() {
-      const { loading, userStockLimit, userType, withdrawableAmount } = await getAuth()
+      const { loading, userId, userStockLimit, userType, withdrawableAmount } =
+        await getAuth()
 
       loading
         ? setIsDoneSubmitting(false)
         : localStorage.setItem(
             'shms_user_data',
             JSON.stringify({
+              userId,
               userStockLimit,
               userType,
               withdrawableAmount

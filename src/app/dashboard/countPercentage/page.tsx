@@ -187,14 +187,10 @@ export default function CountPercentage() {
         <CardWrapper
           heading='اضافة رمز زيادة ربح جديد '
           backButtonHref='/auth/signup'
-          className='md:w-[55rem]'
+          className='w-full mx-auto'
         >
-          <form
-            className='container w-full min-w-max'
-            dir='rtl'
-            onSubmit={handleSubmitPercentage}
-          >
-            <div className='justify-center mb-6 md:flex md:items-center'>
+          <form dir='rtl' onSubmit={handleSubmitPercentage}>
+            <div className='flex items-center justify-center'>
               <div className='md:w-2/3'>
                 {/* <Card className='flex items-center justify-center p-4 rtl'> */}
                 <div className='mb-6 md:flex md:items-center'>
