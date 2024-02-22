@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/card'
 import Copy from '@/components/custom/Copy'
 import OperationAction from './_OperationAction'
+import NoRecords from '@/components/custom/NoRecords'
 
 export default async function MoneyOperations() {
   const withdrawActions = (await getUserMoneyOperations()) as withdrawActionsProps[]
@@ -62,13 +63,19 @@ export default async function MoneyOperations() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {!withdrawActions || withdrawActions.length === 0 ? (
+              {!withdrawActions ? (
                 <TableRow>
                   <TableCell colSpan={15} className='space-y-6'>
                     <Skeleton className='w-full h-12' />
                     <Skeleton className='w-full h-12' />
                     <Skeleton className='w-full h-12' />
                     <Skeleton className='w-full h-12' />
+                  </TableCell>
+                </TableRow>
+              ) : withdrawActions.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={15} className='space-y-6'>
+                    <NoRecords msg='لم يتم العثور على عمليات سحب أو إيداع!' />
                   </TableCell>
                 </TableRow>
               ) : (

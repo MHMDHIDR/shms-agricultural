@@ -53,6 +53,7 @@ export default function OperationAction({
             textAlign: 'justify'
           }
         })
+        // Redirect to dashboard after updating the withdraw status
         redirect('/dashboard')
       } else {
         toast('عفواً حدث خطأ ما أثناء تحديث حالة المعاملة', {

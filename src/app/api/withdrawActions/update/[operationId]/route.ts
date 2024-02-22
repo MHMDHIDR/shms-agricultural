@@ -56,7 +56,7 @@ export async function PATCH(
   try {
     // create new user
     withdraw_withdraw_status === 'deleted'
-      ? await connectDB(`DELETE FROM withdraw_actions SET WHERE shms_withdraw_id = ?`, [
+      ? await connectDB(`DELETE FROM withdraw_actions WHERE shms_withdraw_id = ?`, [
           operationId
         ])
       : await connectDB(
@@ -75,7 +75,7 @@ export async function PATCH(
           ? 'تم الموافقة على'
           : withdraw_withdraw_status === 'rejected'
           ? 'تم رفض'
-          : 'تم تحديث'
+          : 'تم حذف'
       } طلب ${
         operationExists?.shms_action_type === 'withdraw' ? 'سحب' : 'إيداع'
       } رصيد في حسابك رصيد | شمس للخدمات الزراعية`,
@@ -85,7 +85,7 @@ export async function PATCH(
             ? 'تم الموافقة على'
             : withdraw_withdraw_status === 'rejected'
             ? 'تم رفــض'
-            : 'تم تحديث'
+            : 'تم حذف'
         } طلب ${operationExists?.shms_action_type === 'withdraw' ? 'سحب' : 'إيداع'} رصيد`,
         msg: `
           مرحباً، ${userExists.shms_fullname}!
@@ -99,7 +99,7 @@ export async function PATCH(
             ? 'تم الموافقة'
             : withdraw_withdraw_status === 'rejected'
             ? 'تم الرفض'
-            : 'تم تحديث'
+            : 'تم الحذف'
         }.
 
           مبلغ السحب: ${operationExists?.shms_withdraw_amount} ريال قطري فقط.`,

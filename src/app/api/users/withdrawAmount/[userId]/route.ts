@@ -1,6 +1,7 @@
 import { connectDB } from '@/api/utils/db'
 import email from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
+import { randomUUID } from 'crypto'
 import type { UserProps } from '@/types'
 
 export async function POST(
@@ -35,10 +36,12 @@ export async function POST(
   }
 
   try {
+    const referenceCode = randomUUID()
+
     // create new user
     await connectDB(
-      `INSERT INTO withdraw_actions (shms_withdraw_amount, shms_user_id) VALUES (?, ?)`,
-      [withdrawAmount, userId]
+      `INSERT INTO withdraw_actions (shms_withdraw_id, shms_withdraw_amount, shms_user_id) VALUES (?, ?, ?)`,
+      [referenceCode, withdrawAmount, userId]
     )
 
     //send the user an email with a link to activate his/her account

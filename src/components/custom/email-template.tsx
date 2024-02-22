@@ -10,6 +10,12 @@ import {
   Section,
   Text
 } from '@react-email/components'
+import {
+  FacebookIcon,
+  InstagramIcon,
+  TwitterIcon,
+  YouTubeIcon
+} from '@/components/icons/Socials'
 
 export const EmailTemplate = ({
   title,
@@ -156,6 +162,37 @@ export const EmailTemplate = ({
               <br />
               جميع الحقوق محفوظة © {new Date().getFullYear()}
             </Text>
+
+            <section className='flex items-center justify-center w-full h-12 rtl gap-x-20'>
+              <a
+                className='transition opacity-60 hover:opacity-90 hover:-translate-y-1'
+                href='https://facebook.com'
+                target='_blank'
+              >
+                <FacebookIcon style={{ width: 12, height: 12 }} />
+              </a>
+              <a
+                className='transition opacity-60 hover:opacity-90 hover:-translate-y-1'
+                href='https://instagram.com/shmsagri'
+                target='_blank'
+              >
+                <InstagramIcon style={{ width: 12, height: 12 }} />
+              </a>
+              <a
+                className='transition opacity-60 hover:opacity-90 hover:-translate-y-1'
+                href='https://youtube.com'
+                target='_blank'
+              >
+                <YouTubeIcon style={{ width: 12, height: 12 }} />
+              </a>
+              <a
+                className='transition opacity-60 hover:opacity-90 hover:-translate-y-1'
+                href='https://twitter.com'
+                target='_blank'
+              >
+                <TwitterIcon style={{ width: 12, height: 12 }} />
+              </a>
+            </section>
 
             {buttonLink &&
               (buttonLink.includes('reset-password') ||

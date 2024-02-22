@@ -24,8 +24,10 @@ export default function NewWithdraw() {
     getAuthType['withdrawableAmount'] | null
   >(null)
   const [withdrawAmount, setWithdrawAmount] = useState('')
-  const [isSubmittingForm, setIsSubmittingForm] = useState(false)
-  const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+  const [formStatus, setFormStatus] = useState({
+    isSubmitting: false,
+    isSubmittingDone: false
+  })
   const { replace } = useRouter()
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export default function NewWithdraw() {
     } else {
       try {
         resetFormErrors()
-        setIsSubmittingForm(true)
+        setFormStatus({ ...formStatus, isSubmitting: true })
 
         const withdrawFromBalance: { data: UserProps } = await axios.post(
           `${API_URL}/users/withdrawAmount/${userId}`,
@@ -93,7 +95,7 @@ export default function NewWithdraw() {
         })
         console.error('Error', error)
       } finally {
-        setIsDoneSubmitting(true)
+        setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
       }
     }
   }
@@ -153,18 +155,18 @@ export default function NewWithdraw() {
           {/* Submit Button */}
           <div className='md:flex md:items-center'>
             <Button
-              disabled={isDoneSubmitting}
+              disabled={formStatus.isSubmitting}
               type='submit'
               className={`shadow w-full bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold${
-                isDoneSubmitting ? ' cursor-not-allowed opacity-50' : ''
+                formStatus.isSubmitting ? ' cursor-progress opacity-50' : ''
               }`}
             >
-              {isSubmittingForm ? (
+              {formStatus.isSubmitting ? (
                 <>
                   <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
                   جاري تنفيذ العملية ...
                 </>
-              ) : isDoneSubmitting ? (
+              ) : formStatus.isSubmittingDone ? (
                 <>
                   <Success />
                   تم تنفيذ العملية .. جاري تحويلك

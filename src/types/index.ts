@@ -224,6 +224,7 @@ export type MenuItemsProps = {
 }[]
 
 export type NoItemsProps = {
+  className?: string
   msg?: string
   links?: {
     to: string
