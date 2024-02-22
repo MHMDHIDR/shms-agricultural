@@ -3,7 +3,7 @@
 import { DEFAULT_DURATION } from '@/data/constants'
 import { getAuth } from '@/lib/actions/auth'
 import { validatePasswordStrength } from '@/lib/utils'
-import type { UserLoggedInProps, UserProps } from '@/types'
+import type { UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
@@ -41,15 +41,18 @@ const SigninPage = () => {
   // Refetch the session after sign in
   useEffect(() => {
     async function refetchSession() {
-      const { loading, userStockLimit, userType } = await getAuth()
+      const { loading, userStockLimit, userType, withdrawableAmount } = await getAuth()
 
       loading
         ? setIsDoneSubmitting(false)
-        : localStorage.setItem('shms_stock_limit', JSON.stringify(userStockLimit))
-
-      loading
-        ? setIsDoneSubmitting(false)
-        : localStorage.setItem('shms_type', JSON.stringify(userType))
+        : localStorage.setItem(
+            'shms_user_data',
+            JSON.stringify({
+              userStockLimit,
+              userType,
+              withdrawableAmount
+            } as getAuthType)
+          )
     }
     refetchSession()
   }, [session])

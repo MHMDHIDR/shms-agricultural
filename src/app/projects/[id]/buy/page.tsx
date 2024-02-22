@@ -1,7 +1,7 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { ProjectProps, UserLoggedInProps } from '@/types'
+import type { ProjectProps, UserLoggedInProps, getAuthType } from '@/types'
 import { Suspense, useEffect, useState } from 'react'
 import axios from 'axios'
 import Layout from '@/components/custom/Layout'
@@ -158,6 +158,10 @@ export default function BuyStocks({
     )
   }
 
+  const userStockLimit: getAuthType['userStockLimit'] =
+    typeof window !== 'undefined' &&
+    JSON.parse(String(localStorage.getItem('shms_user_data'))).userStockLimit
+
   return (
     <Layout>
       <section className='flex flex-col mx-auto mt-20 mb-auto'>
@@ -209,11 +213,7 @@ export default function BuyStocks({
               </div>
               <div className='md:w-2/3'>
                 <UserStockSelect
-                  userStockLimit={
-                    (typeof window !== 'undefined' &&
-                      JSON.parse(String(localStorage.getItem('shms_stock_limit')))) ||
-                    100
-                  }
+                  userStockLimit={userStockLimit || 100}
                   setSelectedStocks={setSelectedStocks}
                   selectedStocks={selectedStocks}
                 />

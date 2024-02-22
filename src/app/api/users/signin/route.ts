@@ -57,6 +57,7 @@ export async function POST(req: Request) {
           shms_doc: user.shms_doc,
           shms_user_account_type: user.shms_user_account_type,
           shms_user_stock_limit: user.shms_user_stock_limit,
+          shms_user_withdrawable_balance: user.shms_user_withdrawable_balance,
           shms_user_stocks: user.shms_user_stocks,
           message: 'تم تسجيل الدخول بنجاح'
         })

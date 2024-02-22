@@ -158,7 +158,7 @@ export default function Nav() {
                       <Button
                         className='flex w-full cursor-pointer gap-x-2'
                         onClick={async () => {
-                          localStorage.removeItem('shms_stock_limit')
+                          localStorage.removeItem('shms_user_data')
                           await signOut({ redirect: false })
                           replace('/auth/signin')
                         }}

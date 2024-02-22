@@ -25,7 +25,7 @@ import {
   validateFile
 } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
-import type { ProjectProps, UserLoggedInProps } from '@/types'
+import type { ProjectProps, UserLoggedInProps, getAuthType } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { ArrowBigRight } from 'lucide-react'
@@ -359,8 +359,9 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
-  const userType =
-    typeof window !== 'undefined' && JSON.parse(String(localStorage.getItem('shms_type')))
+  const userType: getAuthType['userType'] =
+    typeof window !== 'undefined' &&
+    JSON.parse(String(localStorage.getItem('shms_user_data'))).userType
 
   return !session && userType !== 'admin' ? (
     <NotFound />
@@ -578,7 +579,7 @@ export default function EditProjectPage({
               </Label>
               <textarea
                 onChange={handleProjectTermsChange}
-                className='w-full px-4 py-2 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded leading-10 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                className='w-full px-4 py-2 leading-10 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 placeholder='أدخل شروط المشروع'
                 defaultValue={htmlToMd(projectTerms)}
                 rows={5}

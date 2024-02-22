@@ -47,8 +47,9 @@ export type getAuthType = {
   userId: UserProps['shms_id']
   isAuth: UserProps['loggedIn'] | boolean
   userType: UserProps['shms_user_account_type']
-  userName?: string
-  userStockLimit?: number
+  userName?: UserProps['shms_fullname']
+  userStockLimit?: UserProps['shms_user_stock_limit']
+  withdrawableAmount?: UserProps['shms_user_withdrawable_balance']
   loading: boolean
 }
 export type getAuthProps = () => Promise<getAuthType>

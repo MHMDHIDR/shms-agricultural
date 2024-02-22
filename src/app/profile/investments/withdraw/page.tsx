@@ -3,7 +3,7 @@
 import { DEFAULT_DURATION } from '@/data/constants'
 import { getAuth } from '@/lib/actions/auth'
 import { validatePasswordStrength } from '@/lib/utils'
-import type { UserLoggedInProps, UserProps } from '@/types'
+import type { UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -134,7 +134,11 @@ export default function WithDrawPage() {
     setWithdrawAmountError('')
   }
 
-  return !session?.expires ? (
+  const { userType, withdrawableAmount }: getAuthType =
+    typeof window !== 'undefined' &&
+    JSON.parse(String(localStorage.getItem('shms_user_data')))
+
+  return !session && userType !== 'admin' ? (
     <NotFound />
   ) : session?.user ? (
     <LoadingPage />
@@ -157,7 +161,7 @@ export default function WithDrawPage() {
               <div className='md:w-1/3'>
                 <label
                   htmlFor='withdraw-amount'
-                  className='block pl-4 mb-1 font-bold text-gray-500 md:text-right md:mb-0'
+                  className='block pl-4 mb-1 font-bold text-gray-500 select-none md:text-right md:mb-0'
                 >
                   الرصيد الذي ترغب في سحبه
                 </label>
@@ -170,11 +174,13 @@ export default function WithDrawPage() {
                   type='number'
                   inputMode='numeric'
                   placeholder='يرجى إدخال الرصيد الذي ترغب في سحبه'
+                  autoFocus
+                  autoSave='on'
                 />
-                <small className='block mt-1 text-xs text-gray-500 md:text-right'>
+                <small className='block mt-1 text-xs text-gray-500 select-none md:text-right'>
                   تستطيع سحب الرصيد حتى مبلغ
                   <strong className='mr-2' data-price>
-                    {10.0}
+                    {withdrawableAmount}
                   </strong>
                 </small>
               </div>
@@ -200,7 +206,7 @@ export default function WithDrawPage() {
                     تم تنفيذ العملية .. جاري تحويلك
                   </>
                 ) : (
-                  'عملية سحب'
+                  'طلب عملية سحب'
                 )}
               </Button>
             </div>

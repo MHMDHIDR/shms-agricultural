@@ -6,7 +6,7 @@ export default function Account() {
   return (
     <div className='flex flex-col items-center justify-center gap-5 mt-10 md:flex-row'>
       {/* First Card */}
-      <Card className='flex-1 p-10 rtl'>
+      <Card className='flex-1 pt-10 pb-0 rtl'>
         {/* Added mr-4 for margin */}
         <CardContent className='text-center'>
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
