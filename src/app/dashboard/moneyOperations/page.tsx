@@ -103,11 +103,12 @@ export default async function MoneyOperations() {
                       <TableCell className='min-w-40'>
                         {/* Toggle User Status Button */}
                         <OperationAction withdrawAction={withdrawAction}>
-                          {withdrawAction.withdraw_withdraw_status === 'pending'
+                          {withdrawAction.withdraw_withdraw_status === 'pending' ||
+                          withdrawAction.withdraw_withdraw_status === 'rejected'
                             ? 'قبول العملية'
                             : withdrawAction.withdraw_withdraw_status === 'completed'
                             ? 'رفـض العملية'
-                            : 'حذف العملية'}
+                            : ''}
                         </OperationAction>
                       </TableCell>
                     </TableRow>

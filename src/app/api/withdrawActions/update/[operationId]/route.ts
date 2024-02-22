@@ -55,10 +55,14 @@ export async function PATCH(
 
   try {
     // create new user
-    await connectDB(
-      `UPDATE withdraw_actions SET withdraw_withdraw_status = ? WHERE shms_withdraw_id = ?`,
-      [withdraw_withdraw_status, operationId]
-    )
+    withdraw_withdraw_status === 'deleted'
+      ? await connectDB(`DELETE FROM withdraw_actions SET WHERE shms_withdraw_id = ?`, [
+          operationId
+        ])
+      : await connectDB(
+          `UPDATE withdraw_actions SET withdraw_withdraw_status = ? WHERE shms_withdraw_id = ?`,
+          [withdraw_withdraw_status, operationId]
+        )
 
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments/withdraw`
@@ -68,23 +72,21 @@ export async function PATCH(
       to: userExists.shms_email,
       subject: `${
         withdraw_withdraw_status === 'completed'
-          ? 'تم الموافقة'
+          ? 'تم الموافقة على'
           : withdraw_withdraw_status === 'rejected'
-          ? 'تم الرفض'
+          ? 'تم رفض'
           : 'تم تحديث'
-      } على طلب ${
+      } طلب ${
         operationExists?.shms_action_type === 'withdraw' ? 'سحب' : 'إيداع'
       } رصيد في حسابك رصيد | شمس للخدمات الزراعية`,
       msg: {
         title: `${
           withdraw_withdraw_status === 'completed'
-            ? 'تم الموافقة'
+            ? 'تم الموافقة على'
             : withdraw_withdraw_status === 'rejected'
-            ? 'تم الرفض'
+            ? 'تم رفــض'
             : 'تم تحديث'
-        } على طلب ${
-          operationExists?.shms_action_type === 'withdraw' ? 'سحب' : 'إيداع'
-        } رصيد في حسابك رصيد | شمس للخدمات الزراعية`,
+        } طلب ${operationExists?.shms_action_type === 'withdraw' ? 'سحب' : 'إيداع'} رصيد`,
         msg: `
           مرحباً، ${userExists.shms_fullname}!
 
@@ -113,11 +115,11 @@ export async function PATCH(
           withdrawUpdated: 1,
           message: `${
             withdraw_withdraw_status === 'completed'
-              ? 'تم الموافقة'
+              ? 'تم الموافقة على'
               : withdraw_withdraw_status === 'rejected'
-              ? 'تم الرفض'
+              ? 'تم رفض'
               : 'تم تحديث'
-          } على الطلب بنجاح 👍🏼`
+          } الطلب بنجاح 👍🏼`
         }),
         { status: 201 }
       )

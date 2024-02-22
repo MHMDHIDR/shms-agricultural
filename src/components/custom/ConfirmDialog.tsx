@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button, ButtonProps } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -12,12 +12,12 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { Success } from '../icons/Status'
-
+import { Success } from '@/components/icons/Status'
 export function ConfirmDialog({
   StockLimit = 1,
   onClick,
   onChange,
+  variant,
   formStatus,
   children,
   heading = children as string | undefined
@@ -25,6 +25,7 @@ export function ConfirmDialog({
   StockLimit?: number
   onClick: () => void
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  variant?: ButtonProps['variant']
   formStatus: { isSubmitting: boolean; isSubmittingDone: boolean }
   children: React.ReactNode
   heading?: string
@@ -34,7 +35,7 @@ export function ConfirmDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='outline'>{children}</Button>
+        <Button variant={variant ?? 'outline'}>{children}</Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px] rtl'>
         <DialogHeader>

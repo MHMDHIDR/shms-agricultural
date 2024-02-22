@@ -10,6 +10,7 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import type { ConfirmProps } from '@/types'
 
 export default function Confirm({
@@ -20,15 +21,25 @@ export default function Confirm({
   className,
   children,
   imageId,
-  shmsProjectImages
+  shmsProjectImages,
+  formStatus
 }: ConfirmProps) {
+  const { isSubmitting } = formStatus ?? {
+    isSubmitting: false
+  }
+
   return (
     <AlertDialog>
       <AlertDialogTrigger
         className={`w-full${isLoading ? ' cursor-progress' : ''}`}
         disabled={isLoading}
       >
-        <Button variant={variant} asSpan className={className}>
+        <Button
+          variant={variant}
+          asSpan
+          className={cn(isSubmitting ? 'cursor-progress opacity-75' : '', className)}
+          disabled={isSubmitting}
+        >
           {children ?? 'إجراء'}
         </Button>
       </AlertDialogTrigger>

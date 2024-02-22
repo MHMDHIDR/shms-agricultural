@@ -97,7 +97,7 @@ export type withdrawActionsProps = {
   shms_user_id: UserProps['shms_id']
   shms_withdraw_amount: number
   shms_action_type: 'withdraw' | 'deposit'
-  withdraw_withdraw_status: 'pending' | 'completed' | 'rejected'
+  withdraw_withdraw_status: 'pending' | 'completed' | 'rejected' | 'deleted'
   // When withdraw action happens
   message?: string
   // When withdraw is added, this is set to 1
@@ -258,6 +258,7 @@ export type ConfirmProps = {
   children: string | React.ReactNode
   imageId?: string
   shmsProjectImages?: string
+  formStatus?: { isSubmitting: boolean; isSubmittingDone: boolean }
 }
 
 export type purchasedStocksData = {

@@ -226,6 +226,12 @@ export function getProjectStatus(status: string): string {
     ? 'ســـحب رصيد'
     : status === 'deposit'
     ? 'إيـــــــداع رصيد'
+    : status === 'completed'
+    ? 'تم الموافقة'
+    : status === 'deposit'
+    ? 'قيد المراجعة'
+    : status === 'rejected'
+    ? 'تم الرفض'
     : status
 }
 
