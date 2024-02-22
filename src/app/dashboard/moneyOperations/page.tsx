@@ -18,6 +18,7 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import Copy from '@/components/custom/Copy'
+import OperationAction from './_OperationAction'
 
 export default async function MoneyOperations() {
   const withdrawActions = (await getUserMoneyOperations()) as withdrawActionsProps[]
@@ -100,7 +101,14 @@ export default async function MoneyOperations() {
                         {getProjectStatus(withdrawAction.withdraw_withdraw_status)}
                       </TableCell>
                       <TableCell className='min-w-40'>
-                        {/* withdrawAction.withdraw_withdraw_status */}
+                        {/* Toggle User Status Button */}
+                        <OperationAction withdrawAction={withdrawAction}>
+                          {withdrawAction.withdraw_withdraw_status === 'pending'
+                            ? 'قبول العملية'
+                            : withdrawAction.withdraw_withdraw_status === 'completed'
+                            ? 'رفـض العملية'
+                            : 'حذف العملية'}
+                        </OperationAction>
                       </TableCell>
                     </TableRow>
                   )

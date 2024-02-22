@@ -98,6 +98,12 @@ export type withdrawActionsProps = {
   shms_withdraw_amount: number
   shms_action_type: 'withdraw' | 'deposit'
   withdraw_withdraw_status: 'pending' | 'completed' | 'rejected'
+  // When withdraw action happens
+  message?: string
+  // When withdraw is added, this is set to 1
+  withdrawAdded?: number
+  // When withdraw is updated, this is set to 1
+  withdrawUpdated?: number
 }
 
 export type shms_formSignupDataProps = {
