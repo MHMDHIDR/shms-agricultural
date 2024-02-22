@@ -105,7 +105,6 @@ export default function Users() {
       }
 
       setUserDeleted(data.userDeleted ?? 0)
-      // redirect('/dashboard')
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -203,7 +202,7 @@ export default function Users() {
                 : type === 'totalBalance'
                 ? 'الرصيد الكلي'
                 : 'الرصيد القابل للسحب'
-            } بنجاح 👍🏼`,
+            } بنجاح 👍🏼 .. جاري تحويلك`,
           {
             icon: <Success className='w-6 h-6 ml-3' />,
             position: 'bottom-center',
@@ -234,7 +233,7 @@ export default function Users() {
       }
 
       setUserUpdated(data.userUpdated ?? 0)
-      // redirect('/dashboard')
+      redirect('/dashboard')
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,

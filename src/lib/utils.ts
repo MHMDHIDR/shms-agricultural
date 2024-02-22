@@ -1,5 +1,10 @@
 import { API_URL, DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
-import type { ProjectProps, abstractWordsProps, validateFileProps } from '@/types'
+import type {
+  ProjectProps,
+  UserProps,
+  abstractWordsProps,
+  validateFileProps
+} from '@/types'
 import axios from 'axios'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -118,6 +123,23 @@ export async function getProject(projectId: ProjectProps['shms_project_id']) {
   )
 
   return project
+}
+
+/**
+ * A function to get the user data (for a single user)
+ * @param userId
+ * @returns Promise<UserProps | undefined>
+ */
+export async function getUser(
+  userId: UserProps['shms_id']
+): Promise<UserProps | undefined> {
+  const {
+    data: user
+  }: {
+    data: UserProps[]
+  } = await axios.get(`${API_URL}/users/all?userId=${userId}`)
+
+  return user[0]
 }
 
 /**

@@ -1,8 +1,16 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { getAuth } from '@/lib/actions/auth'
+import { getUser } from '@/lib/utils'
+import { UserProps } from '@/types'
 import Link from 'next/link'
 
-export default function Account() {
+export default async function Account() {
+  const { userId } = await getAuth()
+  const { shms_user_total_balance, shms_user_withdrawable_balance } = (await getUser(
+    userId
+  )) as UserProps
+
   return (
     <div className='flex flex-col items-center justify-center gap-5 mt-10 md:flex-row'>
       {/* First Card */}
@@ -14,7 +22,7 @@ export default function Account() {
             <div className='space-y-2 divide-y divide-gray-300'>
               <h1 className='text-lg font-bold'>الرصيد الكلي</h1>
               <h3 className='py-4 text-3xl font-bold' data-price>
-                0.0
+                {shms_user_total_balance ?? 0}
               </h3>
             </div>
 
@@ -22,7 +30,7 @@ export default function Account() {
             <div className='space-y-2 divide-y divide-gray-300'>
               <h1 className='text-lg font-bold'>الرصيد القابل للسحب</h1>
               <h3 className='py-4 text-3xl font-bold' data-price>
-                0.0
+                {shms_user_withdrawable_balance ?? 0}
               </h3>
               <Link href={'/profile/investments/withdraw'} className='border-none'>
                 <Button variant={'pressable'}>سحب الرصيد</Button>

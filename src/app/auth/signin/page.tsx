@@ -84,7 +84,6 @@ const SigninPage = () => {
 
         const results = await signIn('credentials', {
           redirect: false,
-          // callbackUrl: redirectUrl ?? '/',
           emailOrPhone: emailOrPhone.trim().toLowerCase(),
           password
         })
