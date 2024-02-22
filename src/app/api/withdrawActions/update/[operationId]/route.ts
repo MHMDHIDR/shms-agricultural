@@ -111,7 +111,13 @@ export async function PATCH(
       return new Response(
         JSON.stringify({
           withdrawUpdated: 1,
-          message: `تم إرسال طلب السحب وسيتم إشعارك قريباً بحالة الطلب 👍🏼`
+          message: `${
+            withdraw_withdraw_status === 'completed'
+              ? 'تم الموافقة'
+              : withdraw_withdraw_status === 'rejected'
+              ? 'تم الرفض'
+              : 'تم تحديث'
+          } على الطلب بنجاح 👍🏼`
         }),
         { status: 201 }
       )
@@ -121,7 +127,13 @@ export async function PATCH(
     return new Response(
       JSON.stringify({
         withdrawUpdated: 0,
-        message: `عفواً! لم يتم إرسال طلب السحب، حدث خطأ ما! `
+        message: `عفواً! لم يتم ${
+          withdraw_withdraw_status === 'completed'
+            ? 'تم الموافقة'
+            : withdraw_withdraw_status === 'rejected'
+            ? 'تم الرفض'
+            : 'تم تحديث'
+        }، حدث خطأ ما! `
       }),
       { status: 500 }
     )
