@@ -15,17 +15,18 @@ export default function OperationAction({
   withdrawAction: withdrawActionsProps
 }) {
   const toggleWithdrawActionsStatus = async (
-    id: string,
+    operationId: string,
+    userId: string,
     status: withdrawActionsProps['withdraw_withdraw_status'] | null
   ) => {
     try {
       const { data }: { data: withdrawActionsProps } = await axios.patch(
-        `${API_URL}/users/toggleStatus/${id}`,
-        { status }
+        `${API_URL}/withdrawActions/update/${operationId}`,
+        { userId, status }
       )
 
       if (data.withdrawUpdated === 1) {
-        toast(data.message ?? 'تم تحديث حالة المعامل بنجاح 👍🏼', {
+        toast(data.message ?? 'تم تحديث حالة المعاملة بنجاح 👍🏼', {
           icon: <Success className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
           className: 'text-right select-none rtl',
@@ -39,7 +40,7 @@ export default function OperationAction({
           }
         })
       } else {
-        toast('حدث خطأ ما', {
+        toast('عفواً حدث خطأ ما أثناء تحديث حالة المعاملة', {
           icon: <Error className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
           className: 'text-right select-none rtl',
@@ -78,6 +79,7 @@ export default function OperationAction({
       }
       onClick={async () => {
         await toggleWithdrawActionsStatus(
+          withdrawAction.shms_withdraw_id,
           withdrawAction.shms_user_id,
           withdrawAction.withdraw_withdraw_status === 'pending'
             ? 'completed'

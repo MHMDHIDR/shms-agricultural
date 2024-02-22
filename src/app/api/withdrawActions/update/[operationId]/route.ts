@@ -1,21 +1,29 @@
+// /withdrawActions/update/[operationId]
 import { connectDB } from '@/api/utils/db'
 import email from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import type { UserProps } from '@/types'
+import type { UserProps, withdrawActionsProps } from '@/types'
+import { arabicDate } from '@/lib/utils'
 
-export async function POST(
+export async function PATCH(
   req: Request,
   { params: { operationId } }: { params: { operationId: string } }
 ) {
   if (!operationId) throw new Error('User ID is required')
 
   const body = await req.json()
-  const { withdrawAmount } = body
+  const {
+    status: withdraw_withdraw_status,
+    userId: shms_user_id
+  }: {
+    status: withdrawActionsProps['withdraw_withdraw_status']
+    userId: withdrawActionsProps['shms_user_id']
+  } = body
 
-  if (!withdrawAmount) {
+  if (!withdraw_withdraw_status) {
     return new Response(
       JSON.stringify({
-        userWithdrawnBalance: 0,
+        withdrawUpdated: 0,
         message: 'الرجاء إدخال الرصيد المطلوب سحبه!'
       }),
       { status: 400 }
@@ -25,13 +33,22 @@ export async function POST(
   // Check if user exists
   const userExists = (
     (await connectDB(`SELECT * FROM users WHERE shms_id = ?`, [
-      operationId
+      shms_user_id
     ])) as UserProps[]
   )[0]
+  // Check if operation exists
+  const operationExists = (
+    (await connectDB(`SELECT * FROM withdraw_actions WHERE shms_withdraw_id = ?`, [
+      operationId
+    ])) as withdrawActionsProps[]
+  )[0]
 
-  if (!userExists) {
+  if (!userExists || !operationExists) {
     return new Response(
-      JSON.stringify({ userWithdrawnBalance: 0, message: 'المستخدم غير موجود!' }),
+      JSON.stringify({
+        withdrawUpdated: 0,
+        message: `عفواً! لم يتم إيجاد المستخدم أو العملية المطلوبة`
+      }),
       { status: 404 }
     )
   }
@@ -39,8 +56,8 @@ export async function POST(
   try {
     // create new user
     await connectDB(
-      `INSERT INTO withdraw_actions (shms_withdraw_amount, shms_user_id) VALUES (?, ?)`,
-      [withdrawAmount, operationId]
+      `UPDATE withdraw_actions SET withdraw_withdraw_status = ? WHERE shms_withdraw_id = ?`,
+      [withdraw_withdraw_status, operationId]
     )
 
     //send the user an email with a link to activate his/her account
@@ -49,17 +66,41 @@ export async function POST(
     const emailData = {
       from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
       to: userExists.shms_email,
-      subject: 'سحب رصيد | شمس للخدمات الزراعية',
+      subject: `${
+        withdraw_withdraw_status === 'completed'
+          ? 'تم الموافقة'
+          : withdraw_withdraw_status === 'rejected'
+          ? 'تم الرفض'
+          : 'تم تحديث'
+      } على طلب ${
+        operationExists?.shms_action_type === 'withdraw' ? 'سحب' : 'إيداع'
+      } رصيد في حسابك رصيد | شمس للخدمات الزراعية`,
       msg: {
-        title: 'طلب سحب رصيد من حسابك في شمس للخدمات الزراعية',
+        title: `${
+          withdraw_withdraw_status === 'completed'
+            ? 'تم الموافقة'
+            : withdraw_withdraw_status === 'rejected'
+            ? 'تم الرفض'
+            : 'تم تحديث'
+        } على طلب ${
+          operationExists?.shms_action_type === 'withdraw' ? 'سحب' : 'إيداع'
+        } رصيد في حسابك رصيد | شمس للخدمات الزراعية`,
         msg: `
           مرحباً، ${userExists.shms_fullname}!
 
-          شكراً لإرسال طلب سحب الرصيد من شمس.
+          نود إعلامك بأن طلب ${
+            operationExists?.shms_action_type === 'withdraw' ? 'السحب' : 'الإيداع'
+          } الذي قمت به تم في تاريخ ${
+          arabicDate(operationExists?.shms_created_at) ?? 'غير معروف'
+        } بحالة ${
+          withdraw_withdraw_status === 'completed'
+            ? 'تم الموافقة'
+            : withdraw_withdraw_status === 'rejected'
+            ? 'تم الرفض'
+            : 'تم تحديث'
+        }.
 
-          مبلغ السحب: ${withdrawAmount} ريال قطري فقط.
-
-          بمجرد مراجعة طلبك، سيتم إشعارك بحالة الطلب.`,
+          مبلغ السحب: ${operationExists?.shms_withdraw_amount} ريال قطري فقط.`,
         buttonLink,
         buttonLabel: 'مراجعة الطلب'
       }
@@ -69,7 +110,7 @@ export async function POST(
     if (data?.id) {
       return new Response(
         JSON.stringify({
-          userWithdrawnBalance: 1,
+          withdrawUpdated: 1,
           message: `تم إرسال طلب السحب وسيتم إشعارك قريباً بحالة الطلب 👍🏼`
         }),
         { status: 201 }
@@ -79,7 +120,7 @@ export async function POST(
     console.error(error)
     return new Response(
       JSON.stringify({
-        userWithdrawnBalance: 0,
+        withdrawUpdated: 0,
         message: `عفواً! لم يتم إرسال طلب السحب، حدث خطأ ما! `
       }),
       { status: 500 }
