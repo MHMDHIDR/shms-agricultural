@@ -38,6 +38,10 @@ export default function Users() {
   const [users, setUsers] = useState<UserProps[]>([])
   const [userStockLimit, setUserStockLimit] =
     useState<UserProps['shms_user_stock_limit']>(1)
+  const [userTotalBalance, setUserTotalBalance] =
+    useState<UserProps['shms_user_total_balance']>(0)
+  const [userTotalWithdrawableBalance, setUserTotalWithdrawableBalance] =
+    useState<UserProps['shms_user_withdrawable_balance']>(0)
 
   const [formStatus, setFormStatus] = useState({
     isSubmitting: false,
@@ -178,28 +182,42 @@ export default function Users() {
     }
   }
 
-  const updateUserStockLimit = async (id: string, stockLimit: number) => {
+  const updateUserStockLimitOrBalance = async (
+    id: string,
+    newValue: number,
+    type: string
+  ) => {
     try {
       setFormStatus({ ...formStatus, isSubmitting: true })
       const { data }: { data: UserProps } = await axios.patch(
-        `${API_URL}/users/updateStockLimit/${id}`,
-        { stockLimit }
+        `${API_URL}/users/updateStockLimitOrBalance/${id}`,
+        { newValue, type }
       )
 
       if (data.userUpdated === 1) {
-        toast(data.message ?? 'تم تحديث حد شراء الاسهم بنجاح 👍🏼', {
-          icon: <Success className='w-6 h-6 ml-3' />,
-          position: 'bottom-center',
-          className: 'text-right select-none rtl',
-          duration: DEFAULT_DURATION,
-          style: {
-            backgroundColor: '#F0FAF0',
-            color: '#367E18',
-            border: '1px solid #367E18',
-            gap: '1.5rem',
-            textAlign: 'justify'
+        toast(
+          data.message ??
+            `تم تحديث ${
+              type === 'stockLimit'
+                ? 'حد شراء الأسهم'
+                : type === 'totalBalance'
+                ? 'الرصيد الكلي'
+                : 'الرصيد القابل للسحب'
+            } بنجاح 👍🏼`,
+          {
+            icon: <Success className='w-6 h-6 ml-3' />,
+            position: 'bottom-center',
+            className: 'text-right select-none rtl',
+            duration: DEFAULT_DURATION,
+            style: {
+              backgroundColor: '#F0FAF0',
+              color: '#367E18',
+              border: '1px solid #367E18',
+              gap: '1.5rem',
+              textAlign: 'justify'
+            }
           }
-        })
+        )
       } else {
         toast('حدث خطأ ما', {
           icon: <Error className='w-6 h-6 ml-3' />,
@@ -216,7 +234,7 @@ export default function Users() {
       }
 
       setUserUpdated(data.userUpdated ?? 0)
-      redirect('/dashboard')
+      // redirect('/dashboard')
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -263,6 +281,8 @@ export default function Users() {
                   <TableHead>حالة المستخدم</TableHead>
                   <TableHead>عدد الاسهم</TableHead>
                   <TableHead>حد شراء الأسهم</TableHead>
+                  <TableHead>الرصيد الكلي</TableHead>
+                  <TableHead>الرصيد القابل للسحب</TableHead>
                   <TableHead>الاجراء</TableHead>
                 </TableRow>
               </TableHeader>
@@ -286,7 +306,7 @@ export default function Users() {
                       <TableCell className='min-w-40'>
                         <Link
                           href={`tel:${user.shms_phone}`}
-                          className='text-blue-500 hover:font-bold hover:text-blue-700 transition-colors'
+                          className='text-blue-500 transition-colors hover:font-bold hover:text-blue-700'
                         >
                           {user.shms_phone}
                         </Link>
@@ -320,6 +340,12 @@ export default function Users() {
                       <TableCell className='min-w-40'>
                         {user.shms_user_stock_limit ?? 1}
                       </TableCell>
+                      <TableCell className='min-w-40'>
+                        {user.shms_user_total_balance ?? 0}
+                      </TableCell>
+                      <TableCell className='min-w-40'>
+                        {user.shms_user_withdrawable_balance ?? 0}
+                      </TableCell>
                       <TableCell className='flex min-w-56 gap-x-2'>
                         <DropdownMenu>
                           <DropdownMenuTrigger>
@@ -327,7 +353,7 @@ export default function Users() {
                               الاجراء
                             </span>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent className='space-y-2 max-w-20'>
+                          <DropdownMenuContent className='flex flex-col gap-y-1.5'>
                             {/* Delete Button */}
                             <Confirm
                               variant={'destructive'}
@@ -367,12 +393,48 @@ export default function Users() {
                             <ConfirmDialog
                               StockLimit={user.shms_user_stock_limit ?? 1}
                               onClick={async () => {
-                                await updateUserStockLimit(user.shms_id, userStockLimit!)
+                                await updateUserStockLimitOrBalance(
+                                  user.shms_id,
+                                  userStockLimit!,
+                                  'stockLimit'
+                                )
                               }}
                               onChange={e => setUserStockLimit(Number(e.target.value))}
                               formStatus={formStatus}
                             >
                               حد شراء الاسهم
+                            </ConfirmDialog>
+                            {/* All Amount */}
+                            <ConfirmDialog
+                              StockLimit={user.shms_user_total_balance ?? 1}
+                              onClick={async () => {
+                                await updateUserStockLimitOrBalance(
+                                  user.shms_id,
+                                  userTotalBalance!,
+                                  'totalBalance'
+                                )
+                              }}
+                              onChange={e => setUserTotalBalance(Number(e.target.value))}
+                              formStatus={formStatus}
+                            >
+                              الرصيد الكلي
+                            </ConfirmDialog>
+                            {/* Withdrawable Balance */}
+                            <ConfirmDialog
+                              StockLimit={user.shms_user_withdrawable_balance ?? 1}
+                              onClick={async () => {
+                                await updateUserStockLimitOrBalance(
+                                  user.shms_id,
+                                  userTotalWithdrawableBalance!,
+                                  'withdrawableBalance'
+                                )
+                              }}
+                              onChange={e =>
+                                setUserTotalWithdrawableBalance(Number(e.target.value))
+                              }
+                              formStatus={formStatus}
+                            >
+                              الرصيد القابل للسحب
                             </ConfirmDialog>
                           </DropdownMenuContent>
                         </DropdownMenu>

@@ -13,9 +13,11 @@ export type UserProps = {
   shms_password?: string
   shms_phone?: string
   shms_address?: string
-  shms_doc?: string
   shms_user_stocks?: stocksPurchasedProps[]
   shms_user_stock_limit?: number
+  shms_user_total_balance?: number
+  shms_user_withdrawable_balance?: number
+  shms_doc?: string
   shms_created_at?: string
   shms_user_account_type?: 'admin' | 'user'
   shms_user_account_status?: 'active' | 'block' | 'pending'

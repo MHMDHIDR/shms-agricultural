@@ -16,7 +16,7 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        pressable: `min-w-[7rem] text-white py-1.5 px-6 rounded-md
+        pressable: `min-w-[7rem] text-white py-1.5 px-6 rounded-md select-none
           shadow-[0_7px] hover:shadow-[0_5px]
           shadow-green-700 hover:shadow-green-900
           bg-green-600 hover:bg-green-700

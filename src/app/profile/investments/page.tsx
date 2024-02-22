@@ -70,7 +70,7 @@ export default async function DashboardInvestors() {
     <Layout>
       <section className='container mx-auto'>
         <Account />
-        <Card className='min-w-full md:w-[300px] rtl mt-40'>
+        <Card className='min-w-full md:w-[300px] rtl mt-12'>
           <CardContent>
             <CardHeader className='font-bold text-center'>
               تفاصيل الأســــهــــم

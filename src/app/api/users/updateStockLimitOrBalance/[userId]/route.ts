@@ -9,7 +9,7 @@ export async function PATCH(
   if (!userId) throw new Error('User ID is required')
 
   const body = await req.json()
-  const { stockLimit } = body
+  const { newValue, type } = body
 
   try {
     // Check if user exists
@@ -27,9 +27,15 @@ export async function PATCH(
 
     const updateUser = (await connectDB(
       `UPDATE users
-          SET shms_user_stock_limit = ?
-            WHERE shms_id = ?`,
-      [stockLimit, userId]
+      ${
+        type === 'stockLimit'
+          ? 'SET shms_user_stock_limit = ?'
+          : type === 'totalBalance'
+          ? 'SET shms_user_total_balance = ?'
+          : 'SET shms_user_withdrawable_balance = ?'
+      }
+        WHERE shms_id = ?`,
+      [newValue, userId]
     )) as ResultSetHeader
 
     const { affectedRows: userUpdated } = updateUser as ResultSetHeader

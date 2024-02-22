@@ -19,13 +19,15 @@ export function ConfirmDialog({
   onClick,
   onChange,
   formStatus,
-  children
+  children,
+  heading = children as string | undefined
 }: {
   StockLimit?: number
   onClick: () => void
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   formStatus: { isSubmitting: boolean; isSubmittingDone: boolean }
   children: React.ReactNode
+  heading?: string
 }) {
   const { isSubmitting, isSubmittingDone } = formStatus
 
@@ -37,16 +39,16 @@ export function ConfirmDialog({
       <DialogContent className='sm:max-w-[425px] rtl'>
         <DialogHeader>
           <DialogTitle className='pb-4 font-bold text-center select-none'>
-            تعديل الأسهم
+            {heading}
           </DialogTitle>
           <DialogDescription className='text-right'>
-            يمكنك تعديل الاسهم لهذا المستخدم، ثم الضغط على حفظ التغييرات
+            يمكنك {heading} لهذا المستخدم، ثم الضغط على حفظ التغييرات
           </DialogDescription>
         </DialogHeader>
-        <div className='py-4 grid gap-4'>
-          <div className='items-center grid grid-cols-4 gap-4'>
+        <div className='grid gap-4 py-4'>
+          <div className='grid items-center grid-cols-4 gap-4'>
             <Label htmlFor='stocks_limit' className='text-right'>
-              عدد الأسهم
+              إدخل العدد
             </Label>
             <Input
               id='stocks_limit'
