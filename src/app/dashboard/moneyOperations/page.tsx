@@ -9,7 +9,6 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { getProjectDate, getProjectStatus, getUserMoneyOperations } from '@/lib/utils'
-import { getAuth } from '@/lib/actions/auth'
 import { withdrawActionsProps } from '@/types'
 import {
   Card,
@@ -20,12 +19,11 @@ import {
 } from '@/components/ui/card'
 import Copy from '@/components/custom/Copy'
 
-export default async function WithdrawOperations() {
-  const { userId } = await getAuth()
-  const withdrawActions = (await getUserMoneyOperations(userId)) as withdrawActionsProps[]
+export default async function MoneyOperations() {
+  const withdrawActions = (await getUserMoneyOperations()) as withdrawActionsProps[]
 
   return (
-    <TabsContent value='withdraw_operations'>
+    <TabsContent value='money_operations'>
       <Card className='min-w-full'>
         <CardHeader dir='rtl' className='select-none'>
           <CardTitle className='text-center'>
@@ -35,7 +33,7 @@ export default async function WithdrawOperations() {
             </strong>
           </CardTitle>
           <CardDescription>
-            هنا يمكنك مشاهدة جميع عمليات السحب والإيداع التي تمت على حسابك
+            هنا يمكنك مشاهدة جميع عمليات السحب والإيداع التي تمت في الموقع
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -56,6 +54,9 @@ export default async function WithdrawOperations() {
                 </TableHead>
                 <TableHead className='font-bold text-center select-none'>
                   حالة الطلب
+                </TableHead>
+                <TableHead className='font-bold text-center select-none'>
+                  الإجراء
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -97,6 +98,9 @@ export default async function WithdrawOperations() {
                         }
                       >
                         {getProjectStatus(withdrawAction.withdraw_withdraw_status)}
+                      </TableCell>
+                      <TableCell className='min-w-40'>
+                        {/* withdrawAction.withdraw_withdraw_status */}
                       </TableCell>
                     </TableRow>
                   )

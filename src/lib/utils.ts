@@ -155,13 +155,15 @@ export async function getUser(
  * @returns Promise<withdrawActionsProps | undefined>
  */
 export async function getUserMoneyOperations(
-  userId: withdrawActionsProps['shms_user_id']
-): Promise<withdrawActionsProps[] | undefined> {
+  userId?: withdrawActionsProps['shms_user_id']
+): Promise<withdrawActionsProps[]> {
   const {
     data: withdrawActions
   }: {
     data: withdrawActionsProps[]
-  } = await axios.get(`${API_URL}/withdrawActions/get/${userId}`)
+  } = userId
+    ? await axios.get(`${API_URL}/withdrawActions/get/${userId}`)
+    : await axios.get(`${API_URL}/withdrawActions/get/all`)
 
   return withdrawActions
 }
