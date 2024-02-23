@@ -9,7 +9,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { getProjectDate, getProjectStatus, getUserMoneyOperations } from '@/lib/utils'
-import { withdrawActionsProps } from '@/types'
+import { accountingOperationsProps } from '@/types'
 import {
   Card,
   CardContent,
@@ -22,7 +22,7 @@ import OperationAction from './_OperationAction'
 import NoRecords from '@/components/custom/NoRecords'
 
 export default async function MoneyOperations() {
-  const withdrawActions = (await getUserMoneyOperations()) as withdrawActionsProps[]
+  const withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
 
   return (
     <TabsContent value='money_operations'>
@@ -98,23 +98,23 @@ export default async function MoneyOperations() {
                       </TableCell>
                       <TableCell
                         className={
-                          withdrawAction.withdraw_withdraw_status === 'pending'
+                          withdrawAction.accounting_operation_status === 'pending'
                             ? 'text-yellow-500'
-                            : withdrawAction.withdraw_withdraw_status === 'completed'
+                            : withdrawAction.accounting_operation_status === 'completed'
                             ? 'text-green-500'
                             : 'text-red-500'
                         }
                       >
-                        {getProjectStatus(withdrawAction.withdraw_withdraw_status)}
+                        {getProjectStatus(withdrawAction.accounting_operation_status)}
                       </TableCell>
                       <TableCell className='min-w-40'>
                         {/* Toggle User Status Button */}
                         <OperationAction withdrawAction={withdrawAction}>
-                          {withdrawAction.withdraw_withdraw_status === 'pending' ||
-                          withdrawAction.withdraw_withdraw_status === 'rejected'
-                            ? 'قبول العملية'
-                            : withdrawAction.withdraw_withdraw_status === 'completed'
-                            ? 'رفـض العملية'
+                          {withdrawAction.accounting_operation_status === 'pending' ||
+                          withdrawAction.accounting_operation_status === 'rejected'
+                            ? 'قبول'
+                            : withdrawAction.accounting_operation_status === 'completed'
+                            ? 'رفـض'
                             : ''}
                         </OperationAction>
                       </TableCell>

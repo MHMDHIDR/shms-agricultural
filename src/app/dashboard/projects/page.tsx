@@ -276,7 +276,7 @@ export default function Projects() {
   }
 
   return (
-    <TabsContent value='add_project' className='mt-20 md:mt-5'>
+    <TabsContent value='add_project' className='mt-6 md:mt-5'>
       <Card className='rtl'>
         <ProjectsTable />
         <Divider className='my-10' />

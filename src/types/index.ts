@@ -16,7 +16,7 @@ export type UserProps = {
   shms_user_stocks?: stocksPurchasedProps[]
   shms_user_stock_limit?: number
   shms_user_total_balance?: number
-  shms_user_withdrawable_balance?: number
+  shms_user_withdrawable_balance: number
   shms_doc?: string
   shms_created_at?: string
   shms_user_account_type?: 'admin' | 'user'
@@ -91,13 +91,15 @@ export type ProjectProps = {
   message?: string
 }
 
-export type withdrawActionsProps = {
+export type accountingOperationsProps = {
   shms_withdraw_id: string
   shms_created_at: string
   shms_user_id: UserProps['shms_id']
   shms_withdraw_amount: number
   shms_action_type: 'withdraw' | 'deposit'
-  withdraw_withdraw_status: 'pending' | 'completed' | 'rejected' | 'deleted'
+  accounting_operation_status: 'pending' | 'completed' | 'rejected' | 'deleted'
+  // when rejecting add a reason
+  withdraw_reject_reason?: string
   // When withdraw action happens
   message?: string
   // When withdraw is added, this is set to 1

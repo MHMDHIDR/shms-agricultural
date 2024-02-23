@@ -9,17 +9,18 @@ import axios from 'axios'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { toast } from 'sonner'
 import { Success, Error } from '@/components/icons/Status'
-import type { withdrawActionsProps } from '@/types'
+import type { accountingOperationsProps } from '@/types'
 import { redirect } from '@/lib/utils'
 import { useState } from 'react'
 import Confirm from '@/components/custom/Confirm'
+import { Settings, Trash } from 'lucide-react'
 
 export default function OperationAction({
   children,
   withdrawAction
 }: {
   children: string
-  withdrawAction: withdrawActionsProps
+  withdrawAction: accountingOperationsProps
 }) {
   const [formStatus, setFormStatus] = useState({
     isSubmitting: false,
@@ -29,12 +30,12 @@ export default function OperationAction({
   const toggleWithdrawActionsStatus = async (
     operationId: string,
     userId: string,
-    status: withdrawActionsProps['withdraw_withdraw_status'] | null
+    status: accountingOperationsProps['accounting_operation_status'] | null
   ) => {
     try {
       setFormStatus({ ...formStatus, isSubmitting: true })
 
-      const { data }: { data: withdrawActionsProps } = await axios.patch(
+      const { data }: { data: accountingOperationsProps } = await axios.patch(
         `${API_URL}/withdrawActions/update/${operationId}`,
         { userId, status }
       )
@@ -97,19 +98,19 @@ export default function OperationAction({
       <DropdownMenuContent className='flex flex-col gap-y-4'>
         <Confirm
           variant={
-            withdrawAction.withdraw_withdraw_status === 'pending' ||
-            withdrawAction.withdraw_withdraw_status === 'rejected'
+            withdrawAction.accounting_operation_status === 'pending' ||
+            withdrawAction.accounting_operation_status === 'rejected'
               ? 'pressable'
-              : 'destructive'
+              : 'secondary'
           }
           onClick={async () => {
             await toggleWithdrawActionsStatus(
               withdrawAction.shms_withdraw_id,
               withdrawAction.shms_user_id,
-              withdrawAction.withdraw_withdraw_status === 'pending' ||
-                withdrawAction.withdraw_withdraw_status === 'rejected'
+              withdrawAction.accounting_operation_status === 'pending' ||
+                withdrawAction.accounting_operation_status === 'rejected'
                 ? 'completed'
-                : withdrawAction.withdraw_withdraw_status === 'completed'
+                : withdrawAction.accounting_operation_status === 'completed'
                 ? 'rejected'
                 : null
             )
@@ -117,6 +118,7 @@ export default function OperationAction({
           formStatus={formStatus}
         >
           {children}
+          <Settings className='w-3 h-3 ml-3' />
         </Confirm>
         <Confirm
           variant={'destructive'}
@@ -129,7 +131,8 @@ export default function OperationAction({
           }}
           formStatus={formStatus}
         >
-          حذف العملية
+          حــذف
+          <Trash className='w-3 h-3 ml-3' />
         </Confirm>
       </DropdownMenuContent>
     </DropdownMenu>

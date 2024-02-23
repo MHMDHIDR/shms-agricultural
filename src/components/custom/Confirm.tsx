@@ -31,8 +31,12 @@ export default function Confirm({
   return (
     <AlertDialog>
       <AlertDialogTrigger
-        className={`w-full${isLoading ? ' cursor-progress' : ''}`}
-        disabled={isLoading}
+        className={`w-full${
+          isLoading || isSubmitting
+            ? ' cursor-progress opacity-75 pointer-events-none'
+            : ''
+        }`}
+        disabled={isLoading || isSubmitting}
       >
         <Button
           variant={variant}

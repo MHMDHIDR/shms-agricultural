@@ -4,7 +4,7 @@ import type {
   UserProps,
   abstractWordsProps,
   validateFileProps,
-  withdrawActionsProps
+  accountingOperationsProps
 } from '@/types'
 import axios from 'axios'
 import { clsx, type ClassValue } from 'clsx'
@@ -152,15 +152,15 @@ export async function getUser(
  * getting the user withdrawable balance
  * also getting the deposit balance
  * @param userId
- * @returns Promise<withdrawActionsProps | undefined>
+ * @returns Promise<accountingOperationsProps | undefined>
  */
 export async function getUserMoneyOperations(
-  userId?: withdrawActionsProps['shms_user_id']
-): Promise<withdrawActionsProps[]> {
+  userId?: accountingOperationsProps['shms_user_id']
+): Promise<accountingOperationsProps[]> {
   const {
     data: withdrawActions
   }: {
-    data: withdrawActionsProps[]
+    data: accountingOperationsProps[]
   } = userId
     ? await axios.get(`${API_URL}/withdrawActions/get/${userId}`)
     : await axios.get(`${API_URL}/withdrawActions/get/all`)

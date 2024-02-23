@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table'
 import { getProjectDate, getProjectStatus, getUserMoneyOperations } from '@/lib/utils'
 import { getAuth } from '@/lib/actions/auth'
-import { withdrawActionsProps } from '@/types'
+import { accountingOperationsProps } from '@/types'
 import {
   Card,
   CardContent,
@@ -23,7 +23,9 @@ import NoRecords from '@/components/custom/NoRecords'
 
 export default async function WithdrawOperations() {
   const { userId } = await getAuth()
-  const withdrawActions = (await getUserMoneyOperations(userId)) as withdrawActionsProps[]
+  const withdrawActions = (await getUserMoneyOperations(
+    userId
+  )) as accountingOperationsProps[]
 
   return (
     <TabsContent value='withdraw_operations'>
@@ -106,14 +108,14 @@ export default async function WithdrawOperations() {
                       </TableCell>
                       <TableCell
                         className={
-                          withdrawAction.withdraw_withdraw_status === 'pending'
+                          withdrawAction.accounting_operation_status === 'pending'
                             ? 'text-yellow-500'
-                            : withdrawAction.withdraw_withdraw_status === 'completed'
+                            : withdrawAction.accounting_operation_status === 'completed'
                             ? 'text-green-500'
                             : 'text-red-500'
                         }
                       >
-                        {getProjectStatus(withdrawAction.withdraw_withdraw_status)}
+                        {getProjectStatus(withdrawAction.accounting_operation_status)}
                       </TableCell>
                     </TableRow>
                   )

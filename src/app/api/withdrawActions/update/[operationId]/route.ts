@@ -2,7 +2,7 @@
 import { connectDB } from '@/api/utils/db'
 import email from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import type { UserProps, withdrawActionsProps } from '@/types'
+import type { UserProps, accountingOperationsProps } from '@/types'
 import { arabicDate } from '@/lib/utils'
 
 export async function PATCH(
@@ -13,14 +13,14 @@ export async function PATCH(
 
   const body = await req.json()
   const {
-    status: withdraw_withdraw_status,
+    status: accounting_operation_status,
     userId: shms_user_id
   }: {
-    status: withdrawActionsProps['withdraw_withdraw_status']
-    userId: withdrawActionsProps['shms_user_id']
+    status: accountingOperationsProps['accounting_operation_status']
+    userId: accountingOperationsProps['shms_user_id']
   } = body
 
-  if (!withdraw_withdraw_status) {
+  if (!accounting_operation_status) {
     return new Response(
       JSON.stringify({
         withdrawUpdated: 0,
@@ -40,7 +40,7 @@ export async function PATCH(
   const operationExists = (
     (await connectDB(`SELECT * FROM withdraw_actions WHERE shms_withdraw_id = ?`, [
       operationId
-    ])) as withdrawActionsProps[]
+    ])) as accountingOperationsProps[]
   )[0]
 
   if (!userExists || !operationExists) {
@@ -55,14 +55,25 @@ export async function PATCH(
 
   try {
     // create new user
-    withdraw_withdraw_status === 'deleted'
+    accounting_operation_status === 'deleted'
       ? await connectDB(`DELETE FROM withdraw_actions WHERE shms_withdraw_id = ?`, [
           operationId
         ])
       : await connectDB(
-          `UPDATE withdraw_actions SET withdraw_withdraw_status = ? WHERE shms_withdraw_id = ?`,
-          [withdraw_withdraw_status, operationId]
+          `UPDATE withdraw_actions SET accounting_operation_status = ? WHERE shms_withdraw_id = ?`,
+          [accounting_operation_status, operationId]
         )
+
+    // if the accounting_operation_status === 'completed' then update the user's balance
+    const currentBalance = userExists.shms_user_withdrawable_balance
+    if (accounting_operation_status === 'completed') {
+      const userNewBalance = currentBalance - operationExists.shms_withdraw_amount
+
+      await connectDB(
+        `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
+        [userNewBalance, shms_user_id]
+      )
+    } // when rejected or deleted, the balance will remain the same
 
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments/withdraw`
@@ -71,9 +82,9 @@ export async function PATCH(
       from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
       to: userExists.shms_email,
       subject: `${
-        withdraw_withdraw_status === 'completed'
+        accounting_operation_status === 'completed'
           ? 'تم الموافقة على'
-          : withdraw_withdraw_status === 'rejected'
+          : accounting_operation_status === 'rejected'
           ? 'تم رفض'
           : 'تم حذف'
       } طلب ${
@@ -81,9 +92,9 @@ export async function PATCH(
       } رصيد في حسابك رصيد | شمس للخدمات الزراعية`,
       msg: {
         title: `${
-          withdraw_withdraw_status === 'completed'
+          accounting_operation_status === 'completed'
             ? 'تم الموافقة على'
-            : withdraw_withdraw_status === 'rejected'
+            : accounting_operation_status === 'rejected'
             ? 'تم رفــض'
             : 'تم حذف'
         } طلب ${operationExists?.shms_action_type === 'withdraw' ? 'سحب' : 'إيداع'} رصيد`,
@@ -95,9 +106,9 @@ export async function PATCH(
           } الذي قمت به تم في تاريخ ${
           arabicDate(operationExists?.shms_created_at) ?? 'غير معروف'
         } بحالة ${
-          withdraw_withdraw_status === 'completed'
+          accounting_operation_status === 'completed'
             ? 'تم الموافقة'
-            : withdraw_withdraw_status === 'rejected'
+            : accounting_operation_status === 'rejected'
             ? 'تم الرفض'
             : 'تم الحذف'
         }.
@@ -114,9 +125,9 @@ export async function PATCH(
         JSON.stringify({
           withdrawUpdated: 1,
           message: `${
-            withdraw_withdraw_status === 'completed'
+            accounting_operation_status === 'completed'
               ? 'تم الموافقة على'
-              : withdraw_withdraw_status === 'rejected'
+              : accounting_operation_status === 'rejected'
               ? 'تم رفض'
               : 'تم تحديث'
           } الطلب بنجاح 👍🏼`
@@ -130,9 +141,9 @@ export async function PATCH(
       JSON.stringify({
         withdrawUpdated: 0,
         message: `عفواً! لم يتم ${
-          withdraw_withdraw_status === 'completed'
+          accounting_operation_status === 'completed'
             ? 'تم الموافقة'
-            : withdraw_withdraw_status === 'rejected'
+            : accounting_operation_status === 'rejected'
             ? 'تم الرفض'
             : 'تم تحديث'
         }، حدث خطأ ما! `
