@@ -21,6 +21,7 @@ import {
 import Copy from '@/components/custom/Copy'
 import NoRecords from '@/components/custom/NoRecords'
 
+export const revalidate = 10
 export default async function WithdrawOperations() {
   const { userId } = await getAuth()
   const withdrawActions = (await getUserMoneyOperations(

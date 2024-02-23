@@ -21,6 +21,7 @@ import Copy from '@/components/custom/Copy'
 import OperationAction from './_OperationAction'
 import NoRecords from '@/components/custom/NoRecords'
 
+export const revalidate = 10
 export default async function MoneyOperations() {
   const withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
 
