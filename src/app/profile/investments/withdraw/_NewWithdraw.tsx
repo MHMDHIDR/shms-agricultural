@@ -168,7 +168,7 @@ export default function NewWithdraw() {
                 </>
               ) : formStatus.isSubmittingDone ? (
                 <>
-                  <Success />
+                  <Success className='ml-2' />
                   تم تنفيذ العملية .. جاري تحويلك
                 </>
               ) : (
