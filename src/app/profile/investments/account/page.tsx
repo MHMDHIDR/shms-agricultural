@@ -1,9 +1,9 @@
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { getAuth } from '@/lib/actions/auth'
 import { getUser } from '@/lib/utils'
 import { UserProps } from '@/types'
 import Link from 'next/link'
+import Balance from './_Balance'
 
 export default async function Account() {
   const { userId } = await getAuth()
@@ -17,26 +17,10 @@ export default async function Account() {
       <Card className='flex-1 pt-10 pb-0 rtl'>
         {/* Added mr-4 for margin */}
         <CardContent className='text-center'>
-          <div className='grid grid-cols-1 gap-4 select-none md:grid-cols-2'>
-            {/* First Grid Item */}
-            <div className='space-y-2 divide-y divide-gray-300'>
-              <h1 className='text-lg font-bold'>الرصيد الكلي</h1>
-              <h3 className='py-4 text-3xl font-bold' data-price>
-                {shms_user_total_balance ?? 0}
-              </h3>
-            </div>
-
-            {/* Second Grid Item */}
-            <div className='space-y-2 divide-y divide-gray-300'>
-              <h1 className='text-lg font-bold'>الرصيد القابل للسحب</h1>
-              <h3 className='py-4 text-3xl font-bold' data-price>
-                {shms_user_withdrawable_balance ?? 0}
-              </h3>
-              <Link href={'/profile/investments/withdraw'} className='border-none'>
-                <Button variant={'pressable'}>سحب الرصيد</Button>
-              </Link>
-            </div>
-          </div>
+          <Balance
+            totalAmount={shms_user_total_balance}
+            withdrawableAmount={shms_user_withdrawable_balance}
+          />
         </CardContent>
       </Card>
 
