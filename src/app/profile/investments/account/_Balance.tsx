@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { formattedPrice } from '@/lib/utils'
 import { UserProps, getAuthType } from '@/types'
 import Link from 'next/link'
 import { useEffect } from 'react'
@@ -14,7 +15,7 @@ export default function Balance({
 }) {
   // get shms_user_data from localStorage
   const { userId, userStockLimit, userType } = JSON.parse(
-    String(localStorage.getItem('shms_user_data'))
+    String(typeof window !== 'undefined' && localStorage.getItem('shms_user_data'))
   ) as getAuthType
 
   useEffect(() => {
@@ -34,16 +35,14 @@ export default function Balance({
       {/* First Grid Item */}
       <div className='space-y-2 divide-y divide-gray-300'>
         <h1 className='text-lg font-bold'>الرصيد الكلي</h1>
-        <h3 className='py-4 text-3xl font-bold' data-price>
-          {totalAmount ?? 0}
-        </h3>
+        <h3 className='py-4 text-3xl font-bold'>{formattedPrice(totalAmount ?? 0)}</h3>
       </div>
 
       {/* Second Grid Item */}
       <div className='space-y-2 divide-y divide-gray-300'>
         <h1 className='text-lg font-bold'>الرصيد القابل للسحب</h1>
-        <h3 className='py-4 text-3xl font-bold' data-price>
-          {withdrawableAmount ?? 0}
+        <h3 className='py-4 text-3xl font-bold'>
+          {formattedPrice(withdrawableAmount ?? 0)}
         </h3>
         <Link href={'/profile/investments/withdraw'} className='border-none'>
           <Button variant={'pressable'}>سحب الرصيد</Button>

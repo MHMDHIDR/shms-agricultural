@@ -326,3 +326,18 @@ export const handleCopyToClipboard = async (code: string) => {
     })
   }
 }
+
+/**
+ * A function to format the price to the currency
+ * @param price the price to be formatted
+ * @returns the formatted price
+ * */
+export const formattedPrice = (price: number, maximumFractionDigits: number = 2) => {
+  const formatter = new Intl.NumberFormat('ar-qa', {
+    style: 'currency',
+    currency: 'QAR',
+    maximumFractionDigits
+  })
+
+  return formatter.format(price)
+}

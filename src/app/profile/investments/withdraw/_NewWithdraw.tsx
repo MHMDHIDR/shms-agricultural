@@ -14,6 +14,7 @@ import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import type { UserProps, getAuthType } from '@/types'
 import { TabsContent } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
+import { formattedPrice } from '@/lib/utils'
 
 export default function NewWithdraw() {
   const { userId, withdrawableAmount }: getAuthType =
@@ -145,7 +146,7 @@ export default function NewWithdraw() {
                   {!withdrawAmountLimit ? (
                     <Skeleton className='inline-block w-8 h-4 bg-gray-600' />
                   ) : (
-                    withdrawAmountLimit
+                    formattedPrice(withdrawAmountLimit)
                   )}
                 </strong>
               </small>

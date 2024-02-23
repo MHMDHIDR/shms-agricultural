@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { Checkbox } from '@/components/ui/checkbox'
 import Modal from '@/components/custom/Modal'
 import { LoadingCard } from '@/components/custom/Loading'
+import { formattedPrice } from '@/lib/utils'
 
 export default function BuyStocks({
   params: { id: projectId }
@@ -197,11 +198,8 @@ export default function BuyStocks({
                 </label>
               </div>
               <div className='md:w-2/3'>
-                <span
-                  className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
-                  data-price
-                >
-                  {project?.shms_project_stock_price ?? 0}
+                <span className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'>
+                  {formattedPrice(project?.shms_project_stock_price ?? 0, 0)}
                 </span>
               </div>
             </div>
@@ -226,11 +224,11 @@ export default function BuyStocks({
                 </label>
               </div>
               <div className='md:w-2/3'>
-                <span
-                  className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
-                  data-price
-                >
-                  {selectedStocks * (project ? project.shms_project_stock_price : 0)}
+                <span className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'>
+                  {formattedPrice(
+                    selectedStocks * (project ? project.shms_project_stock_price : 0),
+                    0
+                  )}
                 </span>
               </div>
             </div>
@@ -242,19 +240,19 @@ export default function BuyStocks({
               </div>
               <div className='md:w-2/3'>
                 <div style={{ position: 'relative', width: '100%' }}>
-                  <span
-                    className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
-                    data-price
-                  >
-                    {newPercentage > 0
-                      ? selectedStocks *
-                          (project ? project.shms_project_stock_profits : 0) +
-                        (selectedStocks *
-                          (project ? project.shms_project_stock_profits : 0) *
-                          newPercentage) /
-                          100
-                      : selectedStocks *
-                        (project ? project.shms_project_stock_profits : 0)}
+                  <span className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'>
+                    {formattedPrice(
+                      newPercentage > 0
+                        ? selectedStocks *
+                            (project ? project.shms_project_stock_profits : 0) +
+                            (selectedStocks *
+                              (project ? project.shms_project_stock_profits : 0) *
+                              newPercentage) /
+                              100
+                        : selectedStocks *
+                            (project ? project.shms_project_stock_profits : 0),
+                      0
+                    )}
                   </span>
                 </div>
               </div>
@@ -266,21 +264,23 @@ export default function BuyStocks({
                 </label>
               </div>
               <div className='md:w-2/3'>
-                <span
-                  className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'
-                  data-price
-                >
-                  {newPercentage > 0
-                    ? selectedStocks *
-                        (project ? project.shms_project_stock_profits : 0) +
-                      (selectedStocks *
-                        (project ? project.shms_project_stock_profits : 0) *
-                        newPercentage) /
-                        100 +
-                      selectedStocks * (project ? project.shms_project_stock_price : 0)
-                    : selectedStocks *
-                        (project ? project.shms_project_stock_profits : 0) +
-                      selectedStocks * (project ? project.shms_project_stock_price : 0)}
+                <span className='block p-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none'>
+                  {formattedPrice(
+                    newPercentage > 0
+                      ? selectedStocks *
+                          (project ? project.shms_project_stock_profits : 0) +
+                          (selectedStocks *
+                            (project ? project.shms_project_stock_profits : 0) *
+                            newPercentage) /
+                            100 +
+                          selectedStocks *
+                            (project ? project.shms_project_stock_price : 0)
+                      : selectedStocks *
+                          (project ? project.shms_project_stock_profits : 0) +
+                          selectedStocks *
+                            (project ? project.shms_project_stock_price : 0),
+                    0
+                  )}
                 </span>
               </div>
             </div>
@@ -290,7 +290,7 @@ export default function BuyStocks({
                   رمز خاص لزيادة النسبة <small>(اختياري)</small>
                 </label>
               </div>
-              <div className='md:w-2/3'>
+              <div className='md:w-2/3 space-y-2'>
                 <input
                   className='w-64 px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none md:w-96 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   type='text'

@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/table'
 import { TabsContent } from '@/components/ui/tabs'
 import { API_URL, APP_LOGO } from '@/data/constants'
-import { arabicDate, getProject } from '@/lib/utils'
+import { arabicDate, formattedPrice, getProject } from '@/lib/utils'
 import type { UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 import { Suspense } from 'react'
@@ -182,11 +182,10 @@ export default async function DashboardInvestors() {
                                         <TableCell className='text-center min-w-36'>
                                           {item.newPercentage}
                                         </TableCell>
-                                        <TableCell
-                                          className='text-center min-w-28'
-                                          data-price
-                                        >
-                                          {item.stocks * projectStockPrice}
+                                        <TableCell className='text-center min-w-28'>
+                                          {formattedPrice(
+                                            item.stocks * projectStockPrice
+                                          )}
                                         </TableCell>
                                         <TableCell className='text-center min-w-60'>
                                           {arabicDate(item.createdAt)}

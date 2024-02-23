@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/table'
 import { API_URL } from '@/data/constants'
 import { getAuth } from '@/lib/actions/auth'
-import { getProject, getProjectDate } from '@/lib/utils'
+import { formattedPrice, getProject, getProjectDate } from '@/lib/utils'
 import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 import Contract from './_ShowPDF'
@@ -151,29 +151,17 @@ export default async function DashboardInvestors() {
                             <TableCell className='text-center border border-gray-200'>
                               {stocks}
                             </TableCell>
-                            <TableCell
-                              className='text-center border border-gray-200'
-                              data-price
-                            >
-                              {projectStockPrice}
+                            <TableCell className='text-center border border-gray-200'>
+                              {formattedPrice(projectStockPrice)}
                             </TableCell>
-                            <TableCell
-                              className='text-center border border-gray-200'
-                              data-price
-                            >
-                              {totalPayment}
+                            <TableCell className='text-center border border-gray-200'>
+                              {formattedPrice(totalPayment)}
                             </TableCell>
-                            <TableCell
-                              className='text-center border border-gray-200'
-                              data-price
-                            >
-                              {totalProfit}
+                            <TableCell className='text-center border border-gray-200'>
+                              {formattedPrice(totalProfit)}
                             </TableCell>
-                            <TableCell
-                              className='text-center border border-gray-200'
-                              data-price
-                            >
-                              {totalProfit + totalPayment}
+                            <TableCell className='text-center border border-gray-200'>
+                              {formattedPrice(totalProfit + totalPayment)}
                             </TableCell>
                             <TableCell className='text-center border border-gray-200'>
                               {getProjectDate(new Date(purchaseDate))}

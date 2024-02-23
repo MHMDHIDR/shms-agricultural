@@ -4,6 +4,7 @@ import ProjectImages from '@/components/custom/projectsImages'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import {
   arabicDate,
+  formattedPrice,
   getProject,
   getProjectDuration,
   getProjectStudyCase,
@@ -91,7 +92,7 @@ export default async function ProjectDetailsPage({
             <BadgeDollarSign className='w-20 h-20 stroke-1 stroke-green-500' />
             <span>قيمة السهم الواحد</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
-              {project.shms_project_stock_price}
+              {formattedPrice(project.shms_project_stock_price, 0)}
             </p>
           </div>
 
@@ -101,7 +102,7 @@ export default async function ProjectDetailsPage({
             <LineChart className='w-20 h-20 stroke-1' />
             <span>ارباح السهم الواحد</span>
             <p style={{ color: 'green', fontWeight: 'bold' }}>
-              {project.shms_project_stock_profits}
+              {formattedPrice(project.shms_project_stock_profits, 0)}
             </p>
           </div>
 
