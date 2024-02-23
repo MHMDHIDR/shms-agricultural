@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { MyTooltip } from '@/components/ui/tooltip'
+import { selectedPaymentOptions } from '@/types'
 
 export default function PaymentMetods() {
-  const [selectedOption, setSelectedOption] = useState('cash')
+  const [selectedOption, setSelectedOption] = useState<selectedPaymentOptions>('cash')
 
   const handleOptionChange = (event: { target: { value: any } }) => {
     setSelectedOption(event.target.value)
@@ -22,7 +23,10 @@ export default function PaymentMetods() {
             onChange={handleOptionChange}
             disabled
           />
-          <span className='mr-4'>فيزا</span>
+          <span className='mr-4'>
+            <strong>فيزا</strong>
+            <small className='mr-2'>(غير متاح حاليا)</small>
+          </span>
         </label>
       </MyTooltip>
       {/* بطاقة ائتمانية   -- Credit Card */}
@@ -35,7 +39,10 @@ export default function PaymentMetods() {
             onChange={handleOptionChange}
             disabled
           />
-          <span className='mr-4'>بطاقة ائتمان</span>
+          <span className='mr-4'>
+            <strong>بطاقة ائتمانية</strong>
+            <small className='mr-2'>(غير متاح حاليا)</small>
+          </span>
         </label>
       </MyTooltip>
       {/* نقدا   -- Cash */}
@@ -48,6 +55,18 @@ export default function PaymentMetods() {
         />
         <span className='mr-4'>
           <strong>نقدا</strong>
+        </span>
+      </label>
+      {/* رصيدي في شمس   -- Balance */}
+      <label className='cursor-pointer'>
+        <input
+          type='radio'
+          value='balance'
+          checked={selectedOption === 'balance'}
+          onChange={handleOptionChange}
+        />
+        <span className='mr-4'>
+          <strong>الخصم من رصيد شمس</strong>
         </span>
       </label>
     </div>

@@ -319,3 +319,5 @@ export type generatePDFProps = {
   projectTerms?: string
   referenceCode: string
 }
+
+export type selectedPaymentOptions = 'visa' | 'credit' | 'cash' | 'balance'
