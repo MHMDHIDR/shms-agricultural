@@ -31,6 +31,7 @@ import { scrollToView } from '@/lib/utils'
 import Divider from '@/components/custom/Divider'
 import Copy from '@/components/custom/Copy'
 
+export const revalidate = 10
 export default function CountPercentage() {
   const [projects, setProjects] = useState<ProjectProps[]>([])
   const [selectedProject, setSelectedProject] = useState<
