@@ -161,7 +161,7 @@ export default function BuyStocks({
 
   const userStockLimit: getAuthType['userStockLimit'] =
     typeof window !== 'undefined' &&
-    JSON.parse(String(localStorage.getItem('shms_user_data'))).userStockLimit
+    JSON.parse(String(localStorage.getItem('shms_user_data')))?.userStockLimit
 
   return (
     <Layout>
