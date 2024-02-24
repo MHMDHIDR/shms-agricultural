@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { ChevronDownIcon } from '@radix-ui/react-icons'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -128,10 +128,10 @@ export default function OperationsTable({
           </DropdownMenuContent>
         </DropdownMenu>
         <Input
-          placeholder='إبحــــث في البيانات'
-          value={(table.getColumn('shms_email')?.getFilterValue() as string) ?? ''}
+          placeholder='إبحــــث عن طريق اسم المستثمر'
+          value={table.getColumn('shms_fullname')?.getFilterValue() as string}
           onChange={event =>
-            table.getColumn('shms_email')?.setFilterValue(event.target.value)
+            table.getColumn('shms_fullname')?.setFilterValue(event.target.value)
           }
           className='max-w-sm'
         />
@@ -223,19 +223,19 @@ export default function OperationsTable({
         </Table>
       </div>
       <div className='flex items-center justify-end space-x-2 py-4'>
-        <div className='flex-1 text-sm text-muted-foreground'>
+        {/* <div className='flex-1 text-sm text-muted-foreground'>
           {table.getFilteredSelectedRowModel().rows.length} من{' '}
           {table.getFilteredRowModel().rows.length}{' '}
           {table.getFilteredRowModel().rows.length > 1 ? 'صفوف' : 'صف'}{' '}
-        </div>
-        <div className='space-x-2'>
+        </div> */}
+        <div className='flex gap-x-3'>
           <Button
             variant='outline'
             size='sm'
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            السابق
           </Button>
           <Button
             variant='outline'
@@ -243,7 +243,7 @@ export default function OperationsTable({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            التالي
           </Button>
         </div>
       </div>
