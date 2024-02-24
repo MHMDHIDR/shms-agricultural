@@ -341,3 +341,33 @@ export const formattedPrice = (price: number, maximumFractionDigits: number = 2)
 
   return formatter.format(price)
 }
+
+/**
+ * A function to replace the string with the arabic string
+ * @param string the string to be replaced
+ * @returns the replaced string
+ * */
+export const replaceString = (string: string) => {
+  switch (string) {
+    case 'shms_withdraw_id':
+      return 'الرقم المرجعي'
+    case 'shms_action_type':
+      return 'نوع العملية'
+    case 'shms_fullname':
+      return 'اسم المستثمر'
+    case 'shms_phone':
+      return 'رقم الجوال'
+    case 'shms_email':
+      return 'البريد الالكتروني'
+    case 'shms_address':
+      return 'العنوان'
+    case 'shms_created_at':
+      return 'تاريخ العملية'
+    case 'shms_withdraw_amount':
+      return 'المبلغ المراد سحبه'
+    case 'accounting_operation_status':
+      return 'حالة الطلب'
+    default:
+      return string
+  }
+}

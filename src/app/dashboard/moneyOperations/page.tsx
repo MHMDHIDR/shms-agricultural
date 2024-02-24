@@ -1,14 +1,5 @@
 import { TabsContent } from '@/components/ui/tabs'
-import { Skeleton } from '@/components/ui/skeleton'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
-import { getProjectDate, getProjectStatus, getUserMoneyOperations } from '@/lib/utils'
+import { getUserMoneyOperations } from '@/lib/utils'
 import { accountingOperationsProps } from '@/types'
 import {
   Card,
@@ -17,15 +8,14 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import Copy from '@/components/custom/Copy'
-import OperationAction from './_OperationAction'
-import NoRecords from '@/components/custom/NoRecords'
 import OperationsTable from './_OperationsTable'
 
 export default async function MoneyOperations() {
-  const withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
-
-  console.log(withdrawActions)
+  let withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
+  // filter out the shms_user_id property from the withdrawActions array
+  withdrawActions.forEach(withdrawAction => {
+    delete withdrawAction.shms_user_id
+  })
 
   return (
     <TabsContent value='money_operations'>

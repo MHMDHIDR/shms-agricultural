@@ -38,6 +38,7 @@ import {
 import { accountingOperationsProps } from '@/types'
 import Copy from '@/components/custom/Copy'
 import NoRecords from '@/components/custom/NoRecords'
+import { getProjectStatus, replaceString } from '@/lib/utils'
 
 export const columns: ColumnDef<accountingOperationsProps>[] = [
   {
@@ -212,7 +213,10 @@ export default function OperationsTable({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            replaceString(String(header.column.columnDef.header)),
+                            header.getContext()
+                          )}
                     </TableHead>
                   )
                 })}
@@ -232,8 +236,11 @@ export default function OperationsTable({
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}{' '}
                           </span>
                         </span>
+                      ) : cell.column.id.includes('accounting_operation_status') ||
+                        cell.column.id.includes('shms_action_type') ? (
+                        getProjectStatus(String(cell.getValue()))
                       ) : (
-                        flexRender(cell.column.columnDef.cell, cell.getContext())
+                        replaceString(String(cell.getValue()))
                       )}
                     </TableCell>
                   ))}

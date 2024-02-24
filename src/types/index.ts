@@ -95,15 +95,15 @@ export type ProjectProps = {
 }
 
 export type accountingOperationsProps = {
+  shms_user_id?: UserProps['shms_id']
   shms_withdraw_id: string
-  shms_created_at: string
-  shms_user_id: UserProps['shms_id']
+  shms_action_type: 'withdraw' | 'deposit'
   shms_fullname: UserProps['shms_fullname']
-  shms_address: UserProps['shms_address']
   shms_phone: UserProps['shms_phone']
   shms_email: UserProps['shms_email']
+  shms_address: UserProps['shms_address']
+  shms_created_at: string
   shms_withdraw_amount: number
-  shms_action_type: 'withdraw' | 'deposit'
   accounting_operation_status: 'pending' | 'completed' | 'rejected' | 'deleted'
   // When withdraw action happens
   message?: string
