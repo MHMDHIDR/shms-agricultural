@@ -360,8 +360,9 @@ export default function EditProjectPage({
   }
 
   const userType: getAuthType['userType'] =
-    typeof window !== 'undefined' &&
-    JSON.parse(String(localStorage.getItem('shms_user_data'))).userType
+    (typeof window !== 'undefined' &&
+      JSON.parse(String(localStorage.getItem('shms_user_data'))).userType) ??
+    'user'
 
   return !session && userType !== 'admin' ? (
     <NotFound />
