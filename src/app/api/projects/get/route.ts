@@ -5,7 +5,9 @@ export async function GET() {
 
   return new Response(JSON.stringify(projects), {
     headers: {
-      'Cache-Control': 'no-cache'
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-store, no-cache, must-revalidate',
+      Expires: '0'
     }
   })
 }

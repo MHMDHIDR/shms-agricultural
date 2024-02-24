@@ -48,7 +48,9 @@ export default function CountPercentage() {
       `${API_URL}/projects/get`,
       {
         headers: {
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0'
         }
       }
     )
