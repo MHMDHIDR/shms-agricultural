@@ -86,6 +86,9 @@ export default function PaymentMetods({
         />
         <span className='mr-4'>
           <strong>الخصم من رصيد شمس</strong>
+          {(balanceTotalAmount ?? 0) < totalPaymentAmount && (
+            <small className='mr-2'>(رصيدك غير كافي لشراء الأسهم)</small>
+          )}
         </span>
       </label>
     </div>

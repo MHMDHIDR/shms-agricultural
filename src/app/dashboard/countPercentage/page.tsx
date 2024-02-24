@@ -48,6 +48,7 @@ export default function CountPercentage() {
     // const { data: projects }: { data: ProjectProps[] } = await axios.get(
     //   `${API_URL}/projects/get`
     // )
+    // using fetch instead of axios to opt-out of caching
     const response = await fetch(`${API_URL}/projects/get`, { signal })
     const projects = await response.json()
 
