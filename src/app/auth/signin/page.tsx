@@ -53,18 +53,6 @@ const SigninPage = () => {
         totalAmount
       } = await getAuth()
 
-      console.log('user Data--->', {
-        loading,
-        userId,
-        userStockLimit,
-        userName,
-        userEmail,
-        userPhone,
-        userType,
-        withdrawableAmount,
-        totalAmount
-      })
-
       loading
         ? setIsDoneSubmitting(false)
         : localStorage.setItem(

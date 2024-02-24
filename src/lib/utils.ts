@@ -120,13 +120,24 @@ export const arabicDate = (date: string) =>
   })
 
 export async function getProject(projectId: ProjectProps['shms_project_id']) {
-  const {
-    data: { project }
-  }: { data: { project: ProjectProps } } = await axios.get(
-    `${API_URL}/projects/get/${projectId}`
-  )
+  try {
+    const response = await axios.get(`${API_URL}/projects/get/${projectId}`)
 
-  return project
+    if (response.status === 200) {
+      const { project } = response.data
+      return project
+    } else {
+      throw new Error(`Request failed with status code ${response.status}`)
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      console.error(`Project with ID ${projectId} not found`)
+      return null // Handle 404 by returning null or any appropriate value
+    } else {
+      console.error('Error fetching project data:', error)
+      throw error
+    }
+  }
 }
 
 /**

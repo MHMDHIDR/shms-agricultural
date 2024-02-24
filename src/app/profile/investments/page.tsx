@@ -32,21 +32,29 @@ export default async function DashboardInvestors() {
 
   const projectDataFilter: InverstorProjectData[][] = await Promise.all(
     projectsData.map(async projectData => {
-      return Promise.all(
+      const mappedProjects = await Promise.all(
         projectData.map(async (project: stocksPurchasedProps) => {
-          const projectName = (await getProject(project.shms_project_id))
-            .shms_project_name
-          const projectStockPrice = (await getProject(project.shms_project_id))
-            .shms_project_stock_price
-          const projectProfit = (await getProject(project.shms_project_id))
-            .shms_project_stock_profits
-          const profitCollectionDate = (await getProject(project.shms_project_id))
-            .shms_project_profits_collect_date
-          const purchaseDate = project.createdAt
-          const projectTerms = (await getProject(project.shms_project_id))
-            .shms_project_terms
+          if (!project.shms_project_id) return null
 
-          return {
+          const projectDetails = await getProject(project.shms_project_id)
+          if (!projectDetails) return null
+
+          const {
+            shms_project_name: projectName,
+            shms_project_stock_price: projectStockPrice,
+            shms_project_stock_profits: projectProfit,
+            shms_project_profits_collect_date: profitCollectionDate,
+            createdAt: purchaseDate,
+            shms_project_terms: projectTerms
+          } = projectDetails
+
+          const totalProfit =
+            project.newPercentage > 0
+              ? project.stocks * projectProfit +
+                (project.stocks * projectProfit * project.newPercentage) / 100
+              : project.stocks * projectProfit
+
+          const mappedProject: InverstorProjectData = {
             projectId: project.shms_project_id,
             projectName,
             projectStockPrice,
@@ -55,17 +63,17 @@ export default async function DashboardInvestors() {
             profitCollectionDate,
             purchaseDate,
             projectTerms,
-            totalProfit:
-              project.newPercentage > 0
-                ? project.stocks * projectProfit +
-                  (project.stocks * projectProfit * project.newPercentage) / 100
-                : project.stocks * projectProfit
+            totalProfit
           }
+
+          return mappedProject
         })
       )
+
+      // Filter out null values before returning
+      return mappedProjects.filter(project => project !== null) as InverstorProjectData[]
     })
   )
-
   return (
     <Layout>
       <section className='container mx-auto'>

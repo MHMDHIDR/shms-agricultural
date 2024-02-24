@@ -66,31 +66,31 @@ export default function BuyStocks({
   }, [projectId])
 
   useEffect(() => {
-    //if the user is signed in then we will check getUserTotalAmount and update the localStorage
+    //if the user is signed in then we will check getUserwithdrawableAmount and update the localStorage
     if (localStorage.getItem('shms_user_data')) {
       const userId = JSON.parse(localStorage.getItem('shms_user_data') as string)?.userId
 
-      const getUserTotalAmount = async () => {
+      const getUserWithdrawableAmount = async () => {
         try {
           const {
-            data: { totalAmount }
+            data: { withdrawableAmount }
           }: {
-            data: { totalAmount: UserProps['shms_user_total_balance'] }
+            data: { withdrawableAmount: UserProps['shms_user_total_balance'] }
           } = await axios.get(`${API_URL}/users/getUserStocks/${userId}`)
 
-          // set one single property in the localStorage shms_user_data totalAmount to the totalAmount
+          // set one single property in the localStorage shms_user_data withdrawableAmount to the withdrawableAmount
           localStorage.setItem(
             'shms_user_data',
             JSON.stringify({
               ...JSON.parse(localStorage.getItem('shms_user_data') as string),
-              totalAmount
+              withdrawableAmount
             })
           )
         } catch (error) {
           console.log(error)
         }
       }
-      getUserTotalAmount()
+      getUserWithdrawableAmount()
     }
   }, [])
 

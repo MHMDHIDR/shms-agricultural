@@ -13,9 +13,11 @@ export default function PaymentMetods({
   setSelectedOption: Dispatch<SetStateAction<selectedPaymentOptions>>
   totalPaymentAmount: number
 }) {
-  const { totalAmount }: getAuthType =
-    typeof window !== 'undefined' &&
-    JSON.parse(String(localStorage.getItem('shms_user_data')))
+  const localUser = localStorage.getItem('shms_user_data')
+  // only destructure the totalAmount from the localUser if it's not null
+  const { totalAmount }: getAuthType = localUser
+    ? typeof window !== 'undefined' && JSON.parse(String(localUser))
+    : {}
 
   const handleOptionChange = (event: { target: { value: any } }) => {
     setSelectedOption(event.target.value)

@@ -22,6 +22,7 @@ import type {
   selectedPaymentOptions,
   stocksPurchasedProps
 } from '@/types'
+import { LoadingPage } from '@/components/custom/Loading'
 
 export default function PersonalData({
   params: { id: projectId /*, slug*/ }
@@ -37,7 +38,7 @@ export default function PersonalData({
   const [userData, setUserData] = useState<getAuthType>()
   const [selectedOption, setSelectedOption] = useState<selectedPaymentOptions>('cash')
 
-  const { push } = useRouter()
+  const { push, replace } = useRouter()
 
   useEffect(() => {
     if (session) {
@@ -134,7 +135,11 @@ export default function PersonalData({
     }
   }
 
-  return (
+  return !session || !session?.token ? (
+    replace('/')
+  ) : session?.user ? (
+    <LoadingPage />
+  ) : (
     <Layout>
       {stocksPurchesed === 1 && (
         <ModalMessage status={<Success className='w-24 h-24' />}>{message}</ModalMessage>

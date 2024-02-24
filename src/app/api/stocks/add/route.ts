@@ -42,7 +42,10 @@ export async function PATCH(req: Request) {
 
     // if paymentMethod === 'balance' then check if the user has enough balance
     if (paymentMethod === 'balance') {
-      if (user?.shms_user_total_balance < stocks * project?.shms_project_stock_price) {
+      if (
+        user?.shms_user_withdrawable_balance <
+        stocks * project?.shms_project_stock_price
+      ) {
         return new Response(
           JSON.stringify({
             stocksPurchesed: 0,
@@ -54,35 +57,50 @@ export async function PATCH(req: Request) {
     }
 
     const userPrevStocks = getUserPrevStocks(user as UserProps)
+    const userPrevWithdrawableBalance = getUserPrevWithdrawableBalance(user as UserProps)
     const projectAvailableStocks = getProjectStocks(project as ProjectProps)
+    const newWithdrawableBalance =
+      Number(userPrevWithdrawableBalance) - stocks * project.shms_project_stock_price
 
-    if (userPrevStocks !== null) {
-      await connectDB(`UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`, [
-        JSON.stringify([
-          ...JSON.parse(String(userPrevStocks)),
-          {
-            shms_project_id,
-            stocks,
-            newPercentage,
-            percentageCode,
-            createdAt: new Date().toISOString()
-          }
-        ]),
-        shms_id
-      ])
+    if (userPrevStocks !== null && userPrevStocks.length > 0) {
+      await connectDB(
+        `UPDATE users SET shms_user_stocks = ?,
+          shms_user_withdrawable_balance = ?
+        WHERE shms_id = ?;`,
+        [
+          JSON.stringify([
+            ...userPrevStocks,
+            {
+              shms_project_id,
+              stocks,
+              newPercentage,
+              percentageCode,
+              createdAt: new Date().toISOString()
+            }
+          ]),
+          newWithdrawableBalance,
+          shms_id
+        ]
+      )
     } else {
-      await connectDB(`UPDATE users SET shms_user_stocks = ? WHERE shms_id = ?;`, [
-        JSON.stringify([
-          {
-            shms_project_id,
-            stocks,
-            newPercentage,
-            percentageCode,
-            createdAt: new Date().toISOString()
-          }
-        ]),
-        shms_id
-      ])
+      await connectDB(
+        `UPDATE users SET shms_user_stocks = ?,
+          shms_user_withdrawable_balance = ?
+        WHERE shms_id = ?;`,
+        [
+          JSON.stringify([
+            {
+              shms_project_id,
+              stocks,
+              newPercentage,
+              percentageCode,
+              createdAt: new Date().toISOString()
+            }
+          ]),
+          newWithdrawableBalance,
+          shms_id
+        ]
+      )
     }
 
     const updateProjectAvaStocks = await connectDB(
@@ -169,6 +187,17 @@ function getUserPrevStocks(user: UserProps) {
   if (!user || !user.shms_user_stocks || user.shms_user_stocks.length === 0) return null
 
   return user.shms_user_stocks
+}
+
+function getUserPrevWithdrawableBalance(user: UserProps) {
+  if (
+    !user ||
+    !user.shms_user_withdrawable_balance ||
+    user.shms_user_withdrawable_balance === 0
+  )
+    return null
+
+  return user.shms_user_withdrawable_balance
 }
 
 function getProjectStocks(project: ProjectProps) {
