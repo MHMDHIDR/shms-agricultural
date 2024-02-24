@@ -92,7 +92,7 @@ export default function CountPercentage() {
       }
 
       setPercentageCodesRefresh(data.projectUpdated ?? 0)
-      setTimeout(() => redirect('/dashboard'), DEFAULT_DURATION)
+      setTimeout(() => redirect('/dashboard'), DEFAULT_DURATION / 2)
     } catch (error: any) {
       const errorMessage = error.response?.data?.message ?? error
       toast(errorMessage.length < 50 ? errorMessage : 'حدث خطأ ما'),
