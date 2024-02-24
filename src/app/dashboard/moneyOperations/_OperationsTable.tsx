@@ -189,7 +189,7 @@ export default function OperationsTable({
                     checked={column.getIsVisible()}
                     onCheckedChange={value => column.toggleVisibility(!!value)}
                   >
-                    {column.id}
+                    {replaceString(column.id)}
                   </DropdownMenuCheckboxItem>
                 )
               })}
