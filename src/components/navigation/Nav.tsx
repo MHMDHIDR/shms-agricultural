@@ -12,12 +12,11 @@ import {
 } from '@/components/ui/navigation-menu'
 import useEventListener from '@/hooks/useEventListener'
 import { getAuth } from '@/lib/actions/auth'
-import { abstractWords, cn } from '@/lib/utils'
+import { abstractWords, cn, redirect } from '@/lib/utils'
 import type { MenuItemsProps, UserLoggedInProps } from '@/types'
 import { LogIn, LogOut } from 'lucide-react'
 import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { ShmsIcon } from '@/components/icons/Socials'
 import { Button } from '@/components/ui/button'
@@ -32,7 +31,6 @@ export default function Nav() {
   }: { status: SessionContextValue['status']; data: UserLoggedInProps } = useSession()
 
   const isAuth = status === 'authenticated' ? true : false
-  const { replace } = useRouter()
 
   const [isOpen, setIsOpen] = useState(false)
   const [sticky, setSticky] = useState(false)
@@ -160,7 +158,7 @@ export default function Nav() {
                         onClick={async () => {
                           localStorage.removeItem('shms_user_data')
                           await signOut({ redirect: false })
-                          replace('/auth/signin')
+                          redirect('/auth/signin', 0)
                         }}
                       >
                         <LogOut className='text-[#FDB813] dark:text-[#ffd87e]' />

@@ -20,6 +20,7 @@ import {
 import Copy from '@/components/custom/Copy'
 import OperationAction from './_OperationAction'
 import NoRecords from '@/components/custom/NoRecords'
+import OperationsTable from './_OperationsTable'
 
 export default async function MoneyOperations() {
   const withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
@@ -39,7 +40,8 @@ export default async function MoneyOperations() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table className='min-w-full text-center divide-y divide-gray-200 rtl'>
+          <OperationsTable data={withdrawActions} />
+          {/* <Table className='min-w-full text-center divide-y divide-gray-200 rtl'>
             <TableHeader>
               <TableRow>
                 <TableHead className='font-bold text-center select-none'>
@@ -136,7 +138,6 @@ export default async function MoneyOperations() {
                         {getProjectStatus(withdrawAction.accounting_operation_status)}
                       </TableCell>
                       <TableCell className='min-w-40'>
-                        {/* Toggle User Status Button */}
                         <OperationAction withdrawAction={withdrawAction}>
                           {withdrawAction.accounting_operation_status === 'pending' ||
                           withdrawAction.accounting_operation_status === 'rejected'
@@ -151,7 +152,7 @@ export default async function MoneyOperations() {
                 })
               )}
             </TableBody>
-          </Table>
+          </Table> */}
         </CardContent>
       </Card>
     </TabsContent>
