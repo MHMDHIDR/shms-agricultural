@@ -58,14 +58,18 @@ export async function PATCH(req: Request) {
 
     const userPrevStocks = getUserPrevStocks(user as UserProps)
     const userPrevWithdrawableBalance = getUserPrevWithdrawableBalance(user as UserProps)
+    const userPrevTotalBalance = getUserPrevTotalBalance(user as UserProps)
     const projectAvailableStocks = getProjectStocks(project as ProjectProps)
     const newWithdrawableBalance =
       Number(userPrevWithdrawableBalance) - stocks * project.shms_project_stock_price
+    const newTotalBalance =
+      Number(userPrevTotalBalance) + stocks * project.shms_project_stock_price
 
     if (userPrevStocks !== null && userPrevStocks.length > 0) {
       await connectDB(
         `UPDATE users SET shms_user_stocks = ?,
-          shms_user_withdrawable_balance = ?
+          shms_user_withdrawable_balance = ?,
+          shms_user_total_balance = ?
         WHERE shms_id = ?;`,
         [
           JSON.stringify([
@@ -79,13 +83,15 @@ export async function PATCH(req: Request) {
             }
           ]),
           newWithdrawableBalance,
+          newTotalBalance,
           shms_id
         ]
       )
     } else {
       await connectDB(
         `UPDATE users SET shms_user_stocks = ?,
-          shms_user_withdrawable_balance = ?
+          shms_user_withdrawable_balance = ?,
+          shms_user_total_balance = ?
         WHERE shms_id = ?;`,
         [
           JSON.stringify([
@@ -98,6 +104,7 @@ export async function PATCH(req: Request) {
             }
           ]),
           newWithdrawableBalance,
+          newTotalBalance,
           shms_id
         ]
       )
@@ -198,6 +205,13 @@ function getUserPrevWithdrawableBalance(user: UserProps) {
     return null
 
   return user.shms_user_withdrawable_balance
+}
+
+function getUserPrevTotalBalance(user: UserProps) {
+  if (!user || !user.shms_user_total_balance || user.shms_user_total_balance === 0)
+    return null
+
+  return user.shms_user_total_balance
 }
 
 function getProjectStocks(project: ProjectProps) {

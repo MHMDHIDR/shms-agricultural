@@ -33,6 +33,7 @@ export default async function DashboardInvestors() {
   // Fetch project details for all users
   const fetchUserProjectDetails = async (userStocks: stocksPurchasedProps[]) => {
     const promises = userStocks.map(async (item: stocksPurchasedProps) => {
+      if (!item.shms_project_id) return null
       const projectDetails = await getProject(item.shms_project_id)
 
       if (projectDetails && projectDetails.shms_project_stock_price) {
