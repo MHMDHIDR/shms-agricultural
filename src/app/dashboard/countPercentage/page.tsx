@@ -40,7 +40,7 @@ export default function CountPercentage() {
   const [percentageCode, setPercentageCode] = useState<string>('الرجاء اختيار المشروع')
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
-  const [percentageCodeDeleted, setPercentageCodeDeleted] = useState<number>(0)
+  const [percentageCodesRefresh, setPercentageCodesRefresh] = useState<number>(0)
 
   const { refresh } = useRouter()
 
@@ -53,7 +53,7 @@ export default function CountPercentage() {
 
   useEffect(() => {
     getProjects()
-  }, [percentageCodeDeleted])
+  }, [percentageCodesRefresh])
 
   const handleSubmitPercentage = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -86,6 +86,8 @@ export default function CountPercentage() {
       } else {
         setIsDoneSubmitting(false)
       }
+
+      setPercentageCodesRefresh(data.projectUpdated ?? 0)
       setTimeout(() => refresh(), DEFAULT_DURATION)
     } catch (error: any) {
       const errorMessage = error.response?.data?.message
@@ -116,7 +118,8 @@ export default function CountPercentage() {
         `${API_URL}/projects/edit/${projectId}`,
         {
           shms_project_special_percentage: null,
-          shms_project_special_percentage_code: null
+          shms_project_special_percentage_code: null,
+          updatePercentage: true
         }
       )
 
@@ -150,7 +153,7 @@ export default function CountPercentage() {
         })
       }
 
-      setPercentageCodeDeleted(data.projectUpdated ?? 0)
+      setPercentageCodesRefresh(data.projectUpdated ?? 0)
       setTimeout(() => refresh(), DEFAULT_DURATION)
     } catch (error) {
       toast('حدث خطأ ما أثناء حذف المشروع', {
