@@ -28,7 +28,7 @@ export default function Balance({
         withdrawableAmount
       } as getAuthType)
     )
-  }, [])
+  }, [userId, userStockLimit, userType, withdrawableAmount])
 
   return (
     <div className='grid grid-cols-1 gap-4 select-none md:grid-cols-2'>

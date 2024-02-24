@@ -31,8 +31,8 @@ export default async function MoneyOperations() {
         <CardContent>
           <OperationsTable
             data={withdrawActions}
-            actionButtons={withdrawActions.map(withdrawAction => (
-              <OperationAction withdrawAction={withdrawAction} />
+            actionButtons={withdrawActions.map((withdrawAction, index) => (
+              <OperationAction key={index} withdrawAction={withdrawAction} />
             ))}
           />
         </CardContent>

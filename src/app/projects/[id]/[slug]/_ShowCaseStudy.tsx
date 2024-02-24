@@ -11,7 +11,7 @@ export default function ShowCaseStudy({ project }: { project: ProjectProps }) {
   const [onMobileScreen, setOnMobileScreen] = useState(false)
   useEffect(() => {
     setOnMobileScreen(WINDOW_WIDTH < MOBILE_SCREEN)
-  }, [WINDOW_WIDTH])
+  }, [])
 
   return onMobileScreen ? (
     <Link
