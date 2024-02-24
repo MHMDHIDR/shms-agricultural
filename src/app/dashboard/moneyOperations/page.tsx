@@ -49,6 +49,18 @@ export default async function MoneyOperations() {
                   نوع العملية
                 </TableHead>
                 <TableHead className='font-bold text-center select-none'>
+                  اسم المستثمر
+                </TableHead>
+                <TableHead className='font-bold text-center select-none'>
+                  رقم الجوال
+                </TableHead>
+                <TableHead className='font-bold text-center select-none'>
+                  البريد الالكتروني
+                </TableHead>
+                <TableHead className='font-bold text-center select-none'>
+                  العنوان
+                </TableHead>
+                <TableHead className='font-bold text-center select-none'>
                   تاريخ العملية
                 </TableHead>
                 <TableHead className='font-bold text-center select-none'>
@@ -89,7 +101,23 @@ export default async function MoneyOperations() {
                         />
                         <span>{withdrawAction.shms_withdraw_id}</span>
                       </TableCell>
-                      <TableCell className='min-w-40'>سحب رصيد</TableCell>
+                      <TableCell className='min-w-40'>
+                        {withdrawAction.shms_action_type === 'deposit'
+                          ? 'إيداع رصيد'
+                          : 'سحب رصيد'}
+                      </TableCell>
+                      <TableCell className='min-w-40'>
+                        {withdrawAction.shms_fullname}
+                      </TableCell>
+                      <TableCell className='min-w-40'>
+                        {withdrawAction.shms_phone}
+                      </TableCell>
+                      <TableCell className='min-w-40'>
+                        {withdrawAction.shms_email}
+                      </TableCell>
+                      <TableCell className='min-w-40'>
+                        {withdrawAction.shms_address}
+                      </TableCell>
                       <TableCell className='min-w-40'>
                         {getProjectDate(new Date(withdrawAction.shms_created_at))}
                       </TableCell>

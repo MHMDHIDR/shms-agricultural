@@ -100,7 +100,11 @@ export default async function WithdrawOperations() {
                         />
                         <span>{withdrawAction.shms_withdraw_id}</span>
                       </TableCell>
-                      <TableCell className='min-w-40'>سحب رصيد</TableCell>
+                      <TableCell className='min-w-40'>
+                        {withdrawAction.shms_action_type === 'deposit'
+                          ? 'إيداع رصيد'
+                          : 'سحب رصيد'}
+                      </TableCell>
                       <TableCell className='min-w-40'>
                         {getProjectDate(new Date(withdrawAction.shms_created_at))}
                       </TableCell>
