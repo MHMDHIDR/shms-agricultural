@@ -14,6 +14,8 @@ export const getAuth: getAuthProps = async (): Promise<getAuthType> => {
   let userId = ''
   let userType = ''
   let userName = ''
+  let userEmail = ''
+  let userPhone = ''
   let userStockLimit = 0
   let withdrawableAmount = 0
   let loading = true
@@ -25,7 +27,9 @@ export const getAuth: getAuthProps = async (): Promise<getAuthType> => {
       userId = user?.token?.user.shms_id ?? ''
       isAuth = user?.token?.user.loggedIn ? true : false
       userType = user?.token?.user.shms_user_account_type ?? 'user' // default to user
-      userName = user?.token?.user.shms_fullname ?? ''
+      userName = user?.token?.user.fullname ?? ''
+      userEmail = user?.token?.user.shms_email ?? ''
+      userPhone = user?.token?.user.shms_phone ?? ''
       userStockLimit = user?.token?.user.shms_user_stock_limit ?? 0
       withdrawableAmount = user?.token?.user.shms_user_withdrawable_balance ?? 0
     }
@@ -40,6 +44,8 @@ export const getAuth: getAuthProps = async (): Promise<getAuthType> => {
     isAuth,
     userType: userType as UserProps['shms_user_account_type'],
     userName,
+    userEmail,
+    userPhone,
     userStockLimit,
     withdrawableAmount,
     loading

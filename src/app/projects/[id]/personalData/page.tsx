@@ -5,7 +5,7 @@ import Layout from '@/components/custom/Layout'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import PaymentMetods from '@/components/custom/PaymentMetods'
 import Modal from '@/components/custom/Modal'
-import type { UserLoggedInProps, stocksPurchasedProps } from '@/types'
+import type { UserLoggedInProps, getAuthType, stocksPurchasedProps } from '@/types'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { toast } from 'sonner'
@@ -29,6 +29,7 @@ export default function PersonalData({
   const [message, setMessage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [stockItems, setStockItems] = useState<stocksPurchasedProps>()
+  const [userData, setUserData] = useState<getAuthType>()
 
   const { push } = useRouter()
 
@@ -41,6 +42,12 @@ export default function PersonalData({
       setStockItems(JSON.parse(localStorage.getItem('shms_project') as string))
     }
   }, [session])
+
+  useEffect(() => {
+    if (localStorage.getItem('shms_user_data')) {
+      setUserData(JSON.parse(localStorage.getItem('shms_user_data') as string))
+    }
+  }, [])
 
   const handleConfirmation = () => {
     if (!session) {
@@ -116,6 +123,8 @@ export default function PersonalData({
     }
   }
 
+  console.log(userData)
+
   return (
     <Layout>
       {stocksPurchesed === 1 && (
@@ -133,7 +142,7 @@ export default function PersonalData({
                 </div>
                 <div className='md:w-2/3'>
                   <span className='inline-block w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'>
-                    {session?.token?.user.shms_email ?? (
+                    {userData?.userEmail ?? (
                       <Skeleton className='w-full h-4 bg-gray-300' />
                     )}
                   </span>
@@ -148,7 +157,7 @@ export default function PersonalData({
                 </div>
                 <div className='md:w-2/3'>
                   <span className='inline-block w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'>
-                    {session?.token?.user.fullname ?? (
+                    {userData?.userName ?? (
                       <Skeleton className='w-full h-4 bg-gray-300' />
                     )}
                   </span>
@@ -163,7 +172,7 @@ export default function PersonalData({
                 </div>
                 <div className='md:w-2/3'>
                   <span className='inline-block w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'>
-                    {session?.token?.user.shms_phone ?? (
+                    {userData?.userPhone ?? (
                       <Skeleton className='w-full h-4 bg-gray-300' />
                     )}
                   </span>

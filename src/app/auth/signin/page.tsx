@@ -41,8 +41,16 @@ const SigninPage = () => {
   // Refetch the session after sign in
   useEffect(() => {
     async function refetchSession() {
-      const { loading, userId, userStockLimit, userType, withdrawableAmount } =
-        await getAuth()
+      const {
+        loading,
+        userId,
+        userStockLimit,
+        userName,
+        userEmail,
+        userPhone,
+        userType,
+        withdrawableAmount
+      } = await getAuth()
 
       loading
         ? setIsDoneSubmitting(false)
@@ -51,6 +59,9 @@ const SigninPage = () => {
             JSON.stringify({
               userId,
               userStockLimit,
+              userName,
+              userEmail,
+              userPhone,
               userType,
               withdrawableAmount
             } as getAuthType)

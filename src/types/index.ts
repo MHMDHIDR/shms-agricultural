@@ -50,6 +50,8 @@ export type getAuthType = {
   isAuth: UserProps['loggedIn'] | boolean
   userType: UserProps['shms_user_account_type']
   userName?: UserProps['shms_fullname']
+  userEmail?: UserProps['shms_email']
+  userPhone?: UserProps['shms_phone']
   userStockLimit?: UserProps['shms_user_stock_limit']
   withdrawableAmount?: UserProps['shms_user_withdrawable_balance']
   loading: boolean
