@@ -142,11 +142,11 @@ export default function NewWithdraw() {
               />
               <small className='flex items-center mt-1 text-xs text-gray-500 select-none md:text-right'>
                 تستطيع سحب الرصيد حتى مبلغ
-                <strong className='inline-flex justify-center mr-2' data-price>
+                <strong className='inline-flex justify-center mr-2'>
                   {!withdrawAmountLimit ? (
                     <Skeleton className='inline-block w-8 h-4 bg-gray-600' />
                   ) : (
-                    formattedPrice(withdrawAmountLimit)
+                    formattedPrice(withdrawAmountLimit, 0)
                   )}
                 </strong>
               </small>

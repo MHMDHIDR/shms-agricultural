@@ -69,8 +69,8 @@ export async function PATCH(
     } else if (updatePercentage) {
       updateQuery = `UPDATE projects SET shms_project_special_percentage = ?, shms_project_special_percentage_code = ? WHERE shms_project_id = ?`
       updateValues = [
-        shms_project_special_percentage,
-        shms_project_special_percentage_code,
+        shms_project_special_percentage || null,
+        shms_project_special_percentage_code || null,
         projectId
       ]
     } else {

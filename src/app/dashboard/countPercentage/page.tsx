@@ -31,7 +31,6 @@ import { scrollToView } from '@/lib/utils'
 import Divider from '@/components/custom/Divider'
 import Copy from '@/components/custom/Copy'
 
-export const revalidate = 10
 export default function CountPercentage() {
   const [projects, setProjects] = useState<ProjectProps[]>([])
   const [selectedProject, setSelectedProject] = useState<
@@ -87,12 +86,10 @@ export default function CountPercentage() {
       } else {
         setIsDoneSubmitting(false)
       }
-
-      setTimeout(() => {
-        window.location.href = `/dashboard`
-      }, DEFAULT_DURATION)
+      setTimeout(() => refresh(), DEFAULT_DURATION)
     } catch (error: any) {
-      toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
+      const errorMessage = error.response?.data?.message
+      toast(errorMessage.length < 50 ? errorMessage : 'حدث خطأ ما'),
         {
           icon: <Error className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
@@ -105,7 +102,7 @@ export default function CountPercentage() {
             textAlign: 'justify'
           }
         }
-      console.error('Error', error)
+      console.error('Error: ', errorMessage)
     } finally {
       setIsSubmittingForm(false)
     }
@@ -185,13 +182,9 @@ export default function CountPercentage() {
           <form dir='rtl' onSubmit={handleSubmitPercentage}>
             <div className='flex items-center justify-center'>
               <div className='md:w-2/3'>
-                {/* <Card className='flex items-center justify-center p-4 rtl'> */}
                 <div className='mb-6 md:flex md:items-center'>
                   <div className='md:w-1/3'>
-                    <label
-                      htmlFor='password'
-                      className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
-                    >
+                    <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
                       اختار المشروع
                     </label>
                   </div>
@@ -224,10 +217,7 @@ export default function CountPercentage() {
 
                 <div className='mb-6 md:flex md:items-center'>
                   <div className='md:w-1/3'>
-                    <label
-                      htmlFor='password'
-                      className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
-                    >
+                    <label className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'>
                       رمز زيادة النسبة
                     </label>
                   </div>
@@ -241,10 +231,11 @@ export default function CountPercentage() {
                   </div>
                 </div>
 
+                {/* ادخل النسبة المئوية */}
                 <div className='mb-6 md:flex md:items-center'>
                   <div className='md:w-1/3'>
                     <label
-                      htmlFor='password'
+                      htmlFor='newPercentage'
                       className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
                     >
                       ادخل النسبة المئوية
@@ -255,6 +246,7 @@ export default function CountPercentage() {
                       className='w-full px-4 py-2 text-lg leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                       type='number'
                       placeholder='15'
+                      id='newPercentage'
                       min='0'
                       max='100'
                       onChange={e => setPercentage(Number(e.target.value))}
@@ -263,6 +255,7 @@ export default function CountPercentage() {
                   </div>
                 </div>
 
+                {/* الربح الحالي */}
                 <div className='mb-6 md:flex md:items-center'>
                   <div className='md:w-1/3'>
                     <label
@@ -273,18 +266,11 @@ export default function CountPercentage() {
                     </label>
                   </div>
                   <div className='md:w-2/3'>
-                    <input
-                      className='w-full px-4 text-xl font-bold leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
-                      type='text'
-                      defaultValue={
-                        projects.find(
-                          ({ shms_project_id }) => shms_project_id === selectedProject
-                        )?.shms_project_stock_profits
-                      }
-                      placeholder='الربح الحالي'
-                      readOnly
-                      disabled
-                    />
+                    <span className='inline-block w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'>
+                      {projects.find(
+                        ({ shms_project_id }) => shms_project_id === selectedProject
+                      )?.shms_project_stock_profits ?? 0}
+                    </span>
                   </div>
                 </div>
 
@@ -310,55 +296,39 @@ export default function CountPercentage() {
                         : 0
 
                       return (
-                        <input
-                          className='w-full px-4 text-xl font-bold leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
-                          type='text'
-                          value={newProfits}
-                          placeholder='الربح الجديد'
-                          readOnly
-                          disabled
-                        />
+                        <span className='inline-block w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'>
+                          {newProfits}
+                        </span>
                       )
                     })()}
                   </div>
                 </div>
 
                 <div className='mb-6 md:flex md:items-center'>
-                  <div className='md:w-1/3'>
-                    <label
-                      htmlFor='password'
-                      className='block mb-1 font-bold text-gray-500 md:text-right md:mb-0'
-                    ></label>
-                  </div>
-                  <div
+                  <Button
                     className={
                       isDoneSubmitting
                         ? 'pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
+                        : isSubmittingForm || selectedProject === null || !percentage
+                        ? 'pointer-events-none cursor-progress'
                         : ''
                     }
+                    disabled={isSubmittingForm || selectedProject === null || !percentage}
                   >
-                    <Button
-                      className={
-                        isDoneSubmitting
-                          ? 'pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
-                          : ''
-                      }
-                    >
-                      {isSubmittingForm ? (
-                        <>
-                          <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
-                          جاري الحفظ ...
-                        </>
-                      ) : isDoneSubmitting ? (
-                        <>
-                          <Success className='ml-2' />
-                          تم إضافة النسبة بنجاح
-                        </>
-                      ) : (
-                        'حفظ'
-                      )}
-                    </Button>
-                  </div>
+                    {isSubmittingForm ? (
+                      <>
+                        <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
+                        جاري الحفظ ...
+                      </>
+                    ) : isDoneSubmitting ? (
+                      <>
+                        <Success className='ml-2' />
+                        تم إضافة النسبة بنجاح
+                      </>
+                    ) : (
+                      'حفظ'
+                    )}
+                  </Button>
                 </div>
               </div>
             </div>
@@ -410,9 +380,12 @@ export default function CountPercentage() {
                       <TableCell className='min-w-72'>
                         {project.shms_project_name}
                       </TableCell>
-                      <TableCell className='min-w-40 flex justify-center items-center gap-x-1.5'>
-                        <Copy text={project.shms_project_special_percentage_code} />
-                        {project.shms_project_special_percentage_code}
+                      <TableCell className='min-w-40'>
+                        <Copy
+                          text={project.shms_project_special_percentage_code}
+                          className='inline ml-2'
+                        />
+                        <span>{project.shms_project_special_percentage_code}</span>
                       </TableCell>
                       <TableCell className='min-w-40'>
                         {project.shms_project_special_percentage}%
