@@ -332,7 +332,7 @@ export const handleCopyToClipboard = async (code: string) => {
  * @param price the price to be formatted
  * @returns the formatted price
  * */
-export const formattedPrice = (price: number, maximumFractionDigits: number = 2) => {
+export const formattedPrice = (price: number, maximumFractionDigits: number = 0) => {
   const formatter = new Intl.NumberFormat('ar-qa', {
     style: 'currency',
     currency: 'QAR',
