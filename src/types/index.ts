@@ -15,7 +15,7 @@ export type UserProps = {
   shms_address?: string
   shms_user_stocks?: stocksPurchasedProps[]
   shms_user_stock_limit?: number
-  shms_user_total_balance?: number
+  shms_user_total_balance: number
   shms_user_withdrawable_balance: number
   shms_doc?: string
   shms_created_at?: string
@@ -54,6 +54,7 @@ export type getAuthType = {
   userPhone?: UserProps['shms_phone']
   userStockLimit?: UserProps['shms_user_stock_limit']
   withdrawableAmount?: UserProps['shms_user_withdrawable_balance']
+  totalAmount?: UserProps['shms_user_total_balance']
   loading: boolean
 }
 
@@ -282,6 +283,8 @@ export type stocksPurchasedProps = {
   stocks: number
   newPercentage: number
   percentageCode: string
+  totalPaymentAmount: number
+  paymentMethod: selectedPaymentOptions
   createdAt: string
 }
 

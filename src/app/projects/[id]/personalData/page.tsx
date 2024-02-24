@@ -5,7 +5,6 @@ import Layout from '@/components/custom/Layout'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import PaymentMetods from '@/components/custom/PaymentMetods'
 import Modal from '@/components/custom/Modal'
-import type { UserLoggedInProps, getAuthType, stocksPurchasedProps } from '@/types'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { toast } from 'sonner'
@@ -17,6 +16,12 @@ import { useEffect, useState } from 'react'
 import ModalMessage from '@/components/custom/ModalMessage'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import type {
+  UserLoggedInProps,
+  getAuthType,
+  selectedPaymentOptions,
+  stocksPurchasedProps
+} from '@/types'
 
 export default function PersonalData({
   params: { id: projectId /*, slug*/ }
@@ -30,6 +35,7 @@ export default function PersonalData({
   const [loading, setLoading] = useState<boolean>(false)
   const [stockItems, setStockItems] = useState<stocksPurchasedProps>()
   const [userData, setUserData] = useState<getAuthType>()
+  const [selectedOption, setSelectedOption] = useState<selectedPaymentOptions>('cash')
 
   const { push } = useRouter()
 
@@ -95,6 +101,7 @@ export default function PersonalData({
         stocks: stockItems?.stocks,
         newPercentage: stockItems?.newPercentage,
         percentageCode: stockItems?.percentageCode,
+        paymentMethod: selectedOption,
         createdAt
       })
 
@@ -104,26 +111,28 @@ export default function PersonalData({
         localStorage.removeItem('shms_project')
         setTimeout(() => push(`/profile/investments`), DEFAULT_DURATION)
       }
-    } catch (error) {
-      console.error('error -->', error)
-      toast('حدثت مشكلة أثناء إتمام عملية شراء الأسهم، حاول مرة أخرى لاحقا', {
-        icon: <Error className='w-6 h-6 ml-3' />,
-        position: 'bottom-center',
-        className: 'text-right select-none rtl',
-        style: {
-          backgroundColor: '#FFF0F0',
-          color: '#BE2A2A',
-          border: '1px solid #BE2A2A',
-          gap: '1.5rem',
-          textAlign: 'justify'
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message ?? 'حدث خطأ ما'
+
+      toast(
+        errorMessage ?? 'حدثت مشكلة أثناء إتمام عملية شراء الأسهم، حاول مرة أخرى لاحقا',
+        {
+          icon: <Error className='w-6 h-6 ml-3' />,
+          position: 'bottom-center',
+          className: 'text-right select-none rtl',
+          style: {
+            backgroundColor: '#FFF0F0',
+            color: '#BE2A2A',
+            border: '1px solid #BE2A2A',
+            gap: '1.5rem',
+            textAlign: 'justify'
+          }
         }
-      })
+      )
     } finally {
       setLoading(false)
     }
   }
-
-  console.log(userData)
 
   return (
     <Layout>
@@ -212,7 +221,11 @@ export default function PersonalData({
                 </div>
                 <div className='md:w-2/3'>
                   <br />
-                  <PaymentMetods />
+                  <PaymentMetods
+                    selectedOption={selectedOption}
+                    setSelectedOption={setSelectedOption}
+                    totalPaymentAmount={stockItems?.totalPaymentAmount ?? 0}
+                  />
                 </div>
               </div>
             </form>

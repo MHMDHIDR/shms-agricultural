@@ -35,6 +35,16 @@ export async function POST(
     )
   }
 
+  if (withdrawAmount > userExists.shms_user_withdrawable_balance) {
+    return new Response(
+      JSON.stringify({
+        userWithdrawnBalance: 0,
+        message: 'الرصيد المطلوب سحبه أكبر من الرصيد المتاح!'
+      }),
+      { status: 400 }
+    )
+  }
+
   try {
     const referenceCode = randomUUID()
 

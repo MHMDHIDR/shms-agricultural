@@ -11,7 +11,8 @@ export async function PATCH(req: Request) {
     shms_project_id,
     stocks,
     newPercentage,
-    percentageCode
+    percentageCode,
+    paymentMethod
   }: stocksPurchasedProps = body
 
   if (!shms_id) throw new Error('User ID is required')
@@ -27,6 +28,30 @@ export async function PATCH(req: Request) {
         shms_project_id
       ])) as ProjectProps[]
     )[0]
+
+    // if user or project not found
+    if (!user || !project) {
+      return new Response(
+        JSON.stringify({
+          stocksPurchesed: 0,
+          message: 'عفواً حدث خطأ ما، حاول مرة أخرى'
+        }),
+        { status: 500 }
+      )
+    }
+
+    // if paymentMethod === 'balance' then check if the user has enough balance
+    if (paymentMethod === 'balance') {
+      if (user?.shms_user_total_balance < stocks * project?.shms_project_stock_price) {
+        return new Response(
+          JSON.stringify({
+            stocksPurchesed: 0,
+            message: 'رصيدك غير كافي، لإتمام عملية الشراء'
+          }),
+          { status: 400 }
+        )
+      }
+    }
 
     const userPrevStocks = getUserPrevStocks(user as UserProps)
     const projectAvailableStocks = getProjectStocks(project as ProjectProps)

@@ -154,7 +154,9 @@ export default function BuyStocks({
         shms_project: project?.shms_project_id,
         stocks: selectedStocks,
         newPercentage,
-        percentageCode
+        percentageCode,
+        totalPaymentAmount:
+          selectedStocks * (project ? project.shms_project_stock_price : 0)
       })
     )
   }

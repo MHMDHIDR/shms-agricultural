@@ -49,7 +49,8 @@ const SigninPage = () => {
         userEmail,
         userPhone,
         userType,
-        withdrawableAmount
+        withdrawableAmount,
+        totalAmount
       } = await getAuth()
 
       loading
@@ -63,7 +64,8 @@ const SigninPage = () => {
               userEmail,
               userPhone,
               userType,
-              withdrawableAmount
+              withdrawableAmount,
+              totalAmount
             } as getAuthType)
           )
     }
