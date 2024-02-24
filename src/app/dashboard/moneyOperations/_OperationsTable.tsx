@@ -177,7 +177,7 @@ export default function OperationsTable({
                           ? 'text-green-500'
                           : cell.getValue() === 'rejected'
                           ? 'text-red-500'
-                          : 'text-black'
+                          : 'text-black dark:text-white'
                       }
                     >
                       {cell.column.id.includes('_id') ? (

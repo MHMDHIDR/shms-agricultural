@@ -55,8 +55,6 @@ export default function PersonalData({
     }
   }, [])
 
-  console.log('userData -->', userData)
-
   const handleConfirmation = () => {
     if (!session) {
       toast(JSON.stringify('يجب عليك تسجيل الدخول!'), {

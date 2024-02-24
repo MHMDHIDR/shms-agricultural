@@ -157,13 +157,11 @@ export async function getUser(
 export async function getUserMoneyOperations(
   userId?: accountingOperationsProps['shms_user_id']
 ): Promise<accountingOperationsProps[]> {
-  const {
-    data: withdrawActions
-  }: {
-    data: accountingOperationsProps[]
-  } = userId
-    ? await axios.get(`${API_URL}/withdrawActions/get/${userId}`)
-    : await axios.get(`${API_URL}/withdrawActions/get/all`)
+  const response = userId
+    ? await fetch(`${API_URL}/withdrawActions/get/${userId}`)
+    : await fetch(`${API_URL}/withdrawActions/get/all`)
+
+  const withdrawActions: accountingOperationsProps[] = await response.json()
 
   return withdrawActions
 }
