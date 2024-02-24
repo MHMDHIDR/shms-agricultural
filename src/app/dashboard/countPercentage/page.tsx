@@ -44,16 +44,9 @@ export default function CountPercentage() {
   const [percentageCodesRefresh, setPercentageCodesRefresh] = useState<number>(0)
 
   const getProjects = async () => {
-    const { data: projects }: { data: ProjectProps[] } = await axios.get(
-      `${API_URL}/projects/get`,
-      {
-        headers: {
-          'Cache-Control': 'no-cache',
-          Pragma: 'no-cache',
-          Expires: '0'
-        }
-      }
-    )
+    const response = await fetch(`${API_URL}/projects/get`, { next: { revalidate: 60 } })
+    const projects = await response.json()
+
     setProjects(projects)
   }
 
