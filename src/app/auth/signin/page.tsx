@@ -4,7 +4,7 @@ import { DEFAULT_DURATION } from '@/data/constants'
 import { getAuth } from '@/lib/actions/auth'
 import { validatePasswordStrength } from '@/lib/utils'
 import type { UserLoggedInProps, UserProps, getAuthType } from '@/types'
-import { ReloadIcon } from '@radix-ui/react-icons'
+import { EyeClosedIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -17,6 +17,7 @@ import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { useSession } from 'next-auth/react'
 import { LoadingPage } from '@/components/custom/Loading'
+import { EyeIcon } from 'lucide-react'
 
 const SigninPage = () => {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -166,6 +167,12 @@ const SigninPage = () => {
     setPassError('')
   }
 
+  const [showPassword, setShowPassword] = useState(false)
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(prevShowPassword => !prevShowPassword)
+  }
+
   return session?.expires ? (
     replace('/')
   ) : session?.user ? (
@@ -212,14 +219,21 @@ const SigninPage = () => {
                   كلمة المرور
                 </label>
               </div>
-              <div className='md:w-2/3'>
+              <div className='md:w-2/3 relative'>
                 <input
                   id='password'
                   onChange={handlePasswordChange}
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
-                  type='password'
                   placeholder='******'
+                  type={showPassword ? 'text' : 'password'}
                 />
+                <button
+                  type='button'
+                  onClick={togglePasswordVisibility}
+                  className='absolute top-2 left-6'
+                >
+                  {showPassword ? <EyeIcon /> : <EyeClosedIcon className='w-5 h-5' />}
+                </button>
               </div>
             </div>
 
