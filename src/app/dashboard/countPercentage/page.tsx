@@ -45,7 +45,12 @@ export default function CountPercentage() {
 
   const getProjects = async () => {
     const { data: projects }: { data: ProjectProps[] } = await axios.get(
-      `${API_URL}/projects/get`
+      `${API_URL}/projects/get`,
+      {
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      }
     )
     setProjects(projects)
   }
