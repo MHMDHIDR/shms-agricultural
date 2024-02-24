@@ -16,10 +16,8 @@ import type { accountingOperationsProps } from '@/types'
 import { useRouter } from 'next/navigation'
 
 export default function OperationAction({
-  children,
   withdrawAction
 }: {
-  children: string
   withdrawAction: accountingOperationsProps
 }) {
   const [formStatus, setFormStatus] = useState({
@@ -107,7 +105,7 @@ export default function OperationAction({
           onClick={async () => {
             await toggleWithdrawActionsStatus(
               withdrawAction.shms_withdraw_id,
-              withdrawAction.shms_user_id,
+              withdrawAction.shms_user_id ?? '',
               withdrawAction.accounting_operation_status === 'pending' ||
                 withdrawAction.accounting_operation_status === 'rejected'
                 ? 'completed'
@@ -118,7 +116,12 @@ export default function OperationAction({
           }}
           formStatus={formStatus}
         >
-          {children}
+          {withdrawAction.accounting_operation_status === 'pending' ||
+          withdrawAction.accounting_operation_status === 'rejected'
+            ? 'قبول'
+            : withdrawAction.accounting_operation_status === 'completed'
+            ? 'رفـض'
+            : ''}
           <Settings className='w-3 h-3 ml-3' />
         </Confirm>
         <Confirm
@@ -126,7 +129,7 @@ export default function OperationAction({
           onClick={async () => {
             await toggleWithdrawActionsStatus(
               withdrawAction.shms_withdraw_id,
-              withdrawAction.shms_user_id,
+              withdrawAction.shms_user_id ?? '',
               'deleted'
             )
           }}
