@@ -89,7 +89,7 @@ export default function ActivateAccount({
     </p>
   )
 
-  return session?.expires ? (
+  return session?.expires || session?.user ? (
     replace('/')
   ) : session?.user ? (
     <LoadingPage />
