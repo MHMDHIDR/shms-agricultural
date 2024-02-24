@@ -164,21 +164,16 @@ export default function OperationsTable({
   })
 
   return (
-    <div className='w-full'>
+    <div className='w-full rtl'>
       <div className='flex items-center py-4'>
-        <Input
-          placeholder='Filter emails...'
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={event => table.getColumn('email')?.setFilterValue(event.target.value)}
-          className='max-w-sm'
-        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='ml-auto'>
-              Columns <ChevronDownIcon className='ml-2 h-4 w-4' />
+              <ChevronDownIcon className='ml-2 h-4 w-4' />
+              الأعمدة
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
+          <DropdownMenuContent align='end' className='rtl'>
             {table
               .getAllColumns()
               .filter(column => column.getCanHide())
@@ -196,6 +191,14 @@ export default function OperationsTable({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+        <Input
+          placeholder='إبحــــث في البيانات'
+          value={(table.getColumn('shms_email')?.getFilterValue() as string) ?? ''}
+          onChange={event =>
+            table.getColumn('shms_email')?.setFilterValue(event.target.value)
+          }
+          className='max-w-sm'
+        />
       </div>
       <div className='rounded-md border'>
         <Table>
