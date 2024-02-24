@@ -169,6 +169,8 @@ export default function CountPercentage() {
     }
   }
 
+  console.log('projects -->', projects)
+
   return (
     <TabsContent value='profits_percentage'>
       <div className='flex flex-wrap justify-center gap-2.5 my-4'>
