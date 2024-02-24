@@ -129,5 +129,3 @@ export default async function MoneyOperations() {
     </TabsContent>
   )
 }
-
-export const revalidate = 5

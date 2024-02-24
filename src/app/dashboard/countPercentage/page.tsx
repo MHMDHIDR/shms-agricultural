@@ -26,8 +26,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Success, Error } from '@/components/icons/Status'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { useRouter } from 'next/navigation'
-import { scrollToView } from '@/lib/utils'
+import { redirect, scrollToView } from '@/lib/utils'
 import Divider from '@/components/custom/Divider'
 import Copy from '@/components/custom/Copy'
 
@@ -38,11 +37,11 @@ export default function CountPercentage() {
   >(null)
   const [percentage, setPercentage] = useState<number>(0)
   const [percentageCode, setPercentageCode] = useState<string>('الرجاء اختيار المشروع')
-  const [isSubmittingForm, setIsSubmittingForm] = useState(false)
-  const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+  const [formStatus, setFormStatus] = useState({
+    isSubmitting: false,
+    isSubmittingDone: false
+  })
   const [percentageCodesRefresh, setPercentageCodesRefresh] = useState<number>(0)
-
-  const { refresh } = useRouter()
 
   const getProjects = async () => {
     const { data: projects }: { data: ProjectProps[] } = await axios.get(
@@ -58,7 +57,7 @@ export default function CountPercentage() {
   const handleSubmitPercentage = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     try {
-      setIsSubmittingForm(true)
+      setFormStatus({ ...formStatus, isSubmitting: true })
 
       const { data } = await axios.patch(`${API_URL}/projects/edit/${selectedProject}`, {
         shms_project_special_percentage: percentage,
@@ -68,7 +67,7 @@ export default function CountPercentage() {
 
       // make sure to view the response from the data
       if (data.projectUpdated === 1) {
-        setIsDoneSubmitting(true)
+        setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
 
         toast(data.message, {
           icon: <Success />,
@@ -83,14 +82,12 @@ export default function CountPercentage() {
             textAlign: 'justify'
           }
         })
-      } else {
-        setIsDoneSubmitting(false)
       }
 
       setPercentageCodesRefresh(data.projectUpdated ?? 0)
-      setTimeout(() => refresh(), DEFAULT_DURATION)
+      setTimeout(() => redirect('/dashboard'), DEFAULT_DURATION)
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message
+      const errorMessage = error.response?.data?.message ?? error
       toast(errorMessage.length < 50 ? errorMessage : 'حدث خطأ ما'),
         {
           icon: <Error className='w-6 h-6 ml-3' />,
@@ -105,14 +102,13 @@ export default function CountPercentage() {
           }
         }
       console.error('Error: ', errorMessage)
-    } finally {
-      setIsSubmittingForm(false)
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
     }
   }
 
   const deletePercentageCode = async (projectId: string) => {
     try {
-      setIsSubmittingForm(true)
+      setFormStatus({ ...formStatus, isSubmitting: true })
 
       const { data }: { data: ProjectProps } = await axios.patch(
         `${API_URL}/projects/edit/${projectId}`,
@@ -154,7 +150,7 @@ export default function CountPercentage() {
       }
 
       setPercentageCodesRefresh(data.projectUpdated ?? 0)
-      setTimeout(() => refresh(), DEFAULT_DURATION)
+      setTimeout(() => redirect('/dashboard'), DEFAULT_DURATION / 2)
     } catch (error) {
       toast('حدث خطأ ما أثناء حذف المشروع', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -169,8 +165,7 @@ export default function CountPercentage() {
         }
       })
       console.error('Error =>', error)
-    } finally {
-      setIsSubmittingForm(false)
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
     }
   }
 
@@ -310,20 +305,24 @@ export default function CountPercentage() {
                 <div className='mb-6 md:flex md:items-center'>
                   <Button
                     className={
-                      isDoneSubmitting
+                      formStatus.isSubmittingDone
                         ? 'pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
-                        : isSubmittingForm || selectedProject === null || !percentage
+                        : formStatus.isSubmitting ||
+                          selectedProject === null ||
+                          !percentage
                         ? 'pointer-events-none cursor-progress'
                         : ''
                     }
-                    disabled={isSubmittingForm || selectedProject === null || !percentage}
+                    disabled={
+                      formStatus.isSubmitting || selectedProject === null || !percentage
+                    }
                   >
-                    {isSubmittingForm ? (
+                    {formStatus.isSubmitting ? (
                       <>
                         <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
                         جاري الحفظ ...
                       </>
-                    ) : isDoneSubmitting ? (
+                    ) : formStatus.isSubmitting ? (
                       <>
                         <Success className='ml-2' />
                         تم إضافة النسبة بنجاح
@@ -409,12 +408,12 @@ export default function CountPercentage() {
                             await deletePercentageCode(project.shms_project_id)
                           }}
                         >
-                          {isSubmittingForm ? (
+                          {formStatus.isSubmitting ? (
                             <>
                               <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
                               جاري الحذف ...
                             </>
-                          ) : isDoneSubmitting ? (
+                          ) : formStatus.isSubmitting ? (
                             <>
                               <Success className='ml-2' />
                               تم الحذف

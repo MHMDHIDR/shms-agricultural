@@ -9,11 +9,11 @@ import axios from 'axios'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { toast } from 'sonner'
 import { Success, Error } from '@/components/icons/Status'
-import type { accountingOperationsProps } from '@/types'
-import { redirect } from '@/lib/utils'
 import { useState } from 'react'
 import Confirm from '@/components/custom/Confirm'
 import { Settings, Trash } from 'lucide-react'
+import type { accountingOperationsProps } from '@/types'
+import { useRouter } from 'next/navigation'
 
 export default function OperationAction({
   children,
@@ -26,6 +26,8 @@ export default function OperationAction({
     isSubmitting: false,
     isSubmittingDone: false
   })
+
+  const { refresh } = useRouter()
 
   const toggleWithdrawActionsStatus = async (
     operationId: string,
@@ -54,8 +56,6 @@ export default function OperationAction({
             textAlign: 'justify'
           }
         })
-        // Redirect to dashboard after updating the withdraw status
-        redirect('/dashboard')
       } else {
         toast('عفواً حدث خطأ ما أثناء تحديث حالة المعاملة', {
           icon: <Error className='w-6 h-6 ml-3' />,
@@ -70,6 +70,7 @@ export default function OperationAction({
           }
         })
       }
+      setTimeout(() => refresh(), DEFAULT_DURATION)
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
