@@ -350,7 +350,9 @@ export const formattedPrice = (price: number, maximumFractionDigits: number = 2)
 export const replaceString = (string: string) => {
   switch (string) {
     case 'shms_withdraw_id':
-      return 'الرقم المرجعي'
+      return 'الرقم المرجعي للعملية'
+    case 'shms_user_id':
+      return 'الرقم المرجعي للمستثمر'
     case 'shms_action_type':
       return 'نوع العملية'
     case 'shms_fullname':

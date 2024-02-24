@@ -12,11 +12,7 @@ import OperationsTable from './_OperationsTable'
 import OperationAction from './_OperationAction'
 
 export default async function MoneyOperations() {
-  let withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
-  // filter out the shms_user_id property from the withdrawActions array
-  withdrawActions.forEach(withdrawAction => {
-    delete withdrawAction.shms_user_id
-  })
+  const withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
 
   return (
     <TabsContent value='money_operations'>

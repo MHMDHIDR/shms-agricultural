@@ -12,8 +12,8 @@ import { Success, Error } from '@/components/icons/Status'
 import { useState } from 'react'
 import Confirm from '@/components/custom/Confirm'
 import { Settings, Trash } from 'lucide-react'
+import { redirect } from '@/lib/utils'
 import type { accountingOperationsProps } from '@/types'
-import { useRouter } from 'next/navigation'
 
 export default function OperationAction({
   withdrawAction
@@ -24,8 +24,6 @@ export default function OperationAction({
     isSubmitting: false,
     isSubmittingDone: false
   })
-
-  const { refresh } = useRouter()
 
   const toggleWithdrawActionsStatus = async (
     operationId: string,
@@ -68,7 +66,7 @@ export default function OperationAction({
           }
         })
       }
-      setTimeout(() => refresh(), DEFAULT_DURATION)
+      setTimeout(() => redirect('/dashboard'), DEFAULT_DURATION)
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
