@@ -39,6 +39,7 @@ import { accountingOperationsProps } from '@/types'
 import Copy from '@/components/custom/Copy'
 import NoRecords from '@/components/custom/NoRecords'
 import { getProjectDate, getProjectStatus, replaceString } from '@/lib/utils'
+import Link from 'next/link'
 
 export const columns: ColumnDef<accountingOperationsProps>[] = [
   {
@@ -231,7 +232,10 @@ export default function OperationsTable({
                     <TableCell key={cell.id}>
                       {cell.column.id.includes('_id') ? (
                         <span className='flex'>
-                          <Copy text={cell.id} className='inline ml-2 w-10 h-10' />{' '}
+                          <Copy
+                            text={String(cell.getValue())}
+                            className='inline ml-2 w-10 h-10'
+                          />{' '}
                           <span>
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}{' '}
                           </span>
@@ -241,8 +245,15 @@ export default function OperationsTable({
                         getProjectStatus(String(cell.getValue()))
                       ) : cell.column.id.includes('shms_created_at') ? (
                         getProjectDate(new Date(String(cell.getValue())))
+                      ) : cell.column.id.includes('shms_phone') ? (
+                        <Link
+                          href={`tel:${String(cell.getValue())}`}
+                          className='text-blue-500 transition-colors hover:font-bold hover:text-blue-700'
+                        >
+                          {String(cell.getValue())}
+                        </Link>
                       ) : (
-                        replaceString(String(cell.getValue()))
+                        flexRender(cell.column.columnDef.cell, cell.getContext())
                       )}
                     </TableCell>
                   ))}
