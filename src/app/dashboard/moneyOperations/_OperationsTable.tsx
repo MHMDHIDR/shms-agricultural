@@ -36,6 +36,8 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { accountingOperationsProps } from '@/types'
+import Copy from '@/components/custom/Copy'
+import NoRecords from '@/components/custom/NoRecords'
 
 export const columns: ColumnDef<accountingOperationsProps>[] = [
   {
@@ -223,7 +225,16 @@ export default function OperationsTable({
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map(cell => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {cell.column.id.includes('_id') ? (
+                        <span className='flex'>
+                          <Copy text={cell.id} className='inline ml-2 w-10 h-10' />{' '}
+                          <span>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}{' '}
+                          </span>
+                        </span>
+                      ) : (
+                        flexRender(cell.column.columnDef.cell, cell.getContext())
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -231,7 +242,7 @@ export default function OperationsTable({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className='h-24 text-center'>
-                  لا يوجد نتائج
+                  <NoRecords msg='لم يتم العثور على بـيانـــــــــــات!' />
                 </TableCell>
               </TableRow>
             )}

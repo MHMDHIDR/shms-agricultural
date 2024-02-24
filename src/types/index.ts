@@ -105,8 +105,6 @@ export type accountingOperationsProps = {
   shms_withdraw_amount: number
   shms_action_type: 'withdraw' | 'deposit'
   accounting_operation_status: 'pending' | 'completed' | 'rejected' | 'deleted'
-  // when rejecting add a reason
-  withdraw_reject_reason?: string
   // When withdraw action happens
   message?: string
   // When withdraw is added, this is set to 1

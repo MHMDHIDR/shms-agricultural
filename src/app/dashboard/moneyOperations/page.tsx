@@ -25,6 +25,8 @@ import OperationsTable from './_OperationsTable'
 export default async function MoneyOperations() {
   const withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
 
+  console.log(withdrawActions)
+
   return (
     <TabsContent value='money_operations'>
       <Card className='min-w-full'>

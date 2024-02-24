@@ -11,7 +11,6 @@ export async function GET() {
       wa.shms_withdraw_amount,
       wa.shms_action_type,
       wa.accounting_operation_status,
-      wa.withdraw_reject_reason,
       u.shms_fullname,
       u.shms_phone,
       u.shms_email,
