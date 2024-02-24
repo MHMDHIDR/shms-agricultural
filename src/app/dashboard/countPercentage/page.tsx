@@ -44,20 +44,17 @@ export default function CountPercentage() {
   const [percentageCodesRefresh, setPercentageCodesRefresh] = useState<number>(0)
 
   const { signal } = new AbortController()
-  const getProjects = async () => {
-    // const { data: projects }: { data: ProjectProps[] } = await axios.get(
-    //   `${API_URL}/projects/get`
-    // )
-    // using fetch instead of axios to opt-out of caching
-    const response = await fetch(`${API_URL}/projects/get`, { signal })
-    const projects: ProjectProps[] = await response.json()
-
-    setProjects(projects)
-  }
 
   useEffect(() => {
+    const getProjects = async () => {
+      const response = await fetch(`${API_URL}/projects/get`, { signal })
+      const projects: ProjectProps[] = await response.json()
+
+      setProjects(projects)
+    }
+
     getProjects()
-  }, [percentageCodesRefresh])
+  }, [percentageCodesRefresh, signal])
 
   const handleSubmitPercentage = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
