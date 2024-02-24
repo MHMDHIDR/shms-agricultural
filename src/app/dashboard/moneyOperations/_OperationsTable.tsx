@@ -38,7 +38,7 @@ import {
 import { accountingOperationsProps } from '@/types'
 import Copy from '@/components/custom/Copy'
 import NoRecords from '@/components/custom/NoRecords'
-import { getProjectStatus, replaceString } from '@/lib/utils'
+import { getProjectDate, getProjectStatus, replaceString } from '@/lib/utils'
 
 export const columns: ColumnDef<accountingOperationsProps>[] = [
   {
@@ -239,6 +239,8 @@ export default function OperationsTable({
                       ) : cell.column.id.includes('accounting_operation_status') ||
                         cell.column.id.includes('shms_action_type') ? (
                         getProjectStatus(String(cell.getValue()))
+                      ) : cell.column.id.includes('shms_created_at') ? (
+                        getProjectDate(new Date(String(cell.getValue())))
                       ) : (
                         replaceString(String(cell.getValue()))
                       )}
