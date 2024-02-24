@@ -14,7 +14,7 @@ export default function Balance({
   withdrawableAmount: UserProps['shms_user_withdrawable_balance']
 }) {
   // get shms_user_data from localStorage
-  const { userId, userStockLimit, userType } = JSON.parse(
+  const { userId, userStockLimit, userName, userEmail, userPhone, userType } = JSON.parse(
     String(typeof window !== 'undefined' && localStorage.getItem('shms_user_data'))
   ) as getAuthType
 
@@ -24,8 +24,12 @@ export default function Balance({
       JSON.stringify({
         userId,
         userStockLimit,
+        userName,
+        userEmail,
+        userPhone,
         userType,
-        withdrawableAmount
+        withdrawableAmount,
+        totalAmount
       } as getAuthType)
     )
   }, [userId, userStockLimit, userType, withdrawableAmount])

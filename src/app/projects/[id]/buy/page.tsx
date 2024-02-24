@@ -1,7 +1,7 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { ProjectProps, UserLoggedInProps, getAuthType } from '@/types'
+import type { ProjectProps, UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import { Suspense, useEffect, useState } from 'react'
 import axios from 'axios'
 import Layout from '@/components/custom/Layout'
@@ -64,6 +64,35 @@ export default function BuyStocks({
     }
     getProject()
   }, [projectId])
+
+  useEffect(() => {
+    //if the user is signed in then we will check getUserTotalAmount and update the localStorage
+    if (localStorage.getItem('shms_user_data')) {
+      const userId = JSON.parse(localStorage.getItem('shms_user_data') as string)?.userId
+
+      const getUserTotalAmount = async () => {
+        try {
+          const {
+            data: { totalAmount }
+          }: {
+            data: { totalAmount: UserProps['shms_user_total_balance'] }
+          } = await axios.get(`${API_URL}/users/getUserStocks/${userId}`)
+
+          // set one single property in the localStorage shms_user_data totalAmount to the totalAmount
+          localStorage.setItem(
+            'shms_user_data',
+            JSON.stringify({
+              ...JSON.parse(localStorage.getItem('shms_user_data') as string),
+              totalAmount
+            })
+          )
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      getUserTotalAmount()
+    }
+  }, [])
 
   const checkPercentageCode = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
