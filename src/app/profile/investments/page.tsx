@@ -44,7 +44,6 @@ export default async function DashboardInvestors() {
             shms_project_stock_price: projectStockPrice,
             shms_project_stock_profits: projectProfit,
             shms_project_profits_collect_date: profitCollectionDate,
-            createdAt: purchaseDate,
             shms_project_terms: projectTerms
           } = projectDetails
 
@@ -61,7 +60,7 @@ export default async function DashboardInvestors() {
             stocks: project.stocks,
             totalPayment: project.stocks * projectStockPrice,
             profitCollectionDate,
-            purchaseDate,
+            purchaseDate: project.createdAt,
             projectTerms,
             totalProfit
           }
