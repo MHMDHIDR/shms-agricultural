@@ -168,7 +168,18 @@ export default function OperationsTable({
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={
+                        cell.getValue() === 'pending'
+                          ? 'text-yellow-500'
+                          : cell.getValue() === 'completed'
+                          ? 'text-green-500'
+                          : cell.getValue() === 'rejected'
+                          ? 'text-red-500'
+                          : 'text-black'
+                      }
+                    >
                       {cell.column.id.includes('_id') ? (
                         <span className='flex'>
                           <Copy
