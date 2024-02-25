@@ -133,9 +133,9 @@ export default function PersonalData({
     }
   }
 
-  return !session || !session?.token ? (
+  return !session ? (
     replace('/')
-  ) : session?.user ? (
+  ) : !session?.expires ? (
     <LoadingPage />
   ) : (
     <Layout>
