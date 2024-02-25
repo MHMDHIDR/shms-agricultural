@@ -7,7 +7,7 @@ import type { UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import { EyeClosedIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { redirect, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { CardWrapper } from '@/components/auth/card-wrapper'
@@ -28,7 +28,6 @@ const SigninPage = () => {
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
 
-  const { replace } = useRouter()
   const redirectUrl = useSearchParams().get('callbackUrl')
 
   // Errors States
@@ -139,7 +138,7 @@ const SigninPage = () => {
 
           if (redirectUrl) {
             setTimeout(() => {
-              replace(redirectUrl)
+              redirect(redirectUrl)
             }, 200)
           }
         }
@@ -173,7 +172,7 @@ const SigninPage = () => {
   }
 
   return session?.expires ? (
-    replace('/')
+    redirect('/')
   ) : session?.user ? (
     <LoadingPage />
   ) : (

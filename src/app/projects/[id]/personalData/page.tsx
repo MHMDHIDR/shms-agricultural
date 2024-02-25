@@ -260,6 +260,7 @@ export default function PersonalData({
             className={`pressable ${
               loading ? 'opacity-50 cursor-not-allowed hover:scale-100' : ''
             }`}
+            as={`/projects/${projectId}/buy`}
           >
             {loading ? (
               <span className='flex items-center justify-center space-x-2'>
