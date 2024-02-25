@@ -34,9 +34,14 @@ const SigninPage = () => {
   // Errors States
   const [emailOrPhoneError, setEmailOrPhoneError] = useState('')
   const [passError, setPassError] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
+  }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(prevShowPassword => !prevShowPassword)
   }
 
   // Refetch the session after sign in
@@ -165,12 +170,6 @@ const SigninPage = () => {
   function resetFormErrors() {
     setEmailOrPhoneError('')
     setPassError('')
-  }
-
-  const [showPassword, setShowPassword] = useState(false)
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(prevShowPassword => !prevShowPassword)
   }
 
   return session?.expires ? (
