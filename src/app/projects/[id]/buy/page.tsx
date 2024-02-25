@@ -23,6 +23,7 @@ export default function BuyStocks({
 }: {
   params: { id: string }
 }) {
+  const { data: session }: { data: UserLoggedInProps } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [project, setProject] = useState<ProjectProps>()
   const [selectedStocks, setSelectedStocks] = useState(
@@ -43,8 +44,6 @@ export default function BuyStocks({
   const [acceptedTerm, setAcceptedTerm] = useState(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
-
-  const { data: session }: { data: UserLoggedInProps } = useSession()
 
   useEffect(() => {
     const getProject = async () => {

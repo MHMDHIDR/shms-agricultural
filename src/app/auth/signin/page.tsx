@@ -1,14 +1,15 @@
 'use client'
 
+import { useEffect, useMemo } from 'react'
 import { DEFAULT_DURATION } from '@/data/constants'
 import { getAuth } from '@/lib/actions/auth'
-import { validatePasswordStrength } from '@/lib/utils'
+import { validatePasswordStrength, redirect as redirectPage } from '@/lib/utils'
 import type { UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import { EyeClosedIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { redirect, useSearchParams } from 'next/navigation'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { toast } from 'sonner'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import FormMessage from '@/components/custom/FormMessage'
@@ -26,7 +27,7 @@ const SigninPage = () => {
   const [emailOrPhone, setEmailOrPhone] = useState('')
   const [password, setPassword] = useState('')
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
-  const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+  const [isDoneSubmitting, _setIsDoneSubmitting] = useState<boolean>(false)
 
   const redirectUrl = useSearchParams().get('callbackUrl')
 
@@ -43,39 +44,10 @@ const SigninPage = () => {
     setShowPassword(prevShowPassword => !prevShowPassword)
   }
 
-  // Refetch the session after sign in
-  useEffect(() => {
-    async function refetchSession() {
-      const {
-        loading,
-        userId,
-        userStockLimit,
-        userName,
-        userEmail,
-        userPhone,
-        userType,
-        withdrawableAmount,
-        totalAmount
-      } = await getAuth()
-
-      loading
-        ? setIsDoneSubmitting(false)
-        : localStorage.setItem(
-            'shms_user_data',
-            JSON.stringify({
-              userId,
-              userStockLimit,
-              userName,
-              userEmail,
-              userPhone,
-              userType,
-              withdrawableAmount,
-              totalAmount
-            } as getAuthType)
-          )
-    }
-    refetchSession()
-  }, [session])
+  function resetFormErrors() {
+    setEmailOrPhoneError('')
+    setPassError('')
+  }
 
   const handelSigninForm = async (e: {
     target: any
@@ -135,14 +107,10 @@ const SigninPage = () => {
               textAlign: 'justify'
             }
           })
-
-          if (redirectUrl) {
-            setTimeout(() => {
-              redirect(redirectUrl)
-            }, 200)
-          }
         }
       } catch (error: any) {
+        console.error('Error', error)
+
         const message: UserProps['message'] =
           error?.response?.data?.message ?? 'حدث خطأ ما'
         //handle error, show notification using Shadcn notifcation
@@ -158,18 +126,44 @@ const SigninPage = () => {
             textAlign: 'justify'
           }
         })
-        console.error('Error', error)
+      } finally {
+        if (redirectUrl) {
+          redirectPage(redirectUrl, 0)
+        }
       }
     }
   }
 
-  /**
-   * Reset all form errors
-   */
-  function resetFormErrors() {
-    setEmailOrPhoneError('')
-    setPassError('')
-  }
+  useEffect(() => {
+    if (session?.user) {
+      const refetchSession = async () => {
+        const {
+          userId,
+          userStockLimit,
+          userName,
+          userEmail,
+          userPhone,
+          userType,
+          withdrawableAmount,
+          totalAmount
+        } = await getAuth()
+
+        localStorage.setItem(
+          'shms_user_data',
+          JSON.stringify({
+            userId,
+            userStockLimit,
+            userName,
+            userEmail,
+            userPhone,
+            userType,
+            withdrawableAmount,
+            totalAmount
+          })
+        )
+      }
+    }
+  }, [session])
 
   return session?.expires ? (
     redirect('/')
