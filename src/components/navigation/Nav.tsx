@@ -70,7 +70,7 @@ export default function Nav() {
 
   useEffect(() => {
     const getUserData = async () => {
-      const { userType, loading } = await getAuth()
+      const { userType, loading } = (await getAuth()) as getAuthType
       if (loading) return
       setIsUserAdmin(userType === 'admin')
     }

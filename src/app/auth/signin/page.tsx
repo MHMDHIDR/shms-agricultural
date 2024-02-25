@@ -1,10 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
 import { DEFAULT_DURATION } from '@/data/constants'
-import { getAuth } from '@/lib/actions/auth'
 import { validatePasswordStrength, redirect as redirectPage } from '@/lib/utils'
-import type { UserLoggedInProps, UserProps, getAuthType } from '@/types'
+import type { UserLoggedInProps, UserProps } from '@/types'
 import { EyeClosedIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
