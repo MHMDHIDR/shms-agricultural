@@ -6,7 +6,6 @@ import { CardWrapper } from '@/components/auth/card-wrapper'
 import PaymentMetods from '@/components/custom/PaymentMetods'
 import Modal from '@/components/custom/Modal'
 import { useSession } from 'next-auth/react'
-import Link from 'next/link'
 import { toast } from 'sonner'
 import { Error, Loading, Success } from '@/components/icons/Status'
 import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
@@ -110,7 +109,6 @@ export default function PersonalData({
       setStocksPurchesed(stocksPurchesed)
       if (stocksPurchesed === 1) {
         localStorage.removeItem('shms_project')
-        setTimeout(() => push(`/profile/investments`), DEFAULT_DURATION)
       }
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message ?? 'حدث خطأ ما'
@@ -131,7 +129,7 @@ export default function PersonalData({
         }
       )
     } finally {
-      setLoading(false)
+      setTimeout(() => push(`/profile/investments`), DEFAULT_DURATION)
     }
   }
 
@@ -255,12 +253,11 @@ export default function PersonalData({
               'تأكيد بيانات الشراء'
             )}
           </Button>
-          <Link
+          <a
             href={`/projects/${projectId}/buy`}
             className={`pressable ${
               loading ? 'opacity-50 cursor-not-allowed hover:scale-100' : ''
             }`}
-            as={`/projects/${projectId}/buy`}
           >
             {loading ? (
               <span className='flex items-center justify-center space-x-2'>
@@ -270,7 +267,7 @@ export default function PersonalData({
             ) : (
               'تعديل البيانات'
             )}
-          </Link>
+          </a>
         </div>
       </main>
     </Layout>

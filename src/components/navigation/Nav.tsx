@@ -13,7 +13,7 @@ import {
 import useEventListener from '@/hooks/useEventListener'
 import { getAuth } from '@/lib/actions/auth'
 import { abstractWords, cn, redirect } from '@/lib/utils'
-import type { MenuItemsProps, UserLoggedInProps } from '@/types'
+import type { MenuItemsProps, UserLoggedInProps, getAuthType } from '@/types'
 import { LogIn, LogOut } from 'lucide-react'
 import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
 import Link from 'next/link'
@@ -76,6 +76,38 @@ export default function Nav() {
     }
     getUserData()
   }, [])
+
+  useEffect(() => {
+    if (session) {
+      const refetchSession = async () => {
+        const {
+          userId,
+          userStockLimit,
+          userName,
+          userEmail,
+          userPhone,
+          userType,
+          withdrawableAmount,
+          totalAmount
+        } = (await getAuth()) as getAuthType
+
+        localStorage.setItem(
+          'shms_user_data',
+          JSON.stringify({
+            userId,
+            userStockLimit,
+            userName,
+            userEmail,
+            userPhone,
+            userType,
+            withdrawableAmount,
+            totalAmount
+          })
+        )
+      }
+      refetchSession()
+    }
+  }, [session])
 
   useEffect(() => {
     setUserName(

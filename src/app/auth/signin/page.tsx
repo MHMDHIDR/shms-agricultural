@@ -107,6 +107,10 @@ const SigninPage = () => {
               textAlign: 'justify'
             }
           })
+
+          if (redirectUrl) {
+            redirectPage(redirectUrl, 0)
+          }
         }
       } catch (error: any) {
         console.error('Error', error)
@@ -126,45 +130,9 @@ const SigninPage = () => {
             textAlign: 'justify'
           }
         })
-      } finally {
-        if (redirectUrl) {
-          redirectPage(redirectUrl, 0)
-        }
       }
     }
   }
-
-  useEffect(() => {
-    if (session?.user) {
-      const refetchSession = async () => {
-        const {
-          userId,
-          userStockLimit,
-          userName,
-          userEmail,
-          userPhone,
-          userType,
-          withdrawableAmount,
-          totalAmount
-        } = (await getAuth()) as getAuthType
-
-        localStorage.setItem(
-          'shms_user_data',
-          JSON.stringify({
-            userId,
-            userStockLimit,
-            userName,
-            userEmail,
-            userPhone,
-            userType,
-            withdrawableAmount,
-            totalAmount
-          })
-        )
-      }
-      refetchSession()
-    }
-  }, [session])
 
   return session?.expires ? (
     redirect('/')
