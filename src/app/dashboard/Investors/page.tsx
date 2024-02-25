@@ -26,37 +26,26 @@ import { Suspense } from 'react'
 import PurchesedStocks from './_PurchesedStocks'
 
 export default async function DashboardInvestors() {
-  const { data: users }: { data: UserProps[] } = await axios.get(
-    `${API_URL}/users/all?role=investor`
-  )
+  const {
+    data: users
+  }: {
+    data: UserProps[]
+  } = await axios.get(`${API_URL}/users/all?role=investor`)
 
-  // Fetch project details for all users
   const fetchUserProjectDetails = async (userStocks: stocksPurchasedProps[]) => {
     const promises = userStocks.map(async (item: stocksPurchasedProps) => {
-      if (!item.shms_project_id) return null
-      const projectDetails = await getProject(item.shms_project_id)
-
-      if (projectDetails && projectDetails.shms_project_stock_price) {
-        return {
-          projectStockPrice: projectDetails.shms_project_stock_price,
-          stocks: item.stocks
-        }
-      } else {
-        return null
+      const project = await getProject(item.shms_project_id)
+      return {
+        projectStockPrice: project?.shms_project_stock_price || 0,
+        stocks: item.stocks
       }
     })
-
-    const projectDetails = await Promise.all(promises)
-    return projectDetails.filter(project => project !== null) as {
-      projectStockPrice: number
-      stocks: number
-    }[]
+    return Promise.all(promises)
   }
 
-  // // Iterate through users to fetch project details for each
   const usersWithProjectDetails = await Promise.all(
-    users.map(async user => {
-      const userStocks: stocksPurchasedProps[] = JSON.parse(String(user.shms_user_stocks))
+    users.map(async (user: UserProps) => {
+      const userStocks: stocksPurchasedProps[] = JSON.parse(user.shms_user_stocks || '[]')
       const projectsDetails = await fetchUserProjectDetails(userStocks)
 
       return { ...user, projectsDetails }
@@ -176,59 +165,51 @@ export default async function DashboardInvestors() {
                         >
                           {JSON.parse(String(user.shms_user_stocks)).map(
                             async (item: stocksPurchasedProps) => {
-                              const projectDetails = await getProject(
-                                item.shms_project_id
-                              )
-
-                              if (
-                                projectDetails &&
-                                projectDetails.shms_project_name &&
-                                projectDetails.shms_project_stock_price
-                              ) {
-                                const projectName = projectDetails.shms_project_name
-                                const projectStockPrice =
-                                  projectDetails.shms_project_stock_price
-
-                                return (
-                                  <div key={item.shms_project_id}>
-                                    <Table>
-                                      <TableBody>
-                                        <TableRow>
-                                          <TableCell className='text-center min-w-56'>
-                                            {projectName}
-                                          </TableCell>
-                                          <TableCell className='text-center min-w-28'>
-                                            {item.stocks}
-                                          </TableCell>
-                                          <TableCell className='text-center min-w-36'>
-                                            {item.newPercentage}
-                                          </TableCell>
-                                          <TableCell className='text-center min-w-28'>
-                                            {formattedPrice(
-                                              item.stocks * projectStockPrice
-                                            )}
-                                          </TableCell>
-                                          <TableCell className='text-center min-w-60'>
-                                            {arabicDate(item.createdAt)}
-                                          </TableCell>
-                                          <TableCell className='text-center'>
-                                            <PurchesedStocks
-                                              purchesedStocks={{
-                                                item,
-                                                userId: user.shms_id
-                                              }}
-                                            >
-                                              تعديل الأسهم
-                                            </PurchesedStocks>
-                                          </TableCell>
-                                        </TableRow>
-                                      </TableBody>
-                                    </Table>
-                                  </div>
-                                )
-                              } else {
-                                return null // return null if project details are missing
+                              const project = await getProject(item.shms_project_id)
+                              if (!project) {
+                                return null // Exit early if project is null
                               }
+
+                              const projectName = project.shms_project_name
+                              const projectStockPrice = project.shms_project_stock_price
+
+                              return (
+                                <div key={item.shms_project_id}>
+                                  <Table>
+                                    <TableBody>
+                                      <TableRow>
+                                        <TableCell className='text-center min-w-56'>
+                                          {projectName}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-28'>
+                                          {item.stocks}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-36'>
+                                          {item.newPercentage}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-28'>
+                                          {formattedPrice(
+                                            item.stocks * projectStockPrice
+                                          )}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-60'>
+                                          {arabicDate(item.createdAt)}
+                                        </TableCell>
+                                        <TableCell className='text-center'>
+                                          <PurchesedStocks
+                                            purchesedStocks={{
+                                              item,
+                                              userId: user.shms_id
+                                            }}
+                                          >
+                                            تعديل الأسهم
+                                          </PurchesedStocks>
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableBody>
+                                  </Table>
+                                </div>
+                              )
                             }
                           )}
                         </Suspense>

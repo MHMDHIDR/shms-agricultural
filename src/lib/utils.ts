@@ -119,24 +119,21 @@ export const arabicDate = (date: string) =>
     second: 'numeric'
   })
 
-export async function getProject(projectId: ProjectProps['shms_project_id']) {
+export async function getProject(projectId: string) {
   try {
+    if (!projectId) {
+      throw new Error('projectId is undefined or null')
+    }
+
+    console.log('projectId :>> ', projectId)
+
     const response = await axios.get(`${API_URL}/projects/get/${projectId}`)
 
-    if (response.status === 200) {
-      const { project } = response.data
-      return project
-    } else {
-      throw new Error(`Request failed with status code ${response.status}`)
-    }
+    const project = response.data.project
+    return project
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 404) {
-      console.error(`Project with ID ${projectId} not found`)
-      return null // Handle 404 by returning null or any appropriate value
-    } else {
-      console.error('Error fetching project data:', error)
-      throw error
-    }
+    console.error('Error fetching project:', error)
+    return null // Return null (or handle the error appropriately) in case of an error
   }
 }
 
