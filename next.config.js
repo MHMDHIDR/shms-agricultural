@@ -44,6 +44,11 @@ const nextConfig = {
         pathname: '/**'
       },
       {
+        protocol: 'http',
+        hostname: 'media.kenanaonline.com',
+        pathname: '/**'
+      },
+      {
         protocol: 'https',
         hostname: 'mqalla.com',
         pathname: '/**'

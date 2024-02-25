@@ -2,6 +2,7 @@ import Layout from '@/components/custom/Layout'
 import Slider from '@/components/custom/Slider'
 import Link from 'next/link'
 import Image from 'next/image'
+import VissionImage from './vissionImage/page'
 
 export default function Home() {
   // get images from backend api (uploaded to dashboard by admin stored in AWS S3)
@@ -27,23 +28,25 @@ export default function Home() {
         </h1>
 
         <div className='flex flex-col items-center md:flex-row md:gap-8'>
-          <div className='flex items-center justify-center w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition'>
+          {/* <div className="flex items-center justify-center w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition">
             <Image
-              src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
-              alt='Image 1'
+              src="https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg"
+              alt="Image 1"
               width={500}
               height={500}
-              className='object-cover w-full h-full border-4 rounded-full border-darkgreen'
-              style={{ maxWidth: '80%' }}
+              className="object-cover w-full h-full border-4 rounded-full border-darkgreen"
+              style={{ maxWidth: "80%" }}
             />
           </div>
-          <div className='mt-4 md:mt-0'>
-            <p className='text-center' style={{ color: 'gray', fontSize: 15 }}>
-              ان يكون السودان هو فعليا سلة غذاء العالم وان يكون رائدا بين الدول العربية في
-              مجال الزراعة وتطوير الادوات الزراعية وتحسين جودة المزروعات مما يسهم بشكل
-              كبير في النمو الاقتصادي للفرد وللدولة على حد سواء
+          <div className="mt-4 md:mt-0">
+            <p className="text-center" style={{ color: "gray", fontSize: 15 }}>
+              ان يكون السودان هو فعليا سلة غذاء العالم وان يكون رائدا بين الدول
+              العربية في مجال الزراعة وتطوير الادوات الزراعية وتحسين جودة
+              المزروعات مما يسهم بشكل كبير في النمو الاقتصادي للفرد وللدولة على
+              حد سواء
             </p>
-          </div>
+          </div> */}
+          <VissionImage />
         </div>
 
         <div
@@ -217,7 +220,7 @@ export default function Home() {
 
           <div>
             <Image
-              src='https://blog.howdeninsurance.co.uk/wp-content/uploads/2022/11/What-are-the-different-types-of-tractor-used-in-agriculture-.jpg'
+              src='http://media.kenanaonline.com/photos/1238365/1238365363/large_1238365363.jpg?1394703600'
               alt='Image 1'
               width={500}
               height={500}
