@@ -41,6 +41,7 @@ import {
   replaceString
 } from '@/lib/utils'
 import Link from 'next/link'
+import OperationAction from './_OperationAction'
 
 export const columns: ColumnDef<accountingOperationsProps>[] = [
   {
@@ -61,11 +62,11 @@ export const columns: ColumnDef<accountingOperationsProps>[] = [
 ]
 
 export default function OperationsTable({
-  data,
-  actionButtons
+  // actionButtons,
+  data
 }: {
+  // actionButtons: React.ReactNode
   data: accountingOperationsProps[] | any[]
-  actionButtons: React.ReactNode
 }) {
   const dynamicColumns = data.length > 0 ? Object.keys(data[0]) : []
 
@@ -153,13 +154,7 @@ export default function OperationsTable({
                     </TableHead>
                   )
                 })}
-                <TableHead>
-                  {/* <Checkbox
-                    checked={table.getIsAllRowsSelected()}
-                    onCheckedChange={value => table.toggleAllRowsSelected(!!value)}
-                  /> */}
-                  الإجـــــراء
-                </TableHead>
+                <TableHead>الإجـــــراء</TableHead>
               </TableRow>
             ))}
           </TableHeader>
@@ -185,7 +180,7 @@ export default function OperationsTable({
                           <Copy
                             text={String(cell.getValue())}
                             className='inline ml-2 w-10 h-10'
-                          />{' '}
+                          />
                           <span>
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}{' '}
                           </span>
@@ -209,7 +204,9 @@ export default function OperationsTable({
                       )}
                     </TableCell>
                   ))}
-                  <TableCell>{actionButtons}</TableCell>
+                  <TableCell>
+                    <OperationAction withdrawAction={data[0]} />
+                  </TableCell>
                 </TableRow>
               ))
             ) : (

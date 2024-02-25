@@ -9,7 +9,7 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import OperationsTable from './_OperationsTable'
-import OperationAction from './_OperationAction'
+// import OperationAction from './_OperationAction'
 
 export default async function MoneyOperations() {
   const withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
@@ -31,9 +31,9 @@ export default async function MoneyOperations() {
         <CardContent>
           <OperationsTable
             data={withdrawActions}
-            actionButtons={withdrawActions.map((withdrawAction, index) => (
-              <OperationAction key={index} withdrawAction={withdrawAction} />
-            ))}
+            // actionButtons={withdrawActions.map((withdrawAction, index) => (
+            //   <OperationAction key={index} withdrawAction={withdrawAction} />
+            // ))}
           />
         </CardContent>
       </Card>
