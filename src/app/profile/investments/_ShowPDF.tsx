@@ -254,8 +254,8 @@ const Invoice = ({
             </table>
             <p
               style={{
-                marginBlock: '20px',
-                paddingTop: '20px',
+                marginBlock: '10px',
+                paddingTop: '10px',
                 textAlign: 'right',
                 fontSize: '15px',
                 color: '#666'
@@ -266,8 +266,8 @@ const Invoice = ({
             </p>
             <p
               style={{
-                marginBlock: '20px',
-                paddingTop: '20px',
+                marginBlock: '10px',
+                paddingTop: '10px',
                 textAlign: 'right',
                 fontSize: '15px',
                 color: '#333'
@@ -287,8 +287,8 @@ const Invoice = ({
             </p>
             <p
               style={{
-                marginBlock: '20px',
-                paddingTop: '20px',
+                marginBlock: '10px',
+                paddingTop: '10px',
                 textAlign: 'right',
                 fontSize: '15px',
                 color: '#333'
@@ -302,7 +302,7 @@ const Invoice = ({
           </div>
 
           {/* projectTerms */}
-          <div className='p-5 mt-10 text-right border border-gray-200 rounded-lg rtl'>
+          <div className='p-5 mt-4 text-right border border-gray-200 rounded-lg rtl'>
             <h4>
               <strong>شروط العقد</strong>
             </h4>
@@ -316,7 +316,7 @@ const Invoice = ({
 
           <div
             style={{ direction: 'rtl', textAlign: 'right' }}
-            className='mt-32 md:mt-80'
+            className='mt-28 md:mt-80'
           >
             <p style={{ color: '#666', fontSize: '10px' }}>
               الرقم المرجعي
