@@ -43,18 +43,18 @@ export default function CountPercentage() {
   })
   const [percentageCodesRefresh, setPercentageCodesRefresh] = useState<number>(0)
 
-  const { signal } = new AbortController()
+  // const { signal } = new AbortController()
 
   useEffect(() => {
     const getProjects = async () => {
-      const response = await fetch(`${API_URL}/projects/get`, { signal })
+      const response = await fetch(`${API_URL}/projects/get` /*, { signal }*/)
       const projects: ProjectProps[] = await response.json()
 
       setProjects(projects)
     }
 
     getProjects()
-  }, [percentageCodesRefresh, signal])
+  }, [percentageCodesRefresh /*, signal*/])
 
   const handleSubmitPercentage = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
