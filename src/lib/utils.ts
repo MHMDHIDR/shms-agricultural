@@ -123,14 +123,12 @@ export async function getProject(projectId: string) {
   try {
     if (!projectId) {
       throw new Error('projectId is undefined or null')
+    } else {
+      const response = await axios.get(`${API_URL}/projects/get/${projectId}`)
+
+      const project = response.data.project
+      return project
     }
-
-    console.log('projectId :>> ', projectId)
-
-    const response = await axios.get(`${API_URL}/projects/get/${projectId}`)
-
-    const project = response.data.project
-    return project
   } catch (error) {
     console.error('Error fetching project:', error)
     return null // Return null (or handle the error appropriately) in case of an error

@@ -45,12 +45,26 @@ export default async function DashboardInvestors() {
 
   const usersWithProjectDetails = await Promise.all(
     users.map(async (user: UserProps) => {
-      const userStocks: stocksPurchasedProps[] = JSON.parse(user.shms_user_stocks || '[]')
+      const userStocks: stocksPurchasedProps[] = JSON.parse(
+        String(user.shms_user_stocks) || '[]'
+      )
       const projectsDetails = await fetchUserProjectDetails(userStocks)
 
       return { ...user, projectsDetails }
     })
   )
+
+  // Inside the totalInvestment calculation, add console logs to check projectStockPrice and stocks values
+  const totalInvestment = usersWithProjectDetails.reduce((total, user) => {
+    const userInvestment = user.projectsDetails.reduce((userTotal, project) => {
+      // Add a check to ensure project.stocks is defined and numeric
+      const stocks = typeof project.stocks === 'number' ? project.stocks : 0
+
+      const projectInvestment = project.projectStockPrice * stocks
+      return userTotal + projectInvestment
+    }, 0)
+    return total + userInvestment
+  }, 0)
 
   return (
     <TabsContent value='investors'>
@@ -68,12 +82,7 @@ export default async function DashboardInvestors() {
           <CardHeader>
             <CardTitle>مجموع المبالغ المستثمرة</CardTitle>
             <CardDescription className='pt-4 text-2xl'>
-              <strong>
-                {usersWithProjectDetails
-                  .map(user => user.projectsDetails)
-                  .flat()
-                  .reduce((acc, cur) => acc + cur.stocks * cur.projectStockPrice, 0)}
-              </strong>
+              <strong>{formattedPrice(totalInvestment)}</strong>
             </CardDescription>
           </CardHeader>
         </Card>
@@ -86,7 +95,10 @@ export default async function DashboardInvestors() {
                 {usersWithProjectDetails
                   .map(user => user.projectsDetails)
                   .flat()
-                  .reduce((acc, cur) => acc + cur.stocks, 0)}
+                  .reduce(
+                    (acc, cur) => acc + (typeof cur.stocks === 'number' ? cur.stocks : 0),
+                    0
+                  )}
               </strong>
             </CardDescription>
           </CardHeader>

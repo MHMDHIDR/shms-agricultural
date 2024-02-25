@@ -11,9 +11,9 @@ const CONNECTION_OPTIONS = {
 
 let connectionPool: mysql.Pool | null = null
 
-async function getConnectionPool() {
+function getConnectionPool() {
   if (!connectionPool) {
-    connectionPool = await mysql.createPool(CONNECTION_OPTIONS)
+    connectionPool = mysql.createPool(CONNECTION_OPTIONS)
     console.log('✅ Connected to MySQL')
   }
   return connectionPool
@@ -21,7 +21,7 @@ async function getConnectionPool() {
 
 export async function connectDB(query: string, data: any[] | undefined = []) {
   try {
-    const pool = await getConnectionPool()
+    const pool = getConnectionPool()
     const connection = await pool.getConnection()
 
     const [rows] = data.length
