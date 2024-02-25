@@ -1,11 +1,13 @@
 import Layout from '@/components/custom/Layout'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Harvest() {
   return (
     <Layout>
-      <main className='flex flex-col items-center justify-between min-h-screen p-24'>
-        <h1 className='mb-8 text-3xl'>موسم الحصاد</h1>
+      <main className='flex flex-col items-center justify-between min-h-screen'>
+        <h1 className='mb-8 text-2xl'>موسم الحصاد</h1>
 
         <div dir='rtl' style={{ marginTop: 10, justifyContent: 'center' }}>
           <div style={{ margin: 50, display: 'flex', justifyContent: 'center' }}>
@@ -20,9 +22,10 @@ export default function Harvest() {
                 boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
               }}
               alt='موسم الحصاد'
+              className='shadow-lg'
             />
           </div>
-          <div style={{ textAlign: 'right', marginLeft: 20, marginRight: 20 }}>
+          <div className='text-right mx-5 px-20'>
             <p style={{ fontSize: 20 }}>
               يعتبر الحصاد إحدى المراحل الحاسمة في عملية الزراعة، حيث يتم فيها جني
               المحاصيل الناضجة وجمعها بعد جهد وعناء عملية الزراعة. يشمل الحصاد عدة خطوات
@@ -71,6 +74,12 @@ export default function Harvest() {
               إلى سماد عضوي أو استخدامها في إنتاج الطاقة البيولوجية.
             </p>
           </div>
+
+          <Link className='mt-8 text-xl' href='/contact'>
+            <Button variant={'pressable'} className='mt-10 mr-24'>
+              طلب الخــدمة
+            </Button>
+          </Link>
         </div>
       </main>
     </Layout>

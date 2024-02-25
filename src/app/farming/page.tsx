@@ -1,11 +1,13 @@
 import Layout from '@/components/custom/Layout'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Farming() {
   return (
     <Layout>
-      <main className='flex flex-col items-center justify-center min-h-screen p-24'>
-        <h1 className='mb-8 text-3xl'>الزراعة</h1>
+      <main className='flex flex-col items-center justify-center min-h-screen'>
+        <h1 className='mb-8 text-2xl'>الزراعة</h1>
 
         <div
           dir='rtl'
@@ -26,6 +28,7 @@ export default function Farming() {
                 maxHeight: 500,
                 boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
               }}
+              className='shadow-lg'
               alt='الزراعة'
             />
           </div>
@@ -84,6 +87,12 @@ export default function Farming() {
               اللازمة لنمو البذور.
             </p>
           </div>
+
+          <Link className='mt-8 text-xl' href='/contact'>
+            <Button variant={'pressable'} className='mt-10 mr-24'>
+              طلب الخــدمة
+            </Button>
+          </Link>
         </div>
       </main>
     </Layout>

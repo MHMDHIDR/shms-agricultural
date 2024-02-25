@@ -28,24 +28,6 @@ export default function Home() {
         </h1>
 
         <div className='flex flex-col items-center md:flex-row md:gap-8'>
-          {/* <div className="flex items-center justify-center w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition">
-            <Image
-              src="https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg"
-              alt="Image 1"
-              width={500}
-              height={500}
-              className="object-cover w-full h-full border-4 rounded-full border-darkgreen"
-              style={{ maxWidth: "80%" }}
-            />
-          </div>
-          <div className="mt-4 md:mt-0">
-            <p className="text-center" style={{ color: "gray", fontSize: 15 }}>
-              ان يكون السودان هو فعليا سلة غذاء العالم وان يكون رائدا بين الدول
-              العربية في مجال الزراعة وتطوير الادوات الزراعية وتحسين جودة
-              المزروعات مما يسهم بشكل كبير في النمو الاقتصادي للفرد وللدولة على
-              حد سواء
-            </p>
-          </div> */}
           <VissionImage />
         </div>
 
@@ -66,9 +48,7 @@ export default function Home() {
                 >
                   استثمار
                 </h2>
-                <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
-                  وهي مرحلة تصفح المشاريع المتاحة و شراء الاسهم
-                </p>
+
                 <Image
                   src='https://www.agroinvestspain.com/wp-content/uploads/2020/05/agricultural-investment.jpeg'
                   alt='Image 1'
@@ -99,9 +79,7 @@ export default function Home() {
                 >
                   تحضير
                 </h2>
-                <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
-                  وهية مرحلة تجهيز الارض من نظافة و عزق و حراثة
-                </p>
+
                 <Image
                   src='/preparation.jpg'
                   alt='Image 1'
@@ -132,9 +110,7 @@ export default function Home() {
                 >
                   زراعة
                 </h2>
-                <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
-                  وهي مرحلة رمي البذور في الارض ومتابعة الري وسير الزراعة
-                </p>
+
                 <Image
                   src='/farming.png'
                   alt='Image 2'
@@ -165,9 +141,7 @@ export default function Home() {
                 >
                   حصاد
                 </h2>
-                <p style={{ color: 'gray', fontSize: 15, textAlign: 'center' }}>
-                  وهية مرحلة جمع المحصول من الارض والبدء بتجهيزه للتخزين
-                </p>
+
                 <Image
                   src='/harvest.webp'
                   alt='Image 3'

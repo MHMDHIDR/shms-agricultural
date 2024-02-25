@@ -1,11 +1,13 @@
 import Layout from '@/components/custom/Layout'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Preparation() {
   return (
     <Layout>
-      <main className='flex flex-col items-center justify-center min-h-screen p-24'>
-        <h1 className='mb-8 text-3xl'>التحضير للموسم الزراعي</h1>
+      <main className='flex flex-col items-center justify-center min-h-screen'>
+        <h1 className='mb-8 text-2xl'>التحضير للموسم الزراعي</h1>
 
         <div dir='rtl' style={{ marginTop: 10, justifyContent: 'center' }}>
           <div style={{ margin: 50, display: 'flex', justifyContent: 'center' }}>
@@ -20,9 +22,10 @@ export default function Preparation() {
                 boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
               }}
               alt='تحضير التربة'
+              className='shadow-lg'
             />
           </div>
-          <div style={{ textAlign: 'right', marginLeft: 20, marginRight: 20 }}>
+          <div className='text-right mx-5 px-20'>
             <p style={{ fontSize: 20 }}>
               تعد عملية تحضير الأرض قبل الزراعة خطوة حاسمة في نجاح المزروعات. فهي تسهم في
               إعداد البيئة المثلى لنمو النباتات، وتعزز امتصاص الأسمدة والماء، وتقلل من
@@ -71,6 +74,12 @@ export default function Preparation() {
               الزراعة.
             </p>
           </div>
+
+          <Link className='mt-8 text-xl' href='/contact'>
+            <Button variant={'pressable'} className='mt-10 mr-24'>
+              طلب الخــدمة
+            </Button>
+          </Link>
         </div>
       </main>
     </Layout>

@@ -228,16 +228,12 @@ export default function Nav() {
 
             {/* الخدمات */}
             <NavigationMenuItem>
-              <NavigationMenuTrigger>الخدمات</NavigationMenuTrigger>
+              <NavigationMenuTrigger>الخــدمات</NavigationMenuTrigger>
               <NavigationMenuContent className='rtl'>
-                <ul className='grid min-w-screen w-dvw gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] right-0'>
+                <ul className='grid gap-3 p-4 min-w-screen w-dvw md:w-[400px] lg:w-[500px] grid-rows-2 grid-cols-1'>
                   {MenuItems.map(component => (
-                    <NavigationListItem
-                      key={component.title}
-                      title={component.title}
-                      href={component.href}
-                    >
-                      {component.description}
+                    <NavigationListItem key={component.title} href={component.href}>
+                      {component.title}
                     </NavigationListItem>
                   ))}
                 </ul>

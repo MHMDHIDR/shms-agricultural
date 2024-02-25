@@ -31,7 +31,7 @@ function VissionImage() {
               {' '}
             </div>
             <Image
-              src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
+              src='/static-images/vision-image-home.jpg'
               alt='Image 1'
               width={500}
               height={500}
@@ -48,38 +48,35 @@ function VissionImage() {
           </div>
         </>
       ) : (
-        <>
+        <div className='flex items-center'>
           <div className='flex items-center justify-center w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition'>
             <div
               style={{
-                width: 400,
-                height: 300,
+                width: 300,
+                height: 200,
                 backgroundColor: 'green',
-                marginBottom: 600,
-                marginRight: -300,
+                marginBottom: 300,
+                marginRight: -250,
                 borderTopRightRadius: 100,
                 borderBottomLeftRadius: 100
               }}
-            >
-              {' '}
-            </div>
+            ></div>
             <Image
-              src='https://assets.raya.com/wp-content/uploads/2020/11/03220331/951165.jpeg'
+              src='/static-images/vision-image-home.jpg'
               alt='Image 1'
-              width={500}
+              width={400}
               height={500}
-              className='object-cover w-full h-full border-4 rounded-full border-darkgreen'
-              style={{ maxWidth: '80%' }}
+              className='object-cover w-96 h-96 border-4 rounded-full border-darkgreen'
             />
           </div>
           <div className='mt-4 md:mt-0'>
-            <p className='text-center' style={{ color: 'gray', fontSize: 15 }}>
+            <p className='text-center text-lg leading-10 text-gray-800 dark:text-white'>
               ان يكون السودان هو فعليا سلة غذاء العالم وان يكون رائدا بين الدول العربية في
               مجال الزراعة وتطوير الادوات الزراعية وتحسين جودة المزروعات مما يسهم بشكل
               كبير في النمو الاقتصادي للفرد وللدولة على حد سواء
             </p>
           </div>
-        </>
+        </div>
       )}
     </div>
   )
