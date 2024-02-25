@@ -53,7 +53,7 @@ export default async function DashboardInvestors() {
     }[]
   }
 
-  // Iterate through users to fetch project details for each
+  // // Iterate through users to fetch project details for each
   const usersWithProjectDetails = await Promise.all(
     users.map(async user => {
       const userStocks: stocksPurchasedProps[] = JSON.parse(String(user.shms_user_stocks))

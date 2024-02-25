@@ -217,7 +217,7 @@ export default function Home() {
 
           <div>
             <Image
-              src='http://media.kenanaonline.com/photos/1238365/1238365363/large_1238365363.jpg?1394703600'
+              src='https://blog.howdeninsurance.co.uk/wp-content/uploads/2022/11/What-are-the-different-types-of-tractor-used-in-agriculture-.jpg'
               alt='Image 1'
               width={500}
               height={500}

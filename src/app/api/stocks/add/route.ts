@@ -73,7 +73,7 @@ export async function PATCH(req: Request) {
         WHERE shms_id = ?;`,
         [
           JSON.stringify([
-            ...userPrevStocks,
+            ...JSON.parse(String(userPrevStocks)),
             {
               shms_project_id,
               stocks,

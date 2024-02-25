@@ -39,8 +39,8 @@ const nextConfig = {
         pathname: '/**'
       },
       {
-        protocol: 'http',
-        hostname: 'media.kenanaonline.com',
+        protocol: 'https',
+        hostname: 'blog.howdeninsurance.co.uk',
         pathname: '/**'
       },
       {
