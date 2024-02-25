@@ -54,7 +54,7 @@ export default function CountPercentage() {
     }
 
     getProjects()
-  }, [percentageCodesRefresh])
+  }, [percentageCodesRefresh, signal])
 
   const handleSubmitPercentage = async (e: { preventDefault: () => void }) => {
     e.preventDefault()

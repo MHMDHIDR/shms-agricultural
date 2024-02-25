@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { DEFAULT_DURATION } from '@/data/constants'
 import { getAuth } from '@/lib/actions/auth'
 import { validatePasswordStrength, redirect as redirectPage } from '@/lib/utils'
@@ -146,7 +146,7 @@ const SigninPage = () => {
           userType,
           withdrawableAmount,
           totalAmount
-        } = await getAuth()
+        } = (await getAuth()) as getAuthType
 
         localStorage.setItem(
           'shms_user_data',
@@ -162,6 +162,7 @@ const SigninPage = () => {
           })
         )
       }
+      refetchSession()
     }
   }, [session])
 
