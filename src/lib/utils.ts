@@ -165,8 +165,14 @@ export async function getUserMoneyOperations(
   userId?: accountingOperationsProps['shms_user_id']
 ): Promise<accountingOperationsProps[]> {
   const response = userId
-    ? await fetch(`${API_URL}/withdrawActions/get/${userId}`)
-    : await fetch(`${API_URL}/withdrawActions/get/all`)
+    ? await fetch(`${API_URL}/withdrawActions/get/${userId}`, {
+        next: { revalidate: 0 }
+        //,cache: 'no-store'
+      })
+    : await fetch(`${API_URL}/withdrawActions/get/all`, {
+        next: { revalidate: 0 }
+        //,cache: 'no-store'
+      })
 
   const withdrawActions: accountingOperationsProps[] = await response.json()
 

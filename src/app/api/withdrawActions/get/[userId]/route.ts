@@ -2,7 +2,7 @@
 import { connectDB } from '@/api/utils/db'
 import { NextRequest } from 'next/server'
 
-export const revalidate = 10
+export const revalidate = 0
 export async function GET(request: NextRequest) {
   // get everything after /get/ in the URL
   const userId = request.nextUrl.pathname.split('/get/')[1]

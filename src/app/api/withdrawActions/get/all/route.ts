@@ -1,7 +1,7 @@
 //withdrawActions/get/[userId]/route.ts
 import { connectDB } from '@/api/utils/db'
 
-export const revalidate = 10
+export const revalidate = 0
 export async function GET() {
   // Construct the SQL query with a JOIN statement to retrieve user details from the users table
   const query = `
