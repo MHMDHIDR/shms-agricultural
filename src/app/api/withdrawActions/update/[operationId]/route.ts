@@ -66,7 +66,10 @@ export async function PATCH(
 
     // if the accounting_operation_status === 'rejected' then update the user's balance by returning the amount back
     const currentBalance = userExists.shms_user_withdrawable_balance
-    if (accounting_operation_status === 'rejected') {
+    if (
+      accounting_operation_status === 'rejected' ||
+      accounting_operation_status === 'deleted'
+    ) {
       const userNewBalance = currentBalance + operationExists.shms_withdraw_amount
 
       await connectDB(
