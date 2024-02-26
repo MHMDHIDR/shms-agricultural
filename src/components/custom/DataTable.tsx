@@ -41,7 +41,7 @@ import {
   replaceString
 } from '@/lib/utils'
 import Link from 'next/link'
-import OperationAction from '@/app/dashboard/moneyOperations/_OperationAction'
+import OperationAction from '@/app/dashboard/money-operations/_OperationAction'
 import { APP_LOGO } from '@/data/constants'
 import Modal from '@/components/custom/Modal'
 

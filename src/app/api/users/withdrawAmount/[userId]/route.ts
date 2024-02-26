@@ -54,15 +54,6 @@ export async function POST(
       [referenceCode, withdrawAmount, userId]
     )
 
-    // Update user balance, subtract the withdraw amount and later on
-    // if the admin rejects the withdraw, we will add the amount back to the user balance
-    const currentBalance = userExists.shms_user_withdrawable_balance
-    const userNewBalance = currentBalance - withdrawAmount
-    await connectDB(
-      `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
-      [userNewBalance, userExists.shms_id]
-    )
-
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments/withdraw`
 

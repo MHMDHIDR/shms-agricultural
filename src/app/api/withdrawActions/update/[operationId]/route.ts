@@ -1,3 +1,4 @@
+// /withdrawActions/update/[operationId]
 import { connectDB } from '@/api/utils/db'
 import email from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
@@ -8,7 +9,7 @@ export async function PATCH(
   req: Request,
   { params: { operationId } }: { params: { operationId: string } }
 ) {
-  if (!operationId) throw new Error('Operation ID is required')
+  if (!operationId) throw new Error('User ID is required')
 
   const body = await req.json()
   const {
@@ -23,7 +24,7 @@ export async function PATCH(
     return new Response(
       JSON.stringify({
         withdrawUpdated: 0,
-        message: 'Please provide the required balance to withdraw!'
+        message: 'الرجاء إدخال الرصيد المطلوب سحبه!'
       }),
       { status: 400 }
     )
@@ -46,106 +47,105 @@ export async function PATCH(
     return new Response(
       JSON.stringify({
         withdrawUpdated: 0,
-        message: 'User or operation not found!'
+        message: `عفواً! لم يتم إيجاد المستخدم أو العملية المطلوبة`
       }),
       { status: 404 }
     )
   }
 
   try {
-    if (accounting_operation_status === 'deleted') {
-      await connectDB(`DELETE FROM withdraw_actions WHERE shms_withdraw_id = ?`, [
-        operationId
-      ])
-    } else {
-      await connectDB(
-        `UPDATE withdraw_actions SET accounting_operation_status = ? WHERE shms_withdraw_id = ?`,
-        [accounting_operation_status, operationId]
-      )
-
-      const currentBalance = userExists.shms_user_withdrawable_balance
-
-      if (
-        accounting_operation_status === 'rejected' &&
-        (operationExists.accounting_operation_status === 'completed' ||
-          operationExists.accounting_operation_status === 'pending')
-      ) {
-        const userNewBalance = currentBalance + operationExists.shms_withdraw_amount
-        await connectDB(
-          `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
-          [userNewBalance, shms_user_id]
+    // update the operation status
+    accounting_operation_status === 'deleted'
+      ? await connectDB(`DELETE FROM withdraw_actions WHERE shms_withdraw_id = ?`, [
+          operationId
+        ])
+      : await connectDB(
+          `UPDATE withdraw_actions SET accounting_operation_status = ? WHERE shms_withdraw_id = ?`,
+          [accounting_operation_status, operationId]
         )
-      } else if (
-        accounting_operation_status === 'completed' &&
-        operationExists.accounting_operation_status === 'rejected'
-      ) {
-        const userNewBalance = currentBalance - operationExists.shms_withdraw_amount
-        await connectDB(
-          `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
-          [userNewBalance, shms_user_id]
-        )
-      }
 
-      const buttonLink = APP_URL + `/profile/investments/withdraw`
+    const currentBalance = userExists.shms_user_withdrawable_balance
+    let userNewBalance = 0
+    if (accounting_operation_status === 'rejected') {
+      // if the operation is rejected, add the amount back to the user balance
+      userNewBalance = currentBalance + operationExists.shms_withdraw_amount
+    } else if (
+      accounting_operation_status === 'deleted' &&
+      operationExists.accounting_operation_status === 'completed'
+    ) {
+      // if the operation is deleted, add the amount back to the user balance
+      userNewBalance = currentBalance + operationExists.shms_withdraw_amount
+    }
 
-      const emailData = {
-        from: `SHMS Agriculture <${ADMIN_EMAIL}>`,
-        to: userExists.shms_email,
-        subject: `${
+    console.log(' Current Balance: ', currentBalance)
+
+    console.log(' New Balance: ', userNewBalance)
+
+    console.log(' Operation Status: ', accounting_operation_status)
+
+    // await connectDB(
+    //   `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
+    //   [userNewBalance, userExists.shms_id]
+    // )
+
+    //send the user an email with a link to activate his/her account
+    const buttonLink = APP_URL + `/profile/investments/withdraw`
+    const emailData = {
+      from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
+      to: userExists.shms_email,
+      subject: `${
+        accounting_operation_status === 'completed'
+          ? 'تم الموافقة على'
+          : accounting_operation_status === 'rejected'
+          ? 'تم رفض'
+          : 'تم حذف'
+      } طلب ${
+        operationExists?.shms_action_type === 'withdraw' ? 'سحب' : 'إيداع'
+      } رصيد في حسابك رصيد | شمس للخدمات الزراعية`,
+      msg: {
+        title: `${
           accounting_operation_status === 'completed'
-            ? 'Approved'
+            ? 'تم الموافقة على'
             : accounting_operation_status === 'rejected'
-            ? 'Rejected'
-            : 'Deleted'
-        } request for ${
-          operationExists?.shms_action_type === 'withdraw' ? 'withdrawal' : 'deposit'
-        } in your SHMS account`,
-        msg: {
-          title: `${
-            accounting_operation_status === 'completed'
-              ? 'Approved'
-              : accounting_operation_status === 'rejected'
-              ? 'Rejected'
-              : 'Deleted'
-          } request for ${
-            operationExists?.shms_action_type === 'withdraw' ? 'withdrawal' : 'deposit'
-          }`,
-          msg: `Hi ${userExists.shms_fullname}!
+            ? 'تم رفــض'
+            : 'تم حذف'
+        } طلب ${operationExists?.shms_action_type === 'withdraw' ? 'سحب' : 'إيداع'} رصيد`,
+        msg: `
+          مرحباً، ${userExists.shms_fullname}!
 
-          We would like to inform you that your ${
-            operationExists?.shms_action_type === 'withdraw' ? 'withdrawal' : 'deposit'
-          } request on ${
-            arabicDate(operationExists?.shms_created_at) ?? 'unknown'
-          } has been ${
-            accounting_operation_status === 'completed'
-              ? 'approved'
-              : accounting_operation_status === 'rejected'
-              ? 'rejected'
-              : 'deleted'
-          }.
+          نود إعلامك بأن طلب ${
+            operationExists?.shms_action_type === 'withdraw' ? 'السحب' : 'الإيداع'
+          } الذي قمت به تم في تاريخ ${
+          arabicDate(operationExists?.shms_created_at) ?? 'غير معروف'
+        } بحالة ${
+          accounting_operation_status === 'completed'
+            ? 'تم الموافقة'
+            : accounting_operation_status === 'rejected'
+            ? 'تم الرفض'
+            : 'تم الحذف'
+        }.
 
-          Amount: ${operationExists?.shms_withdraw_amount} QAR only.`,
-          buttonLink,
-          buttonLabel: 'Review Request'
-        }
+          مبلغ السحب: ${operationExists?.shms_withdraw_amount} ريال قطري فقط.`,
+        buttonLink,
+        buttonLabel: 'مراجعة الطلب'
       }
+    }
 
-      const data = await email(emailData)
-      if (data?.id) {
-        return new Response(
-          JSON.stringify({
-            withdrawUpdated: 1,
-            message: `${
-              accounting_operation_status === 'completed'
-                ? 'Approved'
-                : accounting_operation_status === 'rejected'
-                ? 'Rejected'
-                : 'Updated'
-            } successfully 👍🏼`
-          }),
-          { status: 201 }
-        )
-      }
+    const data = await email(emailData)
+    if (data?.id) {
+      return new Response(
+        JSON.stringify({
+          withdrawUpdated: 1,
+          message: `${
+            accounting_operation_status === 'completed'
+              ? 'تم الموافقة على'
+              : accounting_operation_status === 'rejected'
+              ? 'تم رفض'
+              : 'تم تحديث'
+          } الطلب بنجاح 👍🏼`
+        }),
+        { status: 201 }
+      )
     }
   } catch (error) {
     console.error(error)

@@ -38,6 +38,7 @@ import Drawer from '@/components/custom/Drawer'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
 import { LoadingPage } from '@/components/custom/Loading'
+import ProjectCondition from './ProjectCondition'
 
 export default function EditProjectPage({
   params: { id: projectId }
@@ -576,7 +577,12 @@ export default function EditProjectPage({
               <Label htmlFor='projectDescription'>
                 شروط المشروع
                 <span className='text-red-500'>*</span>
-                <Drawer>تعليمات شروط المشروع</Drawer>
+                <Drawer
+                  title={'تعليمات توضيحة كيفية استخدام الــMarkdown'}
+                  content={<ProjectCondition />}
+                >
+                  تعليمات شروط المشروع
+                </Drawer>
               </Label>
               <textarea
                 onChange={handleProjectTermsChange}
