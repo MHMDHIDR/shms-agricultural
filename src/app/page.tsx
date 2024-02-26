@@ -6,6 +6,7 @@ import axios from 'axios'
 import { API_URL } from '@/data/constants'
 import { UserProps } from '@/types'
 import Counter from '@/components/custom/Counter'
+import Divider from '@/components/custom/Divider'
 
 export default async function Home() {
   // get images from backend api (uploaded to dashboard by admin stored in AWS S3)
@@ -28,7 +29,7 @@ export default async function Home() {
       <section className='flex flex-col items-center justify-between min-h-screen p-8 md:p-24'>
         <h1 className='mb-8 text-2xl md:text-4xl md:mb-12'>مرحباً بكم في شمــس</h1>
 
-        <h1 style={{ marginTop: 50 }} className='mb-8 text-2xl md:text-4xl md:mb-12'>
+        <h1 className='mb-8 mt-14 text-2xl md:text-4xl md:mb-12 underline-hover'>
           رؤيتنا
         </h1>
 
@@ -190,7 +191,9 @@ export default async function Home() {
           </Link>
         </div>
 
-        <h1 style={{ marginTop: 30 }} className='mb-8 text-2xl md:text-4xl md:mb-12'>
+        <Divider className='my-10' />
+
+        <h1 className='mb-8 mt-14 text-2xl md:text-4xl md:mb-12 underline-hover'>
           معرض الصور
         </h1>
 
