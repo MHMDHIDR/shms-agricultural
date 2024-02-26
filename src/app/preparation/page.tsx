@@ -6,8 +6,8 @@ import Link from 'next/link'
 export default function Preparation() {
   return (
     <Layout>
-      <main className='flex flex-col items-center justify-center min-h-screen'>
-        <h1 className='mb-8 text-2xl'>التحضير للموسم الزراعي</h1>
+      <main className='flex flex-col items-center justify-between min-h-screen'>
+        <h1 className='mb-2 mt-10 text-2xl'>التحضير للموسم الزراعي</h1>
 
         <div dir='rtl' style={{ marginTop: 10, justifyContent: 'center' }}>
           <div style={{ margin: 50, display: 'flex', justifyContent: 'center' }}>

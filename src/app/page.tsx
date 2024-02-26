@@ -2,9 +2,12 @@ import Layout from '@/components/custom/Layout'
 import Slider from '@/components/custom/Slider'
 import Link from 'next/link'
 import Image from 'next/image'
-import VissionImage from './vissionImage/page'
+import axios from 'axios'
+import { API_URL } from '@/data/constants'
+import { UserProps } from '@/types'
+import Counter from '@/components/custom/Counter'
 
-export default function Home() {
+export default async function Home() {
   // get images from backend api (uploaded to dashboard by admin stored in AWS S3)
   const images = [
     'https://source.unsplash.com/featured/?flowers',
@@ -17,6 +20,8 @@ export default function Home() {
     'https://source.unsplash.com/featured/?palms'
   ]
 
+  const { data: users }: { data: UserProps[] } = await axios.get(`${API_URL}/users/all`)
+
   return (
     <Layout>
       <Slider images={images} />
@@ -28,7 +33,31 @@ export default function Home() {
         </h1>
 
         <div className='flex flex-col items-center md:flex-row md:gap-8'>
-          <VissionImage />
+          <div className='flex items-center flex-col md:flex-row'>
+            <div className='flex items-center justify-center w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition'>
+              <div className='bg-green-700 min-w-72 min-h-48 md:w-80 md:h-60 rounded-tr-[6.5rem] rounded-bl-[6.5rem] mb-80 -mr-52'>
+                <h1 className='text-white text-6xl font-bold p-12 pt-8 select-none counter'>
+                  <small className='text-sm block text-right'>عدد العملاء</small>
+                  <Counter number={users.length} />
+                  <span className='rotate-45 inline-block ml-2'>&times;</span>
+                </h1>
+              </div>
+              <Image
+                src='/static-images/vision-image-home.jpg'
+                alt='Image 1'
+                width={400}
+                height={400}
+                className='object-cover min-w-80 min-h-80 aspect-square border-4 rounded-full border-darkgreen'
+              />
+            </div>
+            <div className='mt-4 md:mt-0'>
+              <p className='text-center text-lg leading-10 text-gray-800 dark:text-white'>
+                أن يكون السودان هو فعليا سلة غذاء العالم وان يكون رائداً بين الدول العربية
+                في مجال الزراعة وتطوير الادوات الزراعية وتحسين جودة المزروعات مما يسهم
+                بشكل كبير في النمو الاقتصادي للفرد وللدولة على حد سواء
+              </p>
+            </div>
+          </div>
         </div>
 
         <div

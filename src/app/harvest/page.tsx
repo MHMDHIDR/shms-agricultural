@@ -7,7 +7,7 @@ export default function Harvest() {
   return (
     <Layout>
       <main className='flex flex-col items-center justify-between min-h-screen'>
-        <h1 className='mb-8 text-2xl'>موسم الحصاد</h1>
+        <h1 className='mb-2 mt-10 text-2xl'>موسم الحصاد</h1>
 
         <div dir='rtl' style={{ marginTop: 10, justifyContent: 'center' }}>
           <div style={{ margin: 50, display: 'flex', justifyContent: 'center' }}>

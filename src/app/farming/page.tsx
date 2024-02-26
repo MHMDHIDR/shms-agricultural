@@ -6,18 +6,11 @@ import Link from 'next/link'
 export default function Farming() {
   return (
     <Layout>
-      <main className='flex flex-col items-center justify-center min-h-screen'>
-        <h1 className='mb-8 text-2xl'>الزراعة</h1>
+      <main className='flex flex-col items-center justify-between min-h-screen'>
+        <h1 className='mb-2 mt-10 text-2xl'>الزراعة</h1>
 
-        <div
-          dir='rtl'
-          style={{
-            marginTop: 10,
-            justifyContent: 'center',
-            textAlign: 'center'
-          }}
-        >
-          <div style={{ margin: '0 auto', width: 500 }}>
+        <div dir='rtl' style={{ marginTop: 10, justifyContent: 'center' }}>
+          <div style={{ margin: 50, display: 'flex', justifyContent: 'center' }}>
             <Image
               src='https://cdn.alweb.com/thumbs/kayftazra3/article/fit710x532/%D8%A3%D9%85%D8%AB%D9%84%D8%A9-%D8%B9%D9%84%D9%89-%D8%A8%D8%B0%D9%88%D8%B1-%D8%AA%D8%B2%D8%B1%D8%B9-%D9%81%D9%8A-%D8%A7%D9%84%D9%85%D9%86%D8%B2%D9%84.jpg'
               width={500}
@@ -32,15 +25,7 @@ export default function Farming() {
               alt='الزراعة'
             />
           </div>
-          <div
-            dir='ltr'
-            style={{
-              textAlign: 'right',
-              marginLeft: 20,
-              marginRight: 20,
-              marginTop: 100
-            }}
-          >
+          <div className='text-right mx-5 px-20'>
             <p style={{ fontSize: 20 }}>
               تُعتبر مرحلة رمي البذور والزراعة أحد أهم مراحل عملية الزراعة، حيث يتم فيها
               زراعة البذور في التربة بطريقة تسهل نموها وتطورها لتنتج محصولًا جيدًا. في هذا
