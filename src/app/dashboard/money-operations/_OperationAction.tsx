@@ -66,7 +66,7 @@ export default function OperationAction({
           }
         })
       }
-      setTimeout(() => redirect('/dashboard'), DEFAULT_DURATION)
+      setTimeout(() => redirect('/dashboard/money-operations'), DEFAULT_DURATION)
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,

@@ -16,7 +16,7 @@ export default async function MoneyOperations() {
 
   return (
     <Layout>
-      <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
+      <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>العمليات المالية</h1>
       <DashboardNav />
 
       <section className='container mx-auto'>

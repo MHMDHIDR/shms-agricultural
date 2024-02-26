@@ -57,7 +57,7 @@ export async function PATCH(
     // update the operation status
     accounting_operation_status === 'deleted'
       ? await connectDB(`DELETE FROM withdraw_actions WHERE shms_withdraw_id = ?`, [
-          operationId
+          'operationId'
         ])
       : await connectDB(
           `UPDATE withdraw_actions SET accounting_operation_status = ? WHERE shms_withdraw_id = ?`,
@@ -66,14 +66,9 @@ export async function PATCH(
 
     const currentBalance = userExists.shms_user_withdrawable_balance
     let userNewBalance = 0
-    if (accounting_operation_status === 'rejected') {
-      // if the operation is rejected, add the amount back to the user balance
-      userNewBalance = currentBalance + operationExists.shms_withdraw_amount
-    } else if (
-      accounting_operation_status === 'deleted' &&
-      operationExists.accounting_operation_status === 'completed'
-    ) {
-      // if the operation is deleted, add the amount back to the user balance
+    if (accounting_operation_status === 'completed') {
+      userNewBalance = currentBalance - operationExists.shms_withdraw_amount
+    } else if (accounting_operation_status === 'rejected') {
       userNewBalance = currentBalance + operationExists.shms_withdraw_amount
     }
 
@@ -83,10 +78,10 @@ export async function PATCH(
 
     console.log(' Operation Status: ', accounting_operation_status)
 
-    // await connectDB(
-    //   `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
-    //   [userNewBalance, userExists.shms_id]
-    // )
+    await connectDB(
+      `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
+      [userNewBalance, userExists.shms_id]
+    )
 
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments/withdraw`

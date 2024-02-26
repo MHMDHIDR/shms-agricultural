@@ -256,14 +256,14 @@ export default function Users() {
 
   return (
     <Layout>
-      <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
+      <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>العمــلاء</h1>
       <DashboardNav />
 
       <section className='container mx-auto'>
         <div style={{ width: '100%', display: 'flex' }}>
           <Card className='min-w-full'>
             <CardHeader dir='rtl'>
-              <CardTitle> المستخدمين </CardTitle>
+              <CardTitle>العدد الكلي</CardTitle>
               <CardDescription>{users.length ?? 0}</CardDescription>
             </CardHeader>
             <CardContent>

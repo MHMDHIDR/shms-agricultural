@@ -34,6 +34,7 @@ import { accountingOperationsProps } from '@/types'
 import Copy from '@/components/custom/Copy'
 import NoRecords from '@/components/custom/NoRecords'
 import {
+  cn,
   formattedPrice,
   getProjectDate,
   getProjectStatus,
@@ -101,6 +102,7 @@ export default function OperationsTable({
   })
 
   const filteredColumns = [
+    'shms_user_id',
     'shms_nationality',
     'shms_password',
     'shms_user_account_type',
@@ -154,7 +156,7 @@ export default function OperationsTable({
                   .filter(header => !filteredColumns.includes(header.id))
                   .map(header => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead key={header.id} className={cn('min-w-56 text-center')}>
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -178,7 +180,8 @@ export default function OperationsTable({
                     .map(cell => (
                       <TableCell
                         key={cell.id}
-                        className={
+                        className={cn(
+                          'min-w-56 text-center',
                           cell.getValue() === 'pending'
                             ? 'text-yellow-500'
                             : cell.getValue() === 'completed' ||
@@ -191,7 +194,7 @@ export default function OperationsTable({
                               !cell.getValue()
                             ? 'text-gray-400'
                             : 'text-black dark:text-white'
-                        }
+                        )}
                       >
                         {cell.column.id.includes('_id') ? (
                           <span className='flex'>

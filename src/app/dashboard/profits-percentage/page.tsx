@@ -89,7 +89,7 @@ export default function CountPercentage() {
       }
 
       setPercentageCodesRefresh(data.projectUpdated ?? 0)
-      setTimeout(() => redirect('/dashboard'), DEFAULT_DURATION / 2)
+      setTimeout(() => redirect('/dashboard/profits-percentage'), DEFAULT_DURATION / 2)
     } catch (error: any) {
       const errorMessage = error.response?.data?.message ?? error
       toast(errorMessage.length < 50 ? errorMessage : 'حدث خطأ ما'),
@@ -154,7 +154,7 @@ export default function CountPercentage() {
       }
 
       setPercentageCodesRefresh(data.projectUpdated ?? 0)
-      setTimeout(() => redirect('/dashboard'), DEFAULT_DURATION / 2)
+      setTimeout(() => redirect('/dashboard/profits-percentage'), DEFAULT_DURATION / 2)
     } catch (error) {
       toast('حدث خطأ ما أثناء حذف المشروع', {
         icon: <Error className='w-6 h-6 ml-3' />,
