@@ -4,7 +4,8 @@ import type {
   UserProps,
   abstractWordsProps,
   validateFileProps,
-  accountingOperationsProps
+  accountingOperationsProps,
+  stocksPurchasedProps
 } from '@/types'
 import axios from 'axios'
 import { clsx, type ClassValue } from 'clsx'
@@ -268,6 +269,12 @@ export function getProjectDuration(projectStartDate: Date, projectEndDate: Date)
   return diffMonths > 2 ? `${diffMonths} أشهر` : `${diffMonths} شهر`
 }
 
+export const getUserStokcs = (user: UserProps) => {
+  const USER_STOCKS = JSON.parse(String(user.shms_user_stocks)) as stocksPurchasedProps[]
+  // count the stock in the USER_STOCKS array
+  return USER_STOCKS && USER_STOCKS.reduce((acc, stock) => acc + stock.stocks, 0)
+}
+
 /**
  *  A function to scrollToView of an element
  * @param scrollY the y position to scroll to
@@ -353,27 +360,93 @@ export const formattedPrice = (price: number, maximumFractionDigits: number = 0)
  * */
 export const replaceString = (string: string) => {
   switch (string) {
-    case 'shms_withdraw_id':
+    case 'shms_withdraw_id': {
       return 'الرقم المرجعي للعملية'
-    case 'shms_user_id':
+      break
+    }
+    case 'shms_user_id': {
       return 'الرقم المرجعي للمستثمر'
-    case 'shms_action_type':
+      break
+    }
+    case 'shms_id': {
+      return 'الرقم التسلسلي'
+      break
+    }
+    case 'shms_action_type': {
       return 'نوع العملية'
-    case 'shms_fullname':
+      break
+    }
+    case 'shms_fullname': {
       return 'اسم المستثمر'
-    case 'shms_phone':
+      break
+    }
+    case 'shms_password': {
+      return 'كلمة المرور'
+      break
+    }
+    case 'shms_date_of_birth': {
+      return 'تاريخ الميلاد'
+      break
+    }
+    case 'shms_doc': {
+      return 'صورة المستند'
+      break
+    }
+    case 'shms_user_stocks': {
+      return 'عدد الأسهم'
+      break
+    }
+    case 'shms_user_stock_limit': {
+      return 'الحد الأعلى للأسهم'
+      break
+    }
+    case 'shms_user_total_balance': {
+      return 'الرصيد الكلي للمستثمر'
+      break
+    }
+    case 'shms_user_withdrawable_balance': {
+      return 'الرصيد القابل للسحب'
+      break
+    }
+    case 'shms_user_account_type': {
+      return 'نوع الحساب'
+      break
+    }
+    case 'shms_user_account_status': {
+      return 'حالة الحساب'
+      break
+    }
+    case 'shms_nationality': {
+      return 'الجنسية'
+      break
+    }
+    case 'shms_phone': {
       return 'رقم الجوال'
-    case 'shms_email':
+      break
+    }
+    case 'shms_email': {
       return 'البريد الالكتروني'
-    case 'shms_address':
+      break
+    }
+    case 'shms_address': {
       return 'العنوان'
-    case 'shms_created_at':
+      break
+    }
+    case 'shms_created_at': {
       return 'تاريخ العملية'
-    case 'shms_withdraw_amount':
+      break
+    }
+    case 'shms_withdraw_amount': {
       return 'المبلغ المراد سحبه'
-    case 'accounting_operation_status':
+      break
+    }
+    case 'accounting_operation_status': {
       return 'حالة الطلب'
-    default:
+      break
+    }
+    default: {
       return string
+      break
+    }
   }
 }

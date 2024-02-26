@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react'
+import { useState } from 'react'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import {
   ColumnDef,
@@ -14,7 +14,6 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -38,10 +37,13 @@ import {
   formattedPrice,
   getProjectDate,
   getProjectStatus,
+  getUserStokcs,
   replaceString
 } from '@/lib/utils'
 import Link from 'next/link'
-import OperationAction from './_OperationAction'
+import OperationAction from '@/app/dashboard/moneyOperations/_OperationAction'
+import { APP_LOGO } from '@/data/constants'
+import Modal from '@/components/custom/Modal'
 
 export const columns: ColumnDef<accountingOperationsProps>[] = [
   {
@@ -62,10 +64,8 @@ export const columns: ColumnDef<accountingOperationsProps>[] = [
 ]
 
 export default function OperationsTable({
-  // actionButtons,
   data
 }: {
-  // actionButtons: React.ReactNode
   data: accountingOperationsProps[] | any[]
 }) {
   const dynamicColumns = data.length > 0 ? Object.keys(data[0]) : []
@@ -76,10 +76,10 @@ export default function OperationsTable({
     cell: ({ row }) => <div>{row.getValue(column)}</div>
   }))
 
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
   const table = useReactTable({
     data,
@@ -99,6 +99,14 @@ export default function OperationsTable({
       rowSelection
     }
   })
+
+  const filteredColumns = [
+    'shms_nationality',
+    'shms_password',
+    'shms_user_account_type',
+    'shms_user_reset_token',
+    'shms_user_reset_token_expires'
+  ]
 
   return (
     <div className='w-full rtl'>
@@ -129,7 +137,7 @@ export default function OperationsTable({
           </DropdownMenuContent>
         </DropdownMenu>
         <Input
-          placeholder='إبحــــث عن طريق اسم المستثمر'
+          placeholder='إبحــــث عن طريق الإســـــــم'
           value={table.getColumn('shms_fullname')?.getFilterValue() as string}
           onChange={event =>
             table.getColumn('shms_fullname')?.setFilterValue(event.target.value)
@@ -142,18 +150,20 @@ export default function OperationsTable({
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            replaceString(String(header.column.columnDef.header)),
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
+                {headerGroup.headers
+                  .filter(header => !filteredColumns.includes(header.id))
+                  .map(header => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              replaceString(String(header.column.columnDef.header)),
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    )
+                  })}
                 <TableHead>الإجـــــراء</TableHead>
               </TableRow>
             ))}
@@ -162,48 +172,74 @@ export default function OperationsTable({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell
-                      key={cell.id}
-                      className={
-                        cell.getValue() === 'pending'
-                          ? 'text-yellow-500'
-                          : cell.getValue() === 'completed'
-                          ? 'text-green-500'
-                          : cell.getValue() === 'rejected'
-                          ? 'text-red-500'
-                          : 'text-black dark:text-white'
-                      }
-                    >
-                      {cell.column.id.includes('_id') ? (
-                        <span className='flex'>
-                          <Copy
-                            text={String(cell.getValue())}
-                            className='inline ml-2 w-10 h-10'
-                          />
-                          <span>
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}{' '}
+                  {row
+                    .getVisibleCells()
+                    .filter(cell => !filteredColumns.includes(cell.column.id))
+                    .map(cell => (
+                      <TableCell
+                        key={cell.id}
+                        className={
+                          cell.getValue() === 'pending'
+                            ? 'text-yellow-500'
+                            : cell.getValue() === 'completed' ||
+                              cell.getValue() === 'active'
+                            ? 'text-green-500'
+                            : cell.getValue() === 'rejected' ||
+                              cell.getValue() === 'block'
+                            ? 'text-red-500'
+                            : cell.column.id.includes('shms_user_stocks') &&
+                              !cell.getValue()
+                            ? 'text-gray-400'
+                            : 'text-black dark:text-white'
+                        }
+                      >
+                        {cell.column.id.includes('_id') ? (
+                          <span className='flex'>
+                            <Copy
+                              text={String(cell.getValue())}
+                              className='inline ml-2 w-10 h-10'
+                            />
+                            <span>
+                              {flexRender(cell.column.columnDef.cell, cell.getContext())}{' '}
+                            </span>
                           </span>
-                        </span>
-                      ) : cell.column.id.includes('accounting_operation_status') ||
-                        cell.column.id.includes('shms_action_type') ? (
-                        getProjectStatus(String(cell.getValue()))
-                      ) : cell.column.id.includes('shms_created_at') ? (
-                        getProjectDate(new Date(String(cell.getValue())))
-                      ) : cell.column.id.includes('shms_withdraw_amount') ? (
-                        formattedPrice(Number(cell.getValue()))
-                      ) : cell.column.id.includes('shms_phone') ? (
-                        <Link
-                          href={`tel:${String(cell.getValue())}`}
-                          className='text-blue-500 transition-colors hover:font-bold hover:text-blue-700'
-                        >
-                          {String(cell.getValue())}
-                        </Link>
-                      ) : (
-                        flexRender(cell.column.columnDef.cell, cell.getContext())
-                      )}
-                    </TableCell>
-                  ))}
+                        ) : cell.column.id.includes('accounting_operation_status') ||
+                          cell.column.id.includes('shms_user_account_status') ||
+                          cell.column.id.includes('shms_action_type') ? (
+                          getProjectStatus(String(cell.getValue()))
+                        ) : cell.column.id.includes('shms_created_at') ||
+                          cell.column.id.includes('shms_date_of_birth') ? (
+                          getProjectDate(new Date(String(cell.getValue())))
+                        ) : cell.column.id.includes('shms_user_stocks') ? (
+                          cell.getValue() ? (
+                            getUserStokcs(JSON.parse(String(cell.getValue())))
+                          ) : (
+                            'لم يتم شراء اي اسهم'
+                          )
+                        ) : cell.column.id.includes('shms_withdraw_amount') ? (
+                          formattedPrice(Number(cell.getValue()))
+                        ) : cell.column.id.includes('shms_doc') ? (
+                          <Modal
+                            title={`صورة المستند`}
+                            document={String(cell.getValue()) ?? APP_LOGO}
+                            className='font-bold dark:text-white'
+                          >
+                            عرض المستند
+                          </Modal>
+                        ) : cell.column.id.includes('shms_phone') ? (
+                          <Link
+                            href={`tel:${String(cell.getValue())}`}
+                            className='text-blue-500 transition-colors hover:font-bold hover:text-blue-700'
+                          >
+                            {String(cell.getValue())}
+                          </Link>
+                        ) : cell.column.id.includes('shms_withdraw_amount') ? (
+                          formattedPrice(Number(cell.getValue()))
+                        ) : (
+                          flexRender(cell.column.columnDef.cell, cell.getContext())
+                        )}
+                      </TableCell>
+                    ))}
                   <TableCell>
                     <OperationAction withdrawAction={data[0]} />
                   </TableCell>

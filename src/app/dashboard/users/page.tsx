@@ -26,8 +26,8 @@ import {
 } from '@/components/ui/table'
 import { TabsContent } from '@/components/ui/tabs'
 import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
-import { arabicDate, cn, redirect } from '@/lib/utils'
-import type { UserProps, stocksPurchasedProps } from '@/types'
+import { arabicDate, cn, getUserStokcs, redirect } from '@/lib/utils'
+import type { UserProps } from '@/types'
 import axios from 'axios'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -253,14 +253,6 @@ export default function Users() {
     }
   }
 
-  const getUserStokcs = (user: UserProps) => {
-    const USER_STOCKS = JSON.parse(
-      String(user.shms_user_stocks)
-    ) as stocksPurchasedProps[]
-    // count the stock in the USER_STOCKS array
-    return USER_STOCKS && USER_STOCKS.reduce((acc, stock) => acc + stock.stocks, 0)
-  }
-
   return (
     <TabsContent dir='rtl' value='users' className='mt-20 md:mt-5'>
       <div style={{ width: '100%', display: 'flex' }}>
@@ -353,7 +345,6 @@ export default function Users() {
                             </span>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent className='flex flex-col gap-y-1.5'>
-                            {/* Delete Button */}
                             <Confirm
                               variant={'destructive'}
                               onClick={async () => {
@@ -367,7 +358,6 @@ export default function Users() {
                             >
                               حذف
                             </Confirm>
-                            {/* Toggle User Status Button */}
                             <Confirm
                               variant={'secondary'}
                               onClick={async () => {
@@ -388,7 +378,6 @@ export default function Users() {
                                 ? 'تفعيل الحساب'
                                 : 'تعطيل'}
                             </Confirm>
-                            {/* User Stock Limit */}
                             <ConfirmDialog
                               StockLimit={user.shms_user_stock_limit ?? 1}
                               onClick={async () => {
@@ -403,7 +392,6 @@ export default function Users() {
                             >
                               حد شراء الاسهم
                             </ConfirmDialog>
-                            {/* All Amount */}
                             <ConfirmDialog
                               StockLimit={user.shms_user_total_balance ?? 1}
                               onClick={async () => {
@@ -418,7 +406,6 @@ export default function Users() {
                             >
                               الرصيد الكلي
                             </ConfirmDialog>
-                            {/* Withdrawable Balance */}
                             <ConfirmDialog
                               StockLimit={user.shms_user_withdrawable_balance ?? 1}
                               onClick={async () => {
