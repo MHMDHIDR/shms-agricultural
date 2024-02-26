@@ -11,11 +11,11 @@ export const metadata: Metadata = {
 export default function CookiesPolicyPage() {
   return (
     <Layout>
-      <main className='flex flex-col items-center justify-between min-h-screen p-24 rtl'>
+      <main className='flex flex-col justify-start min-h-screen p-24 rtl'>
         <h1 className='text-xl font-bold select-none'>
           سياسة استخدام ملفات تعريف الارتباط
         </h1>
-        <section className='text-justify leading-10'>
+        <section className='md:text-justify leading-loose mt-10'>
           <p>مرحبًا بك في سياسة استخدام ملفات تعريف الارتباط لموقعنا.</p>
           <p>تستخدم هذه السياسة ملفات تعريف الارتباط لتحسين تجربتك أثناء تصفح الموقع.</p>
           <p>سيتم تخزين معلومات محددة على جهازك لتمكين الوصول إلى ميزات معينة.</p>
