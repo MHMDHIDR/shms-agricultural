@@ -5,6 +5,7 @@ import Link from 'next/link'
 export default function DashboardNav() {
   return (
     <Drawer
+      className='max-h-[calc(100vh-5rem)]'
       content={
         <div className='h-full px-3 py-4 overflow-y-auto'>
           <ul className='space-y-2 font-medium'>

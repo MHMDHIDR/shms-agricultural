@@ -39,6 +39,7 @@ import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
 import { LoadingPage } from '@/components/custom/Loading'
 import ProjectCondition from './ProjectCondition'
+import DashboardNav from '@/app/dashboard/DashboardNav'
 
 export default function EditProjectPage({
   params: { id: projectId }
@@ -371,7 +372,9 @@ export default function EditProjectPage({
     <LoadingPage />
   ) : (
     <Layout>
-      <Card className='mt-56 rtl'>
+      <DashboardNav />
+
+      <Card className='mt-20 rtl'>
         <Link
           href={`/dashboard`}
           className='inline-block mt-4 mr-5 font-bold text-blue-500 underline-hover group'

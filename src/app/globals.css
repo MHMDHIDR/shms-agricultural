@@ -716,7 +716,7 @@
 
 @layer utilities {
   ::-webkit-scrollbar {
-    @apply w-0 lg:w-[calc(var(--scrollbarSize)*1.7)] h-[var(--scrollbarSize)];
+    @apply w-0 lg:w-[calc(var(--scrollbarSize)*.55)] h-[var(--scrollbarSize)];
   }
 
   ::-webkit-scrollbar-thumb,

@@ -7,20 +7,23 @@ import {
   DrawerTrigger
 } from '@/components/ui/drawer'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 export default function MyDrawer({
   title,
   content,
   children,
-  asSpan
+  asSpan,
+  className
 }: {
   title?: React.ReactNode | string
   content: React.ReactNode
   children: React.ReactNode
   asSpan?: boolean
+  className?: string
 }) {
   return (
-    <Drawer modal={true}>
+    <Drawer>
       <DrawerTrigger>
         {asSpan ? (
           <span className='cursor-pointer'>{children}</span>
@@ -37,7 +40,12 @@ export default function MyDrawer({
               <h4>{title}</h4>
             </DrawerTitle>
           )}
-          <DrawerDescription className='container mt-4 overflow-y-auto text-right rtl leading-10 max-h-56'>
+          <DrawerDescription
+            className={cn(
+              'container mt-4 overflow-y-auto text-right rtl leading-10 max-h-56',
+              className
+            )}
+          >
             {content}
           </DrawerDescription>
         </DrawerHeader>
