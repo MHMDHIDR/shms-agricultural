@@ -12,8 +12,8 @@ import {
 } from '@/components/ui/navigation-menu'
 import useEventListener from '@/hooks/useEventListener'
 import { getAuth } from '@/lib/actions/auth'
-import { abstractWords, cn, redirect } from '@/lib/utils'
-import type { MenuItemsProps, UserLoggedInProps, getAuthType } from '@/types'
+import { abstractWords, cn, getUser, redirect } from '@/lib/utils'
+import type { MenuItemsProps, UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import { LogIn, LogOut } from 'lucide-react'
 import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
 import Link from 'next/link'
@@ -86,10 +86,13 @@ export default function Nav() {
           userName,
           userEmail,
           userPhone,
-          userType,
-          withdrawableAmount,
-          totalAmount
+          userType
+          // ,withdrawableAmount,
+          // totalAmount
         } = (await getAuth()) as getAuthType
+
+        const { shms_user_total_balance, shms_user_withdrawable_balance } =
+          (await getUser(userId)) as UserProps
 
         localStorage.setItem(
           'shms_user_data',
@@ -100,8 +103,8 @@ export default function Nav() {
             userEmail,
             userPhone,
             userType,
-            withdrawableAmount,
-            totalAmount
+            totalAmount: shms_user_total_balance,
+            withdrawableAmount: shms_user_withdrawable_balance
           })
         )
       }
