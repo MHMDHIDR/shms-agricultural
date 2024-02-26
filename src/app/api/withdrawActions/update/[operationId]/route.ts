@@ -79,6 +79,17 @@ export async function PATCH(
       )
     }
 
+    // if the accounting_operation_status === 'completed'
+    // then update the user's balance by subtracting the amount
+    if (accounting_operation_status === 'completed') {
+      const userNewBalance = currentBalance - operationExists.shms_withdraw_amount
+
+      await connectDB(
+        `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
+        [userNewBalance, shms_user_id]
+      )
+    }
+
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments/withdraw`
 
