@@ -29,7 +29,7 @@ export default function Counter({ number }: { number: number }) {
           return () => clearInterval(interval)
         }
       },
-      { threshold: 0 }
+      { threshold: 0.7 }
     )
 
     if (counterRef.current) {

@@ -73,6 +73,7 @@ export default async function DashboardInvestors() {
       return mappedProjects.filter(project => project !== null) as InverstorProjectData[]
     })
   )
+
   return (
     <Layout>
       <section className='container mx-auto'>

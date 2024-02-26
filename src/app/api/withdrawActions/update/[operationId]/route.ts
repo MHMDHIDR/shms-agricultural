@@ -64,16 +64,16 @@ export async function PATCH(
           [accounting_operation_status, operationId]
         )
 
-    // if the accounting_operation_status === 'completed' then update the user's balance
+    // if the accounting_operation_status === 'rejected' then update the user's balance by returning the amount back
     const currentBalance = userExists.shms_user_withdrawable_balance
-    if (accounting_operation_status === 'completed') {
-      const userNewBalance = currentBalance - operationExists.shms_withdraw_amount
+    if (accounting_operation_status === 'rejected') {
+      const userNewBalance = currentBalance + operationExists.shms_withdraw_amount
 
       await connectDB(
         `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
         [userNewBalance, shms_user_id]
       )
-    } // when rejected or deleted, the balance will remain the same
+    }
 
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments/withdraw`
