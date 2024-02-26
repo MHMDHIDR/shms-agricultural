@@ -57,7 +57,7 @@ export async function PATCH(
     // update the operation status
     accounting_operation_status === 'deleted'
       ? await connectDB(`DELETE FROM withdraw_actions WHERE shms_withdraw_id = ?`, [
-          'operationId'
+          operationId
         ])
       : await connectDB(
           `UPDATE withdraw_actions SET accounting_operation_status = ? WHERE shms_withdraw_id = ?`,
@@ -66,17 +66,33 @@ export async function PATCH(
 
     const currentBalance = userExists.shms_user_withdrawable_balance
     let userNewBalance = 0
-    if (accounting_operation_status === 'completed') {
+
+    if (
+      operationExists.accounting_operation_status === 'pending' &&
+      accounting_operation_status === 'completed'
+    ) {
+      userNewBalance = currentBalance
+    } else if (
+      operationExists.accounting_operation_status === 'completed' &&
+      accounting_operation_status === 'rejected'
+    ) {
+      userNewBalance = currentBalance + operationExists.shms_withdraw_amount
+    } else if (
+      operationExists.accounting_operation_status === 'rejected' &&
+      accounting_operation_status === 'completed'
+    ) {
       userNewBalance = currentBalance - operationExists.shms_withdraw_amount
-    } else if (accounting_operation_status === 'rejected') {
+    } else if (
+      operationExists.accounting_operation_status === 'rejected' &&
+      accounting_operation_status === 'deleted'
+    ) {
+      userNewBalance = currentBalance
+    } else if (
+      operationExists.accounting_operation_status === 'completed' &&
+      accounting_operation_status === 'deleted'
+    ) {
       userNewBalance = currentBalance + operationExists.shms_withdraw_amount
     }
-
-    console.log(' Current Balance: ', currentBalance)
-
-    console.log(' New Balance: ', userNewBalance)
-
-    console.log(' Operation Status: ', accounting_operation_status)
 
     await connectDB(
       `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
