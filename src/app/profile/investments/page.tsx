@@ -17,6 +17,7 @@ import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/ty
 import axios from 'axios'
 import Contract from './_ShowPDF'
 import Account from '@/app/profile/investments/account/page'
+import { redirect } from 'next/navigation'
 
 export default async function DashboardInvestors() {
   const { userId } = await getAuth()
@@ -74,7 +75,9 @@ export default async function DashboardInvestors() {
     })
   )
 
-  return (
+  return !userId ? (
+    redirect('/auth/signin')
+  ) : (
     <Layout>
       <section className='container mx-auto'>
         <Account />
