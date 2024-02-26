@@ -1,15 +1,18 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 export default function Counter({ number }: { number: number }) {
   const [count, setCount] = useState(1)
   const counterRef = useRef(null)
+  const [hasBeenVisible, setHasBeenVisible] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
-        if (entries[0]?.isIntersecting) {
+        if (entries[0]?.isIntersecting && !hasBeenVisible) {
+          setHasBeenVisible(true)
+
           const animationDuration = 2000
           const step = Math.ceil(number / (animationDuration / 100))
           let currentCount = 1
@@ -26,18 +29,19 @@ export default function Counter({ number }: { number: number }) {
           return () => clearInterval(interval)
         }
       },
-      // 0.5 تعني انه عندما يكون العنصر مرئي بنسبة 50% فقط
-      { threshold: 0.5 }
+      { threshold: 0 }
     )
 
-    observer.observe(counterRef?.current!)
+    if (counterRef.current) {
+      observer.observe(counterRef.current)
+    }
 
     return () => {
       if (counterRef.current) {
         observer.unobserve(counterRef.current)
       }
     }
-  }, [number])
+  }, [number, hasBeenVisible])
 
   return <span ref={counterRef}>{count}</span>
 }

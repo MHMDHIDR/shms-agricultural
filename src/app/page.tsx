@@ -29,10 +29,6 @@ export default async function Home() {
       <section className='flex flex-col items-center justify-between min-h-screen p-8 md:p-24'>
         <h1 className='mb-8 text-2xl md:text-4xl md:mb-12'>مرحباً بكم في شمــس</h1>
 
-        <h1 className='mb-8 mt-14 text-2xl md:text-4xl md:mb-12 underline-hover'>
-          رؤيتنا
-        </h1>
-
         <div className='flex flex-col items-center md:flex-row md:gap-8'>
           <div className='flex items-center flex-col md:flex-row'>
             <div className='flex items-center justify-center w-full bg-transparent md:w-500 md:h-500 hover:opacity-90 hover:-translate-y-1 transition'>
@@ -51,8 +47,11 @@ export default async function Home() {
                 className='object-cover min-w-80 min-h-80 aspect-square border-4 rounded-full border-darkgreen'
               />
             </div>
-            <div className='mt-4 md:mt-0'>
-              <p className='text-center text-lg leading-10 text-gray-800 dark:text-white'>
+            <div className='flex flex-col items-center justify-start mt-4 md:mt-0'>
+              <h1 className='md:-mt-32 text-xl md:text-2xl md:mb-12 underline-hover'>
+                رؤيتنا
+              </h1>
+              <p className='text-center flex-1 text-lg leading-10 text-gray-800 dark:text-white'>
                 أن يكون السودان هو فعليا سلة غذاء العالم وان يكون رائداً بين الدول العربية
                 في مجال الزراعة وتطوير الادوات الزراعية وتحسين جودة المزروعات مما يسهم
                 بشكل كبير في النمو الاقتصادي للفرد وللدولة على حد سواء
