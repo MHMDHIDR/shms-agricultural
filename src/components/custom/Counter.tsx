@@ -32,13 +32,15 @@ export default function Counter({ number }: { number: number }) {
       { threshold: 0.7 }
     )
 
-    if (counterRef.current) {
-      observer.observe(counterRef.current)
+    const currentRef = counterRef.current
+
+    if (currentRef) {
+      observer.observe(currentRef)
     }
 
     return () => {
-      if (counterRef.current) {
-        observer.unobserve(counterRef.current)
+      if (currentRef) {
+        observer.unobserve(currentRef)
       }
     }
   }, [number, hasBeenVisible])
