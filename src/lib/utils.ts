@@ -275,12 +275,6 @@ export function getProjectDuration(projectStartDate: Date, projectEndDate: Date)
   return diffMonths > 2 ? `${diffMonths} أشهر` : `${diffMonths} شهر`
 }
 
-export const getUserStokcs = (user: UserProps) => {
-  const USER_STOCKS = JSON.parse(String(user.shms_user_stocks)) as stocksPurchasedProps[]
-  // count the stock in the USER_STOCKS array
-  return USER_STOCKS && USER_STOCKS.reduce((acc, stock) => acc + stock.stocks, 0)
-}
-
 /**
  *  A function to scrollToView of an element
  * @param scrollY the y position to scroll to

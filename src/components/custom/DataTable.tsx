@@ -21,6 +21,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { ConfirmDialog } from '@/components/custom/ConfirmDialog'
 import { Input } from '@/components/ui/input'
 import {
   Table,
@@ -30,7 +31,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { accountingOperationsProps } from '@/types'
+import { accountingOperationsProps, stocksPurchasedProps } from '@/types'
 import Copy from '@/components/custom/Copy'
 import NoRecords from '@/components/custom/NoRecords'
 import {
@@ -38,7 +39,6 @@ import {
   formattedPrice,
   getProjectDate,
   getProjectStatus,
-  getUserStokcs,
   replaceString
 } from '@/lib/utils'
 import Link from 'next/link'
@@ -214,10 +214,14 @@ export default function OperationsTable({
                           cell.column.id.includes('shms_date_of_birth') ? (
                           getProjectDate(new Date(String(cell.getValue())))
                         ) : cell.column.id.includes('shms_user_stocks') ? (
-                          cell.getValue() ? (
-                            getUserStokcs(JSON.parse(String(cell.getValue())))
-                          ) : (
+                          cell.getValue() === null ? (
                             'لم يتم شراء اي اسهم'
+                          ) : (
+                            JSON.parse(cell.getValue() as string).reduce(
+                              (stock: number, acc: stocksPurchasedProps) =>
+                                stock + acc.stocks,
+                              0
+                            )
                           )
                         ) : cell.column.id.includes('shms_withdraw_amount') ? (
                           formattedPrice(Number(cell.getValue()))
@@ -243,9 +247,18 @@ export default function OperationsTable({
                         )}
                       </TableCell>
                     ))}
-                  <TableCell>
-                    <OperationAction withdrawAction={data[0]} />
-                  </TableCell>
+                  {row
+                    .getVisibleCells()
+                    .filter(cell => !filteredColumns.includes(cell.column.id))
+                    .map(cell => {
+                      if (cell.id.includes('shms_withdraw_amount')) {
+                        return (
+                          <TableCell key={cell.id}>
+                            <OperationAction withdrawAction={data[0]} />
+                          </TableCell>
+                        )
+                      }
+                    })}
                 </TableRow>
               ))
             ) : (

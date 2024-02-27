@@ -25,7 +25,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
-import { arabicDate, cn, getUserStokcs, redirect } from '@/lib/utils'
+import { arabicDate, cn, redirect } from '@/lib/utils'
 import type { UserProps } from '@/types'
 import axios from 'axios'
 import Link from 'next/link'
@@ -34,6 +34,7 @@ import { toast } from 'sonner'
 import { ConfirmDialog } from '@/components/custom/ConfirmDialog'
 import Layout from '@/components/custom/Layout'
 import DashboardNav from '../DashboardNav'
+import DataTable from '@/components/custom/DataTable'
 
 export default function Users() {
   const [users, setUsers] = useState<UserProps[]>([])
@@ -267,19 +268,21 @@ export default function Users() {
               <CardDescription>{users.length ?? 0}</CardDescription>
             </CardHeader>
             <CardContent>
-              <Table className='min-w-full text-center divide-y divide-gray-200'>
+              <DataTable data={users} />
+
+              <Table className='min-w-full text-center divide-y divide-gray-200 rtl'>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>الاسم</TableHead>
-                    <TableHead>تاريخ التسجيل</TableHead>
-                    <TableHead>رقم الهاتف</TableHead>
-                    <TableHead>البريد الالكتروني</TableHead>
-                    <TableHead>حالة المستخدم</TableHead>
-                    <TableHead>عدد الاسهم</TableHead>
-                    <TableHead>حد شراء الأسهم</TableHead>
-                    <TableHead>الرصيد الكلي</TableHead>
-                    <TableHead>الرصيد القابل للسحب</TableHead>
-                    <TableHead>الاجراء</TableHead>
+                    <TableHead className='text-center'>الاسم</TableHead>
+                    <TableHead className='text-center'>تاريخ التسجيل</TableHead>
+                    <TableHead className='text-center'>رقم الهاتف</TableHead>
+                    <TableHead className='text-center'>البريد الالكتروني</TableHead>
+                    <TableHead className='text-center'>حالة المستخدم</TableHead>
+                    <TableHead className='text-center'>عدد الاسهم</TableHead>
+                    <TableHead className='text-center'>حد شراء الأسهم</TableHead>
+                    <TableHead className='text-center'>الرصيد الكلي</TableHead>
+                    <TableHead className='text-center'>الرصيد القابل للسحب</TableHead>
+                    <TableHead className='text-center'>الاجـــــــــــــــراء</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -323,7 +326,7 @@ export default function Users() {
                             ? 'محظور'
                             : 'غير مفعل'}
                         </TableCell>
-                        <TableCell
+                        {/* <TableCell
                           className={cn(
                             'min-w-40',
                             getUserStokcs(user) > 0
@@ -332,7 +335,7 @@ export default function Users() {
                           )}
                         >
                           {getUserStokcs(user) ?? 'لم يتم شراء اي اسهم'}
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell className='min-w-40'>
                           {user.shms_user_stock_limit ?? 1}
                         </TableCell>
