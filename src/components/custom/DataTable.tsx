@@ -21,7 +21,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { ConfirmDialog } from '@/components/custom/ConfirmDialog'
 import { Input } from '@/components/ui/input'
 import {
   Table,
@@ -45,6 +44,7 @@ import Link from 'next/link'
 import OperationAction from '@/app/dashboard/money-operations/_OperationAction'
 import { APP_LOGO } from '@/data/constants'
 import Modal from '@/components/custom/Modal'
+import UsersActions from '@/app/dashboard/users/_UsersActions'
 
 export const columns: ColumnDef<accountingOperationsProps>[] = [
   {
@@ -255,6 +255,12 @@ export default function OperationsTable({
                         return (
                           <TableCell key={cell.id}>
                             <OperationAction withdrawAction={data[0]} />
+                          </TableCell>
+                        )
+                      } else if (cell.id.includes('shms_user_stocks')) {
+                        return (
+                          <TableCell key={cell.id}>
+                            <UsersActions user={data[0]} />
                           </TableCell>
                         )
                       }
