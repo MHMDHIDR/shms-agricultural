@@ -65,6 +65,30 @@ export async function PATCH(req: Request) {
     const newTotalBalance =
       Number(userPrevTotalBalance) + stocks * project.shms_project_stock_price
 
+    // Construct the new user stocks array based on the condition
+    const newUserStocks =
+      userPrevStocks !== null && userPrevStocks.length > 0
+        ? [
+            ...JSON.parse(String(userPrevStocks)),
+            {
+              shms_project_id,
+              stocks,
+              newPercentage,
+              percentageCode,
+              createdAt: new Date().toISOString()
+            }
+          ]
+        : [
+            {
+              shms_project_id,
+              stocks,
+              newPercentage,
+              percentageCode,
+              createdAt: new Date().toISOString()
+            }
+          ]
+
+    // Use newUserStocks array in the query
     await connectDB(
       `UPDATE users SET shms_user_stocks = ?${
         paymentMethod === 'balance'
@@ -72,18 +96,7 @@ export async function PATCH(req: Request) {
           : ''
       } WHERE shms_id = ?`,
       [
-        JSON.stringify([
-          userPrevStocks !== null && userPrevStocks.length > 0
-            ? [...JSON.parse(String(userPrevStocks))]
-            : [],
-          {
-            shms_project_id,
-            stocks,
-            newPercentage,
-            percentageCode,
-            createdAt: new Date().toISOString()
-          }
-        ]),
+        JSON.stringify(newUserStocks),
         ...(paymentMethod === 'balance' ? [newWithdrawableBalance, newTotalBalance] : []),
         shms_id
       ]
