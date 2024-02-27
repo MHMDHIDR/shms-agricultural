@@ -147,7 +147,7 @@ export async function PATCH(req: Request) {
     // Promise.all
     const data = await Promise.all([email(investorEmailData), email(adminEmailData)])
 
-    if (projectUpdated || (data[0] && data[1])) {
+    if (projectUpdated && data[0] && data[1]) {
       return new Response(
         JSON.stringify({
           stocksPurchased: 1,
