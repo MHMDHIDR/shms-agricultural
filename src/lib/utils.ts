@@ -4,8 +4,7 @@ import type {
   UserProps,
   abstractWordsProps,
   validateFileProps,
-  accountingOperationsProps,
-  stocksPurchasedProps
+  accountingOperationsProps
 } from '@/types'
 import axios from 'axios'
 import { clsx, type ClassValue } from 'clsx'
