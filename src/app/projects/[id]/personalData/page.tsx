@@ -135,8 +135,6 @@ export default function PersonalData({
 
   return !session ? (
     replace('/')
-  ) : !session?.expires ? (
-    <LoadingPage />
   ) : (
     <Layout>
       {stocksPurchesed === 1 && (
