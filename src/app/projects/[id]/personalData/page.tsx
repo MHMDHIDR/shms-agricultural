@@ -21,7 +21,6 @@ import type {
   selectedPaymentOptions,
   stocksPurchasedProps
 } from '@/types'
-import { LoadingPage } from '@/components/custom/Loading'
 
 export default function PersonalData({
   params: { id: projectId /*, slug*/ }
