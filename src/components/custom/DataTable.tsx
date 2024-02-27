@@ -123,7 +123,9 @@ export default function OperationsTable({
           <DropdownMenuContent align='end' className='rtl'>
             {table
               .getAllColumns()
-              .filter(column => column.getCanHide())
+              .filter(
+                column => !filteredColumns.includes(column.id) && column.getCanHide()
+              )
               .map(column => {
                 return (
                   <DropdownMenuCheckboxItem
