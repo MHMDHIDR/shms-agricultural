@@ -95,7 +95,7 @@ export default function PersonalData({
       const {
         data: { stocksPurchesed, message }
       } = await axios.patch(`${API_URL}/stocks/add`, {
-        userId,
+        userId: userData?.userId ?? userId,
         shms_project_id: projectId,
         stocks: stockItems?.stocks,
         newPercentage: stockItems?.newPercentage,
