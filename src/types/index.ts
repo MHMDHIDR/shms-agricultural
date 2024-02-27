@@ -277,6 +277,7 @@ export type purchasedStocksData = {
   totalProfit: number
   profitsCollectDate: Date
   referenceCode: string
+  message: string
 }
 
 export type stocksPurchasedProps = {

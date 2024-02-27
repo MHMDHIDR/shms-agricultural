@@ -33,7 +33,7 @@ export async function PATCH(req: Request) {
     if (!user || !project) {
       return new Response(
         JSON.stringify({
-          stocksPurchesed: 0,
+          stocksPurchased: 0,
           message: 'عفواً حدث خطأ ما، حاول مرة أخرى'
         }),
         { status: 500 }
@@ -43,12 +43,12 @@ export async function PATCH(req: Request) {
     // if paymentMethod === 'balance' then check if the user has enough balance
     if (paymentMethod === 'balance') {
       if (
-        user?.shms_user_withdrawable_balance <
-        stocks * project?.shms_project_stock_price
+        user.shms_user_withdrawable_balance <
+        stocks * project.shms_project_stock_price
       ) {
         return new Response(
           JSON.stringify({
-            stocksPurchesed: 0,
+            stocksPurchased: 0,
             message: 'رصيدك غير كافي، لإتمام عملية الشراء'
           }),
           { status: 400 }
@@ -56,59 +56,38 @@ export async function PATCH(req: Request) {
       }
     }
 
-    const userPrevStocks = getUserPrevStocks(user as UserProps)
-    const userPrevWithdrawableBalance = getUserPrevWithdrawableBalance(user as UserProps)
-    const userPrevTotalBalance = getUserPrevTotalBalance(user as UserProps)
-    const projectAvailableStocks = getProjectStocks(project as ProjectProps)
+    const userPrevStocks = getUserPrevStocks(user)
+    const userPrevWithdrawableBalance = getUserPrevWithdrawableBalance(user)
+    const userPrevTotalBalance = getUserPrevTotalBalance(user)
+    const projectAvailableStocks = getProjectStocks(project)
     const newWithdrawableBalance =
       Number(userPrevWithdrawableBalance) - stocks * project.shms_project_stock_price
     const newTotalBalance =
       Number(userPrevTotalBalance) + stocks * project.shms_project_stock_price
 
-    if (userPrevStocks !== null && userPrevStocks.length > 0) {
-      await connectDB(
-        `UPDATE users SET shms_user_stocks = ?,
-          shms_user_withdrawable_balance = ?,
-          shms_user_total_balance = ?
-        WHERE shms_id = ?;`,
-        [
-          JSON.stringify([
-            ...JSON.parse(String(userPrevStocks)),
-            {
-              shms_project_id,
-              stocks,
-              newPercentage,
-              percentageCode,
-              createdAt: new Date().toISOString()
-            }
-          ]),
-          newWithdrawableBalance,
-          newTotalBalance,
-          shms_id
-        ]
-      )
-    } else {
-      await connectDB(
-        `UPDATE users SET shms_user_stocks = ?,
-          shms_user_withdrawable_balance = ?,
-          shms_user_total_balance = ?
-        WHERE shms_id = ?;`,
-        [
-          JSON.stringify([
-            {
-              shms_project_id,
-              stocks,
-              newPercentage,
-              percentageCode,
-              createdAt: new Date().toISOString()
-            }
-          ]),
-          newWithdrawableBalance,
-          newTotalBalance,
-          shms_id
-        ]
-      )
-    }
+    await connectDB(
+      `UPDATE users SET shms_user_stocks = ?${
+        paymentMethod === 'balance'
+          ? ', shms_user_withdrawable_balance = ?, shms_user_total_balance = ?'
+          : ''
+      } WHERE shms_id = ?`,
+      [
+        JSON.stringify([
+          userPrevStocks !== null && userPrevStocks.length > 0
+            ? [...JSON.parse(String(userPrevStocks))]
+            : [],
+          {
+            shms_project_id,
+            stocks,
+            newPercentage,
+            percentageCode,
+            createdAt: new Date().toISOString()
+          }
+        ]),
+        ...(paymentMethod === 'balance' ? [newWithdrawableBalance, newTotalBalance] : []),
+        shms_id
+      ]
+    )
 
     const updateProjectAvaStocks = await connectDB(
       `UPDATE projects SET shms_project_available_stocks = ? WHERE shms_project_id = ?`,
@@ -121,15 +100,15 @@ export async function PATCH(req: Request) {
     const adminButtonLink = APP_URL + `/dashboard`
 
     const investorEmailData = {
-      subject: `تم شراء أسهم من ${project?.shms_project_name} بنجاح | شمس للخدمات الزراعية`,
-      from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
-      to: user?.shms_email ?? '',
+      subject: `تم شراء أسهم من ${project.shms_project_name} بنجاح | ${APP_TITLE}`,
+      from: `${APP_TITLE} | SHMS Agriculture <${ADMIN_EMAIL}>`,
+      to: user.shms_email || '',
       msg: {
         title: 'مرحباً بك في شمس للخدمات الزراعية',
         msg: `
-        مرحباً ${user?.shms_fullname},
+        مرحباً ${user.shms_fullname},
 
-          شكراً لمساهمتك معنا في ${project?.shms_project_name}،
+          شكراً لمساهمتك معنا في ${project.shms_project_name}،
           تم شراء
           ${stocks} أسهم بنجاح.
           يمكنك الآن تصفح استثماراتك في حسابك من خلال الرابط أدناه:`,
@@ -139,29 +118,26 @@ export async function PATCH(req: Request) {
     }
 
     const adminEmailData = {
-      from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
+      from: `${APP_TITLE} | SHMS Agriculture <${ADMIN_EMAIL}>`,
       to: ADMIN_EMAIL,
-      subject: `تم شراء عدد ${stocks} أسهم من ${project?.shms_project_name} بنجاح | شمس للخدمات الزراعية`,
+      subject: `تم شراء عدد ${stocks} أسهم من ${project.shms_project_name} بنجاح | ${APP_TITLE}`,
       msg: {
         title: 'مرحباً بك في شمس للخدمات الزراعية',
         msg: `
-        تم شراء عدد ${stocks} أسهم من ${project?.shms_project_name}  بنجاح،
-        بواسطة ${user?.shms_fullname} (${user?.shms_email})`,
+        تم شراء عدد ${stocks} أسهم من ${project.shms_project_name}  بنجاح،
+        بواسطة ${user.shms_fullname} (${user.shms_email})`,
         buttonLink: adminButtonLink,
         buttonLabel: 'تصفح الاستثمارات'
       }
     }
 
     // Promise.all
-    const data = await Promise.all([
-      await email(investorEmailData),
-      await email(adminEmailData)
-    ])
+    const data = await Promise.all([email(investorEmailData), email(adminEmailData)])
 
     if (projectUpdated || (data[0] && data[1])) {
       return new Response(
         JSON.stringify({
-          stocksPurchesed: 1,
+          stocksPurchased: 1,
           message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
          سيتم التواصل معك من فريق 
          ${APP_TITLE}
@@ -172,7 +148,7 @@ export async function PATCH(req: Request) {
     } else {
       return new Response(
         JSON.stringify({
-          stocksPurchesed: 0,
+          stocksPurchased: 0,
           message: 'لم يتم تأكيد عملية الشراء، حاول مرة أخرى'
         }),
         { status: 500 }
@@ -182,7 +158,7 @@ export async function PATCH(req: Request) {
     console.error(error)
     return new Response(
       JSON.stringify({
-        stocksPurchesed: 0,
+        stocksPurchased: 0,
         message: 'لم يتم تأكيد عملية الشراء، حاول مرة أخرى'
       }),
       { status: 500 }

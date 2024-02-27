@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation'
 import type {
   UserLoggedInProps,
   getAuthType,
+  purchasedStocksData,
   selectedPaymentOptions,
   stocksPurchasedProps
 } from '@/types'
@@ -93,7 +94,9 @@ export default function PersonalData({
     try {
       const createdAt = new Date().toISOString()
       const {
-        data: { stocksPurchesed, message }
+        data: { stocksPurchased, message }
+      }: {
+        data: purchasedStocksData
       } = await axios.patch(`${API_URL}/stocks/add`, {
         userId: userData?.userId ?? userId,
         shms_project_id: projectId,
@@ -105,8 +108,8 @@ export default function PersonalData({
       })
 
       setMessage(message)
-      setStocksPurchesed(stocksPurchesed)
-      if (stocksPurchesed === 1) {
+      setStocksPurchesed(stocksPurchased)
+      if (stocksPurchased === 1) {
         localStorage.removeItem('shms_project')
       }
     } catch (error: any) {
