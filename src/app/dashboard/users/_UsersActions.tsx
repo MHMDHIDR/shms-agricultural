@@ -11,22 +11,36 @@ import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { redirect } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Error, Success } from '@/components/icons/Status'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { UserProps } from '@/types'
 import axios from 'axios'
 
-export default function UsersActions({ user }: { user: UserProps }) {
+export default function UsersActions({
+  user,
+  id
+}: {
+  user: UserProps[]
+  id: UserProps['shms_id']
+}) {
   const [userStockLimit, setUserStockLimit] =
     useState<UserProps['shms_user_stock_limit']>(1)
   const [userTotalBalance, setUserTotalBalance] =
     useState<UserProps['shms_user_total_balance']>(0)
   const [userTotalWithdrawableBalance, setUserTotalWithdrawableBalance] =
     useState<UserProps['shms_user_withdrawable_balance']>(0)
+  const [filteredUser, setFilteredUser] = useState<UserProps>()
 
   const [formStatus, setFormStatus] = useState({
     isSubmitting: false,
     isSubmittingDone: false
   })
+
+  useEffect(() => {
+    if (id) {
+      const filtered = user.filter(user => user.shms_id === id)
+      setFilteredUser(filtered[0])
+    }
+  }, [user])
 
   const deleteUser = async (id: string, S3docId: string) => {
     try {
@@ -228,7 +242,10 @@ export default function UsersActions({ user }: { user: UserProps }) {
         <Confirm
           variant={'destructive'}
           onClick={async () => {
-            await deleteUser(user.shms_id, user.shms_doc?.split('/').pop() ?? '')
+            await deleteUser(
+              filteredUser?.shms_id!,
+              filteredUser?.shms_doc?.split('/').pop() ?? ''
+            )
           }}
           className='w-full'
           isLoading={formStatus.isSubmitting}
@@ -236,30 +253,31 @@ export default function UsersActions({ user }: { user: UserProps }) {
           حذف
         </Confirm>
         <Confirm
-          variant={'secondary'}
+          variant={'outline'}
           onClick={async () => {
             await toggleUserStatus(
-              user.shms_id,
-              user.shms_user_account_status === 'block'
+              filteredUser?.shms_id!,
+              filteredUser?.shms_user_account_status === 'block'
                 ? 'active'
-                : user.shms_user_account_status === 'pending'
+                : filteredUser?.shms_user_account_status === 'pending'
                 ? 'active'
                 : 'block'
             )
           }}
-          className='w-full bg-gray-200'
+          className='w-full'
         >
-          {user.shms_user_account_status === 'block'
-            ? 'تفعيل'
-            : user.shms_user_account_status === 'pending'
+          {/* {JSON.stringify(filteredUser?.shms_user_account_status)} */}
+          {filteredUser?.shms_user_account_status === 'block'
+            ? 'الغاء الحظر'
+            : filteredUser?.shms_user_account_status === 'pending'
             ? 'تفعيل الحساب'
-            : 'تعطيل'}
+            : 'حظر'}
         </Confirm>
         <ConfirmDialog
-          StockLimit={user.shms_user_stock_limit ?? 1}
+          StockLimit={filteredUser?.shms_user_stock_limit ?? 1}
           onClick={async () => {
             await updateUserStockLimitOrBalance(
-              user.shms_id,
+              filteredUser?.shms_id!,
               userStockLimit!,
               'stockLimit'
             )
@@ -270,10 +288,10 @@ export default function UsersActions({ user }: { user: UserProps }) {
           حد شراء الاسهم
         </ConfirmDialog>
         <ConfirmDialog
-          StockLimit={user.shms_user_total_balance ?? 1}
+          StockLimit={filteredUser?.shms_user_total_balance ?? 1}
           onClick={async () => {
             await updateUserStockLimitOrBalance(
-              user.shms_id,
+              filteredUser?.shms_id!,
               userTotalBalance!,
               'totalBalance'
             )
@@ -284,10 +302,10 @@ export default function UsersActions({ user }: { user: UserProps }) {
           الرصيد الكلي
         </ConfirmDialog>
         <ConfirmDialog
-          StockLimit={user.shms_user_withdrawable_balance ?? 1}
+          StockLimit={filteredUser?.shms_user_withdrawable_balance ?? 1}
           onClick={async () => {
             await updateUserStockLimitOrBalance(
-              user.shms_id,
+              filteredUser?.shms_id!,
               userTotalWithdrawableBalance!,
               'withdrawableBalance'
             )

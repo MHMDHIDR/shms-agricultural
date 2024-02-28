@@ -30,7 +30,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { accountingOperationsProps, stocksPurchasedProps } from '@/types'
+import { UserProps, accountingOperationsProps, stocksPurchasedProps } from '@/types'
 import Copy from '@/components/custom/Copy'
 import NoRecords from '@/components/custom/NoRecords'
 import {
@@ -67,7 +67,7 @@ export const columns: ColumnDef<accountingOperationsProps>[] = [
 export default function OperationsTable({
   data
 }: {
-  data: accountingOperationsProps[] | any[]
+  data: accountingOperationsProps[] | UserProps[] | any[]
 }) {
   const dynamicColumns = data.length > 0 ? Object.keys(data[0]) : []
 
@@ -259,10 +259,13 @@ export default function OperationsTable({
                             <OperationAction withdrawAction={data[0]} />
                           </TableCell>
                         )
-                      } else if (cell.id.includes('shms_user_stocks')) {
+                      } else if (cell.id.includes('shms_id')) {
                         return (
                           <TableCell key={cell.id}>
-                            <UsersActions user={data[0]} />
+                            <UsersActions
+                              user={data as UserProps[]}
+                              id={cell.getValue() as string}
+                            />
                           </TableCell>
                         )
                       }
