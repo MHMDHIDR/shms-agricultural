@@ -8,7 +8,7 @@ export default function ImageGallery() {
         <Image src='/ImageGallery/1.jpg' width={300} height={600} alt={APP_TITLE} />
         <Image src='/ImageGallery/2.jpg' width={300} height={600} alt={APP_TITLE} />
         <Image src='/ImageGallery/3.jpg' width={300} height={600} alt={APP_TITLE} />
-        <img src='/ImageGallery/4.jpg' width={300} height={600} alt={APP_TITLE} />
+        <Image src='/ImageGallery/4.jpg' width={300} height={600} alt={APP_TITLE} />
         <Image src='/ImageGallery/5.jpg' width={300} height={600} alt={APP_TITLE} />
       </div>
       <div className='child-container' id='two'>
@@ -21,7 +21,7 @@ export default function ImageGallery() {
         <Image src='/ImageGallery/9.jpg' width={300} height={600} alt={APP_TITLE} />
         <Image src='/ImageGallery/13.jpg' width={300} height={600} alt={APP_TITLE} />
         <Image src='/ImageGallery/10.jpg' width={300} height={600} alt={APP_TITLE} />
-        <img src='/ImageGallery/11.jpg' width={300} height={600} alt={APP_TITLE} />
+        <Image src='/ImageGallery/11.jpg' width={300} height={600} alt={APP_TITLE} />
       </div>
     </div>
   )
