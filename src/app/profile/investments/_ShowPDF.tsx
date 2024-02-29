@@ -110,29 +110,6 @@ const Invoice = ({
               justifyContent: 'space-between',
               alignItems: 'center',
               direction: 'rtl',
-              textAlign: 'right',
-              color: '#333',
-              userSelect: 'none'
-            }}
-          >
-            <div className='w-32 h-40 mx-auto'>
-              <Image
-                src={APP_LOGO}
-                height='100'
-                width='150'
-                alt={APP_TITLE}
-                style={{ width: '150px', height: '100px', marginInline: 'auto' }}
-              />
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginTop: '20px',
-              direction: 'rtl',
               textAlign: 'right'
             }}
           >
@@ -148,6 +125,28 @@ const Invoice = ({
               </p>
             </div>
 
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                direction: 'rtl',
+                textAlign: 'right',
+                color: '#333',
+                userSelect: 'none'
+              }}
+            >
+              <div className='w-32 h-40 mx-auto'>
+                <Image
+                  src={APP_LOGO}
+                  height='100'
+                  width='150'
+                  alt={APP_TITLE}
+                  style={{ width: '150px', height: '100px', marginInline: 'auto' }}
+                />
+              </div>
+            </div>
+
             <div style={{ textAlign: 'right' }}>
               <p style={{ fontWeight: 'bold', color: '#333' }}>
                 الطرف الثاني:
@@ -161,7 +160,7 @@ const Invoice = ({
             </div>
           </div>
 
-          <div style={{ marginTop: '20px' }}>
+          <div>
             <table
               style={{
                 width: '100%',
@@ -314,10 +313,7 @@ const Invoice = ({
             />
           </div>
 
-          <div
-            style={{ direction: 'rtl', textAlign: 'right' }}
-            className='mt-28 md:mt-80'
-          >
+          <div className='mt-5 md:mt-7 text-right' dir='rtl'>
             <p style={{ color: '#666', fontSize: '10px' }}>
               الرقم المرجعي
               <br />
@@ -325,9 +321,9 @@ const Invoice = ({
             </p>
           </div>
 
-          <Divider className='my-10' />
+          <Divider className='mt-6 mb-0' />
 
-          <section className='flex justify-between w-full text-xs text-center text-gray-400 pt-7'>
+          <section className='flex justify-between w-full text-xs text-center text-gray-400 pt-5'>
             <div className='flex flex-col items-start gap-y-3'>
               <div className='flex items-center opacity-80'>
                 <FacebookIcon className='w-5 h-5 md:w-6 md:h-6' />

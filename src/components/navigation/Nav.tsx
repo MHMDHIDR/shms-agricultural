@@ -80,16 +80,8 @@ export default function Nav() {
   useEffect(() => {
     if (session) {
       const refetchSession = async () => {
-        const {
-          userId,
-          userStockLimit,
-          userName,
-          userEmail,
-          userPhone,
-          userType
-          // ,withdrawableAmount,
-          // totalAmount
-        } = (await getAuth()) as getAuthType
+        const { userId, userStockLimit, userName, userEmail, userPhone, userType } =
+          (await getAuth()) as getAuthType
 
         const { shms_user_total_balance, shms_user_withdrawable_balance } =
           (await getUser(userId)) as UserProps
