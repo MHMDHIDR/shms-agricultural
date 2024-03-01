@@ -1,4 +1,12 @@
 import Layout from '@/components/custom/Layout'
+import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: `نبذة عــــن ${APP_TITLE}
+}`,
+  description: APP_DESCRIPTION
+}
 
 export default function AboutPage() {
   return (

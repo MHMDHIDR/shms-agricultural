@@ -17,12 +17,15 @@ import { Checkbox } from '@/components/ui/checkbox'
 import Modal from '@/components/custom/Modal'
 import { LoadingCard } from '@/components/custom/Loading'
 import { formattedPrice } from '@/lib/utils'
+import useDocumentTitle from '@/hooks/useDocumentTitle'
 
 export default function BuyStocks({
   params: { id: projectId }
 }: {
   params: { id: string }
 }) {
+  useDocumentTitle('شراء الأسهم')
+
   const { data: session }: { data: UserLoggedInProps } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [project, setProject] = useState<ProjectProps>()

@@ -1,9 +1,12 @@
-import { Button } from '@/components/ui/button'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
-export const metadata: Metadata = { title: APP_TITLE, description: APP_DESCRIPTION }
+export const metadata: Metadata = {
+  title: `الصفحة غير موجودة | ${APP_TITLE}
+}`,
+  description: APP_DESCRIPTION
+}
 
 export default function NotFound() {
   return (
@@ -85,9 +88,9 @@ export default function NotFound() {
       <div className='absolute w-4 h-5 border-yellow-600 rounded-full top-5 left-1/2 bg-slate-400 -translate-x-1/2 -rotate-12'></div>
       <div className='absolute top-32 left-1/2 w-80 h-52 bg-gray-100 border-[1rem]  border-yellow-600 rounded-3xl outline-4 outline-yellow-900 text-red-700 text-3xl text-center flex flex-col gap-y-6 items-center justify-center animate-[valanceo_5s] repeat-infinite'>
         <span>الصفحة غير موجودة</span>
-        <Button className='bg-green-600 hover:bg-green-700'>
-          <Link href='/'>العودة للصفحة الرئيسية</Link>
-        </Button>
+        <Link href='/' className='pressable'>
+          الصفحة الرئيسية
+        </Link>
       </div>
     </section>
   )

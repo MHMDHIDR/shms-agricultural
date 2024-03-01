@@ -22,12 +22,15 @@ import type {
   selectedPaymentOptions,
   stocksPurchasedProps
 } from '@/types'
+import useDocumentTitle from '@/hooks/useDocumentTitle'
 
 export default function PersonalData({
   params: { id: projectId /*, slug*/ }
 }: {
   params: { id: string /*, slug: string*/ }
 }) {
+  useDocumentTitle('تأكيد بيانات الشراء')
+
   const { data: session }: { data: UserLoggedInProps } = useSession()
   const [userId, setUserId] = useState<string | null>('')
   const [stocksPurchesed, setStocksPurchesed] = useState<number>(0)

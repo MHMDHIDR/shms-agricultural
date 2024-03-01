@@ -1,3 +1,5 @@
+import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
+import { Metadata } from 'next'
 import Layout from '@/components/custom/Layout'
 import NoRecords from '@/components/custom/NoRecords'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
@@ -7,6 +9,12 @@ import { ProjectProps } from '@/types'
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: `مشاريعنا الاستثمارية | ${APP_TITLE}
+}`,
+  description: APP_DESCRIPTION
+}
 
 export default async function Projects() {
   const { data: projects }: { data: ProjectProps[] } = await axios.get(
