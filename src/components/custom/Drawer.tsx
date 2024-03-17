@@ -26,25 +26,20 @@ export default function MyDrawer({
     <Drawer>
       <DrawerTrigger>
         {asSpan ? (
-          <span className='cursor-pointer'>{children}</span>
+          <span className='py-2 px-4 rounded-md mx-5 hover:bg-accent hover:text-accent-foreground'>
+            {children}
+          </span>
         ) : (
           <Button type='button' variant={'ghost'} className='mr-10'>
             {children}
           </Button>
         )}
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className={cn(className)}>
         <DrawerHeader>
-          {title && (
-            <DrawerTitle className='text-right rtl'>
-              <h4>{title}</h4>
-            </DrawerTitle>
-          )}
+          {title && <DrawerTitle className='text-right rtl'>{title}</DrawerTitle>}
           <DrawerDescription
-            className={cn(
-              'container mt-4 overflow-y-auto text-right rtl leading-10 max-h-56',
-              className
-            )}
+            className={'container mt-4 overflow-y-auto text-right rtl leading-10'}
           >
             {content}
           </DrawerDescription>

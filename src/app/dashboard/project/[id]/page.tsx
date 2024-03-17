@@ -581,8 +581,13 @@ export default function EditProjectPage({
                 شروط المشروع
                 <span className='text-red-500'>*</span>
                 <Drawer
-                  title={'تعليمات توضيحة كيفية استخدام الــMarkdown'}
+                  title={
+                    <span className='[font-size:1.55rem_!important]'>
+                      تعليمات توضيحة كيفية استخدام الــMarkdown
+                    </span>
+                  }
                   content={<ProjectCondition />}
+                  asSpan
                 >
                   تعليمات شروط المشروع
                 </Drawer>
