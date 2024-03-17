@@ -5,11 +5,12 @@ import FormMessage from '@/components/custom/FormMessage'
 import Layout from '@/components/custom/Layout'
 import { LoadingPage } from '@/components/custom/Loading'
 import { Error, Success } from '@/components/icons/Status'
+import { EyeClosedIcon, ReloadIcon } from '@radix-ui/react-icons'
+import { EyeIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { validatePasswordStrength, validateUUID } from '@/lib/utils'
 import type { UserLoggedInProps, UserProps } from '@/types'
-import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -32,6 +33,8 @@ const ForgotPasswordPage = ({
 
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const { replace } = useRouter()
 
@@ -164,14 +167,21 @@ const ForgotPasswordPage = ({
                   كلمة المرور
                 </label>
               </div>
-              <div className='md:w-2/3'>
+              <div className='md:w-2/3 relative'>
                 <input
                   id='password'
-                  onChange={handlePasswordChange}
-                  type='password'
-                  placeholder='******'
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  onChange={handlePasswordChange}
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder='******'
                 />
+                <button
+                  type='button'
+                  onClick={() => setShowPassword(prevShowPassword => !prevShowPassword)}
+                  className='absolute top-2 left-6'
+                >
+                  {showPassword ? <EyeIcon /> : <EyeClosedIcon className='w-5 h-5' />}
+                </button>
               </div>
             </div>
 
@@ -185,14 +195,29 @@ const ForgotPasswordPage = ({
                   تأكيد كلمة المرور
                 </label>
               </div>
-              <div className='md:w-2/3'>
+              <div className='md:w-2/3 relative'>
                 <input
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   id='confirmPassword'
+                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   onChange={handleConfrimPasswordChange}
-                  type='confirmPassword'
+                  type={showConfirmPassword ? 'text' : 'password'}
                   placeholder='******'
                 />
+                <button
+                  type='button'
+                  onClick={() =>
+                    setShowConfirmPassword(
+                      prevShowConfirmPassword => !prevShowConfirmPassword
+                    )
+                  }
+                  className='absolute top-2 left-6'
+                >
+                  {showConfirmPassword ? (
+                    <EyeIcon />
+                  ) : (
+                    <EyeClosedIcon className='w-5 h-5' />
+                  )}
+                </button>
               </div>
             </div>
 

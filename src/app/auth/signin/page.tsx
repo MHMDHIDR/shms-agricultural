@@ -4,6 +4,7 @@ import { DEFAULT_DURATION } from '@/data/constants'
 import { validatePasswordStrength, redirect as redirectPage } from '@/lib/utils'
 import type { UserLoggedInProps, UserProps } from '@/types'
 import { EyeClosedIcon, ReloadIcon } from '@radix-ui/react-icons'
+import { EyeIcon } from 'lucide-react'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { redirect, useSearchParams } from 'next/navigation'
@@ -16,7 +17,6 @@ import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { useSession } from 'next-auth/react'
 import { LoadingPage } from '@/components/custom/Loading'
-import { EyeIcon } from 'lucide-react'
 
 const SigninPage = () => {
   const { data: session }: { data: UserLoggedInProps } = useSession()
