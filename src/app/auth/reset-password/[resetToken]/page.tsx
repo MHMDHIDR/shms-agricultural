@@ -134,7 +134,7 @@ const ForgotPasswordPage = ({
     replace('/')
   ) : session?.user ? (
     <LoadingPage />
-  ) : validateUUID(resetToken) ? null : (
+  ) : !validateUUID(resetToken) ? null : (
     <Layout>
       <section className='w-full h-screen min-h-screen mt-32 mb-24'>
         <CardWrapper
