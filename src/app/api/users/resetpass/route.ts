@@ -65,6 +65,9 @@ export async function POST(req: Request) {
         [hashedPassword, null, null, user.shms_id]
       )
 
+      //send the user an email with a link to signin to his/her account
+      const buttonLink = APP_URL + `/auth/signin`
+
       //send the user an email with a link to reset his/her password
       const emailData = {
         from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
@@ -75,23 +78,17 @@ export async function POST(req: Request) {
           msg: `عزيزي ${user.shms_fullname}،
             <br />
             تم إعادة تعيين كلمة المرور الخاصة بك بنجاح، يمكنك الآن تسجيل الدخول باستخدام كلمة المرور الجديدة.
-
-            <br />
-            <a href="${APP_URL}/auth/signin"
-              style="background: #008f1f;text-decoration: none !important;font-weight:700;margin-top:35px;color:#fff;font-size:14px;padding:10px 64px;display:inline-block;border-radius: 50px;"
-              class="cta__button"
-              target="_blank">
-              تسجيل الدخول
-            </a>
             
             <br /><br />
             إذا لم تقم بعمل هذا الإجراء، فيرجى الاتصال بنا على الفور على البريد الإلكتروني التالي: ${ADMIN_EMAIL}
             <br /><br />
 
             شكراً لك.
-            <br /><br />
+            <br />
             <small>لا حاجة للرد على هذا البريد الإلكتروني.</small>`
-        }
+        },
+        buttonLink,
+        buttonLabel: 'تسجيل الدخول'
       }
 
       // try to send the email
