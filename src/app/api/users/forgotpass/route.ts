@@ -65,7 +65,10 @@ export async function POST(req: Request) {
           from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
           to: user.shms_email,
           subject: 'إعادة تعيين كلمة المرور | شمس للخدمات الزراعية',
-          msg: { buttonLink }
+          msg: {
+            buttonLink,
+            buttonLabel: 'إستعادة كلمة المرور'
+          }
         }
 
         // try to send the email

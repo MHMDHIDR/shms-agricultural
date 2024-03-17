@@ -85,10 +85,10 @@ export async function POST(req: Request) {
 
             شكراً لك.
             <br />
-            <small>لا حاجة للرد على هذا البريد الإلكتروني.</small>`
-        },
-        buttonLink,
-        buttonLabel: 'تسجيل الدخول'
+            <small>لا حاجة للرد على هذا البريد الإلكتروني.</small>`,
+          buttonLink,
+          buttonLabel: 'تسجيل الدخول'
+        }
       }
 
       // try to send the email
