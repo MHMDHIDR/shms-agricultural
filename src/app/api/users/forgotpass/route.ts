@@ -30,6 +30,14 @@ export async function POST(req: Request) {
           }),
           { status: 403 }
         )
+      } else if (user.shms_user_account_status === 'pending') {
+        return new Response(
+          JSON.stringify({
+            forgotPassSent: 0,
+            message: `عفواً! حسابك غير مفعل بعد! يرجى تفعيل حسابك عن طريق الرابط المرسل إلى بريدك الإلكتروني`
+          }),
+          { status: 403 }
+        )
       } else if (new Date() < new Date(user.shms_user_reset_token_expires!)) {
         return new Response(
           JSON.stringify({
@@ -38,7 +46,7 @@ export async function POST(req: Request) {
           }),
           { status: 403 }
         )
-      } else if (user.shms_user_account_status === 'active') {
+      } else {
         const userResetPasswordToken = randomUUID()
         const userCanResetPasswordUntil = new Date(Date.now() + 3600000).toISOString()
 
