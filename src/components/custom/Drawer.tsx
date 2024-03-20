@@ -26,7 +26,7 @@ export default function MyDrawer({
     <Drawer>
       <DrawerTrigger>
         {asSpan ? (
-          <span className='py-2 px-4 rounded-md mx-5 hover:bg-accent hover:text-accent-foreground'>
+          <span className='py-2 px-4 rounded-md mx-5 hover:text-accent-foreground'>
             {children}
           </span>
         ) : (

@@ -587,7 +587,6 @@ export default function EditProjectPage({
                     </span>
                   }
                   content={<ProjectCondition />}
-                  asSpan
                 >
                   تعليمات شروط المشروع
                 </Drawer>
