@@ -282,9 +282,8 @@ export default function Projects() {
 
   console.log('session --> ', session)
 
-  return session?.user ? (
-    <LoadingPage />
-  ) : !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+  return session?.user ? null : !session ||
+    session.token?.user.shms_user_account_type !== 'admin' ? (
     <NotFound />
   ) : (
     <Layout>
