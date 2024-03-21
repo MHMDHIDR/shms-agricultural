@@ -8,14 +8,17 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { API_URL } from '@/data/constants'
-import type { UserProps } from '@/types'
+import type { UserLoggedInProps, UserProps } from '@/types'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import Layout from '@/components/custom/Layout'
 import DashboardNav from '../DashboardNav'
 import DataTable from '@/components/custom/DataTable'
+import { useSession } from 'next-auth/react'
+import NotFound from '@/app/not-found'
 
 export default function Users() {
+  const { data: session }: { data: UserLoggedInProps } = useSession()
   const [users, setUsers] = useState<UserProps[]>([])
 
   const getUsers = async () => {
@@ -27,7 +30,9 @@ export default function Users() {
     getUsers()
   }, [])
 
-  return (
+  return !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+    <NotFound />
+  ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>العمــلاء</h1>
       <DashboardNav />

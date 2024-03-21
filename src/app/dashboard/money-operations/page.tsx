@@ -10,11 +10,19 @@ import {
 import DataTable from '@/components/custom/DataTable'
 import Layout from '@/components/custom/Layout'
 import DashboardNav from '../DashboardNav'
+import NotFound from '@/app/not-found'
+import { getAuth } from '@/lib/actions/auth'
+import { LoadingPage } from '@/components/custom/Loading'
 
 export default async function MoneyOperations() {
+  const { userType, loading } = await getAuth()
   const withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
 
-  return (
+  return loading ? (
+    <LoadingPage />
+  ) : userType !== 'admin' ? (
+    <NotFound />
+  ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>العمليات المالية</h1>
       <DashboardNav />

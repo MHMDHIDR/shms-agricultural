@@ -25,7 +25,7 @@ import {
   validateFile
 } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
-import type { ProjectProps, UserLoggedInProps, getAuthType } from '@/types'
+import type { ProjectProps, UserLoggedInProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { ArrowBigRight } from 'lucide-react'
@@ -361,12 +361,7 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
-  const userType: getAuthType['userType'] =
-    (typeof window !== 'undefined' &&
-      JSON.parse(String(localStorage.getItem('shms_user_data'))).userType) ??
-    'user'
-
-  return !session && userType !== 'admin' ? (
+  return !session || session.token?.user.shms_user_account_type !== 'admin' ? (
     <NotFound />
   ) : isLoading ? (
     <LoadingPage />

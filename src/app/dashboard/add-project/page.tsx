@@ -23,7 +23,7 @@ import {
 } from '@/data/constants'
 import { validateFile } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
-import type { ProjectProps } from '@/types'
+import type { ProjectProps, UserLoggedInProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -33,8 +33,11 @@ import ProjectsTable from './ProjectsTabel'
 import MarkdownIt from 'markdown-it'
 import Layout from '@/components/custom/Layout'
 import DashboardNav from '../DashboardNav'
+import { useSession } from 'next-auth/react'
+import NotFound from '@/app/not-found'
 
 export default function Projects() {
+  const { data: session }: { data: UserLoggedInProps } = useSession()
   const [_projects, setProjects] = useState<ProjectProps[]>([])
   const [projectName, setProjectName] = useState('')
   const [projectLocation, setProjectLocation] = useState('')
@@ -276,7 +279,9 @@ export default function Projects() {
     setProjectDescriptionError('')
   }
 
-  return (
+  return !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+    <NotFound />
+  ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
       <DashboardNav />

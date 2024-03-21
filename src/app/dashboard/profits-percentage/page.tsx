@@ -1,7 +1,7 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { ProjectProps } from '@/types'
+import type { ProjectProps, UserLoggedInProps } from '@/types'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import Confirm from '@/components/custom/Confirm'
@@ -30,8 +30,11 @@ import Divider from '@/components/custom/Divider'
 import Copy from '@/components/custom/Copy'
 import DashboardNav from '../DashboardNav'
 import Layout from '@/components/custom/Layout'
+import NotFound from '@/app/not-found'
+import { useSession } from 'next-auth/react'
 
 export default function CountPercentage() {
+  const { data: session }: { data: UserLoggedInProps } = useSession()
   const [projects, setProjects] = useState<ProjectProps[]>([])
   const [selectedProject, setSelectedProject] = useState<
     ProjectProps['shms_project_id'] | null
@@ -173,7 +176,9 @@ export default function CountPercentage() {
     }
   }
 
-  return (
+  return !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+    <NotFound />
+  ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
       <DashboardNav />

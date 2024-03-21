@@ -25,8 +25,12 @@ import { Suspense } from 'react'
 import PurchesedStocks from './investors/PurchesedStocks'
 import Layout from '@/components/custom/Layout'
 import DashboardNav from './DashboardNav'
+import NotFound from '@/app/not-found'
+import { getAuth } from '@/lib/actions/auth'
+import { LoadingPage } from '@/components/custom/Loading'
 
 export default async function DashboardInvestors() {
+  const { userType, loading } = await getAuth()
   const {
     data: users
   }: {
@@ -67,7 +71,11 @@ export default async function DashboardInvestors() {
     return total + userInvestment
   }, 0)
 
-  return (
+  return loading ? (
+    <LoadingPage />
+  ) : userType !== 'admin' ? (
+    <NotFound />
+  ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
       <DashboardNav />
