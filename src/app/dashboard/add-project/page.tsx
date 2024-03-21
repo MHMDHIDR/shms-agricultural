@@ -280,6 +280,8 @@ export default function Projects() {
     setProjectDescriptionError('')
   }
 
+  console.log('session --> ', session)
+
   return session?.user ? (
     <LoadingPage />
   ) : !session || session.token?.user.shms_user_account_type !== 'admin' ? (
