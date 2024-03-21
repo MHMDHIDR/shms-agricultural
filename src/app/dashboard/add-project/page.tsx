@@ -283,6 +283,7 @@ export default function Projects() {
     "session.token?.user.shms_user_account_type !== 'admin' --> ",
     session!.token?.user.shms_user_account_type !== 'admin'
   )
+  console.log('VALUE  --> ', session!.token?.user.shms_user_account_type)
 
   return !session ? (
     <NotFound />
