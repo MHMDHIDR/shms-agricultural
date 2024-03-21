@@ -35,7 +35,7 @@ import Layout from '@/components/custom/Layout'
 import DashboardNav from '../DashboardNav'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
-import { LoadingPage } from '@/components/custom/Loading'
+// import { LoadingPage } from '@/components/custom/Loading'
 
 export default function Projects() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
