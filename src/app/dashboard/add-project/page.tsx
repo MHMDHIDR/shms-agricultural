@@ -26,7 +26,7 @@ import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps, UserLoggedInProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import ProjectsTable from './ProjectsTabel'
@@ -35,7 +35,6 @@ import Layout from '@/components/custom/Layout'
 import DashboardNav from '../DashboardNav'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
-// import { LoadingPage } from '@/components/custom/Loading'
 
 export default function Projects() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -282,8 +281,10 @@ export default function Projects() {
 
   console.log('session --> ', session)
 
-  return !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+  return !session ? (
     <NotFound />
+  ) : session.token?.user.shms_user_account_type !== 'admin' ? (
+    redirect('/')
   ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
