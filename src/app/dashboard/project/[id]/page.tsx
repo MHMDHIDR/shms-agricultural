@@ -361,10 +361,10 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
-  return !session || session.token?.user.shms_user_account_type !== 'admin' ? (
-    <NotFound />
-  ) : isLoading ? (
+  return isLoading || session?.user ? (
     <LoadingPage />
+  ) : !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+    <NotFound />
   ) : (
     <Layout>
       <DashboardNav />

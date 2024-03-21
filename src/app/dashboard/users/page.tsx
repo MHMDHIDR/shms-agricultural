@@ -16,6 +16,7 @@ import DashboardNav from '../DashboardNav'
 import DataTable from '@/components/custom/DataTable'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
+import { LoadingPage } from '@/components/custom/Loading'
 
 export default function Users() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -30,7 +31,9 @@ export default function Users() {
     getUsers()
   }, [])
 
-  return !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+  return session?.user ? (
+    <LoadingPage />
+  ) : !session || session.token?.user.shms_user_account_type !== 'admin' ? (
     <NotFound />
   ) : (
     <Layout>

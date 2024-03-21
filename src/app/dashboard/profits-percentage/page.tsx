@@ -32,6 +32,7 @@ import DashboardNav from '../DashboardNav'
 import Layout from '@/components/custom/Layout'
 import NotFound from '@/app/not-found'
 import { useSession } from 'next-auth/react'
+import { LoadingPage } from '@/components/custom/Loading'
 
 export default function CountPercentage() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -176,7 +177,9 @@ export default function CountPercentage() {
     }
   }
 
-  return !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+  return session?.user ? (
+    <LoadingPage />
+  ) : !session || session.token?.user.shms_user_account_type !== 'admin' ? (
     <NotFound />
   ) : (
     <Layout>
