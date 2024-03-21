@@ -26,7 +26,7 @@ import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps, UserLoggedInProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
-import { redirect, useRouter } from 'next/navigation'
+import { /*redirect,*/ useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import ProjectsTable from './ProjectsTabel'
@@ -279,13 +279,14 @@ export default function Projects() {
     setProjectDescriptionError('')
   }
 
-  console.log('session --> ', session)
+  console.log(
+    "session.token?.user.shms_user_account_type !== 'admin' --> ",
+    session!.token?.user.shms_user_account_type !== 'admin'
+  )
 
   return !session ? (
     <NotFound />
-  ) : session.token?.user.shms_user_account_type !== 'admin' ? (
-    redirect('/')
-  ) : (
+  ) : session.token?.user.shms_user_account_type !== 'admin' ? null : ( //redirect('/')
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
       <DashboardNav />
