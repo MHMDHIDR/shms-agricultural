@@ -132,6 +132,8 @@ const SigninPage = () => {
     }
   }
 
+  console.log('session --> ', session)
+
   return session?.expires ? (
     redirect('/')
   ) : session?.user ? (
