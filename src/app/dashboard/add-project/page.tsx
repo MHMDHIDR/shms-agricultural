@@ -292,7 +292,10 @@ export default function Projects() {
     setProjectDescriptionError('')
   }
 
+  console.log('session --> ', session)
+
   console.log("userType !== 'admin' --> ", userType !== 'admin')
+
   console.log('userType  --> ', userType)
 
   // = ====== getAuth()
