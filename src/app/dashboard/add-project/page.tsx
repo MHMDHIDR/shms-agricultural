@@ -36,6 +36,7 @@ import DashboardNav from '../DashboardNav'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
 import { getAuth } from '@/lib/actions/auth'
+import { LoadingPage } from '@/components/custom/Loading'
 
 export default function Projects() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -298,7 +299,9 @@ export default function Projects() {
 
   return !session ? (
     <NotFound />
-  ) : session.token?.user.shms_user_account_type !== 'admin' ? null : ( //redirect('/')
+  ) : userType !== 'admin' ? (
+    <LoadingPage />
+  ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
       <DashboardNav />
