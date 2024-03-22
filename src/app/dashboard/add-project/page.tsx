@@ -35,6 +35,7 @@ import Layout from '@/components/custom/Layout'
 import DashboardNav from '../DashboardNav'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
+import { getAuth } from '@/lib/actions/auth'
 
 export default function Projects() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -51,10 +52,21 @@ export default function Projects() {
   const [projectDescription, setProjectDescription] = useState('')
   const [projectTerms, setProjectTerms] = useState('')
   const [caseStudyfile, setCaseStudyFile] = useState<File[]>([])
-
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
   const [projectAdded, setProjectAdded] = useState<number>(0)
+  const [userType, setUserType] = useState<string>('')
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const { userType, loading } = await getAuth()
+      if (loading) return
+
+      setUserType(userType ?? session?.token?.user.fullname ?? '')
+    }
+
+    getUserData()
+  }, [session])
 
   const onCaseStudyFileAdd = (e: { target: { files: any } }) => {
     setCaseStudyFile(Array.from(e.target.files))
@@ -279,11 +291,10 @@ export default function Projects() {
     setProjectDescriptionError('')
   }
 
-  console.log(
-    "session.token?.user.shms_user_account_type !== 'admin' --> ",
-    session!.token?.user.shms_user_account_type !== 'admin'
-  )
-  console.log('VALUE  --> ', session!.token?.user.shms_user_account_type)
+  console.log("userType !== 'admin' --> ", userType !== 'admin')
+  console.log('userType  --> ', userType)
+
+  // = ====== getAuth()
 
   return !session ? (
     <NotFound />
