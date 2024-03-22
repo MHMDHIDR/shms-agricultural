@@ -8,7 +8,7 @@ import { EyeIcon } from 'lucide-react'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { redirect, useSearchParams } from 'next/navigation'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { toast } from 'sonner'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import FormMessage from '@/components/custom/FormMessage'
@@ -16,8 +16,6 @@ import Layout from '@/components/custom/Layout'
 import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { useSession } from 'next-auth/react'
-import { getAuth } from '@/lib/actions/auth'
-// import { LoadingPage } from '@/components/custom/Loading'
 
 const SigninPage = () => {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -27,18 +25,6 @@ const SigninPage = () => {
   const [password, setPassword] = useState('')
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, _setIsDoneSubmitting] = useState<boolean>(false)
-  const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
-
-  useEffect(() => {
-    const getUserData = async () => {
-      const { userType, loading } = await getAuth()
-      if (loading) return
-
-      setUserType(userType)
-    }
-
-    getUserData()
-  }, [session])
 
   const redirectUrl = useSearchParams().get('callbackUrl')
 
@@ -145,14 +131,9 @@ const SigninPage = () => {
     }
   }
 
-  console.log('session --> ', session)
-
-  console.log('userType --> ', userType)
-
   return session ? (
     redirect('/')
   ) : (
-    //: session?.user ? (  <LoadingPage /> )
     <Layout>
       <section className='w-full h-screen min-h-screen mt-32 mb-24'>
         <CardWrapper

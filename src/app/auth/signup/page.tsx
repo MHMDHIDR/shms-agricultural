@@ -32,7 +32,6 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { useSession } from 'next-auth/react'
-import { LoadingPage } from '@/components/custom/Loading'
 
 const SignupPage = () => {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -261,10 +260,8 @@ const SignupPage = () => {
     setAcceptedTermError('')
   }
 
-  return session?.expires ? (
+  return session ? (
     replace('/')
-  ) : session?.user ? (
-    <LoadingPage />
   ) : (
     <Layout>
       <section className='mx-auto mt-10 mb-auto md:mt-20'>
