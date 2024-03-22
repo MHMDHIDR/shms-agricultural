@@ -25,7 +25,7 @@ import {
   validateFile
 } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
-import type { ProjectProps, UserLoggedInProps } from '@/types'
+import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { ArrowBigRight } from 'lucide-react'
@@ -40,6 +40,7 @@ import NotFound from '@/app/not-found'
 import { LoadingPage } from '@/components/custom/Loading'
 import ProjectCondition from './ProjectCondition'
 import DashboardNav from '@/app/dashboard/DashboardNav'
+import { getAuth } from '@/lib/actions/auth'
 
 export default function EditProjectPage({
   params: { id: projectId }
@@ -96,6 +97,18 @@ export default function EditProjectPage({
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
   const [caseStudyfileError, setCaseStudyFileError] = useState('')
+  const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const { userType, loading } = await getAuth()
+      if (loading) return
+
+      setUserType(userType)
+    }
+
+    getUserData()
+  }, [session])
 
   const { file } = useContext(FileUploadContext)
 
@@ -361,10 +374,10 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
-  return isLoading || session?.user ? (
-    <LoadingPage />
-  ) : !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+  return (session && userType === 'user') || (!session && userType === 'user') ? (
     <NotFound />
+  ) : isLoading || (!session && userType === 'admin') ? (
+    <LoadingPage />
   ) : (
     <Layout>
       <DashboardNav />

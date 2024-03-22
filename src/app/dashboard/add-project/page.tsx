@@ -292,14 +292,6 @@ export default function Projects() {
     setProjectDescriptionError('')
   }
 
-  console.log('session --> ', session)
-
-  console.log("userType !== 'admin' --> ", userType !== 'admin')
-
-  console.log('userType  --> ', userType)
-
-  // = ====== getAuth()
-
   return (session && userType === 'user') || (!session && userType === 'user') ? (
     <NotFound />
   ) : !session && userType === 'admin' ? (

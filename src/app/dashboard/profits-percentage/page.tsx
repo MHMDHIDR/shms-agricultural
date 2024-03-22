@@ -1,7 +1,7 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { ProjectProps, UserLoggedInProps } from '@/types'
+import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import Confirm from '@/components/custom/Confirm'
@@ -33,6 +33,7 @@ import Layout from '@/components/custom/Layout'
 import NotFound from '@/app/not-found'
 import { useSession } from 'next-auth/react'
 import { LoadingPage } from '@/components/custom/Loading'
+import { getAuth } from '@/lib/actions/auth'
 
 export default function CountPercentage() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -47,6 +48,18 @@ export default function CountPercentage() {
     isSubmittingDone: false
   })
   const [percentageCodesRefresh, setPercentageCodesRefresh] = useState<number>(0)
+  const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const { userType, loading } = await getAuth()
+      if (loading) return
+
+      setUserType(userType)
+    }
+
+    getUserData()
+  }, [session])
 
   useEffect(() => {
     const getProjects = async () => {
@@ -177,10 +190,10 @@ export default function CountPercentage() {
     }
   }
 
-  return session?.user ? (
-    <LoadingPage />
-  ) : !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+  return (session && userType === 'user') || (!session && userType === 'user') ? (
     <NotFound />
+  ) : !session && userType === 'admin' ? (
+    <LoadingPage />
   ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
