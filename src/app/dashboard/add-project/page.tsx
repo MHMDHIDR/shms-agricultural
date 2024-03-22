@@ -302,7 +302,7 @@ export default function Projects() {
 
   return session && userType === 'user' ? (
     <NotFound />
-  ) : (!session && userType === 'admin') || userType !== 'admin' ? (
+  ) : !session && userType === 'admin' ? (
     <LoadingPage />
   ) : (
     <Layout>
