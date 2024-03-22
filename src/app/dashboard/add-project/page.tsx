@@ -300,7 +300,7 @@ export default function Projects() {
 
   // = ====== getAuth()
 
-  return session && userType === 'user' ? (
+  return (session && userType === 'user') || (!session && userType === 'user') ? (
     <NotFound />
   ) : !session && userType === 'admin' ? (
     <LoadingPage />
