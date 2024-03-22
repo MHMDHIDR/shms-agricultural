@@ -23,7 +23,7 @@ import {
 } from '@/data/constants'
 import { validateFile } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
-import type { ProjectProps, UserLoggedInProps } from '@/types'
+import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { /*redirect,*/ useRouter } from 'next/navigation'
@@ -56,14 +56,14 @@ export default function Projects() {
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
   const [projectAdded, setProjectAdded] = useState<number>(0)
-  const [userType, setUserType] = useState<string>('')
+  const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
 
   useEffect(() => {
     const getUserData = async () => {
       const { userType, loading } = await getAuth()
       if (loading) return
 
-      setUserType(userType ?? session?.token?.user.fullname ?? '')
+      setUserType(userType)
     }
 
     getUserData()
