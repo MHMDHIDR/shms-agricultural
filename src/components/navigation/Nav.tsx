@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/navigation-menu'
 import useEventListener from '@/hooks/useEventListener'
 import { getAuth } from '@/lib/actions/auth'
-import { abstractWords, cn, getUser, redirect } from '@/lib/utils'
+import { abstractWords, cn, getUser /*, redirect*/ } from '@/lib/utils'
 import type { MenuItemsProps, UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import { LogIn, LogOut } from 'lucide-react'
 import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
@@ -185,7 +185,7 @@ export default function Nav() {
                         onClick={async () => {
                           localStorage.removeItem('shms_user_data')
                           await signOut({ redirect: false })
-                          redirect('/auth/signin', 0)
+                          // redirect('/auth/signin', 0)
                         }}
                       >
                         <LogOut className='text-[#FDB813] dark:text-[#ffd87e]' />
