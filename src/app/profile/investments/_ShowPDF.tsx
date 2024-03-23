@@ -83,6 +83,7 @@ const Invoice = ({
     totalAmount,
     totalProfit,
     profitsCollectDate,
+    purchaseDate,
     projectTerms,
     referenceCode
   } = dataToShow
@@ -282,7 +283,7 @@ const Invoice = ({
               >
                 {totalAmount} ريال قطري فقط{'  '}
               </strong>
-              وتم ذلك في تاريخ {getProjectDate(new Date())}
+              وتم ذلك في تاريخ {getProjectDate(purchaseDate)}
             </p>
             <p
               style={{

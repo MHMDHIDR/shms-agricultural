@@ -148,6 +148,7 @@ export default async function DashboardInvestors() {
                           totalAmount: totalPayment,
                           totalProfit,
                           profitsCollectDate: profitCollectionDate,
+                          purchaseDate,
                           projectTerms,
                           referenceCode: `#${
                             InvestmentCurrentUser[0]?.shms_id
@@ -184,6 +185,7 @@ export default async function DashboardInvestors() {
                               <Contract
                                 dataToShow={{
                                   ...dataToShow,
+                                  purchaseDate: new Date(purchaseDate),
                                   investorName: dataToShow.investorName || ''
                                 }}
                               />

@@ -323,6 +323,7 @@ export type generatePDFProps = {
   stocksPurchased: number
   totalAmount: number
   totalProfit: number
+  purchaseDate: Date
   profitsCollectDate: Date
   projectTerms?: string
   referenceCode: string
