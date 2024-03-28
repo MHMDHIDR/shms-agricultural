@@ -59,7 +59,7 @@ export async function PATCH(
     }
 
     // Step 1: Retrieve the old value of shms_project_total_stocks before updating it
-    // const oldTotalStocks = project.shms_project_total_stocks
+    const oldTotalStocks = project.shms_project_total_stocks
 
     let updateQuery = ''
     let updateValues = []
@@ -119,17 +119,19 @@ export async function PATCH(
     const updateProject = (await connectDB(updateQuery, updateValues)) as ResultSetHeader
     const { affectedRows: projectUpdated } = updateProject as ResultSetHeader
 
-    // // Step 2: Calculate the difference between the old and new values
-    // const stocksDifference = oldTotalStocks - shms_project_total_stocks
+    // // Step 2: Calculate the difference between the old and new values, Note: shms_project_total_stocks is the new value
+    const stocksDifference = oldTotalStocks - shms_project_total_stocks
 
     // // Step 3: Subtract this difference from the current value of shms_project_available_stocks
-    // const newAvailableStocks = project.shms_project_available_stocks - stocksDifference
+    const newAvailableStocks = project.shms_project_available_stocks - stocksDifference
 
-    // // Update shms_project_available_stocks with the new calculated value
-    // await connectDB(
-    //   `UPDATE projects SET shms_project_available_stocks = ? WHERE shms_project_id = ?`,
-    //   [newAvailableStocks, projectId]
-    // )
+    // Only Update shms_project_available_stocks with the new calculated value if there is a difference in the total stocks value
+    if (stocksDifference !== 0) {
+      await connectDB(
+        `UPDATE projects SET shms_project_available_stocks = ? WHERE shms_project_id = ?`,
+        [newAvailableStocks, projectId]
+      )
+    }
 
     return projectUpdated
       ? new Response(

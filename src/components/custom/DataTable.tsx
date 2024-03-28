@@ -174,7 +174,7 @@ export default function OperationsTable({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map(row => (
+              table.getRowModel().rows.map((row, rowIndex: number) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row
                     .getVisibleCells()
@@ -256,7 +256,7 @@ export default function OperationsTable({
                       if (cell.id.includes('shms_withdraw_amount')) {
                         return (
                           <TableCell key={cell.id}>
-                            <OperationAction withdrawAction={data[0]} />
+                            <OperationAction withdrawAction={data[rowIndex]} />
                           </TableCell>
                         )
                       } else if (cell.id.includes('shms_id')) {
