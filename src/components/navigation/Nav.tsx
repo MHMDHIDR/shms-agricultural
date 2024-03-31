@@ -184,8 +184,8 @@ export default function Nav() {
                         className='flex w-full cursor-pointer gap-x-2'
                         onClick={async () => {
                           localStorage.removeItem('shms_user_data')
-                          await signOut({ redirect: false })
                           redirect('/auth/signin', 0)
+                          await signOut({ redirect: false })
                         }}
                       >
                         <LogOut className='text-[#FDB813] dark:text-[#ffd87e]' />

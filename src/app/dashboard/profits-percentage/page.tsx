@@ -49,29 +49,33 @@ export default function CountPercentage() {
   })
   const [percentageCodesRefresh, setPercentageCodesRefresh] = useState<number>(0)
   const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
+  const [loading, setLoading] = useState(true)
+
+  const getProjects = async () => {
+    const response = await fetch(`${API_URL}/projects/get`, {
+      next: { revalidate: 0 },
+      cache: 'no-store'
+    })
+    const projects: ProjectProps[] = await response.json()
+
+    setProjects(projects)
+  }
 
   useEffect(() => {
     const getUserData = async () => {
       const { userType, loading } = await getAuth()
-      if (loading) return
-
       setUserType(userType)
+      setLoading(loading)
+
+      if (!loading) {
+        getProjects()
+      }
     }
 
     getUserData()
   }, [session])
 
   useEffect(() => {
-    const getProjects = async () => {
-      const response = await fetch(`${API_URL}/projects/get`, {
-        next: { revalidate: 0 },
-        cache: 'no-store'
-      })
-      const projects: ProjectProps[] = await response.json()
-
-      setProjects(projects)
-    }
-
     getProjects()
   }, [percentageCodesRefresh])
 
@@ -190,10 +194,10 @@ export default function CountPercentage() {
     }
   }
 
-  return (session && userType === 'user') || (!session && userType === 'user') ? (
-    <NotFound />
-  ) : !session && userType === 'admin' ? (
+  return loading ? (
     <LoadingPage />
+  ) : !session && userType === 'user' ? (
+    <NotFound />
   ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>

@@ -23,31 +23,29 @@ export default function Users() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
   const [users, setUsers] = useState<UserProps[]>([])
   const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const getUserData = async () => {
       const { userType, loading } = await getAuth()
-      if (loading) return
-
       setUserType(userType)
+      setLoading(loading)
+
+      if (!loading) {
+        const { data: users }: { data: UserProps[] } = await axios.get(
+          `${API_URL}/users/all`
+        )
+        setUsers(users)
+      }
     }
 
     getUserData()
   }, [session])
 
-  const getUsers = async () => {
-    const { data: users }: { data: UserProps[] } = await axios.get(`${API_URL}/users/all`)
-    setUsers(users)
-  }
-
-  useEffect(() => {
-    getUsers()
-  }, [])
-
-  return (session && userType === 'user') || (!session && userType === 'user') ? (
-    <NotFound />
-  ) : !session && userType === 'admin' ? (
+  return loading ? (
     <LoadingPage />
+  ) : !session && userType === 'user' ? (
+    <NotFound />
   ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>العمــلاء</h1>

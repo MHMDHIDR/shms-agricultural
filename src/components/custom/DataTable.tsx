@@ -142,7 +142,7 @@ export default function OperationsTable({
         </DropdownMenu>
         <Input
           placeholder='إبحــــث عن طريق الإســـــــم'
-          value={table.getColumn('shms_fullname')?.getFilterValue() as string}
+          defaultValue={table.getColumn('shms_fullname')?.getFilterValue() as string}
           onChange={event =>
             table.getColumn('shms_fullname')?.setFilterValue(event.target.value)
           }
