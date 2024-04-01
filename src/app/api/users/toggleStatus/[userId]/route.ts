@@ -25,14 +25,12 @@ export async function PATCH(
       )
     }
 
-    const updateUser = (await connectDB(
-      `UPDATE users
-          SET shms_user_account_status = ?
-            ${status === 'active' ? ' ,shms_user_reset_token_expires = NULL' : ''}
-            WHERE shms_id = ?`,
-      ['active', userId]
-    )) as ResultSetHeader
+    const query = `UPDATE users
+    SET shms_user_account_status = ?
+    ${status === 'active' ? ' ,shms_user_reset_token_expires = NULL' : ''}
+    WHERE shms_id = ?`
 
+    const updateUser = (await connectDB(query, [status, userId])) as ResultSetHeader
     const { affectedRows: userUpdated } = updateUser as ResultSetHeader
 
     if (userUpdated) {

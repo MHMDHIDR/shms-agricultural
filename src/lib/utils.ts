@@ -372,7 +372,7 @@ export const replaceString = (string: string) => {
       break
     }
     case 'shms_id': {
-      return 'الرقم التسلسلي'
+      return 'الرقم المرجعي'
       break
     }
     case 'shms_action_type': {

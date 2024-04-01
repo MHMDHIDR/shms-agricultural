@@ -102,7 +102,7 @@ export default function OperationsTable({
   })
 
   const filteredColumns = [
-    'shms_id',
+    // 'shms_id',
     'shms_user_id',
     'shms_nationality',
     'shms_password',
