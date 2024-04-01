@@ -102,6 +102,7 @@ export default function OperationsTable({
   })
 
   const filteredColumns = [
+    'shms_id',
     'shms_user_id',
     'shms_nationality',
     'shms_password',
@@ -120,7 +121,7 @@ export default function OperationsTable({
               الأعمدة
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='rtl'>
+          <DropdownMenuContent align='end' className='rtl' avoidCollisions={false}>
             {table
               .getAllColumns()
               .filter(
@@ -198,13 +199,14 @@ export default function OperationsTable({
                             : 'text-black dark:text-white'
                         )}
                       >
-                        {cell.column.id.includes('_id') ? (
-                          <span className='flex'>
+                        {cell.column.id.includes('_id') ||
+                        cell.column.id.includes('_sn') ? (
+                          <span className='flex gap-x-3 justify-center items-center'>
                             <Copy
                               text={String(cell.getValue())}
-                              className='inline ml-2 w-10 h-10'
+                              className='inline ml-2 w-6 h-6'
                             />
-                            <span>
+                            <span className='font-bold'>
                               {flexRender(cell.column.columnDef.cell, cell.getContext())}{' '}
                             </span>
                           </span>
@@ -283,11 +285,10 @@ export default function OperationsTable({
         </Table>
       </div>
       <div className='flex items-center justify-end space-x-2 py-4'>
-        {/* <div className='flex-1 text-sm text-muted-foreground'>
-          {table.getFilteredSelectedRowModel().rows.length} من{' '}
-          {table.getFilteredRowModel().rows.length}{' '}
-          {table.getFilteredRowModel().rows.length > 1 ? 'صفوف' : 'صف'}{' '}
-        </div> */}
+        <div className='flex-1 text-sm text-muted-foreground'>
+          {/* يتم عرض {table.getFilteredRowModel().rows.length}
+          {table.getFilteredRowModel().rows.length > 1 ? ' صفوف' : ' صف'} */}
+        </div>
         <div className='flex gap-x-3'>
           <Button
             variant='outline'

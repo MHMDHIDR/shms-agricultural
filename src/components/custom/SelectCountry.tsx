@@ -34,7 +34,7 @@ export default function SelectCountry({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className={cn(`w-[200px] xxxxx justify-between`, className)}
+          className={cn(`w-[200px] justify-between`, className)}
         >
           {nationality
             ? countryNames.find(countryName => countryName.label === nationality)?.label

@@ -4,6 +4,7 @@ import { Session } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 
 export type UserProps = {
+  shms_sn: number
   shms_id: string
   shms_fullname: string
   fullname?: string
