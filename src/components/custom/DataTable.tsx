@@ -102,7 +102,7 @@ export default function OperationsTable({
   })
 
   const filteredColumns = [
-    // 'shms_id',
+    'shms_id',
     'shms_user_id',
     'shms_nationality',
     'shms_password',
@@ -253,7 +253,7 @@ export default function OperationsTable({
                     ))}
                   {row
                     .getVisibleCells()
-                    .filter(cell => !filteredColumns.includes(cell.column.id))
+                    // .filter(cell => !filteredColumns.includes(cell.column.id))
                     .map(cell => {
                       if (cell.id.includes('shms_withdraw_amount')) {
                         return (

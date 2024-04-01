@@ -240,6 +240,8 @@ export function getProjectStatus(status: string): string {
     ? 'تم الموافقة'
     : status === 'rejected'
     ? 'تم الرفض'
+    : status === 'block'
+    ? 'محظور'
     : status
 }
 
