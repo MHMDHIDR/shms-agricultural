@@ -7,9 +7,8 @@ import Balance from './_Balance'
 
 export default async function Account() {
   const { userId } = await getAuth()
-  const { shms_user_total_balance, shms_user_withdrawable_balance } = (await getUser(
-    userId
-  )) as UserProps
+  const { shms_user_total_balance, shms_user_withdrawable_balance, shms_fullname } =
+    (await getUser(userId)) as UserProps
 
   return (
     <div className='flex flex-col items-center justify-center gap-5 mt-10 md:flex-row'>
@@ -26,10 +25,8 @@ export default async function Account() {
 
       {/* Second Card (Smaller Card) */}
       <Card className='p-10 rtl'>
-        {/* Reduced padding to make it smaller */}
         <CardContent className='flex flex-col items-center justify-center text-center'>
-          <h1>الملف الشخصي</h1>
-
+          <h1 className='font-bold'>{shms_fullname}</h1>
           <Link
             href='/profile'
             className='mt-10 w-fit py-2.5 px-6 rounded-md font-bold text-white bg-purple-500 shadow hover:bg-purple-400 focus:shadow-outline focus:outline-none'
