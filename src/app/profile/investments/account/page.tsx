@@ -4,8 +4,13 @@ import { getUser } from '@/lib/utils'
 import { UserProps } from '@/types'
 import Link from 'next/link'
 import Balance from './_Balance'
+import { FC } from 'react'
 
-export default async function Account({ userId }: { userId?: string }) {
+interface AccountProps {
+  userId?: string
+}
+
+const Account: FC<AccountProps> = async ({ userId }) => {
   const { userId: currentUserId } = await getAuth()
   const { shms_user_total_balance, shms_user_withdrawable_balance, shms_fullname } =
     (await getUser(userId ?? currentUserId)) as UserProps
@@ -41,3 +46,5 @@ export default async function Account({ userId }: { userId?: string }) {
     </div>
   )
 }
+
+export default Account

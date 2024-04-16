@@ -40,7 +40,7 @@ export default function UsersActions({
       const filtered = user.filter(user => user.shms_id === id)
       setFilteredUser(filtered[0])
     }
-  }, [user])
+  }, [id, user])
 
   const deleteUser = async (id: string, S3docId: string) => {
     try {
