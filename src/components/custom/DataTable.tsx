@@ -227,6 +227,14 @@ export default function OperationsTable({
                               0
                             )
                           )
+                        ) : cell.column.id.includes('shms_fullname') ? (
+                          <Link
+                            href={`/dashboard/users/${String(
+                              cell.row.getValue('shms_id')
+                            )}`}
+                          >
+                            {String(cell.getValue())}
+                          </Link>
                         ) : cell.column.id.includes('shms_withdraw_amount') ? (
                           formattedPrice(Number(cell.getValue()))
                         ) : cell.column.id.includes('shms_doc') ? (

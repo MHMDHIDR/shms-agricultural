@@ -5,10 +5,10 @@ import { UserProps } from '@/types'
 import Link from 'next/link'
 import Balance from './_Balance'
 
-export default async function Account() {
-  const { userId } = await getAuth()
+export default async function Account({ userId }: { userId?: string }) {
+  const { userId: currentUserId } = await getAuth()
   const { shms_user_total_balance, shms_user_withdrawable_balance, shms_fullname } =
-    (await getUser(userId)) as UserProps
+    (await getUser(userId ?? currentUserId)) as UserProps
 
   return (
     <div className='flex flex-col items-center justify-center gap-5 mt-10 md:flex-row'>
@@ -19,6 +19,7 @@ export default async function Account() {
           <Balance
             totalAmount={shms_user_total_balance}
             withdrawableAmount={shms_user_withdrawable_balance}
+            noWithdrawButton={typeof userId !== 'undefined'}
           />
         </CardContent>
       </Card>
@@ -27,12 +28,14 @@ export default async function Account() {
       <Card className='p-10 rtl'>
         <CardContent className='flex flex-col items-center justify-center text-center'>
           <h1 className='font-bold'>{shms_fullname}</h1>
-          <Link
-            href='/profile'
-            className='mt-10 w-fit py-2.5 px-6 rounded-md font-bold text-white bg-purple-500 shadow hover:bg-purple-400 focus:shadow-outline focus:outline-none'
-          >
-            تعديل الملف الشخصي
-          </Link>
+          {!userId ? (
+            <Link
+              href='/profile'
+              className='mt-10 w-fit py-2.5 px-6 rounded-md font-bold text-white bg-purple-500 shadow hover:bg-purple-400 focus:shadow-outline focus:outline-none'
+            >
+              تعديل الملف الشخصي
+            </Link>
+          ) : null}
         </CardContent>
       </Card>
     </div>

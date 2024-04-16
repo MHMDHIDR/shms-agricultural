@@ -5,10 +5,12 @@ import Link from 'next/link'
 
 export default function Balance({
   totalAmount,
-  withdrawableAmount
+  withdrawableAmount,
+  noWithdrawButton
 }: {
   totalAmount: UserProps['shms_user_total_balance']
   withdrawableAmount: UserProps['shms_user_withdrawable_balance']
+  noWithdrawButton?: boolean
 }) {
   return (
     <div className='grid grid-cols-1 gap-4 select-none md:grid-cols-2'>
@@ -24,9 +26,11 @@ export default function Balance({
         <h3 className='py-4 text-3xl font-bold'>
           {formattedPrice(withdrawableAmount ?? 0)}
         </h3>
-        <Link href={'/profile/investments/withdraw'} className='border-none'>
-          <Button variant={'pressable'}>سحب الرصيد</Button>
-        </Link>
+        {!noWithdrawButton && (
+          <Link href={'/profile/investments/withdraw'} className='border-none'>
+            <Button variant={'pressable'}>سحب الرصيد</Button>
+          </Link>
+        )}
       </div>
     </div>
   )
