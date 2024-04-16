@@ -80,7 +80,7 @@ export default async function DashboardInvestors() {
   ) : (
     <Layout>
       <section className='container mx-auto'>
-        <Account />
+        <Account userId={null} />
         <Card className='min-w-full md:w-[300px] rtl mt-12'>
           <CardContent>
             <CardHeader className='font-bold text-center'>

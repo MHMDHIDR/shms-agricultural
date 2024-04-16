@@ -5,7 +5,7 @@ import { UserProps } from '@/types'
 import Link from 'next/link'
 import Balance from './_Balance'
 
-export default async function Account({ userId }: { userId?: string | undefined }) {
+export default async function Account({ userId }: { userId: string | null }) {
   const { userId: currentUserId } = await getAuth()
   const { shms_user_total_balance, shms_user_withdrawable_balance, shms_fullname } =
     (await getUser(userId ?? currentUserId)) as UserProps
