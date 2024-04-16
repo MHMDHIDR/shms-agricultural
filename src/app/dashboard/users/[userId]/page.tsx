@@ -50,7 +50,7 @@ export default async function DashboardInvestors({
         projectName,
         projectStockPrice,
         stocks: projectData.stocks,
-        totalPayment: projectData.totalPaymentAmount, // Assuming this property exists in your data
+        totalPayment: projectData.stocks * projectStockPrice,
         profitCollectionDate,
         purchaseDate: projectData.createdAt,
         projectTerms,
