@@ -23,8 +23,6 @@ export default async function DashboardInvestors({
   const user = (await getUser(userId)) as UserProps
   const projectsData: stocksPurchasedProps[] = JSON.parse(String(user.shms_user_stocks))
 
-  console.log('user ==> ', user)
-
   const projectDataFilter: InverstorProjectData[][] = await Promise.all(
     projectsData.map(async (projectData: stocksPurchasedProps) => {
       // Return an empty array if shms_project_id is missing
