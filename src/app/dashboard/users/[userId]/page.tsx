@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/table'
 import { formattedPrice, getProject, getProjectDate, getUser } from '@/lib/utils'
 import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
-import Account from '@/app/profile/investments/account/page'
+import Account from '@/app/profile/investments/account'
 import { redirect } from 'next/navigation'
 
 export default async function DashboardInvestors({
@@ -22,6 +22,8 @@ export default async function DashboardInvestors({
 }) {
   const user = (await getUser(userId)) as UserProps
   const projectsData: stocksPurchasedProps[] = JSON.parse(String(user.shms_user_stocks))
+
+  console.log('user ==> ', user)
 
   const projectDataFilter: InverstorProjectData[][] = await Promise.all(
     projectsData.map(async (projectData: stocksPurchasedProps) => {

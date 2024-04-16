@@ -16,7 +16,7 @@ import { formattedPrice, getProject, getProjectDate } from '@/lib/utils'
 import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 import Contract from './_ShowPDF'
-import Account from '@/app/profile/investments/account/page'
+import Account from '@/app/profile/investments/account'
 import { redirect } from 'next/navigation'
 
 export default async function DashboardInvestors() {
