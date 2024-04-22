@@ -13,13 +13,16 @@ import {
 import { formattedPrice, getProject, getProjectDate, getUser } from '@/lib/utils'
 import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import Account from '@/app/profile/investments/account'
-import { redirect } from 'next/navigation'
+import { getAuth } from '@/lib/actions/auth'
+import { LoadingPage } from '@/components/custom/Loading'
+import NotFound from '@/app/not-found'
 
 export default async function DashboardInvestors({
   params: { userId }
 }: {
   params: { userId: string }
 }) {
+  const { userType, loading } = await getAuth()
   const user = (await getUser(userId)) as UserProps
   const projectsData: stocksPurchasedProps[] = JSON.parse(String(user.shms_user_stocks))
 
@@ -61,8 +64,10 @@ export default async function DashboardInvestors({
     })
   )
 
-  return !userId ? (
-    redirect('/auth/signin')
+  return loading ? (
+    <LoadingPage />
+  ) : userType !== 'admin' ? (
+    <NotFound />
   ) : (
     <Layout>
       <section className='container mx-auto'>
