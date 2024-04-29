@@ -262,7 +262,7 @@ export default function ProfilePage() {
 
   return !session ? (
     <NotFound />
-  ) : (
+  ) :
     <Layout>
       <CardWrapper
         heading={''}
@@ -417,5 +417,4 @@ export default function ProfilePage() {
         </div>
       </CardWrapper>
     </Layout>
-  )
 }

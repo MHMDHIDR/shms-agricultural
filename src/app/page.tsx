@@ -22,7 +22,12 @@ export default async function Home() {
     'https://source.unsplash.com/featured/?palms'
   ]
 
+  let USERS_COUNT = 0
   const { data: users }: { data: UserProps[] } = await axios.get(`${API_URL}/users/all`)
+  // users count
+  if (users) {
+    USERS_COUNT = users.length
+  }
 
   return (
     <Layout>
@@ -35,7 +40,7 @@ export default async function Home() {
               <div className='bg-green-700 min-w-72 min-h-48 md:w-80 md:h-60 rounded-tr-[6.5rem] rounded-bl-[6.5rem] mb-80 -mr-52'>
                 <h1 className='text-white text-6xl font-bold p-12 pt-8 select-none counter'>
                   <small className='text-sm block text-right'>عدد العملاء</small>
-                  <Counter number={users.length} />
+                  <Counter number={USERS_COUNT} />
                   <span className='rotate-45 inline-block ml-2'>&times;</span>
                 </h1>
               </div>
