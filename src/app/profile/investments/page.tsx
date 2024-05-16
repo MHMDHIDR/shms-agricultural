@@ -54,6 +54,11 @@ export default async function DashboardInvestors() {
                 (project.stocks * projectProfit * project.newPercentage) / 100
               : project.stocks * projectProfit
 
+          const profitPerStock =
+            project.newPercentage > 0
+              ? projectProfit + (projectProfit * project.newPercentage) / 100
+              : projectProfit
+
           const mappedProject: InverstorProjectData = {
             projectId: project.shms_project_id,
             projectName,
@@ -63,6 +68,7 @@ export default async function DashboardInvestors() {
             profitCollectionDate,
             purchaseDate: project.createdAt,
             projectTerms,
+            profitPerStock,
             totalProfit
           }
 
@@ -137,6 +143,7 @@ export default async function DashboardInvestors() {
                         profitCollectionDate,
                         purchaseDate,
                         projectTerms,
+                        profitPerStock,
                         totalProfit
                       }) => {
                         const dataToShow = {
@@ -146,6 +153,7 @@ export default async function DashboardInvestors() {
                           projectName,
                           stocksPurchased: stocks,
                           totalAmount: totalPayment,
+                          profitPerStock,
                           totalProfit,
                           profitsCollectDate: profitCollectionDate,
                           purchaseDate,

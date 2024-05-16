@@ -81,6 +81,7 @@ const Invoice = ({
     investorEmail,
     stocksPurchased,
     totalAmount,
+    profitPerStock,
     totalProfit,
     profitsCollectDate,
     purchaseDate,
@@ -211,6 +212,16 @@ const Invoice = ({
                       color: '#333'
                     }}
                   >
+                    ربح السهم الواحد
+                  </th>
+                  <th
+                    style={{
+                      padding: '10px',
+                      textAlign: 'right',
+                      fontWeight: 'bold',
+                      color: '#333'
+                    }}
+                  >
                     الأرباح
                   </th>
                   <th
@@ -242,6 +253,9 @@ const Invoice = ({
                   </td>
                   <td style={{ padding: '10px', textAlign: 'right', color: '#333' }}>
                     {totalAmount}
+                  </td>
+                  <td style={{ padding: '10px', textAlign: 'right', color: '#333' }}>
+                    {profitPerStock}
                   </td>
                   <td style={{ padding: '10px', textAlign: 'right', color: '#333' }}>
                     {totalProfit}

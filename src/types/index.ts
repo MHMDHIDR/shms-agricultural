@@ -313,6 +313,7 @@ export type InverstorProjectData = {
   profitCollectionDate: Date
   projectTerms: string
   purchaseDate: string
+  profitPerStock: number
   totalProfit: number
 }
 
@@ -323,6 +324,7 @@ export type generatePDFProps = {
   investorEmail?: string
   stocksPurchased: number
   totalAmount: number
+  profitPerStock: number
   totalProfit: number
   purchaseDate: Date
   profitsCollectDate: Date
