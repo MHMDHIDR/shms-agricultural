@@ -16,6 +16,7 @@ import Account from '@/app/profile/investments/account'
 import { getAuth } from '@/lib/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
 import NotFound from '@/app/not-found'
+import Contract from '@/app/profile/investments/_ShowPDF'
 
 export default async function DashboardInvestors({
   params: { userId }
@@ -23,6 +24,8 @@ export default async function DashboardInvestors({
   params: { userId: string }
 }) {
   const { userType, loading } = await getAuth()
+
+  // To make sure the user is the investor -- للتأكد من ان المستخدم هو المستثمر المطلوب
   const user = (await getUser(userId)) as UserProps
   const projectsData: stocksPurchasedProps[] = JSON.parse(String(user.shms_user_stocks))
 
@@ -111,11 +114,9 @@ export default async function DashboardInvestors({
                     <TableHead className='text-center border border-gray-200 select-none min-w-60'>
                       تاريخ تسليم الأرباح
                     </TableHead>
-                    {!userId ? (
-                      <TableHead className='text-center border border-gray-200 select-none min-w-60'>
-                        عرض العقد
-                      </TableHead>
-                    ) : null}
+                    <TableHead className='text-center border border-gray-200 select-none min-w-60'>
+                      عرض العقد
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -129,35 +130,62 @@ export default async function DashboardInvestors({
                         totalPayment,
                         profitCollectionDate,
                         purchaseDate,
+                        projectTerms,
                         totalProfit
-                      }) => (
-                        <TableRow key={projectId}>
-                          <TableCell className='text-center border border-gray-200'>
-                            {projectName}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            {stocks}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            {formattedPrice(projectStockPrice)}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            {formattedPrice(totalPayment)}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            {formattedPrice(totalProfit)}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            {formattedPrice(totalProfit + totalPayment)}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            {getProjectDate(new Date(purchaseDate))}
-                          </TableCell>
-                          <TableCell className='text-center border border-gray-200'>
-                            {getProjectDate(new Date(profitCollectionDate))}
-                          </TableCell>
-                        </TableRow>
-                      )
+                      }) => {
+                        const dataToShow = {
+                          investorName: user?.shms_fullname,
+                          investorPhone: user?.shms_phone,
+                          investorEmail: user?.shms_email,
+                          projectName,
+                          stocksPurchased: stocks,
+                          totalAmount: totalPayment,
+                          totalProfit,
+                          profitsCollectDate: profitCollectionDate,
+                          purchaseDate,
+                          projectTerms,
+                          referenceCode: `#${
+                            user?.shms_id
+                          }#${projectId}#${new Date().getTime()}`
+                        }
+                        return (
+                          <TableRow key={projectId}>
+                            <TableCell className='text-center border border-gray-200'>
+                              {projectName}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              {stocks}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              {formattedPrice(projectStockPrice)}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              {formattedPrice(totalPayment)}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              {formattedPrice(totalProfit)}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              {formattedPrice(totalProfit + totalPayment)}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              {getProjectDate(new Date(purchaseDate))}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              {getProjectDate(new Date(profitCollectionDate))}
+                            </TableCell>
+                            <TableCell className='text-center border border-gray-200'>
+                              <Contract
+                                dataToShow={{
+                                  ...dataToShow,
+                                  purchaseDate: new Date(purchaseDate),
+                                  investorName: dataToShow.investorName || ''
+                                }}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        )
+                      }
                     )
                   })}
                 </TableBody>
