@@ -1,11 +1,11 @@
 'use server'
 
 import { Resend } from 'resend'
-import { ADMIN_EMAIL, SHMS_EMAIL as shmsEmail } from '@/data/constants'
+import { ADMIN_EMAIL, SHMS_EMAIL } from '@/data/constants'
 import { EmailTemplate } from '@/components/custom/email-template'
 import type { CreateEmailResponse, emailMethodProps } from '@/types'
 
-const { RESEND_API_KEY, SHMS_EMAIL } = process.env
+const { RESEND_API_KEY } = process.env
 
 async function email({ name, subject, from, to, msg }: emailMethodProps) {
   const resend = new Resend(RESEND_API_KEY)
@@ -13,7 +13,7 @@ async function email({ name, subject, from, to, msg }: emailMethodProps) {
   const { data, error: cause }: CreateEmailResponse = await resend.emails.send({
     to,
     from: `"${name ?? 'شمس للخدمات الزراعية | SHMS Agriculture'}" <${
-      SHMS_EMAIL ?? shmsEmail
+      'info@shmsagricultural.com' ?? SHMS_EMAIL
     }>`,
     subject,
     reply_to: from ?? ADMIN_EMAIL,
