@@ -7,7 +7,7 @@ export const APP_LOGO = 'https://shmsagricultural.com/logo-slogan.png'
 
 export const APP_LOGO_sm = 'https://shmsagricultural.com/logo.svg'
 
-export const SHMS_EMAIL = `info@shmsagriculture.com`
+export const SHMS_EMAIL = `info@shmsagricultural.com`
 
 export const SHMS_PHONE = `+974 6602 7723`
 
@@ -39,4 +39,4 @@ export const APP_URL =
 
 export const API_URL = APP_URL + '/api'
 
-export const ADMIN_EMAIL = 'info@shmsagriculture.com'
+export const ADMIN_EMAIL = 'info@shmsagricultural.com'
