@@ -8,6 +8,7 @@ import { UserProps } from '@/types'
 import Counter from '@/components/custom/Counter'
 import Divider from '@/components/custom/Divider'
 import ImageGallery from './dashboard/ImageGallery'
+import { NavigateTop } from '@/components/custom/NavigateTop'
 
 export default async function Home() {
   // get images from backend api (uploaded to dashboard by admin stored in AWS S3)
@@ -199,6 +200,7 @@ export default async function Home() {
         </h1>
         <ImageGallery />
       </section>
+      <NavigateTop />
     </Layout>
   )
 }

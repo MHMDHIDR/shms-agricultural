@@ -1,6 +1,7 @@
 import Layout from '@/components/custom/Layout'
 import Link from 'next/link'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
+import { NavigateTop } from '@/components/custom/NavigateTop'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -105,6 +106,7 @@ export default function TermsPage() {
             </Link>
           </p>
         </section>
+        <NavigateTop />
       </main>
     </Layout>
   )
