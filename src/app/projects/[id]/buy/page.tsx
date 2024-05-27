@@ -244,7 +244,11 @@ export default function BuyStocks({
               </div>
               <div className='md:w-2/3'>
                 <UserStockSelect
-                  userStockLimit={userStockLimit || 100}
+                  userStockLimit={
+                    project?.shms_project_available_stocks && userStockLimit
+                      ? Math.min(userStockLimit, project.shms_project_available_stocks)
+                      : userStockLimit || 100
+                  }
                   setSelectedStocks={setSelectedStocks}
                   selectedStocks={selectedStocks}
                 />

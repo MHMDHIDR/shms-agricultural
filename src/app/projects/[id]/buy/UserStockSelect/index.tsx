@@ -26,7 +26,7 @@ export default function UserStockSelect({
       </SelectTrigger>
       <SelectContent avoidCollisions={false}>
         {/*
-          الحصول على  عدد الأسهم من السيشن وحسابها من الحد الأقصى
+          الحصول على عدد الأسهم من السيشن وحسابها من الحد الأقصى
            لمخزون المستخدم إلى 1
         */}
         {Array.from({ length: userStockLimit }, (_, userStockLimitCounter) => (
