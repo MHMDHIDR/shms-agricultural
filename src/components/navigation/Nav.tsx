@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/navigation-menu'
 import useEventListener from '@/hooks/useEventListener'
 import { getAuth } from '@/lib/actions/auth'
-import { abstractWords, cn, getUser, redirect } from '@/lib/utils'
+import { abstractWords, cn, getUser } from '@/lib/utils'
 import type { MenuItemsProps, UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import { LogIn, LogOut } from 'lucide-react'
 import { signOut, useSession, type SessionContextValue } from 'next-auth/react'

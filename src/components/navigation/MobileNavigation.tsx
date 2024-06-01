@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
-import { abstractWords, cn, redirect } from '@/lib/utils'
+import { abstractWords, cn } from '@/lib/utils'
 import type { MenuItemsProps, UserLoggedInProps } from '@/types'
 import { LogOut } from 'lucide-react'
 import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
