@@ -32,8 +32,9 @@ export async function PUT(req: Request) {
         { status: 400 }
       )
     } else {
+      const anHour = 3600000
       const userResetPasswordToken = randomUUID()
-      const userCanResetPasswordUntil = new Date(Date.now() + 3600000) // 1 hour from signup time
+      const userCanResetPasswordUntil = new Date(Date.now() + anHour * 2)
 
       await connectDB(
         `UPDATE users
@@ -53,7 +54,7 @@ export async function PUT(req: Request) {
 
       const buttonLink = APP_URL + `/auth/activate/${userResetPasswordToken}`
 
-      //send the user an email with a link to reset his/her password
+      // send the user an email with a link to reset his/her password
       const emailData = {
         from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
         to: userEmail,
@@ -80,7 +81,7 @@ export async function PUT(req: Request) {
         if (data?.id) {
           return new Response(
             JSON.stringify({
-              message: `تم إرسال بريد الكتروني لتأكيد البريد الالكتروني الجديد، الرجاء إتباع التعليمات في البريد الالكتروني المرسل لكم في البريد الالكتروني الجديد...`,
+              message: `تم إرسال بريد الكتروني لتأكيد البريد الالكتروني الجديد، الرجاء إتباع التعليمات في البريد الالكتروني المرسل لكم في البريد الالكتروني الجديد... جاري تسجيل الخروج`,
               resetEmail: 1
             })
           )
@@ -100,13 +101,6 @@ export async function PUT(req: Request) {
           })
         )
       }
-
-      return new Response(
-        JSON.stringify({
-          message: `تم إرسال بريد الكتروني لتأكيد البريد الالكتروني الجديد، الرجاء إتباع التعليمات في البريد الالكتروني المرسل لكم في البريد الالكتروني الجديد`,
-          resetEmail: 1
-        })
-      )
     }
   } catch (error) {
     console.error(error)

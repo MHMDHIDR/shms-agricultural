@@ -2,7 +2,6 @@ import { connectDB } from '@/api/utils/db'
 import email from '@/lib/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps } from '@/types'
-import { ResultSetHeader } from 'mysql2/promise'
 
 export async function PUT(req: Request) {
   const body = await req.json()
@@ -43,55 +42,53 @@ export async function PUT(req: Request) {
       )
     } else {
       // activate user
-      const activateUser = (await connectDB(
+      await connectDB(
         `UPDATE users
           SET shms_user_account_status = ?, 
-            shms_user_reset_token_expires = NULL
-            WHERE shms_id = ?`,
+            shms_user_reset_token_expires = NULL,
+            shms_user_reset_token = NULL
+            WHERE shms_user_reset_token = ?`,
         ['active', userId]
-      )) as ResultSetHeader
+      )
 
-      const { affectedRows: isActivated } = activateUser as ResultSetHeader
+      //send the user an email with a link to activate his/her account
+      const buttonLink = APP_URL + `/auth/signin`
 
-      if (isActivated) {
-        //send the user an email with a link to activate his/her account
-        const buttonLink = APP_URL + `/auth/signin`
-
-        const emailData = {
-          from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
-          to: user?.shms_email,
-          subject: 'تم تفعيل حسابك بنجاح | شمس للخدمات الزراعية',
-          msg: {
-            title: 'مرحباً بك في شمس للخدمات الزراعية',
-            msg: `
+      const emailData = {
+        from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
+        to: user?.shms_email,
+        subject: 'تم تفعيل حسابك بنجاح | شمس للخدمات الزراعية',
+        msg: {
+          title: 'مرحباً بك في شمس للخدمات الزراعية',
+          msg: `
             <h1 style="font-weight:bold">مرحباً ${user?.shms_fullname},</h1>
             <p>
              شكراً لتسجيلك في شمس للخدمات الزراعي،
              تم تفعيل حسابك بنجاح، يمكنك الآن تسجيل الدخول إلى حسابك من خلال الرابط أدناه:
             </p>`,
-            buttonLink,
-            buttonLabel: 'تسجيل الدخول'
-          }
+          buttonLink,
+          buttonLabel: 'تسجيل الدخول'
         }
+      }
 
-        const data = await email(emailData)
-        if (data?.id) {
-          return new Response(
-            JSON.stringify({
-              userActivated: 1,
-              message: `تم إرسال بريد الكتروني لتأكيد تفعيل حساب المستخدم، يمكنك تسجيل الدخول بنجاح 👍🏼`
-            }),
-            { status: 201 }
-          )
-        } else {
-          return new Response(
-            JSON.stringify({
-              userActivated: 0,
-              message: `عفواً، لم يتم إرسال بريد الكتروني لتأكيد تفعيل حساب المستخدم!`
-            }),
-            { status: 500 }
-          )
-        }
+      const data = await email(emailData)
+
+      if (data?.id) {
+        return new Response(
+          JSON.stringify({
+            userActivated: 1,
+            message: `تم إرسال بريد الكتروني لتأكيد تفعيل حساب المستخدم، يمكنك تسجيل الدخول بنجاح 👍🏼`
+          }),
+          { status: 201 }
+        )
+      } else {
+        return new Response(
+          JSON.stringify({
+            userActivated: 0,
+            message: `عفواً، لم يتم إرسال بريد الكتروني لتأكيد تفعيل حساب المستخدم!`
+          }),
+          { status: 500 }
+        )
       }
     }
   } catch (err) {

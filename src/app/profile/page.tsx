@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { CardWrapper } from '@/components/auth/card-wrapper'
@@ -21,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ModeToggle } from '@/components/navigation/ModeToggle'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-import { validatePasswordStrength, validateEmail } from '@/lib/utils'
+import { validatePasswordStrength, validateEmail, redirect } from '@/lib/utils'
 import { toast } from 'sonner'
 import { API_URL, APP_URL, DEFAULT_DURATION } from '@/data/constants'
 import axios from 'axios'
@@ -64,8 +63,6 @@ export default function ProfilePage() {
 
   const [isSubmittingPasswordForm, setIsSubmittingPasswordForm] = useState<boolean>(false)
   const [isSubmittingEmailForm, setIsSubmittingEmailForm] = useState<boolean>(false)
-
-  const { replace } = useRouter()
 
   function resetFormErrors() {
     setCurrentError('')
@@ -150,13 +147,10 @@ export default function ProfilePage() {
                 textAlign: 'justify'
               }
             })
-
-        revalidatePath('/', 'layout')
-
-        setTimeout(() => replace(`/profile`), DEFAULT_DURATION / 2)
       } catch (error: any) {
         const message: UserProps['message'] =
           error?.response.data.message ?? 'عفواً! حدث خطأ غير متوقع حاول مرة أخرى'
+
         //handle error, show notification using Shadcn notifcation
         toast(message, {
           icon: <Error className='w-6 h-6 ml-3' />,
@@ -260,9 +254,18 @@ export default function ProfilePage() {
     }
   }
 
+  const handleSignOut = async () => {
+    localStorage.removeItem('shms_user_data')
+    try {
+      await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
+    } catch (error) {
+      console.error('Sign-out error:', error)
+    }
+  }
+
   return !session ? (
     <NotFound />
-  ) :
+  ) : (
     <Layout>
       <CardWrapper
         heading={''}
@@ -317,6 +320,7 @@ export default function ProfilePage() {
                         className={`font-bold ${
                           isSubmittingEmailForm ? 'cursor-not-allowed opacity-50' : ''
                         }`}
+                        onClick={handleSignOut}
                       >
                         {isSubmittingEmailForm ? (
                           <>
@@ -417,4 +421,5 @@ export default function ProfilePage() {
         </div>
       </CardWrapper>
     </Layout>
+  )
 }

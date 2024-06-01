@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button'
 import { MenuToggler } from './MenuToggler'
 import MobileNavigation from './MobileNavigation'
 import { Skeleton } from '@/components/ui/skeleton'
+import { APP_URL } from '@/data/constants'
 
 export default function Nav() {
   const {
@@ -118,6 +119,15 @@ export default function Nav() {
     setOnMobileScreen(WINDOW_WIDTH < MOBILE_SCREEN)
   }, [WINDOW_WIDTH])
 
+  const handleSignOut = async () => {
+    localStorage.removeItem('shms_user_data')
+    try {
+      await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
+    } catch (error) {
+      console.error('Sign-out error:', error)
+    }
+  }
+
   return (
     <header
       className={`container sticky rtl bg-gray-100 dark:bg-gray-900 z-[999] w-screen min-w-full animate-slidedown border-b py-0 border-white border-opacity-20 dark:bg-opacity-30 bg-opacity-70 backdrop-blur backdrop-filter`}
@@ -182,11 +192,7 @@ export default function Nav() {
 
                       <Button
                         className='flex w-full cursor-pointer gap-x-2'
-                        onClick={async () => {
-                          localStorage.removeItem('shms_user_data')
-                          redirect('/auth/signin', 0)
-                          await signOut({ redirect: false })
-                        }}
+                        onClick={handleSignOut}
                       >
                         <LogOut className='text-[#FDB813] dark:text-[#ffd87e]' />
                         <span className='hidden text-white md:inline-block min-w-fit dark:text-black'>

@@ -11,6 +11,7 @@ import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { NavigationListItem } from '../ui/navigation-menu'
+import { APP_URL } from '@/data/constants'
 
 export default function MobileNavigation({
   isOpen,
@@ -42,6 +43,15 @@ export default function MobileNavigation({
       })
     )
   }, [session?.token?.user.fullname])
+
+  const handleSignOut = async () => {
+    localStorage.removeItem('shms_user_data')
+    try {
+      await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
+    } catch (error) {
+      console.error('Sign-out error:', error)
+    }
+  }
 
   return (
     <Accordion
@@ -103,11 +113,7 @@ export default function MobileNavigation({
               <>
                 <NavigationListItem
                   className='flex items-center justify-start md:gap-1'
-                  onClick={async () => {
-                    localStorage.removeItem('shms_user_data')
-                    await signOut({ redirect: false })
-                    redirect('/auth/signin', 0)
-                  }}
+                  onClick={handleSignOut}
                 >
                   <span className='inline md:hidden dark:text-white'>تسجيل الخروج</span>
                   <LogOut className='text-[#FDB813] inline-block dark:text-[#ffd87e] mr-2' />
