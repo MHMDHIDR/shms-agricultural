@@ -19,13 +19,21 @@ function getConnectionPool() {
   return connectionPool
 }
 
+function formatDateForMySQL(date: Date): string {
+  return date.toISOString().slice(0, 19).replace('T', ' ')
+}
+
 export async function connectDB(query: string, data: any[] | undefined = []) {
   try {
     const pool = getConnectionPool()
     const connection = await pool.getConnection()
 
-    const [rows] = data.length
-      ? await connection.execute(query, data)
+    const formattedData = data.map(item =>
+      item instanceof Date ? formatDateForMySQL(item) : item
+    )
+
+    const [rows] = formattedData.length
+      ? await connection.execute(query, formattedData)
       : await connection.execute(query)
 
     connection.release()

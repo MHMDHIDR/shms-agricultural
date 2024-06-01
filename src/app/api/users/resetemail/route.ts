@@ -33,7 +33,7 @@ export async function PUT(req: Request) {
       )
     } else {
       const userResetPasswordToken = randomUUID()
-      const userCanResetPasswordUntil = new Date(Date.now() + 3600000).toISOString() // 1 hour from signup time
+      const userCanResetPasswordUntil = new Date(Date.now() + 3600000) // 1 hour from signup time
 
       await connectDB(
         `UPDATE users
@@ -51,6 +51,8 @@ export async function PUT(req: Request) {
         ]
       )
 
+      const buttonLink = APP_URL + `/auth/activate/${userResetPasswordToken}`
+
       //send the user an email with a link to reset his/her password
       const emailData = {
         from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
@@ -62,20 +64,13 @@ export async function PUT(req: Request) {
             <br /><br />
             تم تغيير البريد الاكتروني الخاص بك بنجاح، يرجى الضغط على تفعيل البريد الالكتروني في الزر أدناه لتفعيل تسجيل الدخول باستخدام البريد الاكتروني الجديد.
 
-            <a href="${APP_URL}/auth/activate/${userResetPasswordToken}"
-              class="cta__button"
-              style="background: #008f1f;text-decoration: none !important;font-weight:700;margin-top:35px;color:#fff;font-size:14px;padding:10px 64px;display:inline-block;border-radius: 50px;"
-              target="_blank">
-              تفعيل البريد الالكتروني الجديد
-            </a>
-            
-            <br /><br />
-            إذا لم تقم بعمل هذا الإجراء، فيرجى الاتصال بنا على الفور على البريد الإلكتروني التالي: ${ADMIN_EMAIL}
-            <br /><br />
+            <strong>إذا لم تقم بعمل هذا الإجراء، فيرجى الاتصال بنا على الفور على البريد الإلكتروني التالي: ${ADMIN_EMAIL}</strong>
 
             شكراً لك.
-            <br /><br />
-            <small>لا حاجة للرد على هذا البريد الإلكتروني.</small>`
+            <br />
+            <small>لا حاجة للرد على هذا البريد الإلكتروني.</small>`,
+          buttonLink,
+          buttonLabel: 'تفعيل البريد الالكتروني الجديد'
         }
       }
 
