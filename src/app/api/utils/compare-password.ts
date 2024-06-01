@@ -10,8 +10,8 @@ export const ComparePasswords = async (
   userNewPassword: string
 ) => {
   try {
-    const isMatchingPasswords = await compare(userNewPassword, userStoredPassword)
-    return isMatchingPasswords
+    // return isMatchingPasswords
+    return await compare(userNewPassword, userStoredPassword)
   } catch (error) {
     throw new Error(`Error during Checking Passwords: ${error})`)
   }
