@@ -55,12 +55,10 @@ export default function ProfilePage() {
   const [current, setCurrent] = useState('')
   const [password, setPassword] = useState('')
   const [comfirm_password, setComfirm_password] = useState('')
-
   const [emailError, setEmailError] = useState('')
   const [currentError, setCurrentError] = useState('')
   const [passError, setPassError] = useState('')
   const [comfirm_passwordError, setComfirm_passwordError] = useState('')
-
   const [isSubmittingPasswordForm, setIsSubmittingPasswordForm] = useState<boolean>(false)
   const [isSubmittingEmailForm, setIsSubmittingEmailForm] = useState<boolean>(false)
 
@@ -271,14 +269,14 @@ export default function ProfilePage() {
         heading={''}
         backButtonLabel='الذهاب للصفحة الرئيسية'
         backButtonHref='/'
-        className='md:w-[50rem] mt-[10rem] mx-auto'
+        className='md:w-[50rem] mt-16 mx-auto'
       >
         <div className='flex flex-col items-center justify-center'>
           <Button
             asChild
             className='font-bold text-white bg-purple-500 shadow w-96 min-w-56 hover:bg-purple-400 focus:shadow-outline focus:outline-none'
           >
-            <Link href='/projects'>الذهاب إلـــى المشاريع</Link>
+            <Link href='/profile/investments'>الذهاب إلـــى لوحة التحكم</Link>
           </Button>
 
           <div dir='rtl' className='my-6 md:flex md:items-center md:my-10'>
