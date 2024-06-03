@@ -17,35 +17,26 @@ import DataTable from '@/components/custom/DataTable'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
 import { LoadingPage } from '@/components/custom/Loading'
-import { getAuth } from '@/lib/actions/auth'
 
 export default function Users() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
   const [users, setUsers] = useState<UserProps[]>([])
-  const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const getUserData = async () => {
-      const { userType, loading } = await getAuth()
-      setUserType(userType)
-      setLoading(loading)
-
-      if (!loading) {
-        const { data: users }: { data: UserProps[] } = await axios.get(
-          `${API_URL}/users/all`
-        )
-        setUsers(users)
-      }
+      const { data: users }: { data: UserProps[] } = await axios.get(
+        `${API_URL}/users/all`
+      )
+      setUsers(users)
     }
 
     getUserData()
   }, [session])
 
-  return loading ? (
-    <LoadingPage />
-  ) : !session && userType === 'user' ? (
+  return !session || session.token?.user.shms_user_account_type !== 'admin' ? (
     <NotFound />
+  ) : !session.token ? (
+    <LoadingPage />
   ) : (
     <Layout>
       <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>العمــلاء</h1>

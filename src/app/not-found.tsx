@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <section className='fixed inset-0 z-[10000] select-none pointer-events-auto min-h-svh h-screen'>
+    <section className='absolute inset-0 z-[10000] select-none pointer-events-auto min-h-svh max-h-screen'>
       <div className='w-full bg-yellow-300 h-3/4'></div>
       <div className='relative flex w-full bg-yellow-400 justify-evenly h-1/3'>
         <div className='maceta-central left-[5.65rem]'>
