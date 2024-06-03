@@ -279,9 +279,9 @@ export default function Projects() {
     setProjectDescriptionError('')
   }
 
-  return !session || session.token?.user.shms_user_account_type !== 'admin' ? (
+  return session === undefined ? (
     <NotFound />
-  ) : !session.token ? (
+  ) : session === null || session.token?.user.shms_user_account_type !== 'admin' ? (
     <LoadingPage />
   ) : (
     <Layout>
