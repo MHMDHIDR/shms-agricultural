@@ -23,10 +23,10 @@ import {
 } from '@/data/constants'
 import { validateFile } from '@/lib/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
-import type { ProjectProps, UserLoggedInProps } from '@/types'
+import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
+import { /*redirect,*/ useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import ProjectsTable from './ProjectsTabel'
@@ -35,6 +35,7 @@ import Layout from '@/components/custom/Layout'
 import DashboardNav from '../DashboardNav'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
+import { getAuth } from '@/lib/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
 
 export default function Projects() {
@@ -55,6 +56,18 @@ export default function Projects() {
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
   const [projectAdded, setProjectAdded] = useState<number>(0)
+  const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const { userType, loading } = await getAuth()
+      if (loading) return
+
+      setUserType(userType)
+    }
+
+    getUserData()
+  }, [session])
 
   const onCaseStudyFileAdd = (e: { target: { files: any } }) => {
     setCaseStudyFile(Array.from(e.target.files))
@@ -279,9 +292,9 @@ export default function Projects() {
     setProjectDescriptionError('')
   }
 
-  return session === undefined ? (
+  return (session && userType === 'user') || (!session && userType === 'user') ? (
     <NotFound />
-  ) : session === null || session.token?.user.shms_user_account_type !== 'admin' ? (
+  ) : !session && userType === 'admin' ? (
     <LoadingPage />
   ) : (
     <Layout>
