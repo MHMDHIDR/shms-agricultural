@@ -5,7 +5,7 @@ import { signOut, useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Error, Success } from '@/components/icons/Status'
-import type { UserLoggedInProps, UserProps } from '@/types'
+import type { UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import {
   Card,
   CardContent,
@@ -37,6 +37,7 @@ export default function ProfilePage() {
 
   const [fullname, setFullname] = useState('')
   const [currentEmail, setCurrentEmail] = useState('')
+  const [localUser, setLocalUser] = useState<getAuthType>()
 
   useEffect(() => {
     setCurrentEmail(session?.token?.user.shms_email ?? '')
@@ -49,6 +50,14 @@ export default function ProfilePage() {
     }
 
     getUserData()
+
+    // Load user using localStorage.getItem('shms_user_data')
+    const storedEmail = JSON.parse(localStorage.getItem('shms_user_data') ?? '{}')
+    if (storedEmail) {
+      setLocalUser(storedEmail as unknown as getAuthType) // Fix: Explicitly cast the stored email to the expected type
+    } else {
+      setLocalUser(session?.token?.user.shms_email as unknown as getAuthType) // Fix: Explicitly cast the email to the expected type
+    }
   }, [session])
 
   const [email, setEmail] = useState('')
@@ -290,7 +299,7 @@ export default function ProfilePage() {
                   <form onSubmit={handleRenewEmail}>
                     <CardHeader>
                       <CardTitle dir='rtl'>
-                        الاسم : {session?.token?.user.fullname ?? ''}
+                        الاسم : {localUser?.userName ?? fullname}
                       </CardTitle>
                       <CardDescription dir='rtl'>تحديث البيانات الشخصية</CardDescription>
                     </CardHeader>
@@ -301,7 +310,7 @@ export default function ProfilePage() {
                         <Input
                           id='email'
                           onChange={e => setEmail(e.target.value)}
-                          defaultValue={session?.token?.user.shms_email ?? ''}
+                          defaultValue={localUser?.userEmail ?? currentEmail}
                         />
                       </div>
                     </CardContent>
