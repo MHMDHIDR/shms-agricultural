@@ -130,7 +130,7 @@ export default function Nav() {
 
   return (
     <header
-      className={`container sticky rtl bg-gray-100 dark:bg-gray-900 z-[999] w-screen min-w-full animate-slidedown border-b py-0 border-white border-opacity-20 dark:bg-opacity-30 bg-opacity-70 backdrop-blur backdrop-filter`}
+      className={`container rtl bg-gray-100 dark:bg-gray-900 z-[999] w-screen min-w-full animate-slidedown border-b py-0 border-white border-opacity-20 dark:bg-opacity-30 bg-opacity-70 backdrop-blur backdrop-filter`}
     >
       <NavigationMenu className='items-center justify-start w-full max-w-full md:flex rtl'>
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />

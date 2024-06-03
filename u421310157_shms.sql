@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 27, 2024 at 10:25 PM
+-- Generation Time: Jun 03, 2024 at 10:05 AM
 -- Server version: 10.11.7-MariaDB-cll-lve
 -- PHP Version: 7.2.34
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `u421310157_shms`
 --
+CREATE DATABASE IF NOT EXISTS `u421310157_shms` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `u421310157_shms`;
 
 -- --------------------------------------------------------
 
@@ -96,7 +98,7 @@ INSERT INTO `users` (`shms_sn`, `shms_id`, `shms_fullname`, `shms_nationality`, 
 (5, 'deb28d13-5168-4d72-82eb-ae7166a8abe3', 'Hamza Ibrahim Hamza Elhussain', 'السودان', '1997-02-23', 'الدوحه قطر ', 'hamzaelhussain31@gmail.com', '$2a$10$xg/v2OzX0/tcnw33VaOe2OiCFWtS3ixvuf3k9m8CtPa7YG1DSgTuq', '97455358149', 'https://shms-uploads.s3.eu-west-2.amazonaws.com/hamza-ibrahim-hamza-elhussaina3ac5f92-8feb-420b-bc8b-77c3a6fc3920.jpeg-SHMS-deb28d13-5168-4d72-82eb-ae7166a8abe3', NULL, 20, 0, 0, '2024-02-08', 'user', 'active', NULL, NULL),
 (6, '06a89eb6-ac40-44ed-a320-7e7479e916b1', 'راجي خالد محمد بريمه', 'السودان', '1988-05-21', 'الدوحة - معيذر', 'rajykhaled@gmail.com', '$2a$10$a0TYk/iwDZGscA.aXhTZHeyC7Ch.ahMWuE7PWpg3i6wUqL6xvvvb.', '97470072716', 'https://shms-uploads.s3.eu-west-2.amazonaws.com/راجي-خالد-محمد-بريمه17074988204575803361860198978054.jpg-SHMS-06a89eb6-ac40-44ed-a320-7e7479e916b1', NULL, 20, 0, 0, '2024-02-09', 'user', 'active', NULL, NULL),
 (7, '5ec07077-fcf1-46f9-afc9-fb9dc7ea362d', 'عثمان  الفاضل عثمان محمد', 'السودان', '1988-01-01', 'قطر الريان معيذر', 'osmanalfadil767@gmail.com', '$2a$10$RMkOoDNaPc9VqwhwUDNTBepsJGB9cUvJcnzoBbne.IDTyPIJs5yLi', '97433510952', 'https://shms-uploads.s3.eu-west-2.amazonaws.com/عثمان-الفاضل-عثمان-محمد580EA822-4DCE-4003-BE91-1B9606C03BCA.jpeg-SHMS-5ec07077-fcf1-46f9-afc9-fb9dc7ea362d', NULL, 20, 0, 0, '2024-02-09', 'user', 'active', NULL, NULL),
-(8, '05761c95-17db-43c5-9784-fa7d9c0ce6b4', 'أحمد سيف الدين النميري الغزالي', 'السودان', '1998-07-10', '', 'aelghazaliii@gmail.com', '$2a$10$ejV5AszxP/kUwx8LS/tdWeLxe7dLfehtdv4dIvMVfI.Xpn0NVup56', '97477711168', 'https://shms-uploads.s3.eu-west-2.amazonaws.com/أحمد-سيف-الدين-النميري-الغزاليIMG_3518.jpeg-SHMS-05761c95-17db-43c5-9784-fa7d9c0ce6b4', NULL, 25, 70000, 20000, '2024-02-10', 'user', 'active', NULL, NULL),
+(8, '05761c95-17db-43c5-9784-fa7d9c0ce6b4', 'أحمد سيف الدين النميري الغزالي', 'السودان', '1998-07-10', '', 'aelghazaliii@gmail.com', '$2a$10$ejV5AszxP/kUwx8LS/tdWeLxe7dLfehtdv4dIvMVfI.Xpn0NVup56', '97477711168', 'https://shms-uploads.s3.eu-west-2.amazonaws.com/أحمد-سيف-الدين-النميري-الغزاليIMG_3518.jpeg-SHMS-05761c95-17db-43c5-9784-fa7d9c0ce6b4', NULL, 50, 70000, 20000, '2024-02-10', 'user', 'active', NULL, NULL),
 (9, '54dd564b-84be-4148-8077-d8cfb38c4d9e', 'Kamal Alrayah Ahmed  Alkejem', 'السودان', '2000-09-12', 'Doha', 'kamalalrayah1999@gmail.com', '$2a$10$1jYZ0CJdGPn.N3gvpWOguO3GZ1VTCaXDpaiSYDbUmMuQ0airtOLDy', '97477377044', 'https://shms-uploads.s3.eu-west-2.amazonaws.com/kamal-alrayah-ahmed-alkejemIMG_4011.jpeg-SHMS-54dd564b-84be-4148-8077-d8cfb38c4d9e', NULL, 25, 83000, 83000, '2024-02-14', 'user', 'active', NULL, NULL),
 (10, '48b64c0c-b4ce-438e-b46b-2207ba99dea1', 'حمود محمد اليهري  اليافعي ', 'دولة قطر', '1986-01-17', '', 'bohamad558@gmail.com', '$2a$10$9R1asYMvJ5YN5c3d01sxK.BFKL.tJygUB/6iRzzr15EW/.OMYG7dS', '97455855180', 'https://shms-uploads.s3.eu-west-2.amazonaws.com/حمود-محمد-اليهري-اليافعي-image.jpg-SHMS-48b64c0c-b4ce-438e-b46b-2207ba99dea1', '[{\"shms_project_id\":\"a446d84c-0082-42e2-a929-cddf84bc552f\",\"stocks\":40,\"newPercentage\":50,\"percentageCode\":\"WQO0MLV\",\"createdAt\":\"2024-02-26T12:05:47.592Z\"},{\"shms_project_id\":\"a446d84c-0082-42e2-a929-cddf84bc552f\",\"stocks\":16,\"newPercentage\":50,\"percentageCode\":\"Yjdw498\",\"createdAt\":\"2024-04-30T07:39:32.360Z\"}]', 40, 175000, 0, '2024-02-17', 'user', 'active', NULL, NULL),
 (11, '131b748d-f8e5-4eb0-b094-9f1cd67ec030', 'عبدالعزيز  حاتم عباس البشير', 'السودان', '1998-02-19', '', 'abdalazizhatim98@gmail.com', '$2a$10$y/gfFMQjFeKyNwY4fajJbe7wPncNYuYFJd5khuC9XNNwIOVE5Nb6.', '97466034830', 'https://shms-uploads.s3.eu-west-2.amazonaws.com/عبدالعزيز-حاتم-عباس-البشيرinbound6515620707519109357.pdf-SHMS-131b748d-f8e5-4eb0-b094-9f1cd67ec030', NULL, 20, 0, 0, '2024-02-20', 'user', 'active', NULL, NULL),
