@@ -115,7 +115,7 @@ const Contact = () => {
 
   return (
     <Layout>
-      <section className='flex items-center justify-center h-screen min-h-screen p-4 mt-16 md:mt-52 mb-52'>
+      <section className='flex items-center justify-center h-screen min-h-screen p-4 mt-4 md:mt-16 mb-16'>
         <CardWrapper
           heading='تواصل معنا'
           headerLabel=''
