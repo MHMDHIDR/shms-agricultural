@@ -12,9 +12,7 @@ export async function PUT(req: Request) {
   try {
     // Check if user exists
     const user = (
-      (await connectDB(`SELECT * FROM users WHERE shms_user_reset_token = ?`, [
-        userId
-      ])) as UserProps[]
+      (await connectDB(`SELECT * FROM users WHERE shms_id = ?`, [userId])) as UserProps[]
     )[0]
 
     // If user does not exist
