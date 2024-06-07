@@ -24,18 +24,21 @@ export async function PUT(req: Request) {
     }
 
     // If user exists but already activated
-    if (user && new Date() >= new Date(user.shms_user_reset_token_expires!)) {
-      return new Response(
-        JSON.stringify({ userAdded: 0, message: 'انتهت صلاحية رابط تفعيل الحساب!' }),
-        { status: 400 }
-      )
-    } else if (
+    if (
       user.shms_user_reset_token_expires === null &&
       (user.shms_user_account_status === 'active' ||
         user.shms_user_account_status === 'block')
     ) {
       return new Response(
         JSON.stringify({ userAdded: 0, message: 'الحساب مفعل سابقاً' }),
+        { status: 400 }
+      )
+    } else if (
+      user &&
+      new Date() >= new Date(user.shms_user_reset_token_expires as number)
+    ) {
+      return new Response(
+        JSON.stringify({ userAdded: 0, message: 'انتهت صلاحية رابط تفعيل الحساب!' }),
         { status: 400 }
       )
     } else {
