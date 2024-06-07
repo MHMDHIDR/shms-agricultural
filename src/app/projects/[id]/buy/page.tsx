@@ -75,9 +75,9 @@ export default function BuyStocks({
       const getUserWithdrawableAmount = async () => {
         try {
           const {
-            data: { withdrawableAmount }
+            data: { shms_user_stocks }
           }: {
-            data: { withdrawableAmount: UserProps['shms_user_total_balance'] }
+            data: { shms_user_stocks: UserProps['shms_user_stock_limit'] }
           } = await axios.get(`${API_URL}/users/getUserStocks/${userId}`)
 
           // set one single property in the localStorage shms_user_data withdrawableAmount to the withdrawableAmount
@@ -85,7 +85,7 @@ export default function BuyStocks({
             'shms_user_data',
             JSON.stringify({
               ...JSON.parse(localStorage.getItem('shms_user_data') as string),
-              withdrawableAmount
+              userStockLimit: shms_user_stocks
             })
           )
         } catch (error) {
