@@ -1,7 +1,7 @@
 import { connectDB } from '@/api/utils/db'
 import { ADMIN_EMAIL, APP_TITLE, APP_URL } from '@/data/constants'
 import type { ProjectProps, UserProps, stocksPurchasedProps } from '@/types'
-import email from '@/lib/actions/email'
+import email from '@/libs/actions/email'
 import { ResultSetHeader } from 'mysql2/promise'
 
 export async function PATCH(req: Request) {

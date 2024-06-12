@@ -18,7 +18,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { API_URL, APP_LOGO } from '@/data/constants'
-import { arabicDate, formattedPrice, getProject } from '@/lib/utils'
+import { arabicDate, formattedPrice, getProject } from '@/libs/utils'
 import type { UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 import { Suspense } from 'react'
@@ -26,7 +26,7 @@ import PurchesedStocks from './investors/PurchesedStocks'
 import Layout from '@/components/custom/Layout'
 import DashboardNav from './DashboardNav'
 import NotFound from '@/app/not-found'
-import { getAuth } from '@/lib/actions/auth'
+import { getAuth } from '@/libs/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
 
 export default async function DashboardInvestors() {

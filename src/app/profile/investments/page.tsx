@@ -11,8 +11,8 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { API_URL } from '@/data/constants'
-import { getAuth } from '@/lib/actions/auth'
-import { formattedPrice, getProject, getProjectDate } from '@/lib/utils'
+import { getAuth } from '@/libs/actions/auth'
+import { formattedPrice, getProject, getProjectDate } from '@/libs/utils'
 import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 import Contract from './_ShowPDF'

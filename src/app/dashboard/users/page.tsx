@@ -17,7 +17,7 @@ import DataTable from '@/components/custom/DataTable'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
 import { LoadingPage } from '@/components/custom/Loading'
-import { getAuth } from '@/lib/actions/auth'
+import { getAuth } from '@/libs/actions/auth'
 
 export default function Users() {
   const { data: session }: { data: UserLoggedInProps } = useSession()

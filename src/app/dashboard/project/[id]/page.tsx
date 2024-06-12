@@ -23,7 +23,7 @@ import {
   getProject,
   getProjectStatus,
   validateFile
-} from '@/lib/utils'
+} from '@/libs/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -40,7 +40,7 @@ import NotFound from '@/app/not-found'
 import { LoadingPage } from '@/components/custom/Loading'
 import ProjectCondition from './ProjectCondition'
 import DashboardNav from '@/app/dashboard/DashboardNav'
-import { getAuth } from '@/lib/actions/auth'
+import { getAuth } from '@/libs/actions/auth'
 
 export default function EditProjectPage({
   params: { id: projectId }

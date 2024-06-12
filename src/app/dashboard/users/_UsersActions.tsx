@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { ConfirmDialog } from '@/components/custom/ConfirmDialog'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import { redirect } from '@/lib/utils'
+import { redirect } from '@/libs/utils'
 import { toast } from 'sonner'
 import { Error, Success } from '@/components/icons/Status'
 import { useEffect, useState } from 'react'

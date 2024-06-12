@@ -3,7 +3,7 @@
 import { ConfirmDialog } from '@/components/custom/ConfirmDialog'
 import { Success, Error } from '@/components/icons/Status'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import { redirect } from '@/lib/utils'
+import { redirect } from '@/libs/utils'
 import axios from 'axios'
 import { useState } from 'react'
 import { toast } from 'sonner'

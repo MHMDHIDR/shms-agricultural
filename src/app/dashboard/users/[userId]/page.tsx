@@ -10,10 +10,10 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { formattedPrice, getProject, getProjectDate, getUser } from '@/lib/utils'
+import { formattedPrice, getProject, getProjectDate, getUser } from '@/libs/utils'
 import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import Account from '@/app/profile/investments/account'
-import { getAuth } from '@/lib/actions/auth'
+import { getAuth } from '@/libs/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
 import NotFound from '@/app/not-found'
 import Contract from '@/app/profile/investments/_ShowPDF'
@@ -66,7 +66,7 @@ export default async function DashboardInvestors({
         purchaseDate: projectData.createdAt,
         projectTerms,
         profitPerStock,
-        totalProfit,
+        totalProfit
       }
       // Return an array containing the mapped project data
       return [mappedProject]

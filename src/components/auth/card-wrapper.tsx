@@ -3,7 +3,7 @@
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Header } from '@/components/auth/header'
 import { BackButton } from '@/components/auth/back-button'
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 
 interface CardWrapperProps {
   children: React.ReactNode

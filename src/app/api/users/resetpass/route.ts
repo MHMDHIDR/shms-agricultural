@@ -1,6 +1,6 @@
 import { connectDB } from '@/api/utils/db'
 import { genSalt, hash } from 'bcryptjs'
-import email from '@/lib/actions/email'
+import email from '@/libs/actions/email'
 import type { UserProps } from '@/types'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import { ComparePasswords } from '@/api/utils/compare-password'

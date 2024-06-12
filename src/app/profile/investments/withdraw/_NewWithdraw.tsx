@@ -14,7 +14,7 @@ import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import type { UserProps, getAuthType } from '@/types'
 import { TabsContent } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
-import { formattedPrice } from '@/lib/utils'
+import { formattedPrice } from '@/libs/utils'
 
 export default function NewWithdraw() {
   const { userId, withdrawableAmount }: getAuthType =

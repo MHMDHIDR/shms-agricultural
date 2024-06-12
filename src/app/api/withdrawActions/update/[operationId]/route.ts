@@ -1,9 +1,9 @@
 // /withdrawActions/update/[operationId]
 import { connectDB } from '@/api/utils/db'
-import email from '@/lib/actions/email'
+import email from '@/libs/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import type { UserProps, accountingOperationsProps } from '@/types'
-import { arabicDate } from '@/lib/utils'
+import { arabicDate } from '@/libs/utils'
 
 export async function PATCH(
   req: Request,

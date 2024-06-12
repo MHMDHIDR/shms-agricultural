@@ -8,8 +8,8 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { getProjectDate, getProjectStatus, getUserMoneyOperations } from '@/lib/utils'
-import { getAuth } from '@/lib/actions/auth'
+import { getProjectDate, getProjectStatus, getUserMoneyOperations } from '@/libs/utils'
+import { getAuth } from '@/libs/actions/auth'
 import { accountingOperationsProps } from '@/types'
 import {
   Card,

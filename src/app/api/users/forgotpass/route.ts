@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 import { connectDB } from '@/api/utils/db'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import email from '@/lib/actions/email'
+import email from '@/libs/actions/email'
 import type { UserProps } from '@/types'
 
 export async function POST(req: Request) {

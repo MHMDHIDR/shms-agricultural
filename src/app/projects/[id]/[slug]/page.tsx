@@ -9,7 +9,7 @@ import {
   getProjectDuration,
   getProjectStudyCase,
   removeSlug
-} from '@/lib/utils'
+} from '@/libs/utils'
 import { BadgeDollarSign, LineChart, MapPin, TimerIcon, TimerReset } from 'lucide-react'
 import Link from 'next/link'
 import type { imgsProps } from '@/types'

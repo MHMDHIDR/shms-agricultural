@@ -12,7 +12,7 @@ import {
   validatePasswordStrength,
   validatePhone,
   scrollToView
-} from '@/lib/utils'
+} from '@/libs/utils'
 import type { UserLoggedInProps, UserProps, shms_formSignupDataProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'

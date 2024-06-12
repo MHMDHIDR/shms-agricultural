@@ -1,7 +1,7 @@
 'use client'
 
 import { DEFAULT_DURATION } from '@/data/constants'
-import { validatePasswordStrength, redirect as redirectPage } from '@/lib/utils'
+import { validatePasswordStrength, redirect as redirectPage } from '@/libs/utils'
 import type { UserLoggedInProps, UserProps } from '@/types'
 import { EyeClosedIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { EyeIcon } from 'lucide-react'

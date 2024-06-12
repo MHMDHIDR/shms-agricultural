@@ -1,6 +1,6 @@
 import { Toaster } from '@/components/ui/sonner'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 import { FileUploadProvider } from '@/providers/FileUpload'
 import SessionProvider from '@/providers/Session'
 import { ThemeProvider } from '@/providers/Theme'

@@ -1,5 +1,5 @@
 import { APP_LOGO } from '@/data/constants'
-import { createSlug } from '@/lib/utils'
+import { createSlug } from '@/libs/utils'
 import type { imgsProps, uploadFileToS3Props } from '@/types'
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { randomUUID } from 'crypto'

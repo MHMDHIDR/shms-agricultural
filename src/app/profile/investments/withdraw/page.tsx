@@ -4,7 +4,7 @@ import NotFound from '@/app/not-found'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import NewWithdraw from './_NewWithdraw'
 import WithdrawOperations from './_WithdrawOperations'
-import { getAuth } from '@/lib/actions/auth'
+import { getAuth } from '@/libs/actions/auth'
 
 export default async function WithDrawPage() {
   const { userType, loading } = await getAuth()

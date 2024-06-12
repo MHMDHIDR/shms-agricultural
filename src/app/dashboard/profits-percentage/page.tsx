@@ -25,7 +25,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Success, Error } from '@/components/icons/Status'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { redirect, scrollToView } from '@/lib/utils'
+import { redirect, scrollToView } from '@/libs/utils'
 import Divider from '@/components/custom/Divider'
 import Copy from '@/components/custom/Copy'
 import DashboardNav from '../DashboardNav'
@@ -33,7 +33,7 @@ import Layout from '@/components/custom/Layout'
 import NotFound from '@/app/not-found'
 import { useSession } from 'next-auth/react'
 import { LoadingPage } from '@/components/custom/Loading'
-import { getAuth } from '@/lib/actions/auth'
+import { getAuth } from '@/libs/actions/auth'
 
 export default function CountPercentage() {
   const { data: session }: { data: UserLoggedInProps } = useSession()

@@ -1,6 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { getAuth } from '@/lib/actions/auth'
-import { getUser } from '@/lib/utils'
+import { getAuth } from '@/libs/actions/auth'
+import { getUser } from '@/libs/utils'
 import { UserProps } from '@/types'
 import Link from 'next/link'
 import Balance from './_Balance'

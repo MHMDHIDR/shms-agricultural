@@ -9,7 +9,7 @@ import {
   CarouselPrevious,
   type CarouselApi
 } from '@/components/ui/carousel'
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 import Autoplay from 'embla-carousel-autoplay'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'

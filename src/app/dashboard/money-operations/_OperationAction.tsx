@@ -12,7 +12,7 @@ import { Success, Error } from '@/components/icons/Status'
 import { useState } from 'react'
 import Confirm from '@/components/custom/Confirm'
 import { Settings, Trash } from 'lucide-react'
-import { redirect } from '@/lib/utils'
+import { redirect } from '@/libs/utils'
 import type { accountingOperationsProps } from '@/types'
 
 export default function OperationAction({

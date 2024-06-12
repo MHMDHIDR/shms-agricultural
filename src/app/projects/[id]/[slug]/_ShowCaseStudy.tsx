@@ -2,7 +2,7 @@
 
 import Modal from '@/components/custom/Modal'
 import { APP_LOGO, MOBILE_SCREEN, WINDOW_WIDTH } from '@/data/constants'
-import { getProjectStudyCase } from '@/lib/utils'
+import { getProjectStudyCase } from '@/libs/utils'
 import { ProjectProps } from '@/types'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'

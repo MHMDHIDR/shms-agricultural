@@ -16,7 +16,7 @@ import Link from 'next/link'
 import { Checkbox } from '@/components/ui/checkbox'
 import Modal from '@/components/custom/Modal'
 import { LoadingCard } from '@/components/custom/Loading'
-import { formattedPrice } from '@/lib/utils'
+import { formattedPrice } from '@/libs/utils'
 import useDocumentTitle from '@/hooks/useDocumentTitle'
 
 export default function BuyStocks({

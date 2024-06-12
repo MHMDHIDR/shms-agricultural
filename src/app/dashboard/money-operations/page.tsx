@@ -1,4 +1,4 @@
-import { getUserMoneyOperations } from '@/lib/utils'
+import { getUserMoneyOperations } from '@/libs/utils'
 import { accountingOperationsProps } from '@/types'
 import {
   Card,
@@ -11,7 +11,7 @@ import DataTable from '@/components/custom/DataTable'
 import Layout from '@/components/custom/Layout'
 import DashboardNav from '../DashboardNav'
 import NotFound from '@/app/not-found'
-import { getAuth } from '@/lib/actions/auth'
+import { getAuth } from '@/libs/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
 
 export default async function MoneyOperations() {

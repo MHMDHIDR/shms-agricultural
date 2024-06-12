@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { countryNames } from '@/data/list-of-countries'
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
 

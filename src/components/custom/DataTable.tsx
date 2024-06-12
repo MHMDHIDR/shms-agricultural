@@ -39,7 +39,7 @@ import {
   getProjectDate,
   getProjectStatus,
   replaceString
-} from '@/lib/utils'
+} from '@/libs/utils'
 import Link from 'next/link'
 import OperationAction from '@/app/dashboard/money-operations/_OperationAction'
 import { APP_LOGO } from '@/data/constants'

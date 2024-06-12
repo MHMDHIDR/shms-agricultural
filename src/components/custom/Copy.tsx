@@ -1,6 +1,6 @@
 'use client'
 
-import { cn, handleCopyToClipboard } from '@/lib/utils'
+import { cn, handleCopyToClipboard } from '@/libs/utils'
 import { Copy } from 'lucide-react'
 
 export default function CopyText({

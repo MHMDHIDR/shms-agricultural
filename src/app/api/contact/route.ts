@@ -1,4 +1,4 @@
-import email from '@/lib/actions/email'
+import email from '@/libs/actions/email'
 import { ADMIN_EMAIL } from '@/data/constants'
 
 export async function POST(req: Request) {

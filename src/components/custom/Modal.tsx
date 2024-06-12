@@ -22,7 +22,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { APP_LOGO } from '@/data/constants'
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 
 export default function Modal({
   title,

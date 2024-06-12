@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 
 const ICON_SIZE_CLASS = 'w-5 h-5'
 

@@ -4,7 +4,7 @@ import { MyTooltip } from '@/components/ui/tooltip'
 import { ChevronUp } from 'lucide-react'
 import { useState } from 'react'
 import useEventListener from '@/hooks/useEventListener'
-import { scrollToView } from '@/lib/utils'
+import { scrollToView } from '@/libs/utils'
 
 export function NavigateTop({ scrolledHeight = 200 }: { scrolledHeight?: number }) {
   const [isScrolled, setIsScrolled] = useState(false)

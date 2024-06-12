@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 import type { ConfirmProps } from '@/types'
 
 export default function Confirm({

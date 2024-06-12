@@ -9,7 +9,7 @@ import {
 } from '@/components/icons/Socials'
 import { Button } from '@/components/ui/button'
 import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL } from '@/data/constants'
-import { getProjectDate } from '@/lib/utils'
+import { getProjectDate } from '@/libs/utils'
 import { generatePDFProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRef, useCallback, useEffect, useState } from 'react'

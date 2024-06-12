@@ -21,7 +21,7 @@ import {
   DEFAULT_DURATION,
   MAX_FILE_UPLOAD_SIZE
 } from '@/data/constants'
-import { validateFile } from '@/lib/utils'
+import { validateFile } from '@/libs/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
 import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -35,7 +35,7 @@ import Layout from '@/components/custom/Layout'
 import DashboardNav from '../DashboardNav'
 import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
-import { getAuth } from '@/lib/actions/auth'
+import { getAuth } from '@/libs/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
 
 export default function Projects() {

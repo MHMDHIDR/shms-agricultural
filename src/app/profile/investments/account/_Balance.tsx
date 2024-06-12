@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { formattedPrice } from '@/lib/utils'
+import { formattedPrice } from '@/libs/utils'
 import { UserProps } from '@/types'
 import Link from 'next/link'
 

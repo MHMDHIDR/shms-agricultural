@@ -7,7 +7,7 @@ import {
   DrawerTrigger
 } from '@/components/ui/drawer'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 
 export default function MyDrawer({
   title,
