@@ -159,10 +159,10 @@ export default async function DashboardInvestors() {
                               <TableHead className='text-center border border-gray-200 select-none min-w-28'>
                                 إجمالي الدفع
                               </TableHead>
-                              <TableHead className='text-center border border-gray-200 select-none min-w-60'>
+                              <TableHead className='text-center border border-gray-200 select-none min-w-64'>
                                 تاريخ الشراء
                               </TableHead>
-                              <TableHead className='text-center border border-gray-200 select-none min-w-60'>
+                              <TableHead className='text-center border border-gray-200 select-none min-w-40'>
                                 تعديل الأسهم
                               </TableHead>
                             </TableRow>
@@ -218,10 +218,10 @@ export default async function DashboardInvestors() {
                                               item.stocks * projectStockPrice
                                             )}
                                           </TableCell>
-                                          <TableCell className='text-center min-w-60'>
+                                          <TableCell className='text-center min-w-64'>
                                             {arabicDate(item.createdAt)}
                                           </TableCell>
-                                          <TableCell className='text-center'>
+                                          <TableCell className='text-center min-w-40'>
                                             <PurchesedStocks
                                               purchesedStocks={{
                                                 item,
