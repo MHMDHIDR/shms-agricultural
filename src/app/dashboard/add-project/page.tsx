@@ -254,7 +254,7 @@ export default function Projects() {
 
         setProjectAdded(data.projectAdded ?? 0)
         setTimeout(() => {
-          push(`dashboard/project/${shms_project_id}`)
+          push(`/dashboard/project/${shms_project_id}`)
         }, DEFAULT_DURATION)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
