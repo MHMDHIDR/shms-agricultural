@@ -1,6 +1,6 @@
-import { connectDB } from '@/api/utils/db'
-import type { UserProps } from '@/types'
+import client from '@/../prisma/prismadb'
 import { ComparePasswords } from '@/api/utils/compare-password'
+import type { Users } from '@prisma/client'
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -16,12 +16,11 @@ export async function POST(req: Request) {
   // If user is found, check if his/her account is active or blocked
   try {
     // Check for user by using his/her email or Phoneephone number
-    const user = (
-      (await connectDB(`SELECT * FROM users WHERE shms_email = ? OR shms_phone = ?`, [
-        email ?? emailOrPhone,
-        phone ?? emailOrPhone
-      ])) as UserProps[]
-    )[0]
+    const user = await client.users.findFirst({
+      where: {
+        OR: [{ shms_email: email ?? emailOrPhone }, { shms_phone: phone ?? emailOrPhone }]
+      }
+    })
 
     if (!user) {
       return new Response(
@@ -50,8 +49,8 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           loggedIn: 1,
-          fullname: user.shms_fullname,
-          shms_id: user.shms_id,
+          shms_fullname: user.shms_fullname,
+          id: user.id,
           shms_email: user.shms_email,
           shms_phone: user.shms_phone,
           shms_doc: user.shms_doc,
@@ -61,7 +60,7 @@ export async function POST(req: Request) {
           shms_user_total_balance: user.shms_user_total_balance,
           shms_user_stocks: user.shms_user_stocks,
           message: 'تم تسجيل الدخول بنجاح'
-        })
+        } as Users)
       )
     } else {
       return new Response(

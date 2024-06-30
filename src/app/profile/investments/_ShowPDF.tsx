@@ -328,7 +328,7 @@ const Invoice = ({
             />
           </div>
 
-          <div className='mt-5 md:mt-7 text-right' dir='rtl'>
+          <div className='mt-5 text-right md:mt-7' dir='rtl'>
             <p style={{ color: '#666', fontSize: '10px' }}>
               الرقم المرجعي
               <br />
@@ -338,7 +338,7 @@ const Invoice = ({
 
           <Divider className='mt-6 mb-0' />
 
-          <section className='flex justify-between w-full text-xs text-center text-gray-400 pt-5'>
+          <section className='flex justify-between w-full pt-5 text-xs text-center text-gray-400'>
             <div className='flex flex-col items-start gap-y-3'>
               <div className='flex items-center opacity-80'>
                 <FacebookIcon className='w-5 h-5 md:w-6 md:h-6' />

@@ -11,10 +11,11 @@ import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Button } from '@/components/ui/button'
 import { cn, validateUUID } from '@/libs/utils'
 import { Info } from 'lucide-react'
-import type { UserLoggedInProps, UserProps } from '@/types'
 import { LoadingPage } from '@/components/custom/Loading'
-import { useRouter } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import type { UserLoggedInProps } from '@/types'
+import type { Users } from '@prisma/client'
 
 export default function ActivateAccount({
   params: { tokenId }
@@ -33,10 +34,9 @@ export default function ActivateAccount({
 
     try {
       setIsSubmittingForm(true)
-      const activateUser: { data: UserProps } = await axios.put(
-        API_URL + `/users/activate`,
-        { userId: tokenId }
-      )
+      const activateUser: { data: Users } = await axios.put(API_URL + `/users/activate`, {
+        userId: tokenId
+      })
       const { userActivated } = activateUser.data
 
       setIsAccountActivated(userActivated ? true : false)
@@ -93,7 +93,9 @@ export default function ActivateAccount({
     replace('/')
   ) : session?.user ? (
     <LoadingPage />
-  ) : !validateUUID(tokenId) ? null : (
+  ) : !validateUUID(tokenId) ? (
+    notFound()
+  ) : (
     <section className='mt-48 md:mt-32'>
       <CardWrapper
         heading={HEADING}

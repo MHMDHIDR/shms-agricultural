@@ -1,72 +1,96 @@
-import Drawer from '@/components/custom/Drawer'
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import {
   AlignRight,
-  AreaChartIcon,
-  BadgeDollarSign,
-  ProjectorIcon,
-  UsersIcon
+  DollarSignIcon,
+  HomeIcon,
+  PercentIcon,
+  Tractor,
+  Users2
 } from 'lucide-react'
-import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { DashboardIcon } from '@radix-ui/react-icons'
 
-export default function DashboardNav() {
+export default function Dashboard() {
+  const currentPath = usePathname()
+
   return (
-    <Drawer
-      className='max-h-[calc(100vh-5rem)]'
-      content={
-        <div className='h-full px-3 py-4 overflow-y-auto'>
-          <ul className='space-y-2 font-medium'>
-            <li>
-              <Link
-                href='/dashboard/add-project'
-                className='flex items-center p-4 pr-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group'
-              >
-                <ProjectorIcon className='w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                <span className='inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300'>
-                  المشاريع
-                </span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/dashboard/money-operations'
-                className='flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group'
-              >
-                <BadgeDollarSign className='w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                <span className='flex-1 ms-3 whitespace-nowrap'>العمليات المالية</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/dashboard/users'
-                className='flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group'
-              >
-                <UsersIcon className='w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                <span className='ms-3'>العملاء</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/dashboard/profits-percentage'
-                className='flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group'
-              >
-                <AreaChartIcon className='w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
-                <span className='flex-1 ms-3 whitespace-nowrap'>نسب الأرباح</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      }
-      asSpan
-    >
-      <span
-        data-drawer-target='default-sidebar'
-        data-drawer-toggle='default-sidebar'
-        aria-controls='default-sidebar'
-        className='absolute right-5 z-50 top-20 items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
-      >
-        <span className='sr-only'>تصفح لوحة التحكم</span>
-        <AlignRight className='w-6 h-6 stroke-1' />
-      </span>
-    </Drawer>
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button size='icon' variant='outline' className='absolute right-20 top-36'>
+          <AlignRight className='w-6 h-6 stroke-1' />
+          <span className='sr-only'>تصفح لوحة التحكم</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side='right' className='sm:max-w-xs'>
+        <nav className='grid gap-6 text-lg font-medium pt-14 rtl'>
+          <Link
+            href='/'
+            className='flex items-center justify-center w-10 h-10 gap-2 text-lg font-semibold rounded-full group shrink-0 bg-primary text-primary-foreground md:text-base'
+          >
+            <HomeIcon className='w-5 h-5 transition-all group-hover:scale-110' />
+            <span className='sr-only'>زيارة الصفحة الرئيسية</span>
+          </Link>
+          <Link
+            href='/dashboard'
+            className={`flex items-center gap-4 px-2.5 ${
+              currentPath === '/dashboard'
+                ? 'text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <DashboardIcon className='w-5 h-5' />
+            لوحة التحكم
+          </Link>
+          <Link
+            href='/dashboard/projects'
+            className={`flex items-center gap-4 px-2.5 ${
+              currentPath === '/dashboard/projects'
+                ? 'text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <Tractor className='w-5 h-5' />
+            المشاريع
+          </Link>
+          <Link
+            href='/dashboard/money-operations'
+            className={`flex items-center gap-4 px-2.5 ${
+              currentPath === '/dashboard/money-operations'
+                ? 'text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <DollarSignIcon className='w-5 h-5' />
+            العمليات المالية
+          </Link>
+          <Link
+            href='/dashboard/users'
+            className={`flex items-center gap-4 px-2.5 ${
+              currentPath === '/dashboard/users'
+                ? 'text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <Users2 className='w-5 h-5' />
+            العملاء
+          </Link>
+          <Link
+            href='/dashboard/profits-percentage'
+            className={`flex items-center gap-4 px-2.5 ${
+              currentPath === '/dashboard/profits-percentage'
+                ? 'text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <PercentIcon className='w-5 h-5' />
+            نسب الأرباح
+          </Link>
+        </nav>
+      </SheetContent>
+    </Sheet>
   )
 }

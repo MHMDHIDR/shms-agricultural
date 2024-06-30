@@ -1,19 +1,16 @@
-import { connectDB } from '@/api/utils/db'
 import { randomUUID } from 'crypto'
 import email from '@/libs/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import type { UserProps } from '@/types'
+import client from '@/../prisma/prismadb'
 
 export async function PUT(req: Request) {
   const body = await req.json()
   const { userEmail, oldEmail, fullname } = body
 
   try {
-    const user = (
-      (await connectDB(`SELECT * FROM users WHERE shms_email = ?`, [
-        userEmail
-      ])) as UserProps[]
-    )[0]
+    const user = await client.users.findUnique({
+      where: { shms_email: userEmail }
+    })
 
     if (user && user.shms_email === userEmail) {
       return new Response(
@@ -36,21 +33,15 @@ export async function PUT(req: Request) {
       const userResetPasswordToken = randomUUID()
       const userCanResetPasswordUntil = new Date(Date.now() + anHour * 2)
 
-      await connectDB(
-        `UPDATE users
-            SET shms_email = ?,
-            shms_user_account_status = ?,
-            shms_user_reset_token = ?,
-            shms_user_reset_token_expires = ?
-          WHERE shms_email = ?;`,
-        [
-          userEmail,
-          'pending',
-          userResetPasswordToken,
-          userCanResetPasswordUntil,
-          oldEmail
-        ]
-      )
+      await client.users.update({
+        where: { shms_email: oldEmail },
+        data: {
+          shms_email: userEmail,
+          shms_user_account_status: 'pending',
+          shms_user_reset_token: userResetPasswordToken,
+          shms_user_reset_token_expires: userCanResetPasswordUntil
+        }
+      })
 
       const buttonLink = APP_URL + `/auth/activate/${userResetPasswordToken}`
 

@@ -1,18 +1,67 @@
-import { connectDB } from '@/api/utils/db'
-import { type NextRequest } from 'next/server'
+import client from '@/../prisma/prismadb'
+import type { NextRequest } from 'next/server'
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams
   const role = searchParams.get('role')
   const userId = searchParams.get('userId')
 
-  // look for user  FROM users WHERE shms_user_stocks is not null
-  const users =
-    role === 'investor'
-      ? await connectDB(`SELECT * FROM users WHERE shms_user_stocks is not null`)
-      : userId
-      ? await connectDB(`SELECT * FROM users WHERE shms_id = ?`, [userId])
-      : await connectDB(`SELECT * FROM users`)
+  let users = []
 
-  return new Response(JSON.stringify(users))
+  if (role === 'investor') {
+    users = await client.users.findMany({
+      where: {
+        NOT: {
+          shms_user_stocks: {
+            isEmpty: true
+          }
+        }
+      }
+    })
+  } else if (userId) {
+    users = await client.users.findMany({
+      where: {
+        id: userId
+      }
+    })
+  } else {
+    users = await client.users.findMany()
+  }
+
+  // Reorder properties to match the schema
+  const orderedUsers = users.map(user => ({
+    id: user.id,
+    shms_sn: user.shms_sn,
+    shms_fullname: user.shms_fullname,
+    shms_nationality: user.shms_nationality,
+    shms_date_of_birth: user.shms_date_of_birth,
+    shms_address: user.shms_address,
+    shms_email: user.shms_email,
+    shms_password: user.shms_password,
+    shms_phone: user.shms_phone,
+    shms_doc: user.shms_doc,
+    shms_user_stocks: user.shms_user_stocks,
+    shms_user_stock_limit: user.shms_user_stock_limit,
+    shms_user_total_balance: user.shms_user_total_balance,
+    shms_user_withdrawable_balance: user.shms_user_withdrawable_balance,
+    shms_created_at: user.shms_created_at,
+    shms_user_account_type: user.shms_user_account_type,
+    shms_user_account_status: user.shms_user_account_status,
+    shms_user_reset_token: user.shms_user_reset_token,
+    shms_user_reset_token_expires: user.shms_user_reset_token_expires,
+    message: user.message,
+    loggedIn: user.loggedIn,
+    userAdded: user.userAdded,
+    userUpdated: user.userUpdated,
+    userActivated: user.userActivated,
+    userWithdrawnBalance: user.userWithdrawnBalance,
+    forgotPassSent: user.forgotPassSent,
+    newPassSet: user.newPassSet,
+    resetEmail: user.resetEmail,
+    userDeleted: user.userDeleted
+  }))
+
+  return new Response(JSON.stringify(orderedUsers), {
+    headers: { 'Content-Type': 'application/json' }
+  })
 }

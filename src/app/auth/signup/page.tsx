@@ -13,7 +13,7 @@ import {
   validatePhone,
   scrollToView
 } from '@/libs/utils'
-import type { UserLoggedInProps, UserProps, shms_formSignupDataProps } from '@/types'
+import type { UserLoggedInProps, shms_formSignupDataProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { Info } from 'lucide-react'
@@ -32,6 +32,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { useSession } from 'next-auth/react'
+import { Users } from '@prisma/client'
 
 const SignupPage = () => {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -186,24 +187,21 @@ const SignupPage = () => {
         formData.append('file', file[0]!)
         // upload the project images to s3
         const {
-          data: { shms_id, shms_doc }
+          data: { id, shms_doc }
         }: {
-          data: UserProps
+          data: Users
         } = await axios.post(`${API_URL}/uploadToS3`, formData)
-        const joinUser: { data: UserProps } = await axios.post(
-          `${API_URL}/users/signup`,
-          {
-            shms_id,
-            userFullName,
-            nationality,
-            dateOfBirth,
-            address,
-            email,
-            phone,
-            password,
-            shms_doc
-          }
-        )
+        const joinUser: { data: Users } = await axios.post(`${API_URL}/users/signup`, {
+          id,
+          userFullName,
+          nationality,
+          dateOfBirth,
+          address,
+          email,
+          phone,
+          password,
+          shms_doc
+        })
         //getting response from backend
         const { data } = joinUser
         // make sure to view the response from the data
@@ -226,8 +224,10 @@ const SignupPage = () => {
           )
         setTimeout(() => replace(`/`), DEFAULT_DURATION)
       } catch (error: any) {
+        const errorMessages =
+          error.response.data.message ?? 'عفواً حدث خطأ ما أثتاء التسجيل'
         //handle error, show notification using Shadcn notifcation
-        toast(JSON.stringify('عفواً حدث خطأ ما أثتاء التسجيل'), {
+        toast(errorMessages, {
           icon: <Error className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
           className: 'text-right select-none rtl',

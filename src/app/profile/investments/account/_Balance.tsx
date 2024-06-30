@@ -1,19 +1,19 @@
 import { Button } from '@/components/ui/button'
 import { formattedPrice } from '@/libs/utils'
-import { UserProps } from '@/types'
 import Link from 'next/link'
+import type { Users } from '@prisma/client'
 
 export default function Balance({
   totalAmount,
   withdrawableAmount,
   noWithdrawButton
 }: {
-  totalAmount: UserProps['shms_user_total_balance']
-  withdrawableAmount: UserProps['shms_user_withdrawable_balance']
+  totalAmount: Users['shms_user_total_balance']
+  withdrawableAmount: Users['shms_user_withdrawable_balance']
   noWithdrawButton?: boolean
 }) {
   return (
-    <div className='grid grid-cols-1 gap-4 select-none md:grid-cols-2'>
+    <div className='select-none grid grid-cols-1 gap-4 md:grid-cols-2'>
       {/* First Grid Item */}
       <div className='space-y-2 divide-y divide-gray-300'>
         <h1 className='text-lg font-bold'>الرصيد الكلي</h1>

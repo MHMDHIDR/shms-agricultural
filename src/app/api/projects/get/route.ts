@@ -1,8 +1,10 @@
-import { connectDB } from '@/api/utils/db'
+import client from '@/../prisma/prismadb'
 
 export const revalidate = 0
 export async function GET() {
-  const projects = await connectDB(`SELECT * FROM projects`)
+  const projects = await client.projects.findMany()
 
-  return new Response(JSON.stringify(projects))
+  return projects.length === 0
+    ? new Response(JSON.stringify([null]), { status: 200 })
+    : new Response(JSON.stringify(projects), { status: 200 })
 }

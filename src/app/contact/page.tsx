@@ -13,7 +13,8 @@ import { toast } from 'sonner'
 
 import Layout from '@/components/custom/Layout'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { UserProps, emailProps } from '@/types'
+import type { emailProps } from '@/types'
+import type { Users } from '@prisma/client'
 
 const Contact = () => {
   // Form States
@@ -91,8 +92,7 @@ const Contact = () => {
 
         setTimeout(() => replace(`/`), DEFAULT_DURATION)
       } catch (error: any) {
-        const message: UserProps['message'] =
-          error?.response?.data?.message ?? 'حدث خطأ ما'
+        const message: Users['message'] = error?.response?.data?.message ?? 'حدث خطأ ما'
         //handle error, show notification using Shadcn notifcation
         toast(message, {
           icon: <Error className='w-6 h-6 ml-3' />,
@@ -115,7 +115,7 @@ const Contact = () => {
 
   return (
     <Layout>
-      <section className='flex items-center justify-center h-screen min-h-screen p-4 mt-4 md:mt-16 mb-16'>
+      <section className='flex items-center justify-center h-screen min-h-screen p-4 mt-4 mb-16 md:mt-16'>
         <CardWrapper
           heading='تواصل معنا'
           headerLabel=''
@@ -191,7 +191,7 @@ const Contact = () => {
               <div className='md:w-2/3'>
                 <textarea
                   id='message'
-                  className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded resize-y min-h-64 max-h-96 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                  className='w-full px-4 py-2 leading-relaxed text-gray-700 bg-gray-200 border border-gray-200 rounded resize-y min-h-64 max-h-96 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                   onChange={e => setMessage(e.target.value)}
                   rows={10}
                   cols={50}

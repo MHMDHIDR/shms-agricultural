@@ -13,17 +13,17 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import Confirm from '@/components/custom/Confirm'
-import type { UserProps, stocksPurchasedProps } from '@/types'
+import type { Users, Stocks } from '@prisma/client'
 
 export default function PurchasedStocks({
   purchesedStocks: { item, userId },
   children
 }: {
-  purchesedStocks: { item: stocksPurchasedProps; userId: UserProps['shms_id'] }
+  purchesedStocks: { item: Stocks; userId: Users['id'] }
   children: React.ReactNode
 }) {
   const [userPurchasedStocks, setUserPurchasedStocks] =
-    useState<UserProps['shms_user_stock_limit']>(1)
+    useState<Users['shms_user_stock_limit']>(1)
 
   const [formStatus, setFormStatus] = useState({
     isSubmitting: false,
@@ -32,13 +32,12 @@ export default function PurchasedStocks({
 
   const updateUserPurchasedStocks = async (
     userId: string,
-    // use dateOfPurchase to determine which stocks to edit, since it's a unique value
-    dateOfPurchase: string,
+    dateOfPurchase: string | Date,
     stocks: number
   ) => {
     try {
       setFormStatus({ ...formStatus, isSubmitting: true })
-      const { data }: { data: UserProps } = await axios.patch(
+      const { data }: { data: Users } = await axios.patch(
         `${API_URL}/users/updatePurchasedStocks/${userId}`,
         { dateOfPurchase, stocks }
       )
@@ -92,10 +91,13 @@ export default function PurchasedStocks({
     }
   }
 
-  const deleteUserPurchasedStocks = async (userId: string, dateOfPurchase: string) => {
+  const deleteUserPurchasedStocks = async (
+    userId: string,
+    dateOfPurchase: string | Date
+  ) => {
     try {
       setFormStatus({ ...formStatus, isSubmitting: true })
-      const { data }: { data: UserProps } = await axios.patch(
+      const { data }: { data: Users } = await axios.patch(
         `${API_URL}/users/deletePurchasedStocks/${userId}`,
         { dateOfPurchase }
       )
@@ -163,7 +165,7 @@ export default function PurchasedStocks({
             await deleteUserPurchasedStocks(userId, item.createdAt)
           }}
           className='w-full'
-          isLoading={formStatus.isSubmitting}
+          // isLoading={formStatus.isSubmitting}
         >
           حذف الأسهم
         </Confirm>

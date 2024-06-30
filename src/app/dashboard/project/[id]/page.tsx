@@ -22,13 +22,13 @@ import {
   cn,
   getProject,
   getProjectStatus,
+  redirect,
   validateFile
 } from '@/libs/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
-import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
-import { ArrowBigRight } from 'lucide-react'
+import { ArrowBigLeft, ArrowBigRight } from 'lucide-react'
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -41,6 +41,8 @@ import { LoadingPage } from '@/components/custom/Loading'
 import ProjectCondition from './ProjectCondition'
 import DashboardNav from '@/app/dashboard/DashboardNav'
 import { getAuth } from '@/libs/actions/auth'
+import type { UserLoggedInProps } from '@/types'
+import type { Projects, Users } from '@prisma/client'
 
 export default function EditProjectPage({
   params: { id: projectId }
@@ -49,9 +51,7 @@ export default function EditProjectPage({
 }) {
   const { data: session }: { data: UserLoggedInProps } = useSession()
 
-  const [projectImages, setProjectImages] = useState<ProjectProps['shms_project_images']>(
-    []
-  )
+  const [projectImages, setProjectImages] = useState<Projects['shms_project_images']>([])
   const [projectName, setProjectName] = useState('')
   const [projectLocation, setProjectLocation] = useState('')
   const [projectStartDate, setProjectStartDate] = useState<Date>()
@@ -63,22 +63,24 @@ export default function EditProjectPage({
   const [stockPrice, setStockPrice] = useState<number>()
   const [stockProfits, setStockProfits] = useState<number>()
   const [specialPercentage, setProjectSpecialPercentage] =
-    useState<ProjectProps['shms_project_special_percentage']>(0)
+    useState<Projects['shms_project_special_percentage']>(0)
   const [specialPercentageCode, setProjectSpecialPercentageCode] =
-    useState<ProjectProps['shms_project_special_percentage_code']>('')
+    useState<Projects['shms_project_special_percentage_code']>('')
   const [projectDescription, setProjectDescription] = useState('')
   const [projectTerms, setProjectTerms] = useState('')
   const [caseStudyfile, setCaseStudyFile] = useState<File[]>([])
   const [_currentCaseStudyFile, setCurrentCaseStudyFile] = useState<
-    ProjectProps['shms_project_study_case']
+    Projects['shms_project_study_case']
   >([])
-  const [caseStudy, setCaseStudy] = useState<ProjectProps['shms_project_study_case']>([])
-  const [caseStudyIsVisible, setCaseStudyIsVisible] = useState<number>(0)
+  const [caseStudy, setCaseStudy] = useState<Projects['shms_project_study_case']>([])
+  const [caseStudyIsVisible, setCaseStudyIsVisible] = useState<boolean>(false)
   const [projectStatus, setProjectStatus] =
-    useState<ProjectProps['shms_project_status']>('pending')
+    useState<Projects['shms_project_status']>('pending')
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [userType, setUserType] = useState<Users['shms_user_account_type']>()
+  const [isRefetching, setIsRefetching] = useState(false)
 
   const onCaseStudyFileAdd = (e: { target: { files: any } }) => {
     setCaseStudyFile(Array.from(e.target.files))
@@ -97,7 +99,6 @@ export default function EditProjectPage({
   const [stockProfitsError, setStockProfitsError] = useState('')
   const [projectDescriptionError, setProjectDescriptionError] = useState('')
   const [caseStudyfileError, setCaseStudyFileError] = useState('')
-  const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
 
   useEffect(() => {
     const getUserData = async () => {
@@ -126,33 +127,39 @@ export default function EditProjectPage({
   // Get Project details and set the state
   useEffect(() => {
     const getProjectDetails = async () => {
-      const project = await getProject(projectId)
-      setProjectImages(JSON.parse(String(project.shms_project_images)))
-      setProjectName(project.shms_project_name)
-      setProjectLocation(project.shms_project_location)
-      setProjectStartDate(new Date(project.shms_project_start_date))
-      setProjectEndDate(new Date(project.shms_project_end_date))
-      setProjectInvestEndDate(new Date(project.shms_project_invest_date))
-      setProjectProfitCollectDate(new Date(project.shms_project_profits_collect_date))
-      setProjectTotalStocks(project.shms_project_total_stocks)
-      setProjectAvailableStocks(project.shms_project_available_stocks)
-      setStockPrice(project.shms_project_stock_price)
-      setStockProfits(project.shms_project_stock_profits)
-      setProjectSpecialPercentage(project.shms_project_special_percentage)
-      setProjectSpecialPercentageCode(project.shms_project_special_percentage_code)
-      setProjectDescription(project.shms_project_description)
-      setProjectTerms(project.shms_project_terms)
-      setCaseStudy(project.shms_project_study_case ?? 0)
-      setCaseStudyIsVisible(project.shms_project_study_case_visibility ?? 0)
-      setProjectStatus(project.shms_project_status)
-      if (project.shms_project_study_case && project.shms_project_study_case !== null) {
-        setCurrentCaseStudyFile(JSON.parse(String(project.shms_project_study_case)))
+      try {
+        const project = await getProject(projectId)
+        setIsLoading(false)
+        setProjectImages(project.shms_project_images)
+        setProjectName(project.shms_project_name)
+        setProjectLocation(project.shms_project_location)
+        setProjectStartDate(new Date(project.shms_project_start_date))
+        setProjectEndDate(new Date(project.shms_project_end_date))
+        setProjectInvestEndDate(new Date(project.shms_project_invest_date))
+        setProjectProfitCollectDate(new Date(project.shms_project_profits_collect_date))
+        setProjectTotalStocks(project.shms_project_total_stocks)
+        setProjectAvailableStocks(project.shms_project_available_stocks ?? 0)
+        setStockPrice(project.shms_project_stock_price)
+        setStockProfits(project.shms_project_stock_profits)
+        setProjectSpecialPercentage(project.shms_project_special_percentage)
+        setProjectSpecialPercentageCode(project.shms_project_special_percentage_code)
+        setProjectDescription(project.shms_project_description)
+        setProjectTerms(project.shms_project_terms ?? '')
+        setCaseStudy(project.shms_project_study_case ?? 0)
+        setCaseStudyIsVisible(project.shms_project_study_case_visibility ?? false)
+        setProjectStatus(project.shms_project_status)
+        if (project.shms_project_study_case && project.shms_project_study_case !== null) {
+          setCurrentCaseStudyFile(project.shms_project_study_case)
+        }
+      } catch (error: any) {
+        console.error('Error', error)
+      } finally {
+        setIsRefetching(false)
       }
-      setIsLoading(false)
     }
 
     getProjectDetails()
-  }, [projectId])
+  }, [projectId, isRefetching])
 
   const handleCaseStudyFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // get the first file uploaded
@@ -232,8 +239,8 @@ export default function EditProjectPage({
       try {
         resetFormErrors()
         setIsSubmittingForm(true)
-        let newProjectImages: ProjectProps['shms_project_images'] = []
-        let newCaseStudyFile: ProjectProps['shms_project_images'] = []
+        let newProjectImages: Projects['shms_project_images'] = []
+        let newCaseStudyFile: Projects['shms_project_images'] = []
 
         if (file.length > 0) {
           // create a new form data with files data
@@ -247,7 +254,7 @@ export default function EditProjectPage({
           const {
             data: { shms_project_images }
           }: {
-            data: ProjectProps
+            data: Projects
           } = await axios.post(`${API_URL}/uploadToS3`, formData)
 
           // getting response from backend
@@ -263,7 +270,7 @@ export default function EditProjectPage({
           const {
             data: { shms_project_study_case }
           }: {
-            data: ProjectProps
+            data: Projects
           } = await axios.post(`${API_URL}/uploadToS3`, formData)
 
           // getting response from backend
@@ -282,7 +289,7 @@ export default function EditProjectPage({
           const {
             data: { shms_project_images, shms_project_study_case }
           }: {
-            data: ProjectProps
+            data: Projects
           } = await axios.post(`${API_URL}/uploadToS3`, formData)
 
           // getting response from backend
@@ -291,7 +298,7 @@ export default function EditProjectPage({
         }
 
         // upload the project data to the database
-        const updatedProject: { data: ProjectProps } = await axios.patch(
+        const updatedProject: { data: Projects } = await axios.patch(
           `${API_URL}/projects/edit/${projectId}`,
           {
             shms_project_images: [...projectImages, ...newProjectImages],
@@ -301,6 +308,7 @@ export default function EditProjectPage({
             shms_project_end_date: projectEndDate,
             shms_project_invest_date: projectInvestEndDate,
             shms_project_profits_collect_date: projectProfitCollectDate,
+            shms_project_available_stocks: projectAvailableStocks,
             shms_project_total_stocks: projectTotalStocks,
             shms_project_stock_price: stockPrice,
             shms_project_stock_profits: stockProfits,
@@ -309,12 +317,10 @@ export default function EditProjectPage({
             shms_project_special_percentage_code: specialPercentageCode,
             shms_project_terms: projectTerms,
             shms_project_study_case:
-              newCaseStudyFile.length > 0
-                ? [...newCaseStudyFile]
-                : [...JSON.parse(String(caseStudy))],
+              newCaseStudyFile.length > 0 ? [...newCaseStudyFile] : [...caseStudy],
             shms_project_study_case_visibility: caseStudyIsVisible,
             shms_project_status: projectStatus
-          } as ProjectProps
+          } as Projects
         )
         //getting response from backend
         const { data } = updatedProject
@@ -336,9 +342,7 @@ export default function EditProjectPage({
           })
 
         data.projectUpdated === 1 ? setIsDoneSubmitting(true) : setIsDoneSubmitting(false)
-        setTimeout(() => {
-          window.location.href = `/dashboard`
-        }, DEFAULT_DURATION)
+        redirect(`/dashboard/project/${projectId}`, DEFAULT_DURATION / 2)
       } catch (error: any) {
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
           {
@@ -374,7 +378,9 @@ export default function EditProjectPage({
     setProjectDescriptionError('')
   }
 
-  return (session && userType === 'user') || (!session && userType === 'user') ? (
+  return !session ||
+    (session && userType === 'user') ||
+    (!session && userType === 'user') ? (
     <NotFound />
   ) : isLoading || (!session && userType === 'admin') ? (
     <LoadingPage />
@@ -383,13 +389,22 @@ export default function EditProjectPage({
       <DashboardNav />
 
       <Card className='mt-20 rtl'>
-        <Link
-          href={`/dashboard`}
-          className='inline-block mt-4 mr-5 font-bold text-blue-500 underline-hover group'
-        >
-          <ArrowBigRight className='inline-block w-4 h-4 ml-0.5 group-hover:translate-x-2 transition-transform' />
-          العودة للوحة التحكم
-        </Link>
+        <div className='flex items-center justify-between w-full'>
+          <Link
+            href={`/dashboard`}
+            className='inline-block mt-4 mr-5 font-bold text-blue-500 underline-hover group'
+          >
+            <ArrowBigRight className='inline-block w-4 h-4 ml-0.5 group-hover:translate-x-2 transition-transform' />
+            العودة للوحة التحكم
+          </Link>
+          <Link
+            href={`/dashboard/projects`}
+            className='inline-block mt-4 ml-5 font-bold text-blue-500 underline-hover group'
+          >
+            العودة للمشاريع
+            <ArrowBigLeft className='inline-block w-4 h-4 ml-0.5 group-hover:-translate-x-2 transition-transform' />
+          </Link>
+        </div>
         <form onSubmit={e => handelEditProject(e)}>
           <CardHeader>
             <CardTitle className='mb-6 text-center select-none sm:mb-10'>
@@ -410,6 +425,7 @@ export default function EditProjectPage({
                 data={{ projectId, defaultImg: projectImages, imgName: projectName }}
                 id={projectId}
                 ignoreRequired={true}
+                setIsRefetching={setIsRefetching}
               />
             </div>
             {projectImagesError && <FormMessage error>{projectImagesError}</FormMessage>}
@@ -595,13 +611,17 @@ export default function EditProjectPage({
                     </span>
                   }
                   content={<ProjectCondition />}
+                  classNameSpan='hover:bg-accent'
+                  asSpan
                 >
                   تعليمات شروط المشروع
                 </Drawer>
               </Label>
+              <br />
+              <br />
               <textarea
                 onChange={handleProjectTermsChange}
-                className='w-full px-4 py-2 leading-10 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
+                className='w-full px-4 py-2 text-right text-gray-700 bg-gray-200 border border-gray-200 rounded leading-10 dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
                 placeholder='أدخل شروط المشروع'
                 defaultValue={htmlToMd(projectTerms)}
                 rows={5}
@@ -638,9 +658,9 @@ export default function EditProjectPage({
               <Switch
                 id='caseStudyIsVisible'
                 dir='ltr'
-                checked={caseStudyIsVisible === 1}
+                checked={caseStudyIsVisible === true}
                 onCheckedChange={(isVisible: boolean) =>
-                  setCaseStudyIsVisible(isVisible ? 1 : 0)
+                  setCaseStudyIsVisible(isVisible ? true : false)
                 }
               />
               <strong

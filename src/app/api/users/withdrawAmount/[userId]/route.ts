@@ -1,8 +1,7 @@
-import { connectDB } from '@/api/utils/db'
 import email from '@/libs/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import { randomUUID } from 'crypto'
-import type { UserProps } from '@/types'
+import client from '@/../prisma/prismadb'
 
 export async function POST(
   req: Request,
@@ -24,9 +23,7 @@ export async function POST(
   }
 
   // Check if user exists
-  const userExists = (
-    (await connectDB(`SELECT * FROM users WHERE shms_id = ?`, [userId])) as UserProps[]
-  )[0]
+  const userExists = await client.users.findUnique({ where: { id: userId } })
 
   if (!userExists) {
     return new Response(
@@ -49,10 +46,13 @@ export async function POST(
     const referenceCode = randomUUID()
 
     // create new user
-    await connectDB(
-      `INSERT INTO withdraw_actions (shms_withdraw_id, shms_withdraw_amount, shms_user_id) VALUES (?, ?, ?)`,
-      [referenceCode, withdrawAmount, userId]
-    )
+    await client.withdraw_actions.create({
+      data: {
+        id: referenceCode,
+        shms_withdraw_amount: withdrawAmount,
+        shms_user_id: userId
+      }
+    })
 
     /**
      * Update user balance, subtract the withdraw amount and later on
@@ -61,10 +61,10 @@ export async function POST(
      */
     const currentBalance = userExists.shms_user_withdrawable_balance
     const userNewBalance = currentBalance - withdrawAmount
-    await connectDB(
-      `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
-      [userNewBalance, userExists.shms_id]
-    )
+    await client.users.update({
+      where: { id: userId },
+      data: { shms_user_withdrawable_balance: userNewBalance }
+    })
 
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments/withdraw`

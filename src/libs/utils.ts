@@ -1,17 +1,12 @@
+import React from 'react'
 import { API_URL, DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
-import type {
-  ProjectProps,
-  UserProps,
-  abstractWordsProps,
-  validateFileProps,
-  accountingOperationsProps
-} from '@/types'
 import axios from 'axios'
 import { clsx, type ClassValue } from 'clsx'
 import { toast } from 'sonner'
 import { twMerge } from 'tailwind-merge'
 import { Success, Error as ErrorIcon } from '@/components/icons/Status'
-import React from 'react'
+import type { abstractWordsProps, validateFileProps } from '@/types'
+import type { Projects, Users, withdraw_actions } from '@prisma/client'
 
 /**
  * a function to merge tailwind classes
@@ -27,9 +22,8 @@ export function cn(...inputs: ClassValue[]) {
  * @param uuid the uuid string to be validated
  */
 export function validateUUID(uuid: string): boolean {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-    uuid
-  )
+  // validate if uuid is a value mongodb id
+  return uuid.match(/^[0-9a-fA-F]{24}$/) !== null
 }
 
 /**
@@ -93,8 +87,8 @@ export const validateFile: validateFileProps = (
   let isAllowedSize = false
 
   // Get the file extension
-  const fileExtension = file.name.split('.').pop()?.toLowerCase()
-  const fileSizes = file.size // in bytes
+  const fileExtension = file?.name.split('.').pop()?.toLowerCase()
+  const fileSizes = file?.size // in bytes
 
   // Check if the extension is allowed and the file size is less than 2MB
   allowedExtensions?.includes(fileExtension!) && (isAllowedExtension = true)
@@ -108,8 +102,8 @@ export const validateFile: validateFileProps = (
  * @param date  - date string to be formatted (e.g. 2021-08-01T12:00:00.000Z)
  * @returns   - formatted date string (e.g. Sunday, 1 August 2021, 13:00:00)
  */
-export const arabicDate = (date: string) =>
-  new Date(date).toLocaleDateString('ar-EG', {
+export const arabicDate = (date: string | Date) => {
+  const options: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -117,36 +111,46 @@ export const arabicDate = (date: string) =>
     hour: 'numeric',
     minute: 'numeric',
     second: 'numeric'
-  })
+  }
 
-export async function getProject(projectId: string) {
+  // if date is a string, convert it to a date object else use the date object
+  const formattedDate = typeof date === 'string' ? new Date(date) : date
+  return formattedDate.toLocaleDateString('ar-EG', options)
+}
+
+export async function getProject(projectId: string): Promise<Projects> {
   try {
-    if (!projectId) {
-      throw new Error('projectId is undefined or null')
-    } else {
-      const response = await axios.get(`${API_URL}/projects/get/${projectId}`)
+    if (!projectId) throw new Error('projectId is undefined or null')
 
-      const project = response.data.project
-      return project
-    }
-  } catch (error) {
+    const response = await axios.get(`${API_URL}/projects/get/${projectId}`)
+    const project = response.data.project
+
+    if (!project || !project.id) throw new Error('Project not found')
+
+    return project
+  } catch (error: any) {
     console.error('Error fetching project:', error)
-    return null // Return null (or handle the error appropriately) in case of an error
+
+    if (error.response && error.response.status === 404) {
+      throw new Error('Project not found with the provided ID: ' + projectId)
+    } else if (error.response && error.response.status >= 500) {
+      throw new Error('Server error while fetching the project.')
+    } else {
+      throw new Error('Unknown error occurred while fetching the project.')
+    }
   }
 }
 
 /**
  * A function to get the user data (for a single user)
  * @param userId
- * @returns Promise<UserProps | undefined>
+ * @returns Promise<Users | undefined>
  */
-export async function getUser(
-  userId: UserProps['shms_id']
-): Promise<UserProps | undefined> {
+export async function getUser(userId: Users['id']): Promise<Users | undefined> {
   const {
     data: user
   }: {
-    data: UserProps[]
+    data: Users[]
   } = await axios.get(`${API_URL}/users/all?userId=${userId}`)
 
   return user[0]
@@ -158,11 +162,11 @@ export async function getUser(
  * getting the user withdrawable balance
  * also getting the deposit balance
  * @param userId
- * @returns Promise<accountingOperationsProps | undefined>
+ * @returns Promise<withdraw_actions | undefined>
  */
 export async function getUserMoneyOperations(
-  userId?: accountingOperationsProps['shms_user_id']
-): Promise<accountingOperationsProps[]> {
+  userId?: withdraw_actions['id']
+): Promise<withdraw_actions[]> {
   const response = userId
     ? await fetch(`${API_URL}/withdrawActions/get/${userId}`, {
         next: { revalidate: 0 }
@@ -173,7 +177,7 @@ export async function getUserMoneyOperations(
         //,cache: 'no-store'
       })
 
-  const withdrawActions: accountingOperationsProps[] = await response.json()
+  const withdrawActions: withdraw_actions[] = await response.json()
 
   return withdrawActions
 }
@@ -251,16 +255,16 @@ export function getProjectStatus(status: string): string {
  * @returns {string} studyCase document path
  */
 export function getProjectStudyCase(
-  studyCase: ProjectProps['shms_project_study_case']
+  studyCase: Projects['shms_project_study_case']
 ): string {
   let imgDisplayPath = null
   try {
-    imgDisplayPath = JSON.parse(String(studyCase))
+    imgDisplayPath = studyCase
   } catch (error: any) {
     throw new Error('Error parsing study case data:', error.message)
   }
 
-  return imgDisplayPath[0] ? imgDisplayPath[0].imgDisplayPath : null
+  return imgDisplayPath[0] ? imgDisplayPath[0].imgDisplayPath : ''
 }
 
 /**

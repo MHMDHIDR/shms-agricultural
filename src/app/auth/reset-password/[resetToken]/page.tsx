@@ -10,12 +10,13 @@ import { EyeIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { validatePasswordStrength, validateUUID } from '@/libs/utils'
-import type { UserLoggedInProps, UserProps } from '@/types'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import type { UserLoggedInProps } from '@/types'
+import type { Users } from '@prisma/client'
 
 const ForgotPasswordPage = ({
   params: { resetToken }
@@ -77,7 +78,7 @@ const ForgotPasswordPage = ({
           resetToken
         })
         //getting response from backend
-        const { data }: { data: UserProps } = resetPass
+        const { data }: { data: Users } = resetPass
 
         // make sure to view the response from the data
         data.newPassSet === 1
@@ -110,7 +111,7 @@ const ForgotPasswordPage = ({
 
         setTimeout(() => replace(`/auth/signin`), DEFAULT_DURATION)
       } catch (error: any) {
-        const message: UserProps['message'] =
+        const message: Users['message'] =
           error?.response.data.newPassSet === 0
             ? 'عفواً! حدث خطأ ما حاول مرة أخرى'
             : error?.response.data.message
@@ -167,7 +168,7 @@ const ForgotPasswordPage = ({
                   كلمة المرور
                 </label>
               </div>
-              <div className='md:w-2/3 relative'>
+              <div className='relative md:w-2/3'>
                 <input
                   id='password'
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'
@@ -195,7 +196,7 @@ const ForgotPasswordPage = ({
                   تأكيد كلمة المرور
                 </label>
               </div>
-              <div className='md:w-2/3 relative'>
+              <div className='relative md:w-2/3'>
                 <input
                   id='confirmPassword'
                   className='w-full px-4 py-2 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'

@@ -1,20 +1,18 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { getAuth } from '@/libs/actions/auth'
 import { getUser } from '@/libs/utils'
-import { UserProps } from '@/types'
 import Link from 'next/link'
 import Balance from './_Balance'
+import type { Users } from '@prisma/client'
 
 export default async function Account({ userId }: { userId?: string }) {
   const { userId: currentUserId } = await getAuth()
   const { shms_user_total_balance, shms_user_withdrawable_balance, shms_fullname } =
-    (await getUser(userId ?? currentUserId)) as UserProps
+    (await getUser(userId ?? currentUserId)) as Users
 
   return (
-    <div className='flex flex-col items-center justify-center gap-5 mt-10 md:flex-row'>
-      {/* First Card */}
-      <Card className='flex-1 pt-10 pb-0 rtl'>
-        {/* Added mr-4 for margin */}
+    <div className='flex flex-col items-center justify-center mt-10 gap-5 md:flex-row'>
+      <Card className='flex-1 w-full pt-10 pb-0 rtl md:w-fit'>
         <CardContent className='text-center'>
           <Balance
             totalAmount={shms_user_total_balance}
@@ -24,8 +22,7 @@ export default async function Account({ userId }: { userId?: string }) {
         </CardContent>
       </Card>
 
-      {/* Second Card (Smaller Card) */}
-      <Card className='p-10 rtl'>
+      <Card className='w-full p-10 rtl md:w-fit'>
         <CardContent className='flex flex-col items-center justify-center text-center'>
           <h1 className='font-bold'>{shms_fullname}</h1>
           {!userId ? (

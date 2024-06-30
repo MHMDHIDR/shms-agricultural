@@ -1,6 +1,4 @@
-import { connectDB } from '@/api/utils/db'
-import type { ProjectProps } from '@/types'
-import { ResultSetHeader } from 'mysql2/promise'
+import client from '@/../prisma/prismadb'
 
 export async function DELETE(
   _request: Request,
@@ -10,11 +8,7 @@ export async function DELETE(
 
   try {
     // Check if project exists
-    const project = (
-      (await connectDB(`SELECT * FROM projects WHERE shms_project_id = ?`, [
-        projectId
-      ])) as ProjectProps[]
-    )[0]
+    const project = await client.projects.findUnique({ where: { id: projectId } })
 
     // If project does not exist
     if (!project) {
@@ -28,12 +22,8 @@ export async function DELETE(
     }
 
     // delete project
-    const deleteUser = (await connectDB(
-      `DELETE FROM projects WHERE shms_project_id = ?`,
-      [projectId]
-    )) as ResultSetHeader
-
-    const { affectedRows: projectDeleted } = deleteUser as ResultSetHeader
+    const deleteProject = await client.projects.delete({ where: { id: projectId } })
+    const projectDeleted = deleteProject.id === projectId ? 1 : 0
 
     if (projectDeleted) {
       return new Response(

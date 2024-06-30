@@ -5,7 +5,6 @@ import { signOut, useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Error, Success } from '@/components/icons/Status'
-import type { UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import {
   Card,
   CardContent,
@@ -30,6 +29,8 @@ import { revalidatePath } from 'next/cache'
 import Layout from '@/components/custom/Layout'
 import { getAuth } from '@/libs/actions/auth'
 import NotFound from '@/app/not-found'
+import type { UserLoggedInProps, getAuthType } from '@/types'
+import { Users } from '@prisma/client'
 
 export default function ProfilePage() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -46,7 +47,7 @@ export default function ProfilePage() {
       const { userName, loading } = await getAuth()
       if (loading) return
 
-      setFullname(userName ?? session?.token?.user.fullname ?? '')
+      setFullname(userName ?? session?.token?.user.shms_fullname ?? '')
     }
 
     getUserData()
@@ -124,7 +125,7 @@ export default function ProfilePage() {
           isRenewingPassword: true
         })
         //getting response from backend
-        const { data }: { data: UserProps } = resetPass
+        const { data }: { data: Users } = resetPass
 
         // make sure to view the response from the data
         data.newPassSet === 1
@@ -155,7 +156,7 @@ export default function ProfilePage() {
               }
             })
       } catch (error: any) {
-        const message: UserProps['message'] =
+        const message: Users['message'] =
           error?.response.data.message ?? 'عفواً! حدث خطأ غير متوقع حاول مرة أخرى'
 
         //handle error, show notification using Shadcn notifcation
@@ -202,7 +203,7 @@ export default function ProfilePage() {
           fullname
         })
         //getting response from backend
-        const { data }: { data: UserProps } = resetPass
+        const { data }: { data: Users } = resetPass
 
         // make sure to view the response from the data
         data.resetEmail === 1
@@ -239,7 +240,7 @@ export default function ProfilePage() {
           await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
         }, DEFAULT_DURATION / 2)
       } catch (error: any) {
-        const message: UserProps['message'] = error?.response
+        const message: Users['message'] = error?.response
           ? error?.response.data.message
           : 'عفواً! حدث خطأ غير متوقع حاول مرة أخرى'
         //handle error, show notification using Shadcn notifcation

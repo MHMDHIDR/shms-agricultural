@@ -1,7 +1,6 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { ProjectProps, UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import { Suspense, useEffect, useState } from 'react'
 import axios from 'axios'
 import Layout from '@/components/custom/Layout'
@@ -18,6 +17,8 @@ import Modal from '@/components/custom/Modal'
 import { LoadingCard } from '@/components/custom/Loading'
 import { formattedPrice } from '@/libs/utils'
 import useDocumentTitle from '@/hooks/useDocumentTitle'
+import type { UserLoggedInProps, getAuthType } from '@/types'
+import type { Projects, Users } from '@prisma/client'
 
 export default function BuyStocks({
   params: { id: projectId }
@@ -28,7 +29,7 @@ export default function BuyStocks({
 
   const { data: session }: { data: UserLoggedInProps } = useSession()
   const [isLoading, setIsLoading] = useState(false)
-  const [project, setProject] = useState<ProjectProps>()
+  const [project, setProject] = useState<Projects>()
   const [selectedStocks, setSelectedStocks] = useState(
     JSON.parse(
       typeof window !== 'undefined' ? localStorage.getItem('shms_project')! : '{}'
@@ -54,12 +55,12 @@ export default function BuyStocks({
         setIsLoading(true)
         const {
           data: { project }
-        }: { data: { project: ProjectProps } } = await axios.get(
+        }: { data: { project: Projects } } = await axios.get(
           `${API_URL}/projects/get/${projectId}`
         )
         setProject(project)
       } catch (error) {
-        console.log(error)
+        console.error(error)
       } finally {
         setIsLoading(false)
       }
@@ -77,7 +78,7 @@ export default function BuyStocks({
           const {
             data: { shms_user_stocks }
           }: {
-            data: { shms_user_stocks: UserProps['shms_user_stock_limit'] }
+            data: { shms_user_stocks: Users['shms_user_stock_limit'] }
           } = await axios.get(`${API_URL}/users/getUserStocks/${userId}`)
 
           // set one single property in the localStorage shms_user_data withdrawableAmount to the withdrawableAmount
@@ -89,7 +90,7 @@ export default function BuyStocks({
             })
           )
         } catch (error) {
-          console.log(error)
+          console.error(error)
         }
       }
       getUserWithdrawableAmount()
@@ -121,7 +122,7 @@ export default function BuyStocks({
     localStorage.setItem(
       'shms_project',
       JSON.stringify({
-        shms_project: project?.shms_project_id,
+        shms_project: project?.id,
         stocks: selectedStocks,
         newPercentage,
         percentageCode
@@ -182,7 +183,7 @@ export default function BuyStocks({
     localStorage.setItem(
       'shms_project',
       JSON.stringify({
-        shms_project: project?.shms_project_id,
+        shms_project: project?.id,
         stocks: selectedStocks,
         newPercentage,
         percentageCode,

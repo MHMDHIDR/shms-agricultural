@@ -44,7 +44,7 @@ export default function PersonalData({
 
   useEffect(() => {
     if (session) {
-      setUserId(session?.token?.user.shms_id ?? null)
+      setUserId(session?.token?.user.id ?? null)
     }
 
     if (localStorage.getItem('shms_project')) {
@@ -102,7 +102,7 @@ export default function PersonalData({
         data: purchasedStocksData
       } = await axios.patch(`${API_URL}/stocks/add`, {
         userId: userData?.userId ?? userId,
-        shms_project_id: projectId,
+        id: projectId,
         stocks: stockItems?.stocks,
         newPercentage: stockItems?.newPercentage,
         percentageCode: stockItems?.percentageCode,
@@ -202,19 +202,30 @@ export default function PersonalData({
                 </div>
                 <div className='relative'>
                   <Modal
-                    title={`صورة المستند لــ ${session?.token?.user.fullname}`}
+                    title={`صورة المستند لــ ${session?.token?.user.shms_fullname}`}
                     document={session?.token?.user.shms_doc ?? APP_LOGO}
                     className='font-bold dark:text-white'
                     asModal
                   >
-                    <Image
-                      src={session?.token?.user.shms_doc ?? APP_LOGO}
-                      alt='Your Image Alt Text'
-                      style={{ borderRadius: 5 }}
-                      className='p-4 border border-gray-600 rounded-lg cursor-pointer dark:border dark:bg-gray-800 w-72'
-                      width={350}
-                      height={350}
-                    />
+                    {session?.token?.user.shms_doc?.includes('pdf') ? (
+                      <div className='w-full min-h-[15rem]'>
+                        <iframe
+                          src={session?.token?.user.shms_doc}
+                          className='w-full'
+                          height={350}
+                          title={`صورة المستند لــ ${session?.token?.user.shms_fullname}`}
+                        />
+                      </div>
+                    ) : (
+                      <Image
+                        src={session?.token?.user.shms_doc ?? APP_LOGO}
+                        alt='Your Image Alt Text'
+                        style={{ borderRadius: 5 }}
+                        className='p-4 border border-gray-600 rounded-lg cursor-pointer dark:border dark:bg-gray-800 w-72'
+                        width={350}
+                        height={350}
+                      />
+                    )}
                   </Modal>
                 </div>
               </div>

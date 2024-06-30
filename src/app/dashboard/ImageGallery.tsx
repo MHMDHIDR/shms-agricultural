@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export default function ImageGallery() {
   return (
-    <div className='grid grid-cols-2 md:grid-cols-3 gap-6 justify-center'>
+    <div className='justify-center grid grid-cols-2 md:grid-cols-3 gap-6'>
       <div className='grid gap-6' id='one'>
         <Image
           src='/ImageGallery/1.jpg'

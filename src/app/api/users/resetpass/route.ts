@@ -1,7 +1,6 @@
-import { connectDB } from '@/api/utils/db'
+import client from '@/../prisma/prismadb'
 import { genSalt, hash } from 'bcryptjs'
 import email from '@/libs/actions/email'
-import type { UserProps } from '@/types'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import { ComparePasswords } from '@/api/utils/compare-password'
 
@@ -18,17 +17,9 @@ export async function POST(req: Request) {
   try {
     const user = isRenewingPassword
       ? // User is renewing password
-        (
-          (await connectDB(`SELECT * FROM users WHERE shms_email = ?`, [
-            userEmail
-          ])) as UserProps[]
-        )[0]
+        await client.users.findUnique({ where: { shms_email: userEmail } })
       : // Check for user
-        (
-          (await connectDB(`SELECT * FROM users WHERE shms_user_reset_token = ?`, [
-            resetToken
-          ])) as UserProps[]
-        )[0]
+        await client.users.findFirst({ where: { shms_user_reset_token: resetToken } })
 
     if (!user) {
       return new Response(
@@ -56,14 +47,14 @@ export async function POST(req: Request) {
       const salt = await genSalt(10)
       const hashedPassword = await hash(userNewPassword, salt)
 
-      await connectDB(
-        `UPDATE users
-            SET shms_password = ?,
-                shms_user_reset_token = ?,
-                shms_user_reset_token_expires = ?
-            WHERE shms_id = ?;`,
-        [hashedPassword, null, null, user.shms_id]
-      )
+      await client.users.update({
+        where: { id: user.id },
+        data: {
+          shms_password: hashedPassword,
+          shms_user_reset_token: null,
+          shms_user_reset_token_expires: null
+        }
+      })
 
       //send the user an email with a link to signin to his/her account
       const buttonLink = APP_URL + `/auth/signin`
@@ -143,12 +134,10 @@ export async function POST(req: Request) {
       const salt = await genSalt(10)
       const hashedPassword = await hash(userNewPassword, salt)
 
-      await connectDB(
-        `UPDATE users
-            SET shms_password = ?
-            WHERE shms_id = ?;`,
-        [hashedPassword, user.shms_id]
-      )
+      await client.users.update({
+        where: { id: user.id },
+        data: { shms_password: hashedPassword }
+      })
 
       const buttonLink = APP_URL + `/auth/signin`
 

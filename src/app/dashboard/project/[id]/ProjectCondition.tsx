@@ -1,6 +1,6 @@
 export default function ProjectCondition() {
   return (
-    <div className='rtl text-right max-h-96 overflow-y-auto'>
+    <div className='overflow-y-auto text-right rtl max-h-96'>
       <p>
         إنّ لغة ماركداون (Markdown) هي لغة وب تنسيقية. فبدلاً من الكتابة بلغة HTML يمكن
         الكتابة بهذه اللغة وهي أبسط بكثير من html وسهلة القراءة والكتابة، وبوجود مفسر

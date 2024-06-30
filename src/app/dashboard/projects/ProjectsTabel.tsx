@@ -15,21 +15,22 @@ import Link from 'next/link'
 import Modal from '@/components/custom/Modal'
 import { Button } from '@/components/ui/button'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import { cn, getProjectDate, getProjectStatus } from '@/libs/utils'
-import type { ProjectProps } from '@/types'
+import { cn, getProjectDate, getProjectStatus, scrollToView } from '@/libs/utils'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import NoRecords from '@/components/custom/NoRecords'
+import type { Projects } from '@prisma/client'
 
 export default function ProjectsTable() {
-  const [projects, setProjects] = useState<ProjectProps[]>([])
+  const [projects, setProjects] = useState<Projects[]>([])
   const [projectDeleted, setProjectDeleted] = useState<number>(0)
 
   const { refresh } = useRouter()
 
   const getProjects = async () => {
-    const { data: projects }: { data: ProjectProps[] } = await axios.get(
+    const { data: projects }: { data: Projects[] } = await axios.get(
       `${API_URL}/projects/get`
     )
     setProjects(projects)
@@ -41,7 +42,7 @@ export default function ProjectsTable() {
 
   const deleteProject = async (projectId: string) => {
     try {
-      const { data }: { data: ProjectProps } = await axios.delete(
+      const { data }: { data: Projects } = await axios.delete(
         `${API_URL}/projects/delete/${projectId}`
       )
 
@@ -49,7 +50,8 @@ export default function ProjectsTable() {
       const {
         data: { docDeleted }
       }: { data: { docDeleted: boolean } } = await axios.delete(
-        decodeURI(`${API_URL}/deleteFromS3/projects-${projectId}`)
+        decodeURI(`${API_URL}/deleteFromS3/${projectId}`),
+        { data: { imageId: projectId } }
       )
 
       // make sure to view the response from the data
@@ -142,10 +144,23 @@ export default function ProjectsTable() {
               <Skeleton className='w-full h-12' />
             </TableCell>
           </TableRow>
+        ) : projects[0] === null ? (
+          <TableRow>
+            <TableCell colSpan={15} className='space-y-6'>
+              <NoRecords
+                className='cols-span-5'
+                button={
+                  <Button variant={'pressable'} onClick={() => scrollToView(900)}>
+                    إضافة مشروع جديد
+                  </Button>
+                }
+              />
+            </TableCell>
+          </TableRow>
         ) : (
           projects.map(project => {
             return (
-              <TableRow key={project.shms_project_id}>
+              <TableRow key={project.id}>
                 <TableCell className='min-w-40'>{project.shms_project_name}</TableCell>
                 <TableCell className='min-w-40'>
                   {project.shms_project_location}
@@ -175,8 +190,10 @@ export default function ProjectsTable() {
                     <Modal
                       title={`دراسة الجدوى ${project.shms_project_name}`}
                       document={
-                        JSON.parse(String(project.shms_project_study_case))[0]
-                          ?.imgDisplayPath
+                        (
+                          project
+                            .shms_project_study_case[0] as Projects['shms_project_study_case'][0]
+                        ).imgDisplayPath
                       }
                       className='font-bold dark:text-white'
                     >
@@ -198,12 +215,12 @@ export default function ProjectsTable() {
                   <Confirm
                     variant={'destructive'}
                     onClick={async () => {
-                      await deleteProject(project.shms_project_id)
+                      await deleteProject(project.id)
                     }}
                   >
                     حذف
                   </Confirm>
-                  <Link href={'/dashboard/project/' + project.shms_project_id}>
+                  <Link href={'/dashboard/project/' + project.id}>
                     <Button variant={'outline'}>تعديل المشروع</Button>
                   </Link>
                 </TableCell>

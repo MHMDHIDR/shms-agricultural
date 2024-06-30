@@ -1,13 +1,11 @@
-import { connectDB } from '@/api/utils/db'
+import client from '@/../prisma/prismadb'
 import { genSalt, hash } from 'bcryptjs'
 import email from '@/libs/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import type { UserProps } from '@/types'
 
 export async function POST(req: Request) {
   const body = await req.json()
   const {
-    shms_id,
     userFullName,
     nationality,
     dateOfBirth,
@@ -18,7 +16,7 @@ export async function POST(req: Request) {
     shms_doc
   } = body
 
-  if (newUserEmail === '' || phone === '') {
+  if (!newUserEmail || !phone) {
     return new Response(
       JSON.stringify({ userAdded: 0, message: 'الرجاء تعبئة جميع الحقول المطلوبة' }),
       { status: 400 }
@@ -27,11 +25,11 @@ export async function POST(req: Request) {
 
   try {
     // Check if user exists
-    const userExists = (await connectDB(`SELECT * FROM users WHERE shms_email = ?`, [
-      newUserEmail
-    ])) as UserProps[]
+    const userExists = await client.users.findUnique({
+      where: { shms_email: newUserEmail }
+    })
 
-    if (userExists.length > 0) {
+    if (userExists) {
       return new Response(
         JSON.stringify({
           userAdded: 0,
@@ -47,27 +45,34 @@ export async function POST(req: Request) {
 
     const userCanResetPasswordUntil = new Date(Date.now() + 3600000).toISOString() // 1 hour from signup time
 
-    // create new user
-    await connectDB(
-      `INSERT INTO users (shms_id, shms_fullname, shms_nationality, shms_date_of_birth, shms_address, shms_email, shms_phone, shms_password, shms_doc, shms_user_account_status, shms_user_reset_token_expires)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        shms_id,
-        userFullName,
-        nationality,
-        dateOfBirth,
-        address,
-        newUserEmail,
-        phone,
-        hashedPassword,
-        shms_doc,
-        'pending',
-        userCanResetPasswordUntil
-      ]
-    )
+    // get the last shms_sn from the users table
+    const lastUser = await client.users.findFirst({
+      select: { shms_sn: true },
+      orderBy: { shms_sn: 'desc' }
+    })
 
-    //send the user an email with a link to activate his/her account
-    const buttonLink = APP_URL + `/auth/activate/${shms_id}`
+    // Increment the last shms_sn by 1
+    const shms_sn = lastUser ? lastUser.shms_sn + 1 : 1
+
+    // Create new user
+    const newUser = await client.users.create({
+      data: {
+        shms_fullname: userFullName.trim(),
+        shms_sn,
+        shms_nationality: nationality,
+        shms_date_of_birth: new Date(dateOfBirth),
+        shms_address: address,
+        shms_email: newUserEmail,
+        shms_phone: phone,
+        shms_password: hashedPassword,
+        shms_doc,
+        shms_user_account_status: 'pending',
+        shms_user_reset_token_expires: userCanResetPasswordUntil
+      }
+    })
+
+    // Send the user an email with a link to activate their account
+    const buttonLink = `${APP_URL}/auth/activate/${newUser.id}`
 
     const emailData = {
       from: `شمس للخدمات الزراعية | SHMS Agriculture <${ADMIN_EMAIL}>`,
@@ -76,20 +81,20 @@ export async function POST(req: Request) {
       msg: {
         title: 'مرحباً بك في شمس للخدمات الزراعية',
         msg: `
-            مرحباً، ${userFullName}
+          مرحباً، ${userFullName}
 
-             شكراً لتسجيلك في شمس للخدمات الزراعي،
-             اذا كنت ترغب في تفعيل حسابك، يرجى الضغط على الرابط أدناه لتأكيد عنوان بريدك الإلكتروني:
+          شكراً لتسجيلك في شمس للخدمات الزراعي،
+          اذا كنت ترغب في تفعيل حسابك، يرجى الضغط على الرابط أدناه لتأكيد عنوان بريدك الإلكتروني:
 
           إذا كنت تعتقد أن هذا البريد الالكتروني وصلك بالخطأ، أو أن هنالك مشكلة ما، يرجى تجاهل هذا البريد من فضلك!
-            `,
+        `,
         buttonLink,
         buttonLabel: 'تفعيل حسابك'
       }
     }
 
-    const data = await email(emailData)
-    if (data?.id) {
+    const emailResponse = await email(emailData)
+    if (emailResponse?.id) {
       return new Response(
         JSON.stringify({
           userAdded: 1,
@@ -97,6 +102,15 @@ export async function POST(req: Request) {
             'تم تسجيل حساب المستخدم بنجاح ، يرجى تفعيل حسابك من البريد الاكتروني المرسل لديك 👍🏼'
         }),
         { status: 201 }
+      )
+    } else {
+      return new Response(
+        JSON.stringify({
+          userAdded: 0,
+          message:
+            'لم يتم إرسال البريد الإلكتروني للتفعيل، يرجى المحاولة مرة أخرى لاحقاً 🙁'
+        }),
+        { status: 500 }
       )
     }
   } catch (error) {

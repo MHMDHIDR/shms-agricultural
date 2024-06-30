@@ -1,9 +1,8 @@
-// /withdrawActions/update/[operationId]
-import { connectDB } from '@/api/utils/db'
 import email from '@/libs/actions/email'
+import client from '@/../prisma/prismadb'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import type { UserProps, accountingOperationsProps } from '@/types'
 import { arabicDate } from '@/libs/utils'
+import type { accountingOperationsProps } from '@/types'
 
 export async function PATCH(
   req: Request,
@@ -14,7 +13,7 @@ export async function PATCH(
   const body = await req.json()
   const {
     status: accounting_operation_status,
-    userId: shms_user_id
+    userId
   }: {
     status: accountingOperationsProps['accounting_operation_status']
     userId: accountingOperationsProps['shms_user_id']
@@ -31,17 +30,12 @@ export async function PATCH(
   }
 
   // Check if user exists
-  const userExists = (
-    (await connectDB(`SELECT * FROM users WHERE shms_id = ?`, [
-      shms_user_id
-    ])) as UserProps[]
-  )[0]
+  const userExists = await client.users.findUnique({ where: { id: userId } })
+
   // Check if operation exists
-  const operationExists = (
-    (await connectDB(`SELECT * FROM withdraw_actions WHERE shms_withdraw_id = ?`, [
-      operationId
-    ])) as accountingOperationsProps[]
-  )[0]
+  const operationExists = await client.withdraw_actions.findUnique({
+    where: { id: operationId }
+  })
 
   if (!userExists || !operationExists) {
     return new Response(
@@ -56,13 +50,13 @@ export async function PATCH(
   try {
     // update the operation status
     accounting_operation_status === 'deleted'
-      ? await connectDB(`DELETE FROM withdraw_actions WHERE shms_withdraw_id = ?`, [
-          operationId
-        ])
-      : await connectDB(
-          `UPDATE withdraw_actions SET accounting_operation_status = ? WHERE shms_withdraw_id = ?`,
-          [accounting_operation_status, operationId]
-        )
+      ? await client.withdraw_actions.delete({
+          where: { id: operationId }
+        })
+      : await client.withdraw_actions.update({
+          where: { id: operationId },
+          data: { accounting_operation_status }
+        })
 
     const currentBalance = userExists.shms_user_withdrawable_balance
     let userNewBalance = 0
@@ -94,10 +88,10 @@ export async function PATCH(
       userNewBalance = currentBalance + operationExists.shms_withdraw_amount
     }
 
-    await connectDB(
-      `UPDATE users SET shms_user_withdrawable_balance = ? WHERE shms_id = ?`,
-      [userNewBalance, userExists.shms_id]
-    )
+    await client.users.update({
+      where: { id: userExists.id },
+      data: { shms_user_withdrawable_balance: userNewBalance }
+    })
 
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments/withdraw`

@@ -1,6 +1,4 @@
-import { connectDB } from '@/api/utils/db'
-import type { UserProps } from '@/types'
-import { ResultSetHeader } from 'mysql2/promise'
+import client from '@/../prisma/prismadb'
 
 export async function DELETE(
   _request: Request,
@@ -10,9 +8,9 @@ export async function DELETE(
 
   try {
     // Check if user exists
-    const user = (
-      (await connectDB(`SELECT * FROM users WHERE shms_id = ?`, [userId])) as UserProps[]
-    )[0]
+    const user = await client.users.findUnique({
+      where: { id: userId }
+    })
 
     // If user does not exist
     if (!user) {
@@ -23,12 +21,11 @@ export async function DELETE(
     }
 
     // activate user
-    const deleteUser = (await connectDB(`DELETE FROM users WHERE shms_id = ?`, [
-      userId
-    ])) as ResultSetHeader
-    const { affectedRows: userDeleted } = deleteUser as ResultSetHeader
+    const userDeleted = await client.users.delete({
+      where: { id: userId }
+    })
 
-    if (userDeleted) {
+    if (userDeleted.id) {
       return new Response(
         JSON.stringify({ userDeleted, message: `تم حذف حساب المستخدم بنجاح!` }),
         { status: 200 }

@@ -31,7 +31,7 @@ export default function Confirm({
   return (
     <AlertDialog>
       <AlertDialogTrigger
-        className={`w-full${
+        className={`w-fit mx-auto${
           isLoading || isSubmitting
             ? ' cursor-progress opacity-75 pointer-events-none'
             : ''
@@ -40,9 +40,9 @@ export default function Confirm({
       >
         <Button
           variant={variant}
-          asSpan
           className={cn(isSubmitting ? 'cursor-progress opacity-75' : '', className)}
           disabled={isSubmitting}
+          asSpan
         >
           {children ?? 'إجراء'}
         </Button>
@@ -53,7 +53,7 @@ export default function Confirm({
             {message ?? 'هل أنت متأكد'}
           </AlertDialogTitle>
           <AlertDialogDescription className='text-right select-none'>
-            هذا الإجراء لا يمكن إلغاؤه. هل أنت متأكد من أنك تريد الاستمرار؟
+            هذا الإجراء لا يمكن إلغاؤه لاحقاً! هل أنت متأكد من أنك تريد الاستمرار؟
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

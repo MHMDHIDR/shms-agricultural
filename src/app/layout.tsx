@@ -1,12 +1,13 @@
 import { Toaster } from '@/components/ui/sonner'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import { cn } from '@/libs/utils'
+import { getServerSession } from 'next-auth'
+import { Cairo as FontSans } from 'next/font/google'
+import NextTopLoader from 'nextjs-toploader'
 import { FileUploadProvider } from '@/providers/FileUpload'
 import SessionProvider from '@/providers/Session'
 import { ThemeProvider } from '@/providers/Theme'
 import type { Metadata } from 'next'
-import { getServerSession } from 'next-auth'
-import { Cairo as FontSans } from 'next/font/google'
 import './globals.css'
 
 export const fontSans = FontSans({ subsets: ['arabic'], variable: '--font-sans' })
@@ -81,7 +82,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SessionProvider session={session}>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
             <FileUploadProvider>
-              <main>{children}</main>
+              <main>
+                <NextTopLoader
+                  color='#2376EB'
+                  // initialPosition={0.08}
+                  // crawlSpeed={200}
+                  // height={3}
+                  // crawl={true}
+                  // showSpinner={false}
+                  zIndex={1600}
+                  showAtBottom={false}
+                />
+                {children}
+              </main>
               <Toaster />
             </FileUploadProvider>
           </ThemeProvider>

@@ -1,9 +1,9 @@
 import { API_URL } from '@/data/constants'
 import axios from 'axios'
-
-import type { NextAuthOptions, Session, User } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import type { NextAuthOptions, Session, User } from 'next-auth'
+import type { Users } from '@prisma/client'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         try {
           const loginUser = await axios.post(`${API_URL}/users/signin`, credentials)
-          const { data: user } = loginUser
+          const { data: user }: { data: Users } = loginUser
           if (user && user.loggedIn === 1) {
             return Promise.resolve(user)
           }

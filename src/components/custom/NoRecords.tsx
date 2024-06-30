@@ -17,7 +17,7 @@ export default function NoRecords({
   className
 }: NoItemsProps): JSX.Element {
   return (
-    <div className='flex flex-col items-center justify-center gap-6 my-5'>
+    <div className='flex flex-col items-center justify-center my-5 gap-6'>
       <div
         className={cn(
           'w-56 h-56 md:w-72 md:h-72 flex items-center justify-center rounded-full bg-gray-50 shadow-md md:shadow-lg shadow-[#e1e3ec]',

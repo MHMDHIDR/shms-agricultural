@@ -1,8 +1,8 @@
 import { APP_LOGO } from '@/data/constants'
 import { createSlug } from '@/libs/utils'
-import type { imgsProps, uploadFileToS3Props } from '@/types'
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { randomUUID } from 'crypto'
+import { ObjectId } from 'mongodb'
+import type { imgsProps, uploadFileToS3Props } from '@/types'
 
 const { AWS_ACCESS_ID, AWS_SECRET, AWS_BUCKET_NAME, AWS_REGION } = process.env
 
@@ -72,7 +72,9 @@ export async function POST(request: any) {
     const formData = await request.formData()
     const fullname: string = formData.get('fullname')
     const multiple: boolean = JSON.parse(formData.get('multiple') ?? 'false')
-    const projectId: string = formData.get('projectId') ?? randomUUID()
+
+    // projectId get request or generate a new valid mongodbId
+    const projectId: string = formData.get('projectId') ?? new ObjectId().toHexString()
 
     // Extract files dynamically based on their dynamic names
     const files: File[] = []
@@ -108,7 +110,7 @@ export async function POST(request: any) {
 
       const fileUrl = `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${key}`
 
-      return new Response(JSON.stringify({ shms_id: projectId, shms_doc: fileUrl }), {
+      return new Response(JSON.stringify({ id: projectId, shms_doc: fileUrl }), {
         status: 200
       })
     } else {
@@ -146,7 +148,7 @@ export async function POST(request: any) {
 
       return new Response(
         JSON.stringify({
-          shms_project_id: projectId,
+          id: projectId,
           shms_project_images: fileKeys.map((fileKey, index) => {
             return {
               imgDisplayName: fileKey,

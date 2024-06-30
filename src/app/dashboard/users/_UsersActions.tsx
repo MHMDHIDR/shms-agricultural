@@ -12,23 +12,16 @@ import { redirect } from '@/libs/utils'
 import { toast } from 'sonner'
 import { Error, Success } from '@/components/icons/Status'
 import { useEffect, useState } from 'react'
-import type { UserProps } from '@/types'
 import axios from 'axios'
+import type { Users } from '@prisma/client'
 
-export default function UsersActions({
-  user,
-  id
-}: {
-  user: UserProps[]
-  id: UserProps['shms_id']
-}) {
-  const [userStockLimit, setUserStockLimit] =
-    useState<UserProps['shms_user_stock_limit']>(1)
+export default function UsersActions({ user, id }: { user: Users[]; id: Users['id'] }) {
+  const [userStockLimit, setUserStockLimit] = useState<Users['shms_user_stock_limit']>(1)
   const [userTotalBalance, setUserTotalBalance] =
-    useState<UserProps['shms_user_total_balance']>(0)
+    useState<Users['shms_user_total_balance']>(0)
   const [userTotalWithdrawableBalance, setUserTotalWithdrawableBalance] =
-    useState<UserProps['shms_user_withdrawable_balance']>(0)
-  const [filteredUser, setFilteredUser] = useState<UserProps>()
+    useState<Users['shms_user_withdrawable_balance']>(0)
+  const [filteredUser, setFilteredUser] = useState<Users>()
 
   const [formStatus, setFormStatus] = useState({
     isSubmitting: false,
@@ -37,7 +30,7 @@ export default function UsersActions({
 
   useEffect(() => {
     if (id) {
-      const filtered = user.filter(user => user.shms_id === id)
+      const filtered = user.filter(user => user.id === id)
       setFilteredUser(filtered[0])
     }
   }, [id, user])
@@ -45,7 +38,7 @@ export default function UsersActions({
   const deleteUser = async (id: string, S3docId: string) => {
     try {
       setFormStatus({ ...formStatus, isSubmitting: true })
-      const { data }: { data: UserProps } = await axios.delete(
+      const { data }: { data: Users } = await axios.delete(
         `${API_URL}/users/delete/${id}`
       )
 
@@ -105,10 +98,10 @@ export default function UsersActions({
 
   const toggleUserStatus = async (
     id: string,
-    status: UserProps['shms_user_account_status']
+    status: Users['shms_user_account_status']
   ) => {
     try {
-      const { data }: { data: UserProps } = await axios.patch(
+      const { data }: { data: Users } = await axios.patch(
         `${API_URL}/users/toggleStatus/${id}`,
         { status }
       )
@@ -167,7 +160,7 @@ export default function UsersActions({
   ) => {
     try {
       setFormStatus({ ...formStatus, isSubmitting: true })
-      const { data }: { data: UserProps } = await axios.patch(
+      const { data }: { data: Users } = await axios.patch(
         `${API_URL}/users/updateStockLimitOrBalance/${id}`,
         { newValue, type }
       )
@@ -243,7 +236,7 @@ export default function UsersActions({
           variant={'destructive'}
           onClick={async () => {
             await deleteUser(
-              filteredUser?.shms_id!,
+              filteredUser?.id!,
               filteredUser?.shms_doc?.split('/').pop() ?? ''
             )
           }}
@@ -256,7 +249,7 @@ export default function UsersActions({
           variant={'outline'}
           onClick={async () => {
             await toggleUserStatus(
-              filteredUser?.shms_id!,
+              filteredUser?.id!,
               filteredUser?.shms_user_account_status === 'block'
                 ? 'active'
                 : filteredUser?.shms_user_account_status === 'pending'
@@ -266,7 +259,6 @@ export default function UsersActions({
           }}
           className='w-full'
         >
-          {/* {JSON.stringify(filteredUser?.shms_user_account_status)} */}
           {filteredUser?.shms_user_account_status === 'block'
             ? 'الغاء الحظر'
             : filteredUser?.shms_user_account_status === 'pending'
@@ -277,7 +269,7 @@ export default function UsersActions({
           StockLimit={filteredUser?.shms_user_stock_limit ?? 1}
           onClick={async () => {
             await updateUserStockLimitOrBalance(
-              filteredUser?.shms_id!,
+              filteredUser?.id!,
               userStockLimit!,
               'stockLimit'
             )
@@ -291,7 +283,7 @@ export default function UsersActions({
           StockLimit={filteredUser?.shms_user_total_balance ?? 1}
           onClick={async () => {
             await updateUserStockLimitOrBalance(
-              filteredUser?.shms_id!,
+              filteredUser?.id!,
               userTotalBalance!,
               'totalBalance'
             )
@@ -305,7 +297,7 @@ export default function UsersActions({
           StockLimit={filteredUser?.shms_user_withdrawable_balance ?? 1}
           onClick={async () => {
             await updateUserStockLimitOrBalance(
-              filteredUser?.shms_id!,
+              filteredUser?.id!,
               userTotalWithdrawableBalance!,
               'withdrawableBalance'
             )

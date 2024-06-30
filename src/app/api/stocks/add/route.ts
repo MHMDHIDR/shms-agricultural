@@ -1,33 +1,28 @@
-import { connectDB } from '@/api/utils/db'
+import client from '@/../prisma/prismadb'
 import { ADMIN_EMAIL, APP_TITLE, APP_URL } from '@/data/constants'
-import type { ProjectProps, UserProps, stocksPurchasedProps } from '@/types'
 import email from '@/libs/actions/email'
-import { ResultSetHeader } from 'mysql2/promise'
+import type { stocksPurchasedProps } from '@/types'
+import type { Projects, Users } from '@prisma/client'
 
 export async function PATCH(req: Request) {
   const body = await req.json()
   const {
-    userId: shms_id,
-    shms_project_id,
+    userId,
+    id,
     stocks,
     newPercentage,
     percentageCode,
     paymentMethod
   }: stocksPurchasedProps = body
 
-  if (!shms_id) throw new Error('User ID is required')
+  if (!userId) throw new Error('User ID is required')
 
   try {
     // Check if the user has enough balance
-    const user = (
-      (await connectDB(`SELECT * FROM users WHERE shms_id = ?`, [shms_id])) as UserProps[]
-    )[0]
-
-    const project = (
-      (await connectDB(`SELECT * FROM projects WHERE shms_project_id = ?`, [
-        shms_project_id
-      ])) as ProjectProps[]
-    )[0]
+    const [user, project] = await Promise.all([
+      client.users.findUnique({ where: { id: userId } }),
+      client.projects.findUnique({ where: { id } })
+    ])
 
     // if user or project not found
     if (!user || !project) {
@@ -67,11 +62,11 @@ export async function PATCH(req: Request) {
 
     // Construct the new user stocks array based on the condition
     const newUserStocks =
-      userPrevStocks !== null && userPrevStocks.length > 0
+      userPrevStocks !== null && Array.isArray(userPrevStocks)
         ? [
-            ...JSON.parse(String(userPrevStocks)),
+            ...userPrevStocks,
             {
-              shms_project_id,
+              id,
               stocks,
               newPercentage,
               percentageCode,
@@ -80,7 +75,7 @@ export async function PATCH(req: Request) {
           ]
         : [
             {
-              shms_project_id,
+              id,
               stocks,
               newPercentage,
               percentageCode,
@@ -89,24 +84,25 @@ export async function PATCH(req: Request) {
           ]
 
     // Use newUserStocks array in the query
-    await connectDB(
-      `UPDATE users SET shms_user_stocks = ?${
-        paymentMethod === 'balance'
-          ? ', shms_user_withdrawable_balance = ?, shms_user_total_balance = ?'
-          : ''
-      } WHERE shms_id = ?`,
-      [
-        JSON.stringify(newUserStocks),
-        ...(paymentMethod === 'balance' ? [newWithdrawableBalance, newTotalBalance] : []),
-        shms_id
-      ]
-    )
+    await client.users.update({
+      where: { id: userId },
+      data: {
+        shms_user_stocks: newUserStocks,
+        ...(paymentMethod === 'balance'
+          ? {
+              shms_user_withdrawable_balance: newWithdrawableBalance,
+              shms_user_total_balance: newTotalBalance
+            }
+          : {})
+      }
+    })
 
-    const updateProjectAvaStocks = await connectDB(
-      `UPDATE projects SET shms_project_available_stocks = ? WHERE shms_project_id = ?`,
-      [projectAvailableStocks - stocks, shms_project_id]
-    )
-    const { affectedRows: projectUpdated } = updateProjectAvaStocks as ResultSetHeader
+    await client.projects.update({
+      where: { id },
+      data: {
+        shms_project_available_stocks: projectAvailableStocks - stocks
+      }
+    })
 
     //send the user an email with a link to activate his/her account
     const buttonLink = APP_URL + `/profile/investments`
@@ -147,7 +143,7 @@ export async function PATCH(req: Request) {
     // Promise.all
     const data = await Promise.all([email(investorEmailData), email(adminEmailData)])
 
-    if (projectUpdated && data[0] && data[1]) {
+    if (data[0] && data[1]) {
       return new Response(
         JSON.stringify({
           stocksPurchased: 1,
@@ -179,13 +175,13 @@ export async function PATCH(req: Request) {
   }
 }
 
-function getUserPrevStocks(user: UserProps) {
+function getUserPrevStocks(user: Users) {
   if (!user || !user.shms_user_stocks || user.shms_user_stocks.length === 0) return null
 
   return user.shms_user_stocks
 }
 
-function getUserPrevWithdrawableBalance(user: UserProps) {
+function getUserPrevWithdrawableBalance(user: Users) {
   if (
     !user ||
     !user.shms_user_withdrawable_balance ||
@@ -196,14 +192,14 @@ function getUserPrevWithdrawableBalance(user: UserProps) {
   return user.shms_user_withdrawable_balance
 }
 
-function getUserPrevTotalBalance(user: UserProps) {
+function getUserPrevTotalBalance(user: Users) {
   if (!user || !user.shms_user_total_balance || user.shms_user_total_balance === 0)
     return null
 
   return user.shms_user_total_balance
 }
 
-function getProjectStocks(project: ProjectProps) {
+function getProjectStocks(project: Projects) {
   if (!project || !project.shms_project_available_stocks) return 0
 
   return project.shms_project_available_stocks

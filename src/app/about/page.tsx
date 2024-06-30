@@ -12,11 +12,11 @@ export default function AboutPage() {
   return (
     <Layout>
       <main className='flex flex-col justify-between min-h-screen p-24 rtl'>
-        <h1 className='text-xl text-center underline-hover w-fit mx-auto'>
+        <h1 className='mx-auto text-xl text-center underline-hover w-fit'>
           نبذة عن منصة شمس
         </h1>
 
-        <h2 className='mt-8 text-lg text-right font-bold underline underline-offset-4'>
+        <h2 className='mt-8 text-lg font-bold text-right underline underline-offset-4'>
           رؤيتنا:
         </h2>
         <p className='text-xl leading-10'>
@@ -24,7 +24,7 @@ export default function AboutPage() {
           الاستثمارية بالمساهمة وتحقيق الاستدامة البيئية والاقتصادية في القطاع الزراعي.
         </p>
 
-        <h2 className='mt-8 text-lg text-right font-bold underline underline-offset-4'>
+        <h2 className='mt-8 text-lg font-bold text-right underline underline-offset-4'>
           أهدافنا:
         </h2>
         <p className='text-xl leading-10'>
@@ -33,7 +33,7 @@ export default function AboutPage() {
           لتحقيق أفضل العوائد.
         </p>
 
-        <h2 className='mt-8 text-lg text-right font-bold underline underline-offset-4'>
+        <h2 className='mt-8 text-lg font-bold text-right underline underline-offset-4'>
           قيمنا:
         </h2>
         <p className='text-xl leading-10'>

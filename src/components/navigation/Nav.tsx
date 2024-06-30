@@ -13,7 +13,6 @@ import {
 import useEventListener from '@/hooks/useEventListener'
 import { getAuth } from '@/libs/actions/auth'
 import { abstractWords, cn, getUser } from '@/libs/utils'
-import type { MenuItemsProps, UserLoggedInProps, UserProps, getAuthType } from '@/types'
 import { LogIn, LogOut } from 'lucide-react'
 import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
 import Link from 'next/link'
@@ -24,6 +23,8 @@ import { MenuToggler } from './MenuToggler'
 import MobileNavigation from './MobileNavigation'
 import { Skeleton } from '@/components/ui/skeleton'
 import { APP_URL } from '@/data/constants'
+import type { MenuItemsProps, UserLoggedInProps, getAuthType } from '@/types'
+import type { Users } from '@prisma/client'
 
 export default function Nav() {
   const {
@@ -39,6 +40,10 @@ export default function Nav() {
 
   const [isUserAdmin, setIsUserAdmin] = useState(false)
   const [userName, setUserName] = useState('')
+
+  let currentUser: getAuthType =
+    typeof window !== 'undefined' &&
+    JSON.parse(String(localStorage.getItem('shms_user_data')))
 
   // عناصر القائمة
   const MenuItems: MenuItemsProps = [
@@ -85,7 +90,7 @@ export default function Nav() {
           (await getAuth()) as getAuthType
 
         const { shms_user_total_balance, shms_user_withdrawable_balance } =
-          (await getUser(userId)) as UserProps
+          (await getUser(userId)) as Users
 
         localStorage.setItem(
           'shms_user_data',
@@ -108,12 +113,12 @@ export default function Nav() {
   useEffect(() => {
     setUserName(
       abstractWords({
-        words: session?.token?.user.fullname ?? 'حسابي',
+        words: currentUser?.userName ?? session?.token?.user.shms_fullname ?? 'حسابي',
         wordsLength: 2,
         ellipsis: false
       })
     )
-  }, [session?.token?.user.fullname])
+  }, [session?.token?.user.shms_fullname, currentUser])
 
   useEffect(() => {
     setOnMobileScreen(WINDOW_WIDTH < MOBILE_SCREEN)

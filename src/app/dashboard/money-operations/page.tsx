@@ -1,5 +1,4 @@
 import { getUserMoneyOperations } from '@/libs/utils'
-import { accountingOperationsProps } from '@/types'
 import {
   Card,
   CardContent,
@@ -16,7 +15,7 @@ import { LoadingPage } from '@/components/custom/Loading'
 
 export default async function MoneyOperations() {
   const { userType, loading } = await getAuth()
-  const withdrawActions = (await getUserMoneyOperations()) as accountingOperationsProps[]
+  const withdrawActions = await getUserMoneyOperations()
 
   return loading ? (
     <LoadingPage />
@@ -24,7 +23,7 @@ export default async function MoneyOperations() {
     <NotFound />
   ) : (
     <Layout>
-      <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>العمليات المالية</h1>
+      <h1 className='mt-20 mb-10 text-2xl font-bold text-center'>العمليات المالية</h1>
       <DashboardNav />
 
       <section className='container mx-auto'>

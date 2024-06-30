@@ -2,7 +2,6 @@
 
 import { DEFAULT_DURATION } from '@/data/constants'
 import { validatePasswordStrength, redirect as redirectPage } from '@/libs/utils'
-import type { UserLoggedInProps, UserProps } from '@/types'
 import { EyeClosedIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { EyeIcon } from 'lucide-react'
 import { signIn } from 'next-auth/react'
@@ -16,6 +15,8 @@ import Layout from '@/components/custom/Layout'
 import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { useSession } from 'next-auth/react'
+import type { UserLoggedInProps } from '@/types'
+import type { Users } from '@prisma/client'
 
 const SigninPage = () => {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -112,8 +113,7 @@ const SigninPage = () => {
       } catch (error: any) {
         console.error('Error', error)
 
-        const message: UserProps['message'] =
-          error?.response?.data?.message ?? 'حدث خطأ ما'
+        const message: Users['message'] = error?.response?.data?.message ?? 'حدث خطأ ما'
         //handle error, show notification using Shadcn notifcation
         toast(message ?? JSON.stringify(error), {
           icon: <Error className='w-6 h-6 ml-3' />,
@@ -175,7 +175,7 @@ const SigninPage = () => {
                   كلمة المرور
                 </label>
               </div>
-              <div className='md:w-2/3 relative'>
+              <div className='relative md:w-2/3'>
                 <input
                   id='password'
                   onChange={handlePasswordChange}

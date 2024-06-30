@@ -46,8 +46,8 @@ export function ConfirmDialog({
             يمكنك {heading} لهذا المستخدم، ثم الضغط على حفظ التغييرات
           </DialogDescription>
         </DialogHeader>
-        <div className='grid gap-4 py-4'>
-          <div className='grid items-center grid-cols-4 gap-4'>
+        <div className='py-4 grid gap-4'>
+          <div className='items-center grid grid-cols-4 gap-4'>
             <Label htmlFor='stocks_limit' className='text-right'>
               إدخل العدد
             </Label>
@@ -66,10 +66,11 @@ export function ConfirmDialog({
         <DialogFooter>
           <Button
             type='submit'
-            className={`ml-auto ${
+            className={`ml-auto select-none ${
               isSubmittingDone ? 'cursor-not-allowed opacity-75' : ''
             }`}
             onClick={onClick}
+            disabled={isSubmittingDone}
           >
             {isSubmitting ? (
               <>

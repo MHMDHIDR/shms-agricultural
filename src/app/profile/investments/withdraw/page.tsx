@@ -17,7 +17,7 @@ export default async function WithDrawPage() {
     <Layout>
       <section className='container flex flex-col items-center justify-between'>
         <Tabs defaultValue='withdraw_operations' className='w-full mx-auto mt-16'>
-          <TabsList className='grid items-center w-full grid-cols-2 gap-2 mb-6'>
+          <TabsList className='items-center w-full mb-6 grid grid-cols-2 gap-2'>
             <TabsTrigger className='border border-gray-300' value='withdraw_operations'>
               عمليات السحب
             </TabsTrigger>

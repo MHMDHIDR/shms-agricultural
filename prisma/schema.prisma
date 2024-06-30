@@ -1,0 +1,117 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserType {
+  admin
+  user
+}
+
+enum UserStatus {
+  active
+  block
+  pending
+}
+
+enum ProjectStatus {
+  pending
+  active
+}
+
+type Stocks {
+  id             String
+  stocks         Int
+  newPercentage  Int
+  percentageCode String
+  createdAt      DateTime
+}
+
+type ProjectImages {
+  imgDisplayName String
+  imgDisplayPath String
+}
+
+model Projects {
+  id                                   String          @id @default(auto()) @map("_id") @db.ObjectId
+  shms_project_images                  ProjectImages[]
+  shms_project_study_case              ProjectImages[]
+  shms_project_study_case_visibility   Boolean         @default(false)
+  shms_project_name                    String
+  shms_project_location                String
+  shms_project_start_date              DateTime
+  shms_project_end_date                DateTime
+  shms_project_invest_date             DateTime
+  shms_project_profits_collect_date    DateTime
+  shms_project_available_stocks        Int
+  shms_project_total_stocks            Int
+  shms_project_stock_price             Int
+  shms_project_special_percentage      Int?
+  shms_project_special_percentage_code String?
+  shms_project_stock_profits           Int
+  shms_project_description             String
+  shms_project_terms                   String?
+  updateImg                            Boolean?
+  updatePercentage                     Boolean?
+  projectAdded                         Int?
+  projectDeleted                       Int?
+  projectUpdated                       Int?
+  message                              String?
+  shms_project_status                  ProjectStatus   @default(pending)
+
+  @@map("projects")
+}
+
+model Users {
+  id                             String             @id @default(auto()) @map("_id") @db.ObjectId
+  shms_sn                        Int                @default(0)
+  shms_fullname                  String
+  shms_nationality               String
+  shms_date_of_birth             DateTime
+  shms_address                   String             @default("لم يتم إدخال العنوان")
+  shms_email                     String             @unique
+  shms_password                  String
+  shms_phone                     String
+  shms_doc                       String
+  shms_user_stocks               Stocks[]
+  shms_user_stock_limit          Int                @default(20)
+  shms_user_total_balance        Int                @default(0)
+  shms_user_withdrawable_balance Int                @default(0)
+  shms_created_at                DateTime           @default(now())
+  shms_user_account_type         UserType           @default(user)
+  shms_user_account_status       UserStatus         @default(active)
+  shms_user_reset_token          String?
+  shms_user_reset_token_expires  DateTime?
+  message                        String?
+  loggedIn                       Int?
+  userAdded                      Int?
+  userUpdated                    Int?
+  userActivated                  Int?
+  userWithdrawnBalance           Int?
+  forgotPassSent                 Int?
+  newPassSet                     Int?
+  resetEmail                     Int?
+  userDeleted                    Int?
+  withdraw_actions               withdraw_actions[] @relation("UserWithdrawActions")
+
+  @@map("users")
+}
+
+model withdraw_actions {
+  id                          String   @id @default(auto()) @map("_id") @db.ObjectId
+  shms_created_at             DateTime @default(now())
+  shms_user_id                String   @db.ObjectId
+  shms_withdraw_amount        Int      @default(0)
+  shms_action_type            String   @default("withdraw")
+  accounting_operation_status String   @default("pending")
+  message                     String?
+  withdrawAdded               Int?
+  withdrawUpdated             Int?
+  user                        Users    @relation(fields: [shms_user_id], references: [id], name: "UserWithdrawActions") // Child side
+
+  @@map("withdraw_actions")
+}

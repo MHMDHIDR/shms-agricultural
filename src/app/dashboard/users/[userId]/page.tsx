@@ -11,12 +11,13 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { formattedPrice, getProject, getProjectDate, getUser } from '@/libs/utils'
-import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import Account from '@/app/profile/investments/account'
 import { getAuth } from '@/libs/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
 import NotFound from '@/app/not-found'
 import Contract from '@/app/profile/investments/_ShowPDF'
+import type { InverstorProjectData } from '@/types'
+import type { Stocks, Users } from '@prisma/client'
 
 export default async function DashboardInvestors({
   params: { userId }
@@ -26,14 +27,14 @@ export default async function DashboardInvestors({
   const { userType, loading } = await getAuth()
 
   // To make sure the user is the investor -- للتأكد من ان المستخدم هو المستثمر المطلوب
-  const user = (await getUser(userId)) as UserProps
-  const projectsData: stocksPurchasedProps[] = JSON.parse(String(user.shms_user_stocks))
+  const user = (await getUser(userId)) as Users
+  const projectsData: Stocks[] = user.shms_user_stocks
 
   const projectDataFilter: InverstorProjectData[][] = await Promise.all(
-    projectsData.map(async (projectData: stocksPurchasedProps) => {
-      // Return an empty array if shms_project_id is missing
-      if (!projectData.shms_project_id) return []
-      const projectDetails = await getProject(projectData.shms_project_id)
+    projectsData.map(async (projectData: Stocks) => {
+      // Return an empty array if id is missing
+      if (!projectData.id) return []
+      const projectDetails = await getProject(projectData.id)
 
       // Return an empty array if projectDetails is falsy
       if (!projectDetails) return []
@@ -57,14 +58,14 @@ export default async function DashboardInvestors({
           : projectProfit
 
       const mappedProject: InverstorProjectData = {
-        projectId: projectData.shms_project_id,
+        projectId: projectData.id,
         projectName,
         projectStockPrice,
         stocks: projectData.stocks,
         totalPayment: projectData.stocks * projectStockPrice,
         profitCollectionDate,
         purchaseDate: projectData.createdAt,
-        projectTerms,
+        projectTerms: projectTerms || '',
         profitPerStock,
         totalProfit
       }
@@ -153,7 +154,7 @@ export default async function DashboardInvestors({
                           purchaseDate,
                           projectTerms,
                           referenceCode: `#${
-                            user?.shms_id
+                            user?.id
                           }#${projectId}#${new Date().getTime()}`
                         }
                         return (

@@ -15,7 +15,7 @@ export default function Preparation() {
   return (
     <Layout>
       <main className='flex flex-col items-center justify-between min-h-screen'>
-        <h1 className='mb-2 mt-10 text-2xl'>التحضير للموسم الزراعي</h1>
+        <h1 className='mt-10 mb-2 text-2xl'>التحضير للموسم الزراعي</h1>
 
         <div dir='rtl' style={{ marginTop: 10, justifyContent: 'center' }}>
           <div style={{ margin: 50, display: 'flex', justifyContent: 'center' }}>
@@ -33,7 +33,7 @@ export default function Preparation() {
               className='shadow-lg'
             />
           </div>
-          <div className='text-right mx-5 px-20'>
+          <div className='px-20 mx-5 text-right'>
             <p style={{ fontSize: 20 }}>
               تعد عملية تحضير الأرض قبل الزراعة خطوة حاسمة في نجاح المزروعات. فهي تسهم في
               إعداد البيئة المثلى لنمو النباتات، وتعزز امتصاص الأسمدة والماء، وتقلل من

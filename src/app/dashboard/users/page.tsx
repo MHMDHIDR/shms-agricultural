@@ -8,7 +8,6 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { API_URL } from '@/data/constants'
-import type { UserLoggedInProps, UserProps } from '@/types'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import Layout from '@/components/custom/Layout'
@@ -18,11 +17,13 @@ import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
 import { LoadingPage } from '@/components/custom/Loading'
 import { getAuth } from '@/libs/actions/auth'
+import type { UserLoggedInProps } from '@/types'
+import type { Users } from '@prisma/client'
 
 export default function Users() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
-  const [users, setUsers] = useState<UserProps[]>([])
-  const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
+  const [users, setUsers] = useState<Users[]>([])
+  const [userType, setUserType] = useState<Users['shms_user_account_type']>('user')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -32,9 +33,7 @@ export default function Users() {
       setLoading(loading)
 
       if (!loading) {
-        const { data: users }: { data: UserProps[] } = await axios.get(
-          `${API_URL}/users/all`
-        )
+        const { data: users }: { data: Users[] } = await axios.get(`${API_URL}/users/all`)
         setUsers(users)
       }
     }
@@ -48,7 +47,7 @@ export default function Users() {
     <NotFound />
   ) : (
     <Layout>
-      <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>العمــلاء</h1>
+      <h1 className='mt-20 mb-10 text-2xl font-bold text-center'>العمــلاء</h1>
       <DashboardNav />
 
       <section className='container mx-auto'>

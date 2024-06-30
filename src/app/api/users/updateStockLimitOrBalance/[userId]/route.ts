@@ -1,6 +1,4 @@
-import { connectDB } from '@/api/utils/db'
-import type { UserProps } from '@/types'
-import { ResultSetHeader } from 'mysql2/promise'
+import client from '@/../prisma/prismadb'
 
 export async function PATCH(
   req: Request,
@@ -13,9 +11,7 @@ export async function PATCH(
 
   try {
     // Check if user exists
-    const user = (
-      (await connectDB(`SELECT * FROM users WHERE shms_id = ?`, [userId])) as UserProps[]
-    )[0]
+    const user = await client.users.findUnique({ where: { id: userId } })
 
     // If user does not exist
     if (!user) {
@@ -25,24 +21,20 @@ export async function PATCH(
       )
     }
 
-    const updateUser = (await connectDB(
-      `UPDATE users
-      ${
-        type === 'stockLimit'
-          ? 'SET shms_user_stock_limit = ?'
+    const userUpdated = await client.users.update({
+      where: { id: userId },
+      data: {
+        [type === 'stockLimit'
+          ? 'shms_user_stock_limit'
           : type === 'totalBalance'
-          ? 'SET shms_user_total_balance = ?'
-          : 'SET shms_user_withdrawable_balance = ?'
+          ? 'shms_user_total_balance'
+          : 'shms_user_withdrawable_balance']: newValue
       }
-        WHERE shms_id = ?`,
-      [newValue, userId]
-    )) as ResultSetHeader
-
-    const { affectedRows: userUpdated } = updateUser as ResultSetHeader
+    })
 
     if (userUpdated) {
       return new Response(
-        JSON.stringify({ userUpdated, message: `تم تحديث حساب المستخدم بنجاح!` }),
+        JSON.stringify({ userUpdated: 1, message: `تم تحديث حساب المستخدم بنجاح!` }),
         { status: 200 }
       )
     }

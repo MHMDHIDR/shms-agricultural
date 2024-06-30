@@ -27,10 +27,10 @@ export const getAuth: getAuthProps = async (): Promise<getAuthType> => {
     const user: UserLoggedInProps = await getServerSession(authOptions)
 
     if (user) {
-      authData.userId = user?.token?.user.shms_id ?? ''
+      authData.userId = user?.token?.user.id ?? ''
       authData.isAuth = user?.token?.user.loggedIn ? true : false
       authData.userType = user?.token?.user.shms_user_account_type ?? 'user' // default to user
-      authData.userName = user?.token?.user.fullname ?? ''
+      authData.userName = user?.token?.user.shms_fullname ?? ''
       authData.userEmail = user?.token?.user.shms_email ?? ''
       authData.userPhone = user?.token?.user.shms_phone ?? ''
       authData.userStockLimit = user?.token?.user.shms_user_stock_limit ?? 0

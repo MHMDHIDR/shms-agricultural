@@ -1,5 +1,4 @@
-import { connectDB } from '@/api/utils/db'
-import type { ProjectProps } from '@/types'
+import client from '@/../prisma/prismadb'
 
 export async function GET(
   _req: Request,
@@ -16,15 +15,12 @@ export async function GET(
     }
 
     // Get project
-    const project = (
-      (await connectDB(
-        `SELECT * FROM projects WHERE shms_project_special_percentage_code = ?`,
-        [percentageCode]
-      )) as ProjectProps[]
-    )[0]
+    const project = await client.projects.findFirst({
+      where: { shms_project_special_percentage_code: percentageCode }
+    })
 
     // Return project
-    return !project || !project.shms_project_id
+    return !project || !project.id
       ? new Response(
           JSON.stringify({
             isValid: false,

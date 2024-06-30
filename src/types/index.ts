@@ -1,108 +1,32 @@
-import type { ButtonProps } from '@/components/ui/button'
 import { NextApiRequest } from 'next'
 import { Session } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
-
-export type UserProps = {
-  shms_sn: number
-  shms_id: string
-  shms_fullname: string
-  fullname?: string
-  shms_nationality: string
-  shms_date_of_birth: Date
-  shms_email: string
-  shms_password?: string
-  shms_phone?: string
-  shms_address?: string
-  shms_user_stocks?: stocksPurchasedProps[]
-  shms_user_stock_limit?: number
-  shms_user_total_balance: number
-  shms_user_withdrawable_balance: number
-  shms_doc?: string
-  shms_created_at?: string
-  shms_user_account_type?: 'admin' | 'user'
-  shms_user_account_status?: 'active' | 'block' | 'pending'
-  shms_user_reset_token?: string
-  shms_user_reset_token_expires?: number
-  // When user action happens
-  message?: string
-  // When user is logged in, this is set to 1
-  loggedIn?: number
-  // When user is registered, this is set to 1
-  userAdded?: number
-  // When user is updated, this is set to 1
-  userUpdated?: number
-  // When user is activated, this is set to 1
-  userActivated?: number
-  // When user forgot password, this is set to 1
-  userWithdrawnBalance?: number
-  // When user forgot password, this is set to 1
-  forgotPassSent?: number
-  // When user reset password, this is set to 1
-  newPassSet?: number
-  // When user changes their email, this is set to 1
-  resetEmail?: number
-  // When user is delete, this is set to 1
-  userDeleted?: number
-}
+import type { ButtonProps } from '@/components/ui/button'
+import type { Projects, Users } from '@prisma/client'
 
 export type getAuthType = {
-  userId: UserProps['shms_id']
-  isAuth: UserProps['loggedIn'] | boolean
-  userType: UserProps['shms_user_account_type']
-  userName?: UserProps['shms_fullname']
-  userEmail?: UserProps['shms_email']
-  userPhone?: UserProps['shms_phone']
-  userStockLimit?: UserProps['shms_user_stock_limit']
-  withdrawableAmount?: UserProps['shms_user_withdrawable_balance']
-  totalAmount?: UserProps['shms_user_total_balance']
+  userId: Users['id']
+  isAuth: Users['loggedIn'] | boolean
+  userType: Users['shms_user_account_type']
+  userName?: Users['shms_fullname']
+  userEmail?: Users['shms_email']
+  userPhone?: Users['shms_phone']
+  userStockLimit?: Users['shms_user_stock_limit']
+  withdrawableAmount?: Users['shms_user_withdrawable_balance']
+  totalAmount?: Users['shms_user_total_balance']
   loading: boolean
 }
 
 export type getAuthProps = () => Promise<getAuthType>
 
-export type ProjectProps = {
-  shms_project_id: string
-  shms_project_images: imgsProps[]
-  shms_project_study_case: imgsProps[]
-  shms_project_study_case_visibility: number
-  shms_project_name: string
-  shms_project_location: string
-  shms_project_start_date: Date
-  shms_project_end_date: Date
-  shms_project_invest_date: Date
-  shms_project_profits_collect_date: Date
-  shms_project_available_stocks: number
-  shms_project_total_stocks: number
-  shms_project_stock_price: number
-  shms_project_stock_profits: number
-  shms_project_special_percentage: number
-  shms_project_special_percentage_code: string
-  shms_project_description: string
-  shms_project_terms: string
-  shms_project_status: 'active' | 'pending'
-  // only update Image
-  updateImg?: boolean
-  // only update Percentage
-  updatePercentage?: boolean
-  // When project is added, this is set to 1
-  projectAdded?: number
-  // When project is updated, this is set to 1
-  projectUpdated?: number
-  // When project is deleted, this is set to 1
-  projectDeleted?: number
-  // When a project action happens
-  message?: string
-}
-
 export type accountingOperationsProps = {
-  shms_user_id?: UserProps['shms_id']
+  shms_user_id?: Users['id']
   shms_withdraw_id: string
   shms_action_type: 'withdraw' | 'deposit'
-  shms_fullname: UserProps['shms_fullname']
-  shms_phone: UserProps['shms_phone']
-  shms_email: UserProps['shms_email']
-  shms_address: UserProps['shms_address']
+  shms_fullname: Users['shms_fullname']
+  shms_phone: Users['shms_phone']
+  shms_email: Users['shms_email']
+  shms_address: Users['shms_address']
   shms_created_at: string
   shms_withdraw_amount: number
   accounting_operation_status: 'pending' | 'completed' | 'rejected' | 'deleted'
@@ -132,7 +56,7 @@ export type shms_formSignupDataProps = {
 export type UserLoggedInProps =
   | (Session & {
       token?: JWT & {
-        user: UserProps
+        user: Users
       }
     })
   | null
@@ -154,6 +78,7 @@ export type FileUploadComponentProps = {
   }
   ignoreRequired?: boolean
   id?: string
+  setIsRefetching: React.Dispatch<React.SetStateAction<boolean>> | undefined
 }
 
 export type fileRequestProps = NextApiRequest & {
@@ -282,8 +207,8 @@ export type purchasedStocksData = {
 }
 
 export type stocksPurchasedProps = {
-  userId?: UserProps['shms_id']
-  shms_project_id: ProjectProps['shms_project_id']
+  userId?: Users['id']
+  id: Projects['id']
   stocks: number
   newPercentage: number
   percentageCode: string
@@ -312,7 +237,7 @@ export type InverstorProjectData = {
   totalPayment: number
   profitCollectionDate: Date
   projectTerms: string
-  purchaseDate: string
+  purchaseDate: Date
   profitPerStock: number
   totalProfit: number
 }

@@ -13,31 +13,32 @@ import {
 import { API_URL } from '@/data/constants'
 import { getAuth } from '@/libs/actions/auth'
 import { formattedPrice, getProject, getProjectDate } from '@/libs/utils'
-import type { InverstorProjectData, UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 import Contract from './_ShowPDF'
 import Account from '@/app/profile/investments/account'
 import { redirect } from 'next/navigation'
+import type { InverstorProjectData } from '@/types'
+import type { Users, Stocks } from '@prisma/client'
 
 export default async function DashboardInvestors() {
   const { userId } = await getAuth()
-  const { data: users }: { data: UserProps[] } = await axios.get(
+  const { data: users }: { data: Users[] } = await axios.get(
     `${API_URL}/users/all?role=investor`
   )
 
   // To make sure the user is the investor -- للتأكد من ان المستخدم هو المستثمر المطلوب
-  const InvestmentCurrentUser = users.filter(user => user.shms_id === userId)
-  const projectsData: stocksPurchasedProps[][] = InvestmentCurrentUser.map(
-    InvestmentData => JSON.parse(String(InvestmentData.shms_user_stocks))
+  const InvestmentCurrentUser = users.filter(user => user.id === userId)
+  const projectsData: Stocks[][] = InvestmentCurrentUser.map(
+    InvestmentData => InvestmentData.shms_user_stocks
   )
 
   const projectDataFilter: InverstorProjectData[][] = await Promise.all(
     projectsData.map(async projectData => {
       const mappedProjects = await Promise.all(
-        projectData.map(async (project: stocksPurchasedProps) => {
-          if (!project.shms_project_id) return null
+        projectData.map(async (project: Stocks) => {
+          if (!project.id) return null
 
-          const projectDetails = await getProject(project.shms_project_id)
+          const projectDetails = await getProject(project.id)
           if (!projectDetails) return null
 
           const {
@@ -60,14 +61,14 @@ export default async function DashboardInvestors() {
               : projectProfit
 
           const mappedProject: InverstorProjectData = {
-            projectId: project.shms_project_id,
+            projectId: project.id,
             projectName,
             projectStockPrice,
             stocks: project.stocks,
             totalPayment: project.stocks * projectStockPrice,
             profitCollectionDate,
-            purchaseDate: project.createdAt,
-            projectTerms,
+            purchaseDate: new Date(project.createdAt),
+            projectTerms: projectTerms || '',
             profitPerStock,
             totalProfit
           }
@@ -159,7 +160,7 @@ export default async function DashboardInvestors() {
                           purchaseDate,
                           projectTerms,
                           referenceCode: `#${
-                            InvestmentCurrentUser[0]?.shms_id
+                            InvestmentCurrentUser[0]?.id
                           }#${projectId}#${new Date().getTime()}`
                         }
 

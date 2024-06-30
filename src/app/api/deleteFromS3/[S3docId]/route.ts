@@ -27,12 +27,12 @@ const s3Client = new S3Client(s3ClientConfig)
  * @returns {Promise<string>} - The key of the file in S3
  */
 async function deleteFilesFromS3(projectOrFileId: string): Promise<DeletedObject[]> {
-  const listCommand = new ListObjectsV2Command({
+  const params = {
     Bucket: AWS_BUCKET_NAME,
-    // replace only the first - symbol in project-this-is-the-id to project/this-is-the-id
-    Prefix: projectOrFileId.replace('-', '/')
-  })
+    Prefix: `projects/${projectOrFileId}`
+  }
 
+  const listCommand = new ListObjectsV2Command(params)
   let list = await s3Client.send(listCommand)
   let deleted: Array<DeletedObject> = []
 
@@ -83,16 +83,18 @@ async function deleteFileFromS3(
 }
 
 export async function DELETE(
-  _req: Request,
+  request: Request,
   { params: { S3docId } }: { params: { S3docId: string } }
 ) {
-  if (!S3docId) {
-    throw new Error('ID of the document or the folder is required!')
-  }
+  if (!S3docId) throw new Error('ID of the document or the folder is required!')
 
-  if (S3docId.includes('projects')) {
+  const body = await request.json()
+  const { imageId } = body
+
+  // This to delete a whole project (collection of documents)
+  if (!imageId.includes('projects')) {
     try {
-      const dataAfterDelete = await deleteFilesFromS3(S3docId)
+      const dataAfterDelete = await deleteFilesFromS3(imageId)
 
       dataAfterDelete.map(({ DeleteMarker }) => {
         if (!DeleteMarker) {
@@ -111,9 +113,9 @@ export async function DELETE(
       return new Response(error.message, { status: 500 })
     }
   } else {
+    // This to delete single documents (files) from a project
     try {
-      const objectId = S3docId
-      const { DeleteMarker: docDeleted } = await deleteFileFromS3(objectId)
+      const { DeleteMarker: docDeleted } = await deleteFileFromS3(imageId)
 
       return new Response(JSON.stringify({ docDeleted }), { status: 200 })
     } catch (error: any) {

@@ -1,5 +1,4 @@
-import { connectDB } from '@/api/utils/db'
-import type { ProjectProps } from '@/types'
+import client from '@/../prisma/prismadb'
 
 export async function GET(
   _req: Request,
@@ -8,22 +7,10 @@ export async function GET(
   if (!projectId) throw new Error('Project ID is required')
 
   try {
-    if (!projectId) {
-      return new Response(
-        JSON.stringify({ project: null, message: 'عفواً لم يتم العثور على المشروع!' }),
-        { status: 404 }
-      )
-    }
+    // using client from prisma/prismadb.ts instead of connectDB to query the database
+    const project = await client.projects.findUnique({ where: { id: projectId } })
 
-    // Get project
-    const project = (
-      (await connectDB(`SELECT * FROM projects WHERE shms_project_id = ?`, [
-        projectId
-      ])) as ProjectProps[]
-    )[0]
-
-    // Return project
-    return !project || !project.shms_project_id
+    return !project || !project.id
       ? new Response(
           JSON.stringify({ project: null, message: 'عفواً لم يتم العثور على المشروع!' }),
           { status: 404 }
@@ -34,7 +21,7 @@ export async function GET(
     return new Response(
       JSON.stringify({
         project: null,
-        message: `عفواً، لم يتم حذف المشروع! ${err}`
+        message: 'عفواً، حدث خطأ ما أثناء جلب المشروع!'
       }),
       { status: 500 }
     )

@@ -1,7 +1,6 @@
 'use client'
 
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import Confirm from '@/components/custom/Confirm'
@@ -25,7 +24,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Success, Error } from '@/components/icons/Status'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { redirect, scrollToView } from '@/libs/utils'
+import { scrollToView } from '@/libs/utils'
 import Divider from '@/components/custom/Divider'
 import Copy from '@/components/custom/Copy'
 import DashboardNav from '../DashboardNav'
@@ -34,13 +33,14 @@ import NotFound from '@/app/not-found'
 import { useSession } from 'next-auth/react'
 import { LoadingPage } from '@/components/custom/Loading'
 import { getAuth } from '@/libs/actions/auth'
+import type { UserLoggedInProps } from '@/types'
+import type { Projects, Users } from '@prisma/client'
 
 export default function CountPercentage() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
-  const [projects, setProjects] = useState<ProjectProps[]>([])
-  const [selectedProject, setSelectedProject] = useState<
-    ProjectProps['shms_project_id'] | null
-  >(null)
+
+  const [projects, setProjects] = useState<Projects[]>([])
+  const [selectedProject, setSelectedProject] = useState<Projects['id'] | null>(null)
   const [percentage, setPercentage] = useState<number>(0)
   const [percentageCode, setPercentageCode] = useState<string>('الرجاء اختيار المشروع')
   const [formStatus, setFormStatus] = useState({
@@ -48,7 +48,7 @@ export default function CountPercentage() {
     isSubmittingDone: false
   })
   const [percentageCodesRefresh, setPercentageCodesRefresh] = useState<number>(0)
-  const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
+  const [userType, setUserType] = useState<Users['shms_user_account_type']>('user')
   const [loading, setLoading] = useState(true)
 
   const getProjects = async () => {
@@ -56,7 +56,7 @@ export default function CountPercentage() {
       next: { revalidate: 0 },
       cache: 'no-store'
     })
-    const projects: ProjectProps[] = await response.json()
+    const projects: Projects[] = await response.json()
 
     setProjects(projects)
   }
@@ -67,9 +67,7 @@ export default function CountPercentage() {
       setUserType(userType)
       setLoading(loading)
 
-      if (!loading) {
-        getProjects()
-      }
+      if (!loading) getProjects()
     }
 
     getUserData()
@@ -84,15 +82,19 @@ export default function CountPercentage() {
     try {
       setFormStatus({ ...formStatus, isSubmitting: true })
 
-      const { data } = await axios.patch(`${API_URL}/projects/edit/${selectedProject}`, {
-        shms_project_special_percentage: percentage,
-        shms_project_special_percentage_code: percentageCode,
-        updatePercentage: true
-      })
+      const { data }: { data: Projects } = await axios.patch(
+        `${API_URL}/projects/edit/${selectedProject}`,
+        {
+          shms_project_special_percentage: percentage,
+          shms_project_special_percentage_code: percentageCode,
+          updatePercentage: true
+        }
+      )
 
       // make sure to view the response from the data
       if (data.projectUpdated === 1) {
         setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
+        setPercentageCodesRefresh(data.projectUpdated ?? 0)
 
         toast(data.message, {
           icon: <Success />,
@@ -109,8 +111,7 @@ export default function CountPercentage() {
         })
       }
 
-      setPercentageCodesRefresh(data.projectUpdated ?? 0)
-      setTimeout(() => redirect('/dashboard/profits-percentage'), DEFAULT_DURATION / 2)
+      setTimeout(() => setPercentageCodesRefresh(0), 100)
     } catch (error: any) {
       const errorMessage = error.response?.data?.message ?? error
       toast(errorMessage.length < 50 ? errorMessage : 'حدث خطأ ما'),
@@ -135,7 +136,7 @@ export default function CountPercentage() {
     try {
       setFormStatus({ ...formStatus, isSubmitting: true })
 
-      const { data }: { data: ProjectProps } = await axios.patch(
+      const { data }: { data: Projects } = await axios.patch(
         `${API_URL}/projects/edit/${projectId}`,
         {
           shms_project_special_percentage: null,
@@ -146,6 +147,9 @@ export default function CountPercentage() {
 
       // make sure to view the response from the data
       if (data.projectUpdated === 1) {
+        setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
+        setPercentageCodesRefresh(data.projectUpdated ?? 0)
+
         toast(data.message ?? 'تم حذف الرمز بنجاح 👍🏼', {
           icon: <Success className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
@@ -159,23 +163,9 @@ export default function CountPercentage() {
             textAlign: 'justify'
           }
         })
-      } else {
-        toast('حدث خطأ ما أثناء حذف الرمز', {
-          icon: <Error className='w-6 h-6 ml-3' />,
-          position: 'bottom-center',
-          className: 'text-right select-none rtl',
-          style: {
-            backgroundColor: '#FFF0F0',
-            color: '#BE2A2A',
-            border: '1px solid #BE2A2A',
-            gap: '1.5rem',
-            textAlign: 'justify'
-          }
-        })
       }
 
-      setPercentageCodesRefresh(data.projectUpdated ?? 0)
-      setTimeout(() => redirect('/dashboard/profits-percentage'), DEFAULT_DURATION / 2)
+      setTimeout(() => setPercentageCodesRefresh(0), 100)
     } catch (error) {
       toast('حدث خطأ ما أثناء حذف المشروع', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -200,7 +190,7 @@ export default function CountPercentage() {
     <NotFound />
   ) : (
     <Layout>
-      <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
+      <h1 className='mt-20 mb-10 text-2xl font-bold text-center'>لوحة التحكم</h1>
       <DashboardNav />
 
       <section className='container mx-auto'>
@@ -209,7 +199,7 @@ export default function CountPercentage() {
             <CardWrapper
               heading='اضافة رمز زيادة ربح جديد '
               backButtonHref='/auth/signup'
-              className='md:w-full max-w-full'
+              className='max-w-full md:w-full'
             >
               <form dir='rtl' onSubmit={handleSubmitPercentage}>
                 <div className='flex items-center justify-center'>
@@ -237,8 +227,8 @@ export default function CountPercentage() {
                             <SelectValue placeholder='اختيار المشروع' />
                           </SelectTrigger>
                           <SelectContent>
-                            {projects.map(({ shms_project_id, shms_project_name }) => (
-                              <SelectItem key={shms_project_id} value={shms_project_id}>
+                            {projects.map(({ id, shms_project_name }) => (
+                              <SelectItem key={id} value={id}>
                                 {shms_project_name}
                               </SelectItem>
                             ))}
@@ -300,9 +290,8 @@ export default function CountPercentage() {
                       </div>
                       <div className='md:w-2/3'>
                         <span className='inline-block w-full px-4 py-2 font-bold leading-tight text-gray-700 bg-white border border-gray-900 rounded select-none dark:bg-gray-800 dark:text-gray-300 focus:outline-none focus:bg-white focus:border-purple-500'>
-                          {projects.find(
-                            ({ shms_project_id }) => shms_project_id === selectedProject
-                          )?.shms_project_stock_profits ?? 0}
+                          {projects.find(({ id }) => id === selectedProject)
+                            ?.shms_project_stock_profits ?? 0}
                         </span>
                       </div>
                     </div>
@@ -320,9 +309,8 @@ export default function CountPercentage() {
                       <div className='md:w-2/3'>
                         {(() => {
                           const currProfits = Number(
-                            projects.find(
-                              ({ shms_project_id }) => shms_project_id === selectedProject
-                            )?.shms_project_stock_profits
+                            projects.find(({ id }) => id === selectedProject)
+                              ?.shms_project_stock_profits
                           )
                           const newProfits = currProfits
                             ? currProfits + (currProfits * percentage) / 100
@@ -340,11 +328,9 @@ export default function CountPercentage() {
                     <div className='mb-6 md:flex md:items-center'>
                       <Button
                         className={
-                          formStatus.isSubmittingDone
-                            ? 'pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed'
-                            : formStatus.isSubmitting ||
-                              selectedProject === null ||
-                              !percentage
+                          formStatus.isSubmitting ||
+                          selectedProject === null ||
+                          !percentage
                             ? 'pointer-events-none cursor-progress'
                             : ''
                         }
@@ -417,13 +403,13 @@ export default function CountPercentage() {
                     projects
                       .filter(project => project.shms_project_special_percentage_code)
                       .map(project => (
-                        <TableRow key={project.shms_project_id}>
+                        <TableRow key={project.id}>
                           <TableCell className='min-w-72'>
                             {project.shms_project_name}
                           </TableCell>
                           <TableCell className='min-w-40'>
                             <Copy
-                              text={project.shms_project_special_percentage_code}
+                              text={project.shms_project_special_percentage_code ?? ''}
                               className='inline ml-2'
                             />
                             <span>{project.shms_project_special_percentage_code}</span>
@@ -437,14 +423,14 @@ export default function CountPercentage() {
                           <TableCell className='min-w-40'>
                             {project.shms_project_stock_profits +
                               (project.shms_project_stock_profits *
-                                project.shms_project_special_percentage) /
+                                (project.shms_project_special_percentage ?? 0)) /
                                 100}
                           </TableCell>
                           <TableCell className='flex min-w-56 gap-x-2'>
                             <Confirm
                               variant={'destructive'}
                               onClick={async () => {
-                                await deletePercentageCode(project.shms_project_id)
+                                await deletePercentageCode(project.id)
                               }}
                             >
                               {formStatus.isSubmitting ? (

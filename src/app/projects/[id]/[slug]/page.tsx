@@ -12,15 +12,18 @@ import {
 } from '@/libs/utils'
 import { BadgeDollarSign, LineChart, MapPin, TimerIcon, TimerReset } from 'lucide-react'
 import Link from 'next/link'
-import type { imgsProps } from '@/types'
 import ShowCaseStudy from './_ShowCaseStudy'
+import type { imgsProps } from '@/types'
+import type { Projects } from '@prisma/client'
+import { notFound } from 'next/navigation'
+import { getAuth } from '@/libs/actions/auth'
 
 export async function generateMetadata({
   params: { id: projectId, slug }
 }: {
   params: { id: string; slug: string }
 }) {
-  const project = await getProject(projectId)
+  const project: Projects = await getProject(projectId)
 
   return {
     title: removeSlug(decodeURI(slug)) + ' | ' + APP_TITLE,
@@ -34,12 +37,11 @@ export default async function ProjectDetailsPage({
   params: { id: string }
 }) {
   const project = await getProject(projectId)
+  const { userType } = await getAuth()
 
   const getProjectImages: imgsProps['imgDisplayPath'][] =
     project.shms_project_images &&
-    JSON.parse(String(project.shms_project_images)).map(
-      ({ imgDisplayPath }: imgsProps) => imgDisplayPath
-    )
+    project.shms_project_images.map(({ imgDisplayPath }: imgsProps) => imgDisplayPath)
 
   const getProjectCompletedPercentage = (available: number, total: number) => {
     return (
@@ -56,6 +58,9 @@ export default async function ProjectDetailsPage({
       ) || 0
     ) // 0 is a fallback value
   }
+
+  // if project.shms_project_status do not render the page, only the admin can see it, otherwise trigger a 404 error notFound()
+  project.shms_project_status === 'pending' && userType !== 'admin' && notFound()
 
   return (
     <Layout>
@@ -145,14 +150,14 @@ export default async function ProjectDetailsPage({
           // 1 تم إضافته لتجنب القيمة الصفرية  للنسبة المئوية و لعدم إظهار النسبة بشكل حقيقي
           value={[
             getProjectCompletedPercentage(
-              project.shms_project_available_stocks,
+              project.shms_project_available_stocks ?? 0,
               project.shms_project_total_stocks
             )
           ]}
         />
 
         {/* زر شراء السهم */}
-        {project.shms_project_available_stocks > 0 && (
+        {(project.shms_project_available_stocks ?? 0) > 0 && (
           <Link
             href={`/projects/${projectId}/buy`}
             className={`p-4 mt-10 text-white bg-green-500 rounded-lg hover:bg-green-700${

@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/table'
 import { API_URL, APP_LOGO } from '@/data/constants'
 import { arabicDate, formattedPrice, getProject } from '@/libs/utils'
-import type { UserProps, stocksPurchasedProps } from '@/types'
 import axios from 'axios'
 import { Suspense } from 'react'
 import PurchesedStocks from './investors/PurchesedStocks'
@@ -28,18 +27,19 @@ import DashboardNav from './DashboardNav'
 import NotFound from '@/app/not-found'
 import { getAuth } from '@/libs/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
+import type { Stocks, Users } from '@prisma/client'
 
 export default async function DashboardInvestors() {
   const { userType, loading } = await getAuth()
   const {
     data: users
   }: {
-    data: UserProps[]
+    data: Users[]
   } = await axios.get(`${API_URL}/users/all?role=investor`)
 
-  const fetchUserProjectDetails = async (userStocks: stocksPurchasedProps[]) => {
-    const promises = userStocks.map(async (item: stocksPurchasedProps) => {
-      const project = await getProject(item.shms_project_id)
+  const fetchUserProjectDetails = async (userStocks: Stocks[]) => {
+    const promises = userStocks.map(async (item: Stocks) => {
+      const project = await getProject(item.id)
       return {
         projectStockPrice: project?.shms_project_stock_price || 0,
         stocks: item.stocks
@@ -49,10 +49,8 @@ export default async function DashboardInvestors() {
   }
 
   const usersWithProjectDetails = await Promise.all(
-    users.map(async (user: UserProps) => {
-      const userStocks: stocksPurchasedProps[] = JSON.parse(
-        String(user.shms_user_stocks) || '[]'
-      )
+    users.map(async (user: Users) => {
+      const userStocks: Stocks[] = user.shms_user_stocks || []
       const projectsDetails = await fetchUserProjectDetails(userStocks)
 
       return { ...user, projectsDetails }
@@ -77,7 +75,7 @@ export default async function DashboardInvestors() {
     <NotFound />
   ) : (
     <Layout>
-      <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
+      <h1 className='mt-20 mb-10 text-2xl font-bold text-center'>لوحة التحكم</h1>
       <DashboardNav />
 
       <section className='container mx-auto'>
@@ -176,7 +174,7 @@ export default async function DashboardInvestors() {
                   </TableHeader>
                   <TableBody>
                     {users.map(user => (
-                      <TableRow key={user.shms_id}>
+                      <TableRow key={user.id}>
                         <TableCell className='text-center min-w-32'>
                           {user.shms_fullname}
                         </TableCell>
@@ -189,55 +187,50 @@ export default async function DashboardInvestors() {
                               </div>
                             }
                           >
-                            {JSON.parse(String(user.shms_user_stocks)).map(
-                              async (item: stocksPurchasedProps) => {
-                                const project = await getProject(item.shms_project_id)
-                                if (!project) {
-                                  return null // Exit early if project is null
-                                }
-
-                                const projectName = project.shms_project_name
-                                const projectStockPrice = project.shms_project_stock_price
-
-                                return (
-                                  <div key={item.shms_project_id}>
-                                    <Table>
-                                      <TableBody>
-                                        <TableRow>
-                                          <TableCell className='text-center min-w-56'>
-                                            {projectName}
-                                          </TableCell>
-                                          <TableCell className='text-center min-w-28'>
-                                            {item.stocks}
-                                          </TableCell>
-                                          <TableCell className='text-center min-w-36'>
-                                            {item.newPercentage}
-                                          </TableCell>
-                                          <TableCell className='text-center min-w-28'>
-                                            {formattedPrice(
-                                              item.stocks * projectStockPrice
-                                            )}
-                                          </TableCell>
-                                          <TableCell className='text-center min-w-64'>
-                                            {arabicDate(item.createdAt)}
-                                          </TableCell>
-                                          <TableCell className='text-center min-w-40'>
-                                            <PurchesedStocks
-                                              purchesedStocks={{
-                                                item,
-                                                userId: user.shms_id
-                                              }}
-                                            >
-                                              تعديل الأسهم
-                                            </PurchesedStocks>
-                                          </TableCell>
-                                        </TableRow>
-                                      </TableBody>
-                                    </Table>
-                                  </div>
-                                )
+                            {user.shms_user_stocks.map(async (item: Stocks) => {
+                              const project = await getProject(item.id)
+                              if (!project) {
+                                return null // Exit early if project is null
                               }
-                            )}
+
+                              const projectName = project.shms_project_name
+                              const projectStockPrice = project.shms_project_stock_price
+
+                              return (
+                                <div key={item.id}>
+                                  <Table>
+                                    <TableBody>
+                                      <TableRow>
+                                        <TableCell className='text-center min-w-56'>
+                                          {projectName}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-28'>
+                                          {item.stocks}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-36'>
+                                          {item.newPercentage}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-28'>
+                                          {formattedPrice(
+                                            item.stocks * projectStockPrice
+                                          )}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-64'>
+                                          {arabicDate(item.createdAt)}
+                                        </TableCell>
+                                        <TableCell className='text-center min-w-40'>
+                                          <PurchesedStocks
+                                            purchesedStocks={{ item, userId: user.id }}
+                                          >
+                                            تعديل الأسهم
+                                          </PurchesedStocks>
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableBody>
+                                  </Table>
+                                </div>
+                              )
+                            })}
                           </Suspense>
                         </TableCell>
                         <TableCell className='text-center'>

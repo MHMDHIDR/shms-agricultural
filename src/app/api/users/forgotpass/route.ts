@@ -1,8 +1,7 @@
 import { randomUUID } from 'crypto'
-import { connectDB } from '@/api/utils/db'
+import client from '@/../prisma/prismadb'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import email from '@/libs/actions/email'
-import type { UserProps } from '@/types'
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -10,11 +9,9 @@ export async function POST(req: Request) {
 
   try {
     // Check for user by using his/her email or Phoneephone number
-    const user = (
-      (await connectDB(`SELECT * FROM users WHERE shms_email = ?`, [
-        userResetEmail
-      ])) as UserProps[]
-    )[0]
+    const user = await client.users.findUnique({
+      where: { shms_email: userResetEmail }
+    })
 
     if (!user) {
       return new Response(
@@ -50,13 +47,13 @@ export async function POST(req: Request) {
         const userResetPasswordToken = randomUUID()
         const userCanResetPasswordUntil = new Date(Date.now() + 3600000).toISOString()
 
-        await connectDB(
-          `UPDATE users
-            SET shms_user_reset_token = ?,
-                shms_user_reset_token_expires = ?
-            WHERE shms_id = ?;`,
-          [userResetPasswordToken, userCanResetPasswordUntil, user.shms_id]
-        )
+        await client.users.update({
+          where: { id: user.id },
+          data: {
+            shms_user_reset_token: userResetPasswordToken,
+            shms_user_reset_token_expires: userCanResetPasswordUntil
+          }
+        })
 
         //send the user an email with a link to reset his/her password
         const buttonLink = APP_URL + `/auth/reset-password/${userResetPasswordToken}`

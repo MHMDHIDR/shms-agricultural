@@ -30,7 +30,6 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { UserProps, accountingOperationsProps, stocksPurchasedProps } from '@/types'
 import Copy from '@/components/custom/Copy'
 import NoRecords from '@/components/custom/NoRecords'
 import {
@@ -45,6 +44,8 @@ import OperationAction from '@/app/dashboard/money-operations/_OperationAction'
 import { APP_LOGO } from '@/data/constants'
 import Modal from '@/components/custom/Modal'
 import UsersActions from '@/app/dashboard/users/_UsersActions'
+import type { accountingOperationsProps } from '@/types'
+import type { Users, Stocks } from '@prisma/client'
 
 export const columns: ColumnDef<accountingOperationsProps>[] = [
   {
@@ -59,7 +60,7 @@ export const columns: ColumnDef<accountingOperationsProps>[] = [
         currency: 'USD'
       }).format(amount)
 
-      return <div className='text-right font-medium'>{formatted}</div>
+      return <div className='font-medium text-right'>{formatted}</div>
     }
   }
 ]
@@ -67,7 +68,7 @@ export const columns: ColumnDef<accountingOperationsProps>[] = [
 export default function OperationsTable({
   data
 }: {
-  data: accountingOperationsProps[] | UserProps[] | any[]
+  data: accountingOperationsProps[] | Users[] | any[]
 }) {
   const dynamicColumns = data.length > 0 ? Object.keys(data[0]) : []
 
@@ -101,14 +102,24 @@ export default function OperationsTable({
     }
   })
 
+  // Filter out columns that we don't want to show in the UI
   const filteredColumns = [
-    'shms_id',
-    'shms_user_id',
+    'id',
     'shms_nationality',
     'shms_password',
     'shms_user_account_type',
     'shms_user_reset_token',
-    'shms_user_reset_token_expires'
+    'shms_user_reset_token_expires',
+    'message',
+    'loggedIn',
+    'userAdded',
+    'userUpdated',
+    'userActivated',
+    'userWithdrawnBalance',
+    'forgotPassSent',
+    'newPassSet',
+    'resetEmail',
+    'userDeleted'
   ]
 
   return (
@@ -117,7 +128,7 @@ export default function OperationsTable({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='ml-auto'>
-              <ChevronDownIcon className='ml-2 h-4 w-4' />
+              <ChevronDownIcon className='w-4 h-4 ml-2' />
               الأعمدة
             </Button>
           </DropdownMenuTrigger>
@@ -150,7 +161,7 @@ export default function OperationsTable({
           className='max-w-sm'
         />
       </div>
-      <div className='rounded-md border'>
+      <div className='border rounded-md'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
@@ -201,10 +212,10 @@ export default function OperationsTable({
                       >
                         {cell.column.id.includes('_id') ||
                         cell.column.id.includes('_sn') ? (
-                          <span className='flex gap-x-3 justify-center items-center'>
+                          <span className='flex items-center justify-center gap-x-3'>
                             <Copy
                               text={String(cell.getValue())}
-                              className='inline ml-2 w-6 h-6'
+                              className='inline w-6 h-6 ml-2'
                             />
                             <span className='font-bold'>
                               {flexRender(cell.column.columnDef.cell, cell.getContext())}{' '}
@@ -221,16 +232,15 @@ export default function OperationsTable({
                           cell.getValue() === null ? (
                             'لم يتم شراء اي اسهم'
                           ) : (
-                            JSON.parse(cell.getValue() as string).reduce(
-                              (stock: number, acc: stocksPurchasedProps) =>
-                                stock + acc.stocks,
+                            (cell.getValue() as Stocks[]).reduce(
+                              (stock: number, acc: Stocks) => stock + acc.stocks,
                               0
                             )
                           )
                         ) : cell.column.id.includes('shms_fullname') ? (
                           <Link
                             href={`/dashboard/users/${String(
-                              cell.row.getValue('shms_id')
+                              cell.row.getValue('id') ?? cell.row.getValue('shms_user_id')
                             )}`}
                           >
                             {String(cell.getValue())}
@@ -269,11 +279,11 @@ export default function OperationsTable({
                             <OperationAction withdrawAction={data[rowIndex]} />
                           </TableCell>
                         )
-                      } else if (cell.id.includes('shms_id')) {
+                      } else if (cell.id.includes('id')) {
                         return (
                           <TableCell key={cell.id}>
                             <UsersActions
-                              user={data as UserProps[]}
+                              user={data as Users[]}
                               id={cell.getValue() as string}
                             />
                           </TableCell>
@@ -292,10 +302,10 @@ export default function OperationsTable({
           </TableBody>
         </Table>
       </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
+      <div className='flex items-center justify-end py-4 space-x-2'>
         <div className='flex-1 text-sm text-muted-foreground'>
-          {/* يتم عرض {table.getFilteredRowModel().rows.length}
-          {table.getFilteredRowModel().rows.length > 1 ? ' صفوف' : ' صف'} */}
+          يتم عرض {table.getFilteredRowModel().rows.length}
+          {table.getFilteredRowModel().rows.length > 1 ? ' صفوف' : ' صف'}
         </div>
         <div className='flex gap-x-3'>
           <Button

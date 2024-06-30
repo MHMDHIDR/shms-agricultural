@@ -11,10 +11,11 @@ import { Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Error, Success } from '@/components/icons/Status'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import type { UserProps, getAuthType } from '@/types'
 import { TabsContent } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formattedPrice } from '@/libs/utils'
+import type { getAuthType } from '@/types'
+import type { Users } from '@prisma/client'
 
 export default function NewWithdraw() {
   const { userId, withdrawableAmount }: getAuthType =
@@ -55,7 +56,7 @@ export default function NewWithdraw() {
         resetFormErrors()
         setFormStatus({ ...formStatus, isSubmitting: true })
 
-        const withdrawFromBalance: { data: UserProps } = await axios.post(
+        const withdrawFromBalance: { data: Users } = await axios.post(
           `${API_URL}/users/withdrawAmount/${userId}`,
           { withdrawAmount }
         )
@@ -79,8 +80,7 @@ export default function NewWithdraw() {
           })
         setTimeout(() => replace(`/profile/investments`), DEFAULT_DURATION)
       } catch (error: any) {
-        const message: UserProps['message'] =
-          error?.response?.data?.message ?? 'حدث خطأ ما'
+        const message: Users['message'] = error?.response?.data?.message ?? 'حدث خطأ ما'
         //handle error, show notification using Shadcn notifcation
         toast(message ?? JSON.stringify(error), {
           icon: <Error className='w-6 h-6 ml-3' />,

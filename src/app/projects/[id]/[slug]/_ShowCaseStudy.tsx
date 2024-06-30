@@ -3,11 +3,11 @@
 import Modal from '@/components/custom/Modal'
 import { APP_LOGO, MOBILE_SCREEN, WINDOW_WIDTH } from '@/data/constants'
 import { getProjectStudyCase } from '@/libs/utils'
-import { ProjectProps } from '@/types'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import type { Projects } from '@prisma/client'
 
-export default function ShowCaseStudy({ project }: { project: ProjectProps }) {
+export default function ShowCaseStudy({ project }: { project: Projects }) {
   const [onMobileScreen, setOnMobileScreen] = useState(false)
   useEffect(() => {
     setOnMobileScreen(WINDOW_WIDTH < MOBILE_SCREEN)

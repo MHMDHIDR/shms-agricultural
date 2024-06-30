@@ -15,7 +15,7 @@ export default function Farming() {
   return (
     <Layout>
       <main className='flex flex-col items-center justify-between min-h-screen'>
-        <h1 className='mb-2 mt-10 text-2xl'>الزراعة</h1>
+        <h1 className='mt-10 mb-2 text-2xl'>الزراعة</h1>
 
         <div dir='rtl' style={{ marginTop: 10, justifyContent: 'center' }}>
           <div style={{ margin: 50, display: 'flex', justifyContent: 'center' }}>
@@ -33,7 +33,7 @@ export default function Farming() {
               alt='الزراعة'
             />
           </div>
-          <div className='text-right mx-5 px-20'>
+          <div className='px-20 mx-5 text-right'>
             <p style={{ fontSize: 20 }}>
               تُعتبر مرحلة رمي البذور والزراعة أحد أهم مراحل عملية الزراعة، حيث يتم فيها
               زراعة البذور في التربة بطريقة تسهل نموها وتطورها لتنتج محصولًا جيدًا. في هذا

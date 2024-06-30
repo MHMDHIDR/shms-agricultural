@@ -12,10 +12,11 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { Error } from '@/components/icons/Status'
 import { toast } from 'sonner'
 import { Info } from 'lucide-react'
-import type { UserLoggedInProps, UserProps } from '@/types'
 import Layout from '@/components/custom/Layout'
 import { useSession } from 'next-auth/react'
 import { LoadingPage } from '@/components/custom/Loading'
+import type { UserLoggedInProps } from '@/types'
+import type { Users } from '@prisma/client'
 
 const ForgotPasswordPage = () => {
   const HEADING = 'إستعادة كلمة المرور'
@@ -87,7 +88,7 @@ const ForgotPasswordPage = () => {
 
         setTimeout(() => replace(`/`), DEFAULT_DURATION - 1000)
       } catch (error: any) {
-        const message: UserProps['message'] = error?.response.data.message ?? 'حدث خطأ ما'
+        const message: Users['message'] = error?.response.data.message ?? 'حدث خطأ ما'
         //handle error, show notification using Shadcn notifcation
         toast(message, {
           icon: <Error className='w-6 h-6 ml-3' />,

@@ -21,12 +21,10 @@ import {
   DEFAULT_DURATION,
   MAX_FILE_UPLOAD_SIZE
 } from '@/data/constants'
-import { validateFile } from '@/libs/utils'
+import { redirect, validateFile } from '@/libs/utils'
 import { FileUploadContext } from '@/providers/FileUpload'
-import type { ProjectProps, UserLoggedInProps, UserProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
-import { /*redirect,*/ useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import ProjectsTable from './ProjectsTabel'
@@ -37,10 +35,13 @@ import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
 import { getAuth } from '@/libs/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
+import type { UserLoggedInProps } from '@/types'
+import type { Projects, Users } from '@prisma/client'
 
 export default function Projects() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
-  const [_projects, setProjects] = useState<ProjectProps[]>([])
+
+  const [_projects, setProjects] = useState<Projects[]>([])
   const [projectName, setProjectName] = useState('')
   const [projectLocation, setProjectLocation] = useState('')
   const [projectStartDate, setProjectStartDate] = useState<Date>()
@@ -56,7 +57,7 @@ export default function Projects() {
   const [isSubmittingForm, setIsSubmittingForm] = useState(false)
   const [isDoneSubmitting, setIsDoneSubmitting] = useState<boolean>(false)
   const [projectAdded, setProjectAdded] = useState<number>(0)
-  const [userType, setUserType] = useState<UserProps['shms_user_account_type']>('user')
+  const [userType, setUserType] = useState<Users['shms_user_account_type']>()
 
   useEffect(() => {
     const getUserData = async () => {
@@ -89,10 +90,8 @@ export default function Projects() {
 
   const { file } = useContext(FileUploadContext)
 
-  const { push } = useRouter()
-
   const getProjects = async () => {
-    const { data: projects }: { data: ProjectProps[] } = await axios.get(
+    const { data: projects }: { data: Projects[] } = await axios.get(
       `${API_URL}/projects/get`
     )
     setProjects(projects)
@@ -203,16 +202,16 @@ export default function Projects() {
 
         // upload the project images to s3
         const {
-          data: { shms_project_id, shms_project_images, shms_project_study_case }
+          data: { id, shms_project_images, shms_project_study_case }
         }: {
-          data: ProjectProps
+          data: Projects
         } = await axios.post(`${API_URL}/uploadToS3`, formData)
 
         // upload the project data to the database
-        const addProject: { data: ProjectProps } = await axios.post(
+        const addProject: { data: Projects } = await axios.post(
           `${API_URL}/projects/add`,
           {
-            shms_project_id,
+            id,
             shms_project_name: projectName,
             shms_project_location: projectLocation,
             shms_project_start_date: projectStartDate,
@@ -253,9 +252,7 @@ export default function Projects() {
         }
 
         setProjectAdded(data.projectAdded ?? 0)
-        setTimeout(() => {
-          push(`/dashboard/project/${shms_project_id}`)
-        }, DEFAULT_DURATION)
+        redirect(`/dashboard/project/${id}`, DEFAULT_DURATION / 2)
       } catch (error: any) {
         //handle error, show notification using Shadcn notifcation
         toast(error.length < 30 ? JSON.stringify(error) : 'حدث خطأ ما'),
@@ -292,13 +289,15 @@ export default function Projects() {
     setProjectDescriptionError('')
   }
 
-  return (session && userType === 'user') || (!session && userType === 'user') ? (
+  return !session ||
+    (session && userType === 'user') ||
+    (!session && userType === 'user') ? (
     <NotFound />
   ) : !session && userType === 'admin' ? (
     <LoadingPage />
   ) : (
     <Layout>
-      <h1 className='text-2xl mt-20 mb-10 font-bold text-center'>لوحة التحكم</h1>
+      <h1 className='mt-20 mb-10 text-2xl font-bold text-center'>لوحة التحكم</h1>
       <DashboardNav />
 
       <section className='container mx-auto'>
@@ -325,6 +324,7 @@ export default function Projects() {
                     ],
                     imgName: 'Agricultural Project View'
                   }}
+                  setIsRefetching={undefined}
                 />
               </div>
               {projectImagesError && (

@@ -37,12 +37,12 @@ export default function MobileNavigation({
   useEffect(() => {
     setUserName(
       abstractWords({
-        words: session?.token?.user.fullname ?? 'حسابي',
+        words: session?.token?.user.shms_fullname ?? 'حسابي',
         wordsLength: 2,
         ellipsis: false
       })
     )
-  }, [session?.token?.user.fullname])
+  }, [session?.token?.user.shms_fullname])
 
   const handleSignOut = async () => {
     localStorage.removeItem('shms_user_data')

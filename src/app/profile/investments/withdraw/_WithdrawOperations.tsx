@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/table'
 import { getProjectDate, getProjectStatus, getUserMoneyOperations } from '@/libs/utils'
 import { getAuth } from '@/libs/actions/auth'
-import { accountingOperationsProps } from '@/types'
 import {
   Card,
   CardContent,
@@ -20,13 +19,12 @@ import {
 } from '@/components/ui/card'
 import Copy from '@/components/custom/Copy'
 import NoRecords from '@/components/custom/NoRecords'
+import type { withdraw_actions } from '@prisma/client'
 
 export const revalidate = 10
 export default async function WithdrawOperations() {
   const { userId } = await getAuth()
-  const withdrawActions = (await getUserMoneyOperations(
-    userId
-  )) as accountingOperationsProps[]
+  const withdrawActions = (await getUserMoneyOperations(userId)) as withdraw_actions[]
 
   return (
     <TabsContent value='withdraw_operations'>
@@ -92,13 +90,10 @@ export default async function WithdrawOperations() {
               ) : (
                 withdrawActions.map(withdrawAction => {
                   return (
-                    <TableRow key={withdrawAction.shms_withdraw_id}>
+                    <TableRow key={withdrawAction.id}>
                       <TableCell className='min-w-40'>
-                        <Copy
-                          text={withdrawAction.shms_withdraw_id}
-                          className='inline ml-2'
-                        />
-                        <span>{withdrawAction.shms_withdraw_id}</span>
+                        <Copy text={withdrawAction.id} className='inline ml-2' />
+                        <span>{withdrawAction.id}</span>
                       </TableCell>
                       <TableCell className='min-w-40'>
                         {withdrawAction.shms_action_type === 'deposit'
