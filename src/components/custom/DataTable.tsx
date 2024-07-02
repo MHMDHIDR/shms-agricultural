@@ -273,13 +273,13 @@ export default function OperationsTable({
                     .getVisibleCells()
                     // .filter(cell => !filteredColumns.includes(cell.column.id))
                     .map(cell => {
-                      if (cell.id.includes('shms_withdraw_amount')) {
+                      if (cell.id.includes('shms_withdraw_id')) {
                         return (
                           <TableCell key={cell.id}>
                             <OperationAction withdrawAction={data[rowIndex]} />
                           </TableCell>
                         )
-                      } else if (cell.id.includes('id')) {
+                      } else if (cell.id.includes('shms_sn')) {
                         return (
                           <TableCell key={cell.id}>
                             <UsersActions

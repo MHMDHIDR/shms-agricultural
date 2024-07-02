@@ -27,12 +27,12 @@ export async function GET() {
     // Map the result to match the structure of the original SQL query
     const result = withdrawActions.map(action => ({
       shms_withdraw_id: action.id,
-      shms_created_at: action.shms_created_at,
+      shms_fullname: action.user.shms_fullname,
       shms_user_id: action.user.id,
       shms_withdraw_amount: action.shms_withdraw_amount,
-      shms_action_type: action.shms_action_type,
+      shms_created_at: action.shms_created_at,
       accounting_operation_status: action.accounting_operation_status,
-      shms_fullname: action.user.shms_fullname,
+      shms_action_type: action.shms_action_type,
       shms_phone: action.user.shms_phone,
       shms_email: action.user.shms_email,
       shms_address: action.user.shms_address
