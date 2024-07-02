@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Divider from '@/components/custom/Divider'
 import Modal from '@/components/custom/Modal'
 import NoRecords from '@/components/custom/NoRecords'
@@ -176,7 +177,9 @@ export default async function DashboardInvestors() {
                     {users.map(user => (
                       <TableRow key={user.id}>
                         <TableCell className='text-center min-w-32'>
-                          {user.shms_fullname}
+                          <Link href={`/dashboard/users/${user.id}`}>
+                            {user.shms_fullname}
+                          </Link>
                         </TableCell>
                         <TableCell className='text-center'>
                           <Suspense

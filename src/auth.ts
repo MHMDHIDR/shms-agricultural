@@ -21,15 +21,24 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         try {
           const loginUser = await axios.post(`${API_URL}/users/signin`, credentials)
-          const { data: user }: { data: Users } = loginUser
-          if (user && user.loggedIn === 1) {
-            return Promise.resolve(user)
+          const { data: user, status }: { data: Users; status: number } = loginUser
+
+          // Handle success case
+          if (status === 200 && user && user.loggedIn === 1) {
+            return user // Login successful, return user object
+          } else {
+            // Handle specific errors
+            if (status === 403 || status === 401) {
+              const errorMessage = user?.message || 'Authentication failed'
+              throw new Error(errorMessage)
+            }
           }
 
-          return Promise.resolve(null)
-        } catch (error) {
+          return null
+        } catch (error: any) {
           console.error('Error during authorization:', error)
-          return Promise.resolve(null)
+          // Pass the error message from the server
+          throw new Error(error.response?.data?.message || 'Unknown error occurred')
         }
       }
     })
@@ -49,7 +58,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.user = user
       }
-      return Promise.resolve(token)
+      return token
     }
   },
   pages: {
