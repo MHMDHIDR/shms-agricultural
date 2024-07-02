@@ -10,13 +10,20 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { formattedPrice, getProject, getProjectDate, getUser } from '@/libs/utils'
+import {
+  formattedPrice,
+  getProject,
+  getProjectDate,
+  getUser,
+  validateUUID
+} from '@/libs/utils'
 import Account from '@/app/profile/investments/account'
 import { getAuth } from '@/libs/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
 import NotFound from '@/app/not-found'
 import Contract from '@/app/profile/investments/_ShowPDF'
 import DashboardNav from '../../DashboardNav'
+import { notFound } from 'next/navigation'
 import type { InverstorProjectData } from '@/types'
 import type { Stocks, Users } from '@prisma/client'
 
@@ -26,6 +33,8 @@ export default async function DashboardInvestors({
   params: { userId: string }
 }) {
   const { userType, loading } = await getAuth()
+
+  validateUUID(userId) && notFound()
 
   // To make sure the user is the investor -- للتأكد من ان المستخدم هو المستثمر المطلوب
   const user = (await getUser(userId)) as Users
@@ -77,7 +86,7 @@ export default async function DashboardInvestors({
 
   return loading ? (
     <LoadingPage />
-  ) : userType !== 'admin' ? (
+  ) : userType !== 'admin' || validateUUID(userId) ? (
     <NotFound />
   ) : (
     <Layout>
