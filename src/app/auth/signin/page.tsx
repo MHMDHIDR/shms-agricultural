@@ -78,26 +78,18 @@ const SigninPage = () => {
 
         // if the status is 400 or 401 show error message
         if (results?.status.toString().startsWith('4')) {
-          toast(
-            results.status === 401
-              ? results?.error ??
-                  `عفواً، بيانات الدخول غير صحيحة يرجى التأكد من ثم المحاولة مرة أخرى!`
-              : results.status === 403
-              ? results?.error ?? `عفواً، حسابك محظور، يرجى التواصل مع الإدارة`
-              : results?.error ?? 'حدث خطأ ما، الرجاء المحاولة مرة أخرى',
-            {
-              icon: <Error className='w-6 h-6 ml-3' />,
-              position: 'bottom-center',
-              className: 'text-right select-none rtl',
-              style: {
-                backgroundColor: '#FFF0F0',
-                color: '#BE2A2A',
-                border: '1px solid #BE2A2A',
-                gap: '1.5rem',
-                textAlign: 'justify'
-              }
+          toast(results.error ?? 'حدث خطأ ما، الرجاء المحاولة مرة أخرى', {
+            icon: <Error className='w-6 h-6 ml-3' />,
+            position: 'bottom-center',
+            className: 'text-right select-none rtl',
+            style: {
+              backgroundColor: '#FFF0F0',
+              color: '#BE2A2A',
+              border: '1px solid #BE2A2A',
+              gap: '1.5rem',
+              textAlign: 'justify'
             }
-          )
+          })
           setIsSubmittingForm(false)
         } else {
           toast('تم تسجيل دخولك بنجاح', {

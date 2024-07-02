@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
   if (email === '' || phone === '') {
     return new Response(
-      JSON.stringify({ userAdded: 0, message: 'Please Fill In  All The Fields' }),
+      JSON.stringify({ userAdded: 0, message: 'الرجاء إدخال جميع الحقول!' }),
       { status: 400 }
     )
   }
@@ -24,9 +24,13 @@ export async function POST(req: Request) {
 
     if (!user) {
       return new Response(
-        JSON.stringify({ loggedIn: 0, message: 'لم يتم العثور على المستخدم' })
+        JSON.stringify({ loggedIn: 0, message: 'لم يتم العثور على المستخدم' }),
+        { status: 404 }
       )
     }
+
+    // Compare password
+    const isPasswordCorrect = await ComparePasswords(user.shms_password ?? '', password)
 
     if (user.shms_user_account_status === 'block') {
       return new Response(
@@ -45,7 +49,12 @@ export async function POST(req: Request) {
         }),
         { status: 403 }
       )
-    } else if (user && (await ComparePasswords(user.shms_password ?? '', password))) {
+    } else if (!isPasswordCorrect) {
+      return new Response(
+        JSON.stringify({ loggedIn: 0, message: 'كلمة المرور غير صحيحة' }),
+        { status: 401 }
+      )
+    } else {
       return new Response(
         JSON.stringify({
           loggedIn: 1,
@@ -62,17 +71,11 @@ export async function POST(req: Request) {
           message: 'تم تسجيل الدخول بنجاح'
         } as Users)
       )
-    } else {
-      return new Response(
-        JSON.stringify({
-          loggedIn: 0,
-          message: 'Invalid Email/Telephone Number Or Password'
-        }),
-        { status: 401 }
-      )
     }
   } catch (error) {
     console.error(error)
-    throw new Error('Error during authorization')
+    throw new Error(
+      `حدث خطأ ما: ${error instanceof Error ? error.message : JSON.stringify(error)}`
+    )
   }
 }
