@@ -8,8 +8,8 @@ import { createSlug } from '@/libs/utils'
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Projects } from '@prisma/client'
 import { getAuth } from '@/libs/actions/auth'
+import type { Projects } from '@prisma/client'
 
 export const metadata: Metadata = {
   title: `مشاريعنا الاستثمارية | ${APP_TITLE}
@@ -57,7 +57,7 @@ export default async function ProjectsPage() {
                   <CardContent className='relative flex flex-col p-0 shadow-md gap-y-2'>
                     {userType === 'admin' ? (
                       <span
-                        className={`absolute top-14 -left-6 text-white text-center px-8 py-1 transform -rotate-45 origin-top-left text-xs font-bold z-10 ${
+                        className={`absolute top-20 -left-4 text-white text-center px-14 py-1 transform -rotate-45 origin-top-left text-xs font-bold z-10 ${
                           project.shms_project_status === 'active'
                             ? 'bg-green-600'
                             : 'bg-red-600'

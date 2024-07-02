@@ -185,7 +185,7 @@ export default function OperationsTable({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length > 0 ? (
               table.getRowModel().rows.map((row, rowIndex: number) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row

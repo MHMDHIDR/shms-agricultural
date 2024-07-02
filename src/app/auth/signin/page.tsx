@@ -205,10 +205,12 @@ const SigninPage = () => {
             {/* Submit Button */}
             <div className='md:flex md:items-center'>
               <Button
-                disabled={isDoneSubmitting}
+                disabled={isDoneSubmitting || isSubmittingForm}
                 type='submit'
                 className={`shadow w-full bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold${
-                  isDoneSubmitting ? ' cursor-not-allowed opacity-50' : ''
+                  isDoneSubmitting || isSubmittingForm
+                    ? ' cursor-not-allowed opacity-50'
+                    : ''
                 }`}
               >
                 {isSubmittingForm ? (

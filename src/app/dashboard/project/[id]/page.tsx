@@ -388,7 +388,7 @@ export default function EditProjectPage({
     <Layout>
       <DashboardNav />
 
-      <Card className='mt-20 rtl'>
+      <Card className='mt-40 rtl'>
         <div className='flex items-center justify-between w-full'>
           <Link
             href={`/dashboard`}

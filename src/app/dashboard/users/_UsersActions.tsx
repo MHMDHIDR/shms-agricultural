@@ -46,7 +46,8 @@ export default function UsersActions({ user, id }: { user: Users[]; id: Users['i
       const {
         data: { docDeleted }
       }: { data: { docDeleted: boolean } } = await axios.delete(
-        decodeURI(`${API_URL}/deleteFromS3/${S3docId}`)
+        decodeURI(`${API_URL}/deleteFromS3/${S3docId}`),
+        { data: { imageId: S3docId } }
       )
 
       // make sure to view the response from the data

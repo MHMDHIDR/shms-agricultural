@@ -30,12 +30,13 @@ export default function Users() {
     const getUserData = async () => {
       const { userType, loading } = await getAuth()
       setUserType(userType)
-      setLoading(loading)
 
       if (!loading) {
         const { data: users }: { data: Users[] } = await axios.get(`${API_URL}/users/all`)
         setUsers(users)
       }
+
+      setLoading(loading)
     }
 
     getUserData()

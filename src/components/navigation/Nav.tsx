@@ -90,7 +90,10 @@ export default function Nav() {
           (await getAuth()) as getAuthType
 
         const { shms_user_total_balance, shms_user_withdrawable_balance } =
-          (await getUser(userId)) as Users
+          ((await getUser(userId)) as Users) ?? {
+            shms_user_total_balance: 0,
+            shms_user_withdrawable_balance: 0
+          }
 
         localStorage.setItem(
           'shms_user_data',

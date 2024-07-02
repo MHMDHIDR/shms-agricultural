@@ -95,7 +95,7 @@ export async function POST(request: any) {
       return new Response('No file found', { status: 400 })
     }
 
-    // if single file
+    // Only for single file
     if (!multiple) {
       const file: File = files[0] ?? formData.get('file')
       if (!file) return new Response('No file found', { status: 400 })

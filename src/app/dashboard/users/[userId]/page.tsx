@@ -16,6 +16,7 @@ import { getAuth } from '@/libs/actions/auth'
 import { LoadingPage } from '@/components/custom/Loading'
 import NotFound from '@/app/not-found'
 import Contract from '@/app/profile/investments/_ShowPDF'
+import DashboardNav from '../../DashboardNav'
 import type { InverstorProjectData } from '@/types'
 import type { Stocks, Users } from '@prisma/client'
 
@@ -80,7 +81,9 @@ export default async function DashboardInvestors({
     <NotFound />
   ) : (
     <Layout>
-      <section className='container mx-auto'>
+      <DashboardNav />
+
+      <section className='container mx-auto mt-32'>
         <Account userId={userId} />
         <Card className='min-w-full md:w-[300px] rtl mt-12'>
           <CardContent>
@@ -90,8 +93,8 @@ export default async function DashboardInvestors({
             </CardHeader>
             {!projectsData || projectsData.length === 0 ? (
               <NoRecords
-                msg='لا يوجد لديك استثمارات معنا! للبدأ في الاستثمار تصفح مشاريعنا'
-                links={[{ to: `/projects`, label: 'تصفـــح مــشاريعـنا' }]}
+                msg={`لم يتم شراء أسهم من العميل ${user?.shms_fullname}، يمكنك العودة للصفحة السابقة`}
+                links={[{ to: `/dashboard/users`, label: 'العودة للعملاء' }]}
               />
             ) : (
               <Table className='min-w-full overflow-x-auto divide-y divide-gray-200'>

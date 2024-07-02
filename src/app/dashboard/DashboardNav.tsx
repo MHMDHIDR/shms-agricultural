@@ -11,7 +11,14 @@ import {
   Users2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from '@/components/ui/sheet'
 import { DashboardIcon } from '@radix-ui/react-icons'
 
 export default function Dashboard() {
@@ -27,13 +34,18 @@ export default function Dashboard() {
       </SheetTrigger>
       <SheetContent side='right' className='sm:max-w-xs'>
         <nav className='grid gap-6 text-lg font-medium pt-14 rtl'>
-          <Link
-            href='/'
-            className='flex items-center justify-center w-10 h-10 gap-2 text-lg font-semibold rounded-full group shrink-0 bg-primary text-primary-foreground md:text-base'
-          >
-            <HomeIcon className='w-5 h-5 transition-all group-hover:scale-110' />
-            <span className='sr-only'>زيارة الصفحة الرئيسية</span>
-          </Link>
+          <SheetHeader>
+            <SheetTitle>
+              <Link
+                href='/'
+                className='flex items-center justify-center w-10 h-10 gap-2 text-lg font-semibold rounded-full group shrink-0 bg-primary text-primary-foreground md:text-base'
+              >
+                <HomeIcon className='w-5 h-5 transition-all group-hover:scale-110' />
+                <span className='sr-only'>زيارة الصفحة الرئيسية</span>
+              </Link>
+            </SheetTitle>
+            <SheetDescription></SheetDescription>
+          </SheetHeader>
           <Link
             href='/dashboard'
             className={`flex items-center gap-4 px-2.5 ${

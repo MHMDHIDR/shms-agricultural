@@ -51,7 +51,7 @@ export default function ProjectsTable() {
         data: { docDeleted }
       }: { data: { docDeleted: boolean } } = await axios.delete(
         decodeURI(`${API_URL}/deleteFromS3/${projectId}`),
-        { data: { imageId: projectId } }
+        { data: { imageId: `projects/${projectId}` } }
       )
 
       // make sure to view the response from the data

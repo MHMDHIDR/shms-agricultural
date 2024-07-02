@@ -13,10 +13,10 @@ import {
 import { BadgeDollarSign, LineChart, MapPin, TimerIcon, TimerReset } from 'lucide-react'
 import Link from 'next/link'
 import ShowCaseStudy from './_ShowCaseStudy'
-import type { imgsProps } from '@/types'
-import type { Projects } from '@prisma/client'
 import { notFound } from 'next/navigation'
 import { getAuth } from '@/libs/actions/auth'
+import type { imgsProps } from '@/types'
+import type { Projects } from '@prisma/client'
 
 export async function generateMetadata({
   params: { id: projectId, slug }
@@ -139,12 +139,13 @@ export default async function ProjectDetailsPage({
           </div>
         </div>
 
-        {project.shms_project_study_case_visibility &&
-        getProjectStudyCase(project.shms_project_study_case) ? (
+        {(project.shms_project_study_case_visibility &&
+          getProjectStudyCase(project.shms_project_study_case)) ||
+        userType === 'admin' ? (
           <ShowCaseStudy project={project} />
         ) : null}
 
-        {/*  نسبة إكتمال المشروع */}
+        {/* نسبة إكتمال المشروع  */}
         <p className='font-bold select-none'>نسبة إكتمال المشروع</p>
         <PercentageSlider
           // 1 تم إضافته لتجنب القيمة الصفرية  للنسبة المئوية و لعدم إظهار النسبة بشكل حقيقي

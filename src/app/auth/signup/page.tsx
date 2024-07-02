@@ -181,31 +181,45 @@ const SignupPage = () => {
       try {
         resetFormErrors()
         setIsSubmittingForm(true)
+
         const formData = new FormData()
         formData.append('fullname', userFullName)
         formData.append('multiple', 'false')
         formData.append('file', file[0]!)
+
+        const userAddedSuccessfully: { data: Users } = await axios.post(
+          `${API_URL}/users/signup`,
+          {
+            userFullName,
+            nationality,
+            dateOfBirth,
+            address,
+            email,
+            phone,
+            password
+          }
+        )
+        const { id, userAdded } = userAddedSuccessfully.data
+        formData.append('projectId', id)
+
         // upload the project images to s3
         const {
-          data: { id, shms_doc }
+          data: { shms_doc }
         }: {
           data: Users
         } = await axios.post(`${API_URL}/uploadToS3`, formData)
-        const joinUser: { data: Users } = await axios.post(`${API_URL}/users/signup`, {
-          id,
-          userFullName,
-          nationality,
-          dateOfBirth,
-          address,
-          email,
-          phone,
-          password,
-          shms_doc
-        })
+
+        const userUpdatedSuccessfully: { data: Users } = await axios.patch(
+          `${API_URL}/users/signup`,
+          { id, shms_doc }
+        )
+
         //getting response from backend
-        const { data } = joinUser
+        const { userUpdated } = userUpdatedSuccessfully.data
+
         // make sure to view the response from the data
-        data.userAdded === 1 &&
+        userAdded === 1 &&
+          userUpdated === 1 &&
           toast(
             'تم إرسال بريد الكتروني لتأكيد التسجيل ، الرجاء إتباع التعليمات في البريد لتفعيل حسابك 👍🏼',
             {

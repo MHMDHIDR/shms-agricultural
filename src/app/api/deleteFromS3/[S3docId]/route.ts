@@ -20,7 +20,8 @@ const s3ClientConfig = {
 const s3Client = new S3Client(s3ClientConfig)
 
 /**
- * Deletes a Objects or a folder from S3
+ * Deletes Multiple Objects or a folder from S3
+ * Deletes a whole project (collection of documents)
  * @param file - The file to be uploaded
  * @param fileObject - The file object
  * @param fullname  - The fullname of the user
@@ -29,7 +30,7 @@ const s3Client = new S3Client(s3ClientConfig)
 async function deleteFilesFromS3(projectOrFileId: string): Promise<DeletedObject[]> {
   const params = {
     Bucket: AWS_BUCKET_NAME,
-    Prefix: `projects/${projectOrFileId}`
+    Prefix: projectOrFileId
   }
 
   const listCommand = new ListObjectsV2Command(params)
@@ -62,7 +63,8 @@ async function deleteFilesFromS3(projectOrFileId: string): Promise<DeletedObject
 }
 
 /**
- * Deletes a document or a file from S3
+ * Deletes a single document or a file from S3
+ * Deletes user document from s3 bucket
  * @param file - The file to be uploaded
  * @param fileObject - The file object
  * @param fullname  - The fullname of the user
@@ -88,11 +90,12 @@ export async function DELETE(
 ) {
   if (!S3docId) throw new Error('ID of the document or the folder is required!')
 
+  // if imageId is not provided in the request body then use the S3docId
   const body = await request.json()
   const { imageId } = body
 
-  // This to delete a whole project (collection of documents)
-  if (!imageId.includes('projects')) {
+  // Deletes a whole project (collection of documents)
+  if (imageId.includes('projects')) {
     try {
       const dataAfterDelete = await deleteFilesFromS3(imageId)
 

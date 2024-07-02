@@ -25,15 +25,18 @@ export async function DELETE(
       where: { id: userId }
     })
 
-    if (userDeleted.id) {
+    if (userDeleted) {
       return new Response(
-        JSON.stringify({ userDeleted, message: `تم حذف حساب المستخدم بنجاح!` }),
+        JSON.stringify({ userDeleted: 1, message: `تم حذف حساب المستخدم بنجاح!` }),
         { status: 200 }
       )
     }
 
     return new Response(
-      JSON.stringify({ userDeleted, message: `عفواً، لم يتم حذف حساب المستخدم بنجاح!` }),
+      JSON.stringify({
+        userDeleted: 0,
+        message: `عفواً، لم يتم حذف حساب المستخدم بنجاح!`
+      }),
       { status: 400 }
     )
   } catch (err) {

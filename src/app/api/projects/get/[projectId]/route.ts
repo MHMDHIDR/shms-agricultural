@@ -7,7 +7,7 @@ export async function GET(
   if (!projectId) throw new Error('Project ID is required')
 
   try {
-    // using client from prisma/prismadb.ts instead of connectDB to query the database
+    // using client from prismas instead of connectDB to query the database
     const project = await client.projects.findUnique({ where: { id: projectId } })
 
     return !project || !project.id

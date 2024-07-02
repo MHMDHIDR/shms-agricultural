@@ -12,8 +12,7 @@ export async function POST(req: Request) {
     address,
     email: newUserEmail,
     phone,
-    password,
-    shms_doc
+    password
   } = body
 
   if (!newUserEmail || !phone) {
@@ -65,7 +64,7 @@ export async function POST(req: Request) {
         shms_email: newUserEmail,
         shms_phone: phone,
         shms_password: hashedPassword,
-        shms_doc,
+        shms_doc: '',
         shms_user_account_status: 'pending',
         shms_user_reset_token_expires: userCanResetPasswordUntil
       }
@@ -98,6 +97,7 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           userAdded: 1,
+          id: newUser.id,
           message:
             'تم تسجيل حساب المستخدم بنجاح ، يرجى تفعيل حسابك من البريد الاكتروني المرسل لديك 👍🏼'
         }),
@@ -115,9 +115,48 @@ export async function POST(req: Request) {
     }
   } catch (error) {
     console.error(error)
+
     return new Response(
       JSON.stringify({
         userAdded: 0,
+        message: `لم يتم تسجيل المستخدم، يرجى المحاولة مرة أخرى لاحقاً 🙁`,
+        error: error instanceof Error ? error.message : JSON.stringify(error)
+      }),
+      { status: 500 }
+    )
+  }
+}
+
+export async function PATCH(req: Request) {
+  const body = await req.json()
+  const { id, shms_doc } = body
+
+  if (!shms_doc) {
+    return new Response(
+      JSON.stringify({ userUpdated: 0, message: `الرجاء توفير ملف الهوية` })
+    )
+  }
+
+  try {
+    // Create new user
+    await client.users.update({
+      data: { shms_doc },
+      where: { id }
+    })
+
+    return new Response(
+      JSON.stringify({
+        userUpdated: 1,
+        message:
+          'تم تسجيل حساب المستخدم بنجاح ، يرجى تفعيل حسابك من البريد الاكتروني المرسل لديك 👍🏼'
+      }),
+      { status: 201 }
+    )
+  } catch (error) {
+    console.error(error)
+    return new Response(
+      JSON.stringify({
+        userUpdated: 0,
         message: 'لم يتم تسجيل المستخدم، يرجى المحاولة مرة أخرى لاحقاً 🙁'
       }),
       { status: 500 }

@@ -56,12 +56,17 @@ export async function PATCH(
     const oldTotalStocks = project.shms_project_total_stocks
 
     if (updateImg) {
-      console.log('updateImg...')
-
       await client.projects.update({
         where: { id: projectId },
         data: { shms_project_images }
       })
+      return new Response(
+        JSON.stringify({
+          projectUpdated: 1,
+          message: `تم تعديل المشروع بنجاح .. جاري تحويلك`
+        }),
+        { status: 200 }
+      )
     } else if (updatePercentage) {
       await client.projects.update({
         where: { id: projectId },
@@ -71,6 +76,13 @@ export async function PATCH(
             shms_project_special_percentage_code || null
         }
       })
+      return new Response(
+        JSON.stringify({
+          projectUpdated: 1,
+          message: `تم تعديل المشروع بنجاح .. جاري تحويلك`
+        }),
+        { status: 200 }
+      )
     } else {
       await client.projects.update({
         where: { id: projectId },
