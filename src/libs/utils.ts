@@ -1,10 +1,17 @@
 import React from 'react'
-import { API_URL, DEFAULT_DURATION, MAX_FILE_UPLOAD_SIZE } from '@/data/constants'
+import {
+  API_URL,
+  APP_URL,
+  DEFAULT_DURATION,
+  MAX_FILE_UPLOAD_SIZE
+} from '@/data/constants'
 import axios from 'axios'
 import { clsx, type ClassValue } from 'clsx'
 import { toast } from 'sonner'
 import { twMerge } from 'tailwind-merge'
 import { Success, Error as ErrorIcon } from '@/components/icons/Status'
+import { VisibilityState } from '@tanstack/react-table'
+import { signOut } from 'next-auth/react'
 import type { abstractWordsProps, validateFileProps } from '@/types'
 import type { Projects, Users, withdraw_actions } from '@prisma/client'
 
@@ -462,5 +469,23 @@ export const replaceString = (string: string) => {
       return string
       break
     }
+  }
+}
+
+export function saveColumnVisibility(visibilityState: VisibilityState) {
+  localStorage.setItem('columnVisibility', JSON.stringify(visibilityState))
+}
+
+export function loadColumnVisibility() {
+  const savedVisibility = localStorage.getItem('columnVisibility')
+  return savedVisibility ? JSON.parse(savedVisibility) : {}
+}
+
+export async function handleSignOut() {
+  localStorage.removeItem('shms_user_data')
+  try {
+    await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
+  } catch (error) {
+    console.error('Sign-out error:', error)
   }
 }

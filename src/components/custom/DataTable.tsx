@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import {
   ColumnDef,
@@ -37,7 +37,9 @@ import {
   formattedPrice,
   getProjectDate,
   getProjectStatus,
-  replaceString
+  replaceString,
+  saveColumnVisibility,
+  loadColumnVisibility
 } from '@/libs/utils'
 import Link from 'next/link'
 import OperationAction from '@/app/dashboard/money-operations/_OperationAction'
@@ -46,24 +48,6 @@ import Modal from '@/components/custom/Modal'
 import UsersActions from '@/app/dashboard/users/_UsersActions'
 import type { accountingOperationsProps } from '@/types'
 import type { Users, Stocks } from '@prisma/client'
-
-export const columns: ColumnDef<accountingOperationsProps>[] = [
-  {
-    accessorKey: 'amount',
-    header: () => <div className='text-right'>Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('amount'))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(amount)
-
-      return <div className='font-medium text-right'>{formatted}</div>
-    }
-  }
-]
 
 export default function OperationsTable({
   data
@@ -80,12 +64,19 @@ export default function OperationsTable({
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(() =>
+    loadColumnVisibility()
+  )
   const [rowSelection, setRowSelection] = useState({})
+  const [filtering, setFiltering] = useState('')
+
+  useEffect(() => {
+    saveColumnVisibility(columnVisibility)
+  }, [columnVisibility])
 
   const table = useReactTable({
-    data,
-    columns: columns, // Use the dynamically generated columns
+    data: useMemo(() => data, []),
+    columns: useMemo(() => columns, []),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -94,11 +85,13 @@ export default function OperationsTable({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setFiltering,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection
+      rowSelection,
+      globalFilter: filtering
     }
   })
 
@@ -138,26 +131,25 @@ export default function OperationsTable({
               .filter(
                 column => !filteredColumns.includes(column.id) && column.getCanHide()
               )
-              .map(column => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className='capitalize'
-                    checked={column.getIsVisible()}
-                    onCheckedChange={value => column.toggleVisibility(!!value)}
-                  >
-                    {replaceString(column.id)}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
+              .map(column => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className='capitalize'
+                  checked={column.getIsVisible()}
+                  onCheckedChange={value => {
+                    column.toggleVisibility(!!value)
+                    saveColumnVisibility(columnVisibility)
+                  }}
+                >
+                  {replaceString(column.id)}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
         <Input
-          placeholder='إبحــــث عن طريق الإســـــــم'
-          defaultValue={table.getColumn('shms_fullname')?.getFilterValue() as string}
-          onChange={event =>
-            table.getColumn('shms_fullname')?.setFilterValue(event.target.value)
-          }
+          placeholder={`ما الذي تبحث عنه؟`}
+          onChange={event => setFiltering(event.target.value)}
+          defaultValue={filtering}
           className='max-w-sm'
         />
       </div>

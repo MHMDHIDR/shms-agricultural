@@ -4,14 +4,14 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
-import { abstractWords, cn } from '@/libs/utils'
-import type { MenuItemsProps, UserLoggedInProps } from '@/types'
+import { abstractWords, cn, handleSignOut } from '@/libs/utils'
 import { LogOut } from 'lucide-react'
-import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { NavigationListItem } from '../ui/navigation-menu'
-import { APP_URL } from '@/data/constants'
+import type { MenuItemsProps, UserLoggedInProps } from '@/types'
+import type { SessionContextValue } from 'next-auth/react'
 
 export default function MobileNavigation({
   isOpen,
@@ -43,15 +43,6 @@ export default function MobileNavigation({
       })
     )
   }, [session?.token?.user.shms_fullname])
-
-  const handleSignOut = async () => {
-    localStorage.removeItem('shms_user_data')
-    try {
-      await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
-    } catch (error) {
-      console.error('Sign-out error:', error)
-    }
-  }
 
   return (
     <Accordion

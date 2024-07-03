@@ -12,9 +12,9 @@ import {
 } from '@/components/ui/navigation-menu'
 import useEventListener from '@/hooks/useEventListener'
 import { getAuth } from '@/libs/actions/auth'
-import { abstractWords, cn, getUser } from '@/libs/utils'
+import { abstractWords, cn, getUser, handleSignOut } from '@/libs/utils'
 import { LogIn, LogOut } from 'lucide-react'
-import { signOut, useSession, type SessionContextValue } from 'next-auth/react'
+import { useSession, type SessionContextValue } from 'next-auth/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { ShmsIcon } from '@/components/icons/Socials'
@@ -22,7 +22,6 @@ import { Button } from '@/components/ui/button'
 import { MenuToggler } from './MenuToggler'
 import MobileNavigation from './MobileNavigation'
 import { Skeleton } from '@/components/ui/skeleton'
-import { APP_URL } from '@/data/constants'
 import type { MenuItemsProps, UserLoggedInProps, getAuthType } from '@/types'
 import type { Users } from '@prisma/client'
 
@@ -126,15 +125,6 @@ export default function Nav() {
   useEffect(() => {
     setOnMobileScreen(WINDOW_WIDTH < MOBILE_SCREEN)
   }, [WINDOW_WIDTH])
-
-  const handleSignOut = async () => {
-    localStorage.removeItem('shms_user_data')
-    try {
-      await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
-    } catch (error) {
-      console.error('Sign-out error:', error)
-    }
-  }
 
   return (
     <header

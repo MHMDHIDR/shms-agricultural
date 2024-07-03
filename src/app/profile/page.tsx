@@ -19,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ModeToggle } from '@/components/navigation/ModeToggle'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-import { validatePasswordStrength, validateEmail } from '@/libs/utils'
+import { validatePasswordStrength, validateEmail, handleSignOut } from '@/libs/utils'
 import { toast } from 'sonner'
 import { API_URL, APP_URL, DEFAULT_DURATION } from '@/data/constants'
 import axios from 'axios'
@@ -29,8 +29,8 @@ import { revalidatePath } from 'next/cache'
 import Layout from '@/components/custom/Layout'
 import { getAuth } from '@/libs/actions/auth'
 import NotFound from '@/app/not-found'
-import type { UserLoggedInProps, getAuthType } from '@/types'
 import { Users } from '@prisma/client'
+import type { UserLoggedInProps, getAuthType } from '@/types'
 
 export default function ProfilePage() {
   const { data: session }: { data: UserLoggedInProps } = useSession()
@@ -259,15 +259,6 @@ export default function ProfilePage() {
       } finally {
         setIsSubmittingEmailForm(false)
       }
-    }
-  }
-
-  const handleSignOut = async () => {
-    localStorage.removeItem('shms_user_data')
-    try {
-      await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
-    } catch (error) {
-      console.error('Sign-out error:', error)
     }
   }
 
