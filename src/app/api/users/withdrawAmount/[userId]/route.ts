@@ -1,7 +1,8 @@
 import email from '@/libs/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import { randomUUID } from 'crypto'
 import client from '@/../prisma/prismadb'
+import { ObjectId } from 'mongodb'
+import { Users } from '@prisma/client'
 
 export async function POST(
   req: Request,
@@ -10,7 +11,10 @@ export async function POST(
   if (!userId) throw new Error('User ID is required')
 
   const body = await req.json()
-  const { withdrawAmount } = body
+  let { withdrawAmount }: { withdrawAmount: Users['shms_user_withdrawable_balance'] } =
+    body
+
+  withdrawAmount = parseInt(String(withdrawAmount))
 
   if (!withdrawAmount) {
     return new Response(
@@ -43,7 +47,7 @@ export async function POST(
   }
 
   try {
-    const referenceCode = randomUUID()
+    const referenceCode = new ObjectId().toHexString()
 
     // create new user
     await client.withdraw_actions.create({

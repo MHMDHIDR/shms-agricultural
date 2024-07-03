@@ -1,7 +1,7 @@
-import { randomUUID } from 'crypto'
 import client from '@/../prisma/prismadb'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import email from '@/libs/actions/email'
+import { ObjectId } from 'mongodb'
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
           { status: 403 }
         )
       } else {
-        const userResetPasswordToken = randomUUID()
+        const userResetPasswordToken = new ObjectId().toHexString()
         const userCanResetPasswordUntil = new Date(Date.now() + 3600000).toISOString()
 
         await client.users.update({

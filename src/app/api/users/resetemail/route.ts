@@ -1,7 +1,7 @@
-import { randomUUID } from 'crypto'
 import email from '@/libs/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import client from '@/../prisma/prismadb'
+import { ObjectId } from 'mongodb'
 
 export async function PUT(req: Request) {
   const body = await req.json()
@@ -30,7 +30,7 @@ export async function PUT(req: Request) {
       )
     } else {
       const anHour = 3600000
-      const userResetPasswordToken = randomUUID()
+      const userResetPasswordToken = new ObjectId().toHexString()
       const userCanResetPasswordUntil = new Date(Date.now() + anHour * 2)
 
       await client.users.update({

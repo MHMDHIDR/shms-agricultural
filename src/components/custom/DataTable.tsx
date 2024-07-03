@@ -64,11 +64,13 @@ export default function OperationsTable({
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(() =>
-    loadColumnVisibility()
-  )
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
   const [filtering, setFiltering] = useState('')
+
+  useEffect(() => {
+    setColumnVisibility(() => loadColumnVisibility())
+  }, [])
 
   useEffect(() => {
     saveColumnVisibility(columnVisibility)
@@ -265,6 +267,8 @@ export default function OperationsTable({
                     .getVisibleCells()
                     // .filter(cell => !filteredColumns.includes(cell.column.id))
                     .map(cell => {
+                      console.log(cell)
+
                       if (cell.id.includes('shms_withdraw_id')) {
                         return (
                           <TableCell key={cell.id}>
@@ -272,15 +276,17 @@ export default function OperationsTable({
                           </TableCell>
                         )
                       } else if (cell.id.includes('id')) {
-                        // This MUST be includes('id') of the user to be able to get the user id
-                        return (
-                          <TableCell key={cell.id}>
-                            <UsersActions
-                              user={data as Users[]}
-                              id={cell.getValue() as string}
-                            />
-                          </TableCell>
-                        )
+                        if (!cell.id.includes('shms_user_id')) {
+                          // This MUST be cell.id.includes('id') for the user to be clickable
+                          return (
+                            <TableCell key={cell.id}>
+                              <UsersActions
+                                user={data as Users[]}
+                                id={cell.getValue() as string}
+                              />
+                            </TableCell>
+                          )
+                        }
                       }
                     })}
                 </TableRow>

@@ -103,7 +103,7 @@ export default async function WithdrawOperations() {
                       <TableCell className='min-w-40'>
                         {getProjectDate(new Date(withdrawAction.shms_created_at))}
                       </TableCell>
-                      <TableCell className='min-w-40'>
+                      <TableCell className='min-w-40' data-price>
                         {withdrawAction.shms_withdraw_amount}
                       </TableCell>
                       <TableCell

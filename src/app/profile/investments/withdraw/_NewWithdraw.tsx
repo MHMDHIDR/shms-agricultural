@@ -143,7 +143,9 @@ export default function NewWithdraw() {
               <small className='flex items-center mt-1 text-xs text-gray-500 select-none md:text-right'>
                 تستطيع سحب الرصيد حتى مبلغ
                 <strong className='inline-flex justify-center mr-2'>
-                  {!withdrawAmountLimit ? (
+                  {withdrawAmountLimit === 0 ? (
+                    <span className='text-lg'>0</span>
+                  ) : !withdrawAmountLimit ? (
                     <Skeleton className='inline-block w-8 h-4 bg-gray-600' />
                   ) : (
                     formattedPrice(withdrawAmountLimit, 0)
@@ -156,11 +158,11 @@ export default function NewWithdraw() {
           {/* Submit Button */}
           <div className='md:flex md:items-center'>
             <Button
-              disabled={formStatus.isSubmitting}
               type='submit'
-              className={`shadow w-full bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold${
-                formStatus.isSubmitting ? ' cursor-progress opacity-50' : ''
+              className={`shadow w-full bg-purple-500 disabled:cursor-not-allowed hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold${
+                formStatus.isSubmitting || !withdrawAmountLimit ? ' opacity-50' : ''
               }`}
+              disabled={formStatus.isSubmitting || !withdrawAmountLimit}
             >
               {formStatus.isSubmitting ? (
                 <>
