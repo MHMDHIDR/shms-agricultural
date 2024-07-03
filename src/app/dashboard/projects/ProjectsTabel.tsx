@@ -118,9 +118,7 @@ export default function ProjectsTable() {
           <TableHead className='font-bold text-center select-none'>
             اخر موعد للمساهمة
           </TableHead>
-          <TableHead className='font-bold text-center select-none'>
-            عدد الأسهم المتاحة
-          </TableHead>
+          <TableHead className='font-bold text-center select-none'>عدد الأسهم</TableHead>
           <TableHead className='font-bold text-center select-none'>
             سعر السهم الواحد
           </TableHead>
@@ -177,10 +175,10 @@ export default function ProjectsTable() {
                 <TableCell className='min-w-40'>
                   {project.shms_project_total_stocks}
                 </TableCell>
-                <TableCell className='min-w-40'>
+                <TableCell className='min-w-40' data-price>
                   {project.shms_project_stock_price}
                 </TableCell>
-                <TableCell className='min-w-40'>
+                <TableCell className='min-w-40' data-price>
                   {project.shms_project_stock_profits}
                 </TableCell>
                 <TableCell className='min-w-40'>

@@ -34,7 +34,7 @@ export default async function DashboardInvestors({
 }) {
   const { userType, loading } = await getAuth()
 
-  validateUUID(userId) && notFound()
+  !validateUUID(userId) && notFound()
 
   // To make sure the user is the investor -- للتأكد من ان المستخدم هو المستثمر المطلوب
   const user = (await getUser(userId)) as Users
@@ -86,7 +86,7 @@ export default async function DashboardInvestors({
 
   return loading ? (
     <LoadingPage />
-  ) : userType !== 'admin' || validateUUID(userId) ? (
+  ) : userType !== 'admin' || !validateUUID(userId) ? (
     <NotFound />
   ) : (
     <Layout>

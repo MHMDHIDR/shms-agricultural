@@ -20,7 +20,25 @@ export async function DELETE(
       )
     }
 
-    // activate user
+    // Get the user's stocks
+    const userStocks = user.shms_user_stocks
+
+    if (userStocks && userStocks.length > 0) {
+      // Update projects to remove user stocks
+      for (const stock of userStocks) {
+        await client.projects.updateMany({
+          where: { id: stock.id },
+          data: {
+            shms_project_available_stocks: {
+              // Return stocks to the project
+              increment: stock.stocks
+            }
+          }
+        })
+      }
+    }
+
+    // Delete the user
     const userDeleted = await client.users.delete({
       where: { id: userId }
     })

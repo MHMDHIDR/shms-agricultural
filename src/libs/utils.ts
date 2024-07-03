@@ -27,15 +27,17 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * a function to validate if a string is a valid uuid
  * @param uuid the uuid string to be validated
+ * @returns boolean if the uuid is valid
  */
 export function validateUUID(uuid: string): boolean {
   // validate if uuid is a value mongodb id
-  return (
-    uuid.match(/^[0-9a-fA-F]{24}$/) !== null ||
+  const isValidMongoId = uuid.match(/^[0-9a-fA-F]{24}$/) !== null
+  const isValidUUID =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
       uuid
     )
-  )
+
+  return isValidMongoId || isValidUUID
 }
 
 /**

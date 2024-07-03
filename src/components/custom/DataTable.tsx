@@ -271,7 +271,8 @@ export default function OperationsTable({
                             <OperationAction withdrawAction={data[rowIndex]} />
                           </TableCell>
                         )
-                      } else if (cell.id.includes('shms_sn')) {
+                      } else if (cell.id.includes('id')) {
+                        // This MUST be includes('id') of the user to be able to get the user id
                         return (
                           <TableCell key={cell.id}>
                             <UsersActions
