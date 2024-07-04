@@ -9,6 +9,7 @@ import { ThemeProvider } from '@/providers/Theme'
 import SessionProvider from '@/providers/Session'
 import type { Metadata } from 'next'
 import './globals.css'
+import CookieConsent from '@/components/custom/CookieConsent'
 
 export const fontSans = FontSans({ subsets: ['arabic'], variable: '--font-sans' })
 
@@ -93,6 +94,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   zIndex={1600}
                   showAtBottom={false}
                 />
+                <CookieConsent />
                 {children}
               </main>
               <Toaster />

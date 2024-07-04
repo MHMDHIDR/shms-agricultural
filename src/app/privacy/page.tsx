@@ -29,7 +29,7 @@ export default function PrivacyPage() {
               بزيارة موقعنا على الويب على الرابط
               <Link
                 href='/'
-                className='mx-3 text-blue-500 underline-hover hover:text-blue-700'
+                className='mx-3 text-blue-500 underline-hover hover:text-blue-700 dark:hover:text-blue-400'
               >
                 shmsagricultural.com
               </Link>
@@ -43,7 +43,7 @@ export default function PrivacyPage() {
             تزال أي أسئلة أو استفسارات يرجى الاتصال بنا على
             <Link
               href='mailto:info@shmsagricultural.com'
-              className='mx-3 text-blue-500 underline-hover hover:text-blue-700'
+              className='mx-3 text-blue-500 underline-hover hover:text-blue-700 dark:hover:text-blue-400'
             >
               info@shmsagricultural.com.
             </Link>
@@ -231,7 +231,7 @@ export default function PrivacyPage() {
             ملف تعريف الارتباط الخاص بنا:
             <Link
               href='/cookies-policy'
-              className='mx-3 text-blue-500 underline-hover hover:text-blue-700'
+              className='mx-3 text-blue-500 underline-hover hover:text-blue-700 dark:hover:text-blue-400'
             >
               https://shmsagricultural.com/cookies-policy.
             </Link>
@@ -322,7 +322,7 @@ export default function PrivacyPage() {
             الخصوصية، يرجى الاتصال بنا عن طريق البريد الإلكتروني على
             <Link
               href='mailto:info@shmsagricultural.com'
-              className='mx-3 text-blue-500 underline-hover hover:text-blue-700'
+              className='mx-3 text-blue-500 underline-hover hover:text-blue-700 dark:hover:text-blue-400'
             >
               info@shmsagricultural.com.
             </Link>
@@ -337,7 +337,7 @@ export default function PrivacyPage() {
             البيانات التي نحتفظ بها عنك، فيرجى الاتصال بنا عبر البريد الإلكتروني على
             <Link
               href='mailto:info@shmsagricultural.com'
-              className='mx-3 text-blue-500 underline-hover hover:text-blue-700'
+              className='mx-3 text-blue-500 underline-hover hover:text-blue-700 dark:hover:text-blue-400'
             >
               info@shmsagricultural.com.
             </Link>
