@@ -114,7 +114,7 @@ export default function NewWithdraw() {
         heading='سحب الرصيد'
         backButtonLabel='العودة للوحة التحكم'
         backButtonHref='/profile/investments'
-        className='min-w-full mx-auto'
+        className='min-w-full max-w-fit mx-auto'
       >
         <form dir='rtl' onSubmit={e => handelWithDrawPageForm(e)}>
           {withdrawAmountError && <FormMessage error>{withdrawAmountError}</FormMessage>}
