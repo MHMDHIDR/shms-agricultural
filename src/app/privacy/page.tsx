@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <Layout>
-      <main className='flex flex-col min-h-screen p-24 rtl gap-y-10'>
+      <main className='flex flex-col min-h-screen p-2.5 md:p-16 rtl gap-y-10'>
         <h1 className='text-xl font-bold select-none'>سياسة الخصوصية</h1>
         <section className='leading-loose md:text-justify'>
           <h2 className='text-sm font-semibold text-gray-600'>

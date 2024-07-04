@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <Layout>
-      <main className='flex flex-col justify-between min-h-screen p-24 rtl'>
+      <main className='flex flex-col justify-between min-h-screen p-2.5 md:p-16 rtl'>
         <h1 className='text-xl font-bold select-none'>الشروط والأحكام</h1>
         <section className='leading-loose text-justify'>
           <h2 className='mt-4 text-lg font-semibold'>مقدمة</h2>
