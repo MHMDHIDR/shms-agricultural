@@ -1,10 +1,11 @@
 import client from '@/../prisma/prismadb'
 import email from '@/libs/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
+import { Users } from '@prisma/client'
 
-export async function PUT(req: Request) {
+export async function PATCH(req: Request) {
   const body = await req.json()
-  const { userId } = body
+  const { userId }: { userId: Users['id'] | Users['shms_user_reset_token'] } = body
 
   if (!userId) {
     return new Response('Token ID is required', { status: 400 })
@@ -12,11 +13,14 @@ export async function PUT(req: Request) {
 
   try {
     // Check if user exists
-    const user = await client.users.findUnique({ where: { id: userId } })
+    // where id is equal to userId or shms_user_reset_token is equal to userId
+    const user = await client.users.findFirst({
+      where: { OR: [{ id: userId }, { shms_user_reset_token: userId }] }
+    })
 
     if (!user) {
       return new Response(
-        JSON.stringify({ userAdded: 0, message: 'عفواً لم يتم العثور على الحساب!' }),
+        JSON.stringify({ userActivated: 0, message: 'عفواً لم يتم العثور على الحساب!' }),
         { status: 404 }
       )
     }
@@ -27,18 +31,22 @@ export async function PUT(req: Request) {
         user.shms_user_account_status === 'block')
     ) {
       return new Response(
-        JSON.stringify({ userAdded: 0, message: 'الحساب مفعل سابقاً' }),
+        JSON.stringify({ userActivated: 0, message: 'الحساب مفعل سابقاً' }),
         { status: 400 }
       )
-    } else if (new Date() >= user.shms_user_reset_token_expires!) {
+    } else if (
+      user.shms_user_reset_token_expires !== null &&
+      new Date() >= user.shms_user_reset_token_expires
+    ) {
       return new Response(
-        JSON.stringify({ userAdded: 0, message: 'انتهت صلاحية رابط تفعيل الحساب!' }),
+        JSON.stringify({ userActivated: 0, message: 'انتهت صلاحية رابط تفعيل الحساب!' }),
         { status: 400 }
       )
     } else {
       // Activate user
       await client.users.update({
-        where: { id: userId },
+        // where id is equal to userId or shms_user_reset_token is equal to userId
+        where: { id: user.id },
         data: {
           shms_user_account_status: 'active',
           shms_user_reset_token_expires: null,
@@ -87,8 +95,9 @@ export async function PUT(req: Request) {
         )
       }
     }
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error('Error: ', error)
+
     return new Response(
       JSON.stringify({
         userActivated: 0,

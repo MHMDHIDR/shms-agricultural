@@ -75,7 +75,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased bg-gray-100 dark:bg-gray-900 overflow-x-clip',
+          'min-h-screen bg-background font-sans antialiased dark:bg-gray-900 overflow-x-clip',
           fontSans.variable
         )}
       >

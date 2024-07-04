@@ -34,9 +34,10 @@ export default function ActivateAccount({
 
     try {
       setIsSubmittingForm(true)
-      const activateUser: { data: Users } = await axios.put(API_URL + `/users/activate`, {
-        userId: tokenId
-      })
+      const activateUser: { data: Users } = await axios.patch(
+        API_URL + `/users/activate`,
+        { userId: tokenId }
+      )
       const { userActivated } = activateUser.data
 
       setIsAccountActivated(userActivated ? true : false)

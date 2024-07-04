@@ -15,7 +15,7 @@ export default async function WithDrawPage() {
     <LoadingPage />
   ) : (
     <Layout>
-      <section className='container flex flex-col items-center justify-between'>
+      <section className='container flex flex-col items-center justify-between min-h-svh'>
         <Tabs defaultValue='withdraw_operations' className='w-full mx-auto mt-16'>
           <TabsList className='items-center w-full mb-6 grid grid-cols-2 gap-2'>
             <TabsTrigger className='border border-gray-300' value='withdraw_operations'>

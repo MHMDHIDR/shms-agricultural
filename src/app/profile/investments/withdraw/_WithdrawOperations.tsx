@@ -20,6 +20,7 @@ import {
 import Copy from '@/components/custom/Copy'
 import NoRecords from '@/components/custom/NoRecords'
 import type { withdraw_actions } from '@prisma/client'
+import { Plus } from 'lucide-react'
 
 export const revalidate = 10
 export default async function WithdrawOperations() {
@@ -39,6 +40,12 @@ export default async function WithdrawOperations() {
           <CardDescription>
             هنا يمكنك مشاهدة جميع عمليات السحب والإيداع التي تمت على حسابك
           </CardDescription>
+          <TabsList className='bg-transparent'>
+            <TabsTrigger className='pressable ml-auto' value='new_withdraw'>
+              <Plus className='ml-1' />
+              سحب جديد
+            </TabsTrigger>
+          </TabsList>
         </CardHeader>
         <CardContent>
           <Table className='min-w-full text-center divide-y divide-gray-200 rtl'>

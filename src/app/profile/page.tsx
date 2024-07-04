@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Error, Success } from '@/components/icons/Status'
@@ -21,11 +21,10 @@ import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { validatePasswordStrength, validateEmail, handleSignOut } from '@/libs/utils'
 import { toast } from 'sonner'
-import { API_URL, APP_URL, DEFAULT_DURATION } from '@/data/constants'
+import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import axios from 'axios'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import FormMessage from '@/components/custom/FormMessage'
-import { revalidatePath } from 'next/cache'
 import Layout from '@/components/custom/Layout'
 import { getAuth } from '@/libs/actions/auth'
 import NotFound from '@/app/not-found'
@@ -156,11 +155,8 @@ export default function ProfilePage() {
               }
             })
       } catch (error: any) {
-        const message: Users['message'] =
-          error?.response.data.message ?? 'عفواً! حدث خطأ غير متوقع حاول مرة أخرى'
-
         //handle error, show notification using Shadcn notifcation
-        toast(message, {
+        toast(error.response.data.message, {
           icon: <Error className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
           className: 'text-right select-none rtl',
@@ -197,7 +193,7 @@ export default function ProfilePage() {
         resetFormErrors()
         setIsSubmittingEmailForm(true)
 
-        const resetPass = await axios.put(`${API_URL}/users/resetemail`, {
+        const resetPass = await axios.patch(`${API_URL}/users/resetemail`, {
           userEmail: email,
           oldEmail: currentEmail,
           fullname
@@ -206,45 +202,28 @@ export default function ProfilePage() {
         const { data }: { data: Users } = resetPass
 
         // make sure to view the response from the data
-        data.resetEmail === 1
-          ? toast(data.message, {
-              icon: <Success />,
-              position: 'bottom-center',
-              className: 'text-right select-none rtl',
-              duration: DEFAULT_DURATION,
-              style: {
-                backgroundColor: '#F0FAF0',
-                color: '#367E18',
-                border: '1px solid #367E18',
-                gap: '1.5rem',
-                textAlign: 'justify'
-              }
-            })
-          : toast(data.message ?? 'حدث خطأ ما، الرجاء المحاولة مرة أخرى', {
-              icon: <Error />,
-              position: 'bottom-center',
-              className: 'text-right select-none rtl',
-              duration: DEFAULT_DURATION,
-              style: {
-                backgroundColor: '#FFF0F0',
-                color: '#BE2A2A',
-                border: '1px solid #BE2A2A',
-                gap: '1.5rem',
-                textAlign: 'justify'
-              }
-            })
+        if (data.resetEmail === 1) {
+          toast(data.message, {
+            icon: <Success />,
+            position: 'bottom-center',
+            className: 'text-right select-none rtl',
+            duration: DEFAULT_DURATION,
+            style: {
+              backgroundColor: '#F0FAF0',
+              color: '#367E18',
+              border: '1px solid #367E18',
+              gap: '1.5rem',
+              textAlign: 'justify'
+            }
+          })
 
-        revalidatePath('/', 'layout')
-        // تسجيل خروج المستخدم ضروري لتحديث البريد الالكتروني في الجلسة الحالية
-        setTimeout(async () => {
-          await signOut({ redirect: true, callbackUrl: APP_URL ?? '/' })
-        }, DEFAULT_DURATION / 2)
+          setTimeout(async () => {
+            await handleSignOut()
+          }, DEFAULT_DURATION - DEFAULT_DURATION * 0.2)
+        }
       } catch (error: any) {
-        const message: Users['message'] = error?.response
-          ? error?.response.data.message
-          : 'عفواً! حدث خطأ غير متوقع حاول مرة أخرى'
         //handle error, show notification using Shadcn notifcation
-        toast(message, {
+        toast(error.response.data.message, {
           icon: <Error className='w-6 h-6 ml-3' />,
           position: 'bottom-center',
           className: 'text-right select-none rtl',
@@ -256,8 +235,6 @@ export default function ProfilePage() {
             textAlign: 'justify'
           }
         })
-      } finally {
-        setIsSubmittingEmailForm(false)
       }
     }
   }
@@ -307,19 +284,20 @@ export default function ProfilePage() {
                       </div>
                     </CardContent>
                     <CardContent className='-space-y-4'>
-                      {/* suppressHydrationWarning is important to prevent server hydration warning */}
-                      <Label suppressHydrationWarning>
+                      {/* suppressHydrationWarning was important to prevent server hydration warning */}
+                      <Label /*suppressHydrationWarning*/>
                         تغيير الى الوضع {theme === 'dark' ? 'الفاتح' : 'الداكن'}
                       </Label>
                       <ModeToggle className='-mr-16 max-w-fit' />
                     </CardContent>
                     <CardFooter>
                       <Button
-                        disabled={isSubmittingEmailForm}
-                        className={`font-bold ${
-                          isSubmittingEmailForm ? 'cursor-not-allowed opacity-50' : ''
+                        className={`font-bold disabled:pointer-events-auto ${
+                          isSubmittingEmailForm
+                            ? 'cursor-progress'
+                            : 'disabled:cursor-not-allowed'
                         }`}
-                        onClick={handleSignOut}
+                        disabled={!email || isSubmittingEmailForm}
                       >
                         {isSubmittingEmailForm ? (
                           <>
@@ -397,10 +375,10 @@ export default function ProfilePage() {
                     </CardContent>
                     <CardFooter>
                       <Button
-                        disabled={isSubmittingPasswordForm}
                         className={`font-bold ${
                           isSubmittingPasswordForm ? 'cursor-not-allowed opacity-50' : ''
                         }`}
+                        disabled={isSubmittingPasswordForm}
                       >
                         {isSubmittingPasswordForm ? (
                           <>

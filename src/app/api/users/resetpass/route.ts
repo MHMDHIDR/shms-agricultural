@@ -23,13 +23,13 @@ export async function POST(req: Request) {
 
     if (!user) {
       return new Response(
-        JSON.stringify({ newPassSet: 0, message: `عفواً, لا يوجد مستخدم بهذا الحساب` })
+        JSON.stringify({ newPassSet: 0, message: `عفواً، لا يوجد مستخدم بهذا الحساب` })
       )
     } else if (user.shms_user_account_status === 'block') {
       return new Response(
         JSON.stringify({
           newPassSet: 0,
-          message: `عفواً, حسابك محظور, يرجى التواصل مع الإدارة لإعادة تفعيل حسابك`
+          message: `عفواً، حسابك محظور, يرجى التواصل مع الإدارة لإعادة تفعيل حسابك`
         })
       )
     } else if (
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           newPassSet: 0,
-          message: `عفواً, رابط إعادة تعيين كلمة المرور منتهي الصلاحية, يرجى إعادة طلب إعادة تعيين كلمة المرور`
+          message: `عفواً، رابط إعادة تعيين كلمة المرور منتهي الصلاحية, يرجى إعادة طلب إعادة تعيين كلمة المرور`
         })
       )
     } else if (resetToken === user.shms_user_reset_token && !isRenewingPassword) {
@@ -96,7 +96,7 @@ export async function POST(req: Request) {
           return new Response(
             JSON.stringify({
               newPassSet: 0,
-              message: `عفواً, لم يتم إرسال رسالة إعادة تعيين كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدار`
+              message: `عفواً، لم يتم إرسال رسالة إعادة تعيين كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدار`
             })
           )
         }
@@ -122,7 +122,7 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           newPassSet: 0,
-          message: `عفواً, كلمة المرور القديمة غير صحيحة, يرجى إعادة المحاولة`
+          message: `عفواً، كلمة المرور القديمة غير صحيحة, يرجى إعادة المحاولة`
         }),
         { status: 400 }
       )
@@ -177,7 +177,7 @@ export async function POST(req: Request) {
           return new Response(
             JSON.stringify({
               newPassSet: 0,
-              message: `عفواً, لم يتم إرسال رسالة تأكيد تغيير كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة`
+              message: `عفواً، لم يتم إرسال رسالة تأكيد تغيير كلمة المرور, يرجى المحاولة مرة أخرى, وإذا استمرت المشكلة يرجى التواصل مع الإدارة`
             })
           )
         }
@@ -200,7 +200,7 @@ export async function POST(req: Request) {
       return new Response(
         JSON.stringify({
           newPassSet: 0,
-          message: `عفواً, رابط إعادة تعيين كلمة المرور غير صالح, يرجى إعادة طلب إعادة تعيين كلمة المرور`
+          message: `عفواً، رابط إعادة تعيين كلمة المرور غير صالح, يرجى إعادة طلب إعادة تعيين كلمة المرور`
         }),
         { status: 400 }
       )
