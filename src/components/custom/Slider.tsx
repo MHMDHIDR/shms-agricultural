@@ -48,11 +48,12 @@ export default function CarouselDApiDemo({
               <CardContent className='flex items-center justify-center w-screen min-w-[100svh] p-0'>
                 <Image
                   src={image}
-                  priority={true}
                   alt={`Slide ${index + 1}`}
                   className='object-cover w-full h-full'
                   width={'1024'}
                   height={'850'}
+                  loading='lazy'
+                  // priority={true}
                 />
               </CardContent>
             </Card>

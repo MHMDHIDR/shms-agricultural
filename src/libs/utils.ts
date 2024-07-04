@@ -474,16 +474,30 @@ export const replaceString = (string: string) => {
   }
 }
 
+/**
+ * A function to save the column visibility
+ * @param visibilityState the visibility state to be saved
+ * @returns void
+ */
 export function saveColumnVisibility(visibilityState: VisibilityState) {
   localStorage.setItem('columnVisibility', JSON.stringify(visibilityState))
 }
 
-export function loadColumnVisibility() {
+/**
+ * A function to load the column visibility
+ * @returns the saved visibility
+ */
+export function loadColumnVisibility(): any {
   const savedVisibility =
     typeof window !== undefined ? localStorage.getItem('columnVisibility') : null
   return savedVisibility ? JSON.parse(savedVisibility) : {}
 }
 
+/**
+ * A function to handle the Sign Out using next-auth signOut method
+ * and remove the user data from the localStorage
+ * @returns Promise<void>
+ */
 export async function handleSignOut() {
   localStorage.removeItem('shms_user_data')
   try {
@@ -491,4 +505,18 @@ export async function handleSignOut() {
   } catch (error) {
     console.error('Sign-out error:', error)
   }
+}
+
+/**
+ * Images is a function that returns an array of images in this format /slider/slider-$NUMBER_OF_IMAGE.wepb
+ * I will pass the number of images to the function and it will return the array of images
+ * @param NUMBER_OF_IMAGES the number of images to be returned
+ * @returns imagesArray the array of images
+ */
+export function images(NUMBER_OF_IMAGES: number): string[] {
+  let imagesArray = []
+  for (let i = 1; i <= NUMBER_OF_IMAGES; i++) {
+    imagesArray.push(`/slider/slider-0${i}.wepb`)
+  }
+  return imagesArray
 }

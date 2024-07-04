@@ -8,20 +8,10 @@ import Counter from '@/components/custom/Counter'
 import Divider from '@/components/custom/Divider'
 import ImageGallery from './dashboard/ImageGallery'
 import { NavigateTop } from '@/components/custom/NavigateTop'
+import { images } from '@/libs/utils'
 import type { Users } from '@prisma/client'
 
 export default async function Home() {
-  // get images from backend api (uploaded to dashboard by admin stored in AWS S3)
-  const images = [
-    '/slider/slider-01.wepb',
-    '/slider/slider-02.wepb',
-    '/slider/slider-03.wepb',
-    '/slider/slider-04.wepb',
-    '/slider/slider-05.wepb',
-    '/slider/slider-06.wepb',
-    '/slider/slider-07.wepb'
-  ]
-
   let USERS_COUNT = 0
   const { data: users }: { data: Users[] } = await axios.get(`${API_URL}/users/all`)
   // users count
@@ -31,7 +21,8 @@ export default async function Home() {
 
   return (
     <Layout>
-      <Slider images={images} />
+      {/* Try to build a way to fetch images from backend api (uploaded on the dashboard & stored in AWS S3) */}
+      <Slider images={images(7)} />
       <section className='flex flex-col items-center justify-between min-h-screen p-8 md:p-24'>
         <h1 className='mb-8 text-2xl md:text-4xl md:mb-12'>مرحباً بكم في شمــس</h1>
         <div className='flex flex-col items-center md:flex-row md:gap-8'>
