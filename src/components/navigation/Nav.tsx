@@ -157,7 +157,7 @@ export default function Nav() {
            }`}
           >
             {/* تسجيل الدخول */}
-            <div className='flex items-center gap-x-4'>
+            <NavigationMenuItem>
               {!isAuth ? (
                 <Link className={`w-full`} href={`/auth/signin`}>
                   <Button className='flex w-full cursor-pointer gap-x-2'>
@@ -166,7 +166,7 @@ export default function Nav() {
                   </Button>
                 </Link>
               ) : (
-                <NavigationMenuItem>
+                <div>
                   <NavigationMenuTrigger>
                     {!userName ? <Skeleton className='w-20 h-3' /> : userName}
                   </NavigationMenuTrigger>
@@ -199,9 +199,9 @@ export default function Nav() {
                       </Button>
                     </ul>
                   </NavigationMenuContent>
-                </NavigationMenuItem>
+                </div>
               )}
-            </div>
+            </NavigationMenuItem>
 
             {/* عن شمس */}
             <NavigationMenuItem>

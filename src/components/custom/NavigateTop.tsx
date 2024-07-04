@@ -22,6 +22,7 @@ export function NavigateTop({ scrolledHeight = 200 }: { scrolledHeight?: number 
           isScrolled ? `translate-x-0` : `translate-x-20`
         }`}
         onClick={() => scrollToView(400)}
+        aria-label='الى الأعلى'
       >
         <ChevronUp
           strokeWidth={1.5}

@@ -8,7 +8,8 @@ import {
   Html,
   Img,
   Section,
-  Text
+  Text,
+  Link
 } from '@react-email/components'
 import {
   FacebookIcon,
@@ -105,7 +106,7 @@ export const EmailTemplate = ({
                   style={{ textAlign: 'center', marginTop: '1.75rem' }}
                   key='buttonDiv'
                 >
-                  <a
+                  <Link
                     style={{
                       padding: '0.5rem 1.5rem',
                       borderRadius: '0.375rem',
@@ -124,7 +125,7 @@ export const EmailTemplate = ({
                     target='_blank'
                   >
                     {buttonLabel ?? 'إعادة تعيين كلمة المرور'}
-                  </a>
+                  </Link>
                 </div>
               )}
 
@@ -164,34 +165,38 @@ export const EmailTemplate = ({
             </Text>
 
             <section className='flex items-center justify-center w-full h-12 rtl gap-x-20'>
-              <a
+              <Link
                 className='transition opacity-60 hover:opacity-90 hover:-translate-y-1'
                 href='https://facebook.com'
                 target='_blank'
+                aria-label='صفحتنا على الفيسبوك'
               >
                 <FacebookIcon style={{ width: 12, height: 12 }} />
-              </a>
-              <a
+              </Link>
+              <Link
                 className='transition opacity-60 hover:opacity-90 hover:-translate-y-1'
                 href='https://instagram.com/shmsagri'
                 target='_blank'
+                aria-label='صفحتنا على الانستغرام'
               >
                 <InstagramIcon style={{ width: 12, height: 12 }} />
-              </a>
-              <a
+              </Link>
+              <Link
                 className='transition opacity-60 hover:opacity-90 hover:-translate-y-1'
                 href='https://youtube.com'
                 target='_blank'
+                aria-label='قناتنا على اليوتيوب'
               >
                 <YouTubeIcon style={{ width: 12, height: 12 }} />
-              </a>
-              <a
+              </Link>
+              <Link
                 className='transition opacity-60 hover:opacity-90 hover:-translate-y-1'
                 href='https://twitter.com'
                 target='_blank'
+                aria-label='حسابنا على تويتر'
               >
                 <TwitterIcon style={{ width: 12, height: 12 }} />
-              </a>
+              </Link>
             </section>
 
             {buttonLink &&
