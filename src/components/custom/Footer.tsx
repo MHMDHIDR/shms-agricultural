@@ -63,8 +63,6 @@ export default function Footer() {
           شروط الاستخدام
         </Link>
       </section>
-      aria-label='' href='/terms' className='opacity-60 hover:opacity-90
-      transition'فيسبوك'
       <p className='pb-6 text-center text-gray-400 select-none'>
         <span>&copy; {new Date().getFullYear()} </span>
         <span>{APP_TITLE}</span>

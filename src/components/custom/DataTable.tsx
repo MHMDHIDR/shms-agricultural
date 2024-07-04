@@ -77,8 +77,8 @@ export default function OperationsTable({
   }, [columnVisibility])
 
   const table = useReactTable({
-    data: useMemo(() => data, []),
-    columns: useMemo(() => columns, []),
+    data: useMemo(() => data, [data]),
+    columns: useMemo(() => columns, [columns]),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -267,8 +267,6 @@ export default function OperationsTable({
                     .getVisibleCells()
                     // .filter(cell => !filteredColumns.includes(cell.column.id))
                     .map(cell => {
-                      console.log(cell)
-
                       if (cell.id.includes('shms_withdraw_id')) {
                         return (
                           <TableCell key={cell.id}>
