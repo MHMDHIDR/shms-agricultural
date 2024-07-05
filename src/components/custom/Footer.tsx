@@ -1,10 +1,10 @@
-import Divider from '@/components/custom/Divider'
+import Divider from '@/components/custom/divider'
 import {
   FacebookIcon,
   InstagramIcon,
   TwitterIcon,
   YouTubeIcon
-} from '@/components/icons/Socials'
+} from '@/components/icons/socials'
 import { APP_TITLE } from '@/data/constants'
 import Link from 'next/link'
 

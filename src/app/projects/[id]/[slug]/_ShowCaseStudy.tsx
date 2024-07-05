@@ -1,6 +1,6 @@
 'use client'
 
-import Modal from '@/components/custom/Modal'
+import Modal from '@/components/custom/modal'
 import { APP_LOGO, MOBILE_SCREEN, WINDOW_WIDTH } from '@/data/constants'
 import { getProjectStudyCase } from '@/libs/utils'
 import Link from 'next/link'

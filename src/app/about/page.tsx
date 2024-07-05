@@ -1,4 +1,4 @@
-import Layout from '@/components/custom/Layout'
+import Layout from '@/components/custom/layout'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import { Metadata } from 'next'
 

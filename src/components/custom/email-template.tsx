@@ -16,7 +16,7 @@ import {
   InstagramIcon,
   TwitterIcon,
   YouTubeIcon
-} from '@/components/icons/Socials'
+} from '@/components/icons/socials'
 
 export const EmailTemplate = ({
   title,

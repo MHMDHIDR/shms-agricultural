@@ -1,5 +1,5 @@
-import Layout from '@/components/custom/Layout'
-import { NavigateTop } from '@/components/custom/NavigateTop'
+import Layout from '@/components/custom/layout'
+import { NavigateTop } from '@/components/custom/navigate-top'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import Link from 'next/link'
 import type { Metadata } from 'next'

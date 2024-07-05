@@ -34,7 +34,7 @@ export default function PaymentMetods({
   return (
     <div className='flex flex-col rtl gap-y-2'>
       {/* فيزا   -- Visa */}
-      <MyTooltip text='غير متاح حاليا'>
+      <MyTooltip text='غير متاح حاليا' className='translate-x-14'>
         <label className='opacity-50 cursor-not-allowed'>
           <input
             type='radio'
@@ -50,7 +50,7 @@ export default function PaymentMetods({
         </label>
       </MyTooltip>
       {/* بطاقة ائتمانية   -- Credit Card */}
-      <MyTooltip text='غير متاح حاليا'>
+      <MyTooltip text='غير متاح حاليا' className='translate-x-14'>
         <label className='opacity-50 cursor-not-allowed'>
           <input
             type='radio'

@@ -1,6 +1,6 @@
-import Layout from '@/components/custom/Layout'
-import { PercentageSlider } from '@/components/custom/PercentageSlider'
-import ProjectImages from '@/components/custom/projectsImages'
+import Layout from '@/components/custom/layout'
+import { PercentageSlider } from '@/components/custom/percentage-slider'
+import ProjectImages from '@/components/custom/projects-images'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import {
   arabicDate,

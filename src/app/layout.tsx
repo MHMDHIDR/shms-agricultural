@@ -4,12 +4,12 @@ import { cn } from '@/libs/utils'
 import { getServerSession } from 'next-auth'
 import { Cairo as FontSans } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
-import { FileUploadProvider } from '@/providers/FileUpload'
-import { ThemeProvider } from '@/providers/Theme'
-import SessionProvider from '@/providers/Session'
+import { FileUploadProvider } from '@/providers/file-upload'
+import { ThemeProvider } from '@/providers/theme'
+import SessionProvider from '@/providers/session'
 import type { Metadata } from 'next'
 import './globals.css'
-import CookieConsent from '@/components/custom/CookieConsent'
+import CookieConsent from '@/components/custom/cookie-consent'
 
 export const fontSans = FontSans({ subsets: ['arabic'], variable: '--font-sans' })
 

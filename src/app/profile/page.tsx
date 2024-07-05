@@ -16,7 +16,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ModeToggle } from '@/components/navigation/ModeToggle'
+import { ModeToggle } from '@/components/navigation/mode-toggle'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { validatePasswordStrength, validateEmail, handleSignOut } from '@/libs/utils'
@@ -24,8 +24,8 @@ import { toast } from 'sonner'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import axios from 'axios'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import FormMessage from '@/components/custom/FormMessage'
-import Layout from '@/components/custom/Layout'
+import FormMessage from '@/components/custom/form-message'
+import Layout from '@/components/custom/layout'
 import { getAuth } from '@/libs/actions/auth'
 import NotFound from '@/app/not-found'
 import { Users } from '@prisma/client'
@@ -284,8 +284,7 @@ export default function ProfilePage() {
                       </div>
                     </CardContent>
                     <CardContent className='-space-y-4'>
-                      {/* suppressHydrationWarning was important to prevent server hydration warning */}
-                      <Label /*suppressHydrationWarning*/>
+                      <Label>
                         تغيير الى الوضع {theme === 'dark' ? 'الفاتح' : 'الداكن'}
                       </Label>
                       <ModeToggle className='-mr-16 max-w-fit' />

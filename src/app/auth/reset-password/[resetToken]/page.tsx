@@ -1,9 +1,9 @@
 'use client'
 
 import { CardWrapper } from '@/components/auth/card-wrapper'
-import FormMessage from '@/components/custom/FormMessage'
-import Layout from '@/components/custom/Layout'
-import { LoadingPage } from '@/components/custom/Loading'
+import FormMessage from '@/components/custom/form-message'
+import Layout from '@/components/custom/layout'
+import { LoadingPage } from '@/components/custom/loading'
 import { Error, Success } from '@/components/icons/Status'
 import { EyeClosedIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { EyeIcon } from 'lucide-react'

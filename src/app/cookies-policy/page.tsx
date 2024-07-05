@@ -1,4 +1,4 @@
-import Layout from '@/components/custom/Layout'
+import Layout from '@/components/custom/layout'
 import Link from 'next/link'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import type { Metadata } from 'next'

@@ -1,7 +1,7 @@
 'use client'
 
-import type { FileUploadProps } from '@/types'
 import { createContext, useEffect, useState } from 'react'
+import type { FileUploadProps } from '@/types'
 
 export const FileUploadContext = createContext({} as FileUploadProps)
 

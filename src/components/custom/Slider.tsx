@@ -13,7 +13,7 @@ import { cn } from '@/libs/utils'
 import Autoplay from 'embla-carousel-autoplay'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import Overlay from './Overlay'
+import Overlay from '@/components/custom/overlay'
 
 export default function CarouselDApiDemo({
   images,

@@ -40,9 +40,7 @@ export function MyTooltip({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent className={cn(`translate-x-14`, className)}>
-          {text}
-        </TooltipContent>
+        <TooltipContent className={cn(``, className)}>{text}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   )

@@ -1,5 +1,5 @@
 import { cn } from '@/libs/utils'
-import { ShmsIcon } from '../icons/Socials'
+import { ShmsIcon } from '../icons/socials'
 import { Skeleton } from '../ui/skeleton'
 
 export const LoadingPage = () => (

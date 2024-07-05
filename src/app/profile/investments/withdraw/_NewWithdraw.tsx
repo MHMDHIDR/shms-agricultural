@@ -2,7 +2,7 @@
 
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { CardWrapper } from '@/components/auth/card-wrapper'
-import FormMessage from '@/components/custom/FormMessage'
+import FormMessage from '@/components/custom/form-message'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'

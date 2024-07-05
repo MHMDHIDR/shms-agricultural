@@ -1,6 +1,6 @@
-import Divider from '@/components/custom/Divider'
-import Layout from '@/components/custom/Layout'
-import NoRecords from '@/components/custom/NoRecords'
+import Divider from '@/components/custom/divider'
+import Layout from '@/components/custom/layout'
+import NoRecords from '@/components/custom/no-records'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
   Table,
@@ -14,7 +14,7 @@ import { API_URL } from '@/data/constants'
 import { getAuth } from '@/libs/actions/auth'
 import { formattedPrice, getProject, getProjectDate } from '@/libs/utils'
 import axios from 'axios'
-import Contract from './_ShowPDF'
+import Contract from './show-pdf'
 import Account from '@/app/profile/investments/account'
 import { redirect } from 'next/navigation'
 import type { InverstorProjectData } from '@/types'

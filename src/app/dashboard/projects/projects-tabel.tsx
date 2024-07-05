@@ -1,6 +1,6 @@
 'use client'
 
-import Confirm from '@/components/custom/Confirm'
+import Confirm from '@/components/custom/confirm'
 import { Error, Success } from '@/components/icons/Status'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
@@ -12,7 +12,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 import Link from 'next/link'
-import Modal from '@/components/custom/Modal'
+import Modal from '@/components/custom/modal'
 import { Button } from '@/components/ui/button'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { cn, getProjectDate, getProjectStatus, scrollToView } from '@/libs/utils'
@@ -20,7 +20,7 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import NoRecords from '@/components/custom/NoRecords'
+import NoRecords from '@/components/custom/no-records'
 import type { Projects } from '@prisma/client'
 
 export default function ProjectsTable() {

@@ -1,6 +1,6 @@
-import Divider from '@/components/custom/Divider'
-import Layout from '@/components/custom/Layout'
-import NoRecords from '@/components/custom/NoRecords'
+import Divider from '@/components/custom/divider'
+import Layout from '@/components/custom/layout'
+import NoRecords from '@/components/custom/no-records'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
   Table,
@@ -19,10 +19,10 @@ import {
 } from '@/libs/utils'
 import Account from '@/app/profile/investments/account'
 import { getAuth } from '@/libs/actions/auth'
-import { LoadingPage } from '@/components/custom/Loading'
+import { LoadingPage } from '@/components/custom/loading'
 import NotFound from '@/app/not-found'
-import Contract from '@/app/profile/investments/_ShowPDF'
-import DashboardNav from '../../DashboardNav'
+import Contract from '@/app/profile/investments/show-pdf'
+import DashboardNav from '../../dashboard-nav'
 import { notFound } from 'next/navigation'
 import type { InverstorProjectData } from '@/types'
 import type { Stocks, Users } from '@prisma/client'

@@ -1,6 +1,6 @@
 'use client'
 
-import { ConfirmDialog } from '@/components/custom/ConfirmDialog'
+import { ConfirmDialog } from '@/components/custom/confirm-dialog'
 import { Success, Error } from '@/components/icons/Status'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { redirect } from '@/libs/utils'
@@ -12,7 +12,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import Confirm from '@/components/custom/Confirm'
+import Confirm from '@/components/custom/confirm'
 import type { Users, Stocks } from '@prisma/client'
 
 export default function PurchasedStocks({

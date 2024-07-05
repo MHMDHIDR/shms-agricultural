@@ -30,8 +30,8 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import Copy from '@/components/custom/Copy'
-import NoRecords from '@/components/custom/NoRecords'
+import Copy from '@/components/custom/copy'
+import NoRecords from '@/components/custom/no-records'
 import {
   cn,
   formattedPrice,
@@ -42,10 +42,10 @@ import {
   loadColumnVisibility
 } from '@/libs/utils'
 import Link from 'next/link'
-import OperationAction from '@/app/dashboard/money-operations/_OperationAction'
+import OperationAction from '@/app/dashboard/money-operations/operation-action'
 import { APP_LOGO } from '@/data/constants'
-import Modal from '@/components/custom/Modal'
-import UsersActions from '@/app/dashboard/users/_UsersActions'
+import Modal from '@/components/custom/modal'
+import UsersActions from '@/app/dashboard/users/users-actions'
 import type { accountingOperationsProps } from '@/types'
 import type { Users, Stocks } from '@prisma/client'
 

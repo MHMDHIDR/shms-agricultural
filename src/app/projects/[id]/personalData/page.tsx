@@ -1,10 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import Layout from '@/components/custom/Layout'
+import Layout from '@/components/custom/layout'
 import { CardWrapper } from '@/components/auth/card-wrapper'
-import PaymentMetods from '@/components/custom/PaymentMetods'
-import Modal from '@/components/custom/Modal'
+import PaymentMetods from '@/components/custom/payment-metods'
+import Modal from '@/components/custom/modal'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { Error, Loading, Success } from '@/components/icons/Status'
@@ -12,9 +12,10 @@ import { API_URL, APP_LOGO, DEFAULT_DURATION } from '@/data/constants'
 import axios from 'axios'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect, useState } from 'react'
-import ModalMessage from '@/components/custom/ModalMessage'
+import ModalMessage from '@/components/custom/modal-message'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import useDocumentTitle from '@/hooks/useDocumentTitle'
 import type {
   UserLoggedInProps,
   getAuthType,
@@ -22,7 +23,6 @@ import type {
   selectedPaymentOptions,
   stocksPurchasedProps
 } from '@/types'
-import useDocumentTitle from '@/hooks/useDocumentTitle'
 
 export default function PersonalData({
   params: { id: projectId /*, slug*/ }

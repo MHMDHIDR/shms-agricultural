@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import Confirm from '@/components/custom/Confirm'
+import Confirm from '@/components/custom/confirm'
 import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription } from '@/components/ui/card'

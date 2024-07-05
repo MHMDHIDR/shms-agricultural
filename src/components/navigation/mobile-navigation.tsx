@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Accordion,
   AccordionContent,
@@ -9,7 +11,8 @@ import { LogOut } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { NavigationListItem } from '../ui/navigation-menu'
+import { NavigationListItem } from '@/components/ui/navigation-menu'
+import Feedback from '@/components/custom/feedback'
 import type { MenuItemsProps, UserLoggedInProps } from '@/types'
 import type { SessionContextValue } from 'next-auth/react'
 
@@ -33,6 +36,7 @@ export default function MobileNavigation({
   const isAuth = status === 'authenticated' ? true : false
 
   const [userName, setUserName] = useState('')
+  const [email, setEmail] = useState('')
 
   useEffect(() => {
     setUserName(
@@ -42,6 +46,7 @@ export default function MobileNavigation({
         ellipsis: false
       })
     )
+    setEmail(session?.token?.user.shms_email ?? '')
   }, [session?.token?.user.shms_fullname])
 
   return (
@@ -99,6 +104,13 @@ export default function MobileNavigation({
             </NavigationListItem>
             {isUserAdmin ? (
               <NavigationListItem href='/dashboard'>الإدارة</NavigationListItem>
+            ) : null}
+            {isAuth ? (
+              <NavigationListItem>
+                <Feedback name={userName ?? ''} email={email ?? ''}>
+                  قدم إقتراح
+                </Feedback>
+              </NavigationListItem>
             ) : null}
             {isAuth && (
               <>

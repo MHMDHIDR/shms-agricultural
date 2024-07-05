@@ -1,5 +1,5 @@
-import Layout from '@/components/custom/Layout'
-import { LoadingPage } from '@/components/custom/Loading'
+import Layout from '@/components/custom/layout'
+import { LoadingPage } from '@/components/custom/loading'
 import NotFound from '@/app/not-found'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import NewWithdraw from './_NewWithdraw'

@@ -17,8 +17,8 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import Copy from '@/components/custom/Copy'
-import NoRecords from '@/components/custom/NoRecords'
+import Copy from '@/components/custom/copy'
+import NoRecords from '@/components/custom/no-records'
 import type { withdraw_actions } from '@prisma/client'
 import { Plus } from 'lucide-react'
 

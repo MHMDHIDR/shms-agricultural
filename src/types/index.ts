@@ -258,3 +258,21 @@ export type generatePDFProps = {
 }
 
 export type selectedPaymentOptions = 'visa' | 'credit' | 'cash' | 'balance'
+
+export type ProjectPlannerAIEndpoint = {
+  projectId: 'j570e6arxv5pjg7gxgk4akkq356w9vsq'
+  feedback: string
+  title?: string
+  name?: string
+  email?: string
+  label: ProjectPlannerAILabel
+}
+
+enum ProjectPlannerAILabel {
+  issue = 'issue',
+  idea = 'idea',
+  question = 'question',
+  complaint = 'complaint',
+  featureRequest = 'featureRequest',
+  other = 'other'
+}

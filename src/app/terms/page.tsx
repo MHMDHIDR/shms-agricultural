@@ -1,7 +1,7 @@
-import Layout from '@/components/custom/Layout'
+import Layout from '@/components/custom/layout'
 import Link from 'next/link'
 import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
-import { NavigateTop } from '@/components/custom/NavigateTop'
+import { NavigateTop } from '@/components/custom/navigate-top'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {

@@ -17,15 +17,16 @@ import useEventListener from '@/hooks/useEventListener'
 import { getAuth } from '@/libs/actions/auth'
 import { abstractWords, cn, getUser, handleSignOut } from '@/libs/utils'
 import { LogIn, LogOut } from 'lucide-react'
-import { MenuToggler } from './MenuToggler'
-import MobileNavigation from './MobileNavigation'
-import { ShmsIcon } from '@/components/icons/Socials'
+import { MenuToggler } from './menu-toggler'
+import MobileNavigation from './mobile-navigation'
+import { ShmsIcon } from '@/components/icons/socials'
 import { Button } from '@/components/ui/button'
-import Feedback from '@/components/custom/Feedback'
+import Feedback from '@/components/custom/feedback'
 import { Skeleton } from '@/components/ui/skeleton'
-import type { MenuItemsProps, UserLoggedInProps, getAuthType } from '@/types'
 import type { Users } from '@prisma/client'
+import type { MenuItemsProps, UserLoggedInProps, getAuthType } from '@/types'
 import type { SessionContextValue } from 'next-auth/react'
+import { MOBILE_SCREEN, WINDOW_WIDTH } from '@/data/constants'
 
 export default function Nav() {
   const {
@@ -71,9 +72,6 @@ export default function Nav() {
     scrollTop > 200 ? setSticky(true) : setSticky(false)
   }
   useEventListener('scroll', isSticky)
-
-  const WINDOW_WIDTH = typeof window !== 'undefined' ? window.innerWidth : 0
-  const MOBILE_SCREEN = 768
 
   useEffect(() => {
     const getUserData = async () => {
@@ -167,7 +165,7 @@ export default function Nav() {
 
             {/* تسجيل الدخول */}
             <NavigationMenuItem>
-              {!isAuth ? (
+              {!session || !isAuth ? (
                 <Link className={`w-full`} href={`/auth/signin`}>
                   <Button className='flex w-full cursor-pointer gap-x-2'>
                     تسجيل الدخول

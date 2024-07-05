@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import Divider from '@/components/custom/Divider'
-import Modal from '@/components/custom/Modal'
-import NoRecords from '@/components/custom/NoRecords'
+import Divider from '@/components/custom/divider'
+import Modal from '@/components/custom/modal'
+import NoRecords from '@/components/custom/no-records'
 import {
   Card,
   CardContent,
@@ -22,12 +22,12 @@ import { API_URL, APP_LOGO } from '@/data/constants'
 import { arabicDate, formattedPrice, getProject } from '@/libs/utils'
 import axios from 'axios'
 import { Suspense } from 'react'
-import PurchesedStocks from './investors/PurchesedStocks'
-import Layout from '@/components/custom/Layout'
-import DashboardNav from './DashboardNav'
+import PurchesedStocks from './investors/purchesed-stocks'
+import Layout from '@/components/custom/layout'
+import DashboardNav from './dashboard-nav'
 import NotFound from '@/app/not-found'
 import { getAuth } from '@/libs/actions/auth'
-import { LoadingPage } from '@/components/custom/Loading'
+import { LoadingPage } from '@/components/custom/loading'
 import type { Stocks, Users } from '@prisma/client'
 
 export default async function DashboardInvestors() {

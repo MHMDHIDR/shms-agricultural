@@ -1,8 +1,9 @@
 'use client'
+
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { MyTooltip } from '@/components/ui/tooltip'
 import { ChevronUp } from 'lucide-react'
-import { useState } from 'react'
 import useEventListener from '@/hooks/useEventListener'
 import { scrollToView } from '@/libs/utils'
 
@@ -15,7 +16,7 @@ export function NavigateTop({ scrolledHeight = 200 }: { scrolledHeight?: number 
   useEventListener('scroll', isSticky)
 
   return (
-    <MyTooltip text='الى الأعلى' className='translate-x-0'>
+    <MyTooltip text='الى الأعلى'>
       <Button
         variant={'outline'}
         className={`fixed opacity-80 hover:opacity-100 w-fit bottom-2.5 transition duration-700 right-2.5 group ${

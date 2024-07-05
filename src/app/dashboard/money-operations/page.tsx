@@ -6,12 +6,12 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import DataTable from '@/components/custom/DataTable'
-import Layout from '@/components/custom/Layout'
-import DashboardNav from '../DashboardNav'
+import DataTable from '@/components/custom/data-table'
+import Layout from '@/components/custom/layout'
+import DashboardNav from '../dashboard-nav'
 import NotFound from '@/app/not-found'
 import { getAuth } from '@/libs/actions/auth'
-import { LoadingPage } from '@/components/custom/Loading'
+import { LoadingPage } from '@/components/custom/loading'
 
 export default async function MoneyOperations() {
   const { userType, loading } = await getAuth()

@@ -1,7 +1,7 @@
 'use client'
 
 import { CardWrapper } from '@/components/auth/card-wrapper'
-import FormMessage from '@/components/custom/FormMessage'
+import FormMessage from '@/components/custom/form-message'
 import { Error, Success } from '@/components/icons/Status'
 import { Button } from '@/components/ui/button'
 import { ReloadIcon } from '@radix-ui/react-icons'
@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-import Layout from '@/components/custom/Layout'
+import Layout from '@/components/custom/layout'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import type { emailProps } from '@/types'
 import type { Users } from '@prisma/client'

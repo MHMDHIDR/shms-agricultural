@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Modal from '@/components/custom/Modal'
+import Modal from '@/components/custom/modal'
 
 const ProjectImages = ({ images }: { images: string[] }) => {
   return (

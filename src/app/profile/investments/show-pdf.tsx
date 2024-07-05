@@ -1,12 +1,12 @@
 'use client'
 
-import Divider from '@/components/custom/Divider'
+import Divider from '@/components/custom/divider'
 import {
   FacebookIcon,
   InstagramIcon,
   TwitterIcon,
   YouTubeIcon
-} from '@/components/icons/Socials'
+} from '@/components/icons/socials'
 import { Button } from '@/components/ui/button'
 import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL } from '@/data/constants'
 import { getProjectDate } from '@/libs/utils'
