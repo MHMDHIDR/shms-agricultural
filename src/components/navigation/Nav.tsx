@@ -1,5 +1,8 @@
 'use client'
 
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import {
   NavigationListItem,
   NavigationMenu,
@@ -14,16 +17,15 @@ import useEventListener from '@/hooks/useEventListener'
 import { getAuth } from '@/libs/actions/auth'
 import { abstractWords, cn, getUser, handleSignOut } from '@/libs/utils'
 import { LogIn, LogOut } from 'lucide-react'
-import { useSession, type SessionContextValue } from 'next-auth/react'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { ShmsIcon } from '@/components/icons/Socials'
-import { Button } from '@/components/ui/button'
 import { MenuToggler } from './MenuToggler'
 import MobileNavigation from './MobileNavigation'
+import { ShmsIcon } from '@/components/icons/Socials'
+import { Button } from '@/components/ui/button'
+import Feedback from '@/components/custom/Feedback'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { MenuItemsProps, UserLoggedInProps, getAuthType } from '@/types'
 import type { Users } from '@prisma/client'
+import type { SessionContextValue } from 'next-auth/react'
 
 export default function Nav() {
   const {
@@ -128,7 +130,7 @@ export default function Nav() {
 
   return (
     <header
-      className={`container relative rtl bg-gray-100 dark:bg-gray-900 z-[999] w-screen min-w-full animate-slidedown border-b py-0 border-white border-opacity-20 dark:bg-opacity-30 bg-opacity-70 backdrop-blur backdrop-filter`}
+      className={`container relative rtl bg-gray-100 dark:bg-gray-900 z-50 w-screen min-w-full animate-slidedown border-b py-0 border-white border-opacity-20 dark:bg-opacity-30 bg-opacity-70 backdrop-blur backdrop-filter`}
     >
       <NavigationMenu className='items-center justify-start w-full max-w-full md:flex rtl'>
         <MenuToggler setIsOpen={setIsOpen} isOpen={isOpen} />
@@ -156,6 +158,13 @@ export default function Nav() {
                : '-translate-y-full opacity-0 md:opacity-100'
            }`}
           >
+            {isAuth ? (
+              <Feedback
+                name={currentUser?.userName ?? session?.token?.user.shms_fullname ?? ''}
+                email={currentUser?.userEmail ?? session?.token?.user.shms_email ?? ''}
+              />
+            ) : null}
+
             {/* تسجيل الدخول */}
             <NavigationMenuItem>
               {!isAuth ? (
