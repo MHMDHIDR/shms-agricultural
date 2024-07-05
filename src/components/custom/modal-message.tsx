@@ -1,7 +1,7 @@
 import { LegacyRef, forwardRef } from 'react'
 
 import { ModalProps } from '@/types'
-import { Loading } from '../icons/Status'
+import { Loading } from '../icons/status'
 
 const ModalMessage = forwardRef(
   (

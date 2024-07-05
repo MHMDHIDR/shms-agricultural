@@ -47,7 +47,7 @@ export default function MobileNavigation({
       })
     )
     setEmail(session?.token?.user.shms_email ?? '')
-  }, [session?.token?.user.shms_fullname])
+  }, [session?.token?.user.shms_fullname, session?.token?.user.shms_email])
 
   return (
     <Accordion

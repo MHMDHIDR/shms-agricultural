@@ -2,7 +2,7 @@
 
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import FormMessage from '@/components/custom/form-message'
-import { Error, Success } from '@/components/icons/Status'
+import { Error, Success } from '@/components/icons/status'
 import { Button } from '@/components/ui/button'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'

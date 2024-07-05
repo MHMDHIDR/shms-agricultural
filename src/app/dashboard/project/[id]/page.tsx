@@ -3,7 +3,7 @@
 import FileUpload from '@/components/custom/file-upload'
 import FormMessage from '@/components/custom/form-message'
 import Layout from '@/components/custom/layout'
-import { Error, Success } from '@/components/icons/Status'
+import { Error, Success } from '@/components/icons/status'
 import { Button } from '@/components/ui/button'
 import {
   Card,

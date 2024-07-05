@@ -8,7 +8,7 @@ import {
 import axios from 'axios'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { toast } from 'sonner'
-import { Success, Error } from '@/components/icons/Status'
+import { Success, Error } from '@/components/icons/status'
 import { useState } from 'react'
 import Confirm from '@/components/custom/confirm'
 import { Settings, Trash } from 'lucide-react'

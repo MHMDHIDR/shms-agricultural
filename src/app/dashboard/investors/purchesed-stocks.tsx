@@ -1,7 +1,7 @@
 'use client'
 
 import { ConfirmDialog } from '@/components/custom/confirm-dialog'
-import { Success, Error } from '@/components/icons/Status'
+import { Success, Error } from '@/components/icons/status'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import { redirect } from '@/libs/utils'
 import axios from 'axios'

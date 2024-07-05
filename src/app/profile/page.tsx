@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { CardWrapper } from '@/components/auth/card-wrapper'
-import { Error, Success } from '@/components/icons/Status'
+import { Error, Success } from '@/components/icons/status'
 import {
   Card,
   CardContent,

@@ -124,7 +124,7 @@ export default function Nav() {
 
   useEffect(() => {
     setOnMobileScreen(WINDOW_WIDTH < MOBILE_SCREEN)
-  }, [WINDOW_WIDTH])
+  }, [])
 
   return (
     <header

@@ -22,7 +22,7 @@ import {
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { Success, Error } from '@/components/icons/Status'
+import { Success, Error } from '@/components/icons/status'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { scrollToView } from '@/libs/utils'
 import Divider from '@/components/custom/divider'

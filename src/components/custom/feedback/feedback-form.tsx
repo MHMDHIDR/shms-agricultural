@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { SheetClose, SheetFooter } from '@/components/ui/sheet'
 import { DEFAULT_DURATION } from '@/data/constants'
-import { Error } from '@/components/icons/Status'
+import { Error } from '@/components/icons/status'
 import type { ProjectPlannerAIEndpoint } from '@/types'
 import type { Users } from '@prisma/client'
 import {

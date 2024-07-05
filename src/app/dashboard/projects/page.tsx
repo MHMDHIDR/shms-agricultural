@@ -1,9 +1,9 @@
 'use client'
 
 import Divider from '@/components/custom/divider'
-import FileUpload from '@/components/custom/FileUpload'
+import FileUpload from '@/components/custom/file-upload'
 import FormMessage from '@/components/custom/form-message'
-import { Error, Success } from '@/components/icons/Status'
+import { Error, Success } from '@/components/icons/status'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -22,7 +22,7 @@ import {
   MAX_FILE_UPLOAD_SIZE
 } from '@/data/constants'
 import { redirect, validateFile } from '@/libs/utils'
-import { FileUploadContext } from '@/providers/FileUpload'
+import { FileUploadContext } from '@/providers/file-upload'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import { useContext, useEffect, useState } from 'react'

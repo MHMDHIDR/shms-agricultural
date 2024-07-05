@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { Success } from '@/components/icons/Status'
+import { Success } from '@/components/icons/status'
 export function ConfirmDialog({
   StockLimit = 1,
   onClick,

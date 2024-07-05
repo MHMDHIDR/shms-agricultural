@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import Confirm from '@/components/custom/confirm'
-import { Error, Success } from '@/components/icons/Status'
+import { Error, Success } from '@/components/icons/status'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
@@ -11,7 +11,7 @@ import {
   DEFAULT_DURATION,
   FILE_UPLOAD_IMG_SIZE
 } from '@/data/constants'
-import { FileUploadContext } from '@/providers/FileUpload'
+import { FileUploadContext } from '@/providers/file-upload'
 import axios from 'axios'
 import Image from 'next/image'
 import { toast } from 'sonner'

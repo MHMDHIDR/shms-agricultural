@@ -1,7 +1,7 @@
 'use client'
 
 import Confirm from '@/components/custom/confirm'
-import { Error, Success } from '@/components/icons/Status'
+import { Error, Success } from '@/components/icons/status'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
