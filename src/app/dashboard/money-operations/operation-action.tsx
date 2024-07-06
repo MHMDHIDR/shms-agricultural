@@ -1,29 +1,26 @@
 'use client'
 
+import { useContext } from 'react'
+import axios from 'axios'
+import { toast } from 'sonner'
+import { API_URL, DEFAULT_DURATION } from '@/data/constants'
+import { Settings, Trash } from 'lucide-react'
+import { FormStatusContext } from '@/providers/form-status'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import axios from 'axios'
-import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import { toast } from 'sonner'
 import { Success, Error } from '@/components/icons/status'
-import { useState } from 'react'
 import Confirm from '@/components/custom/confirm'
-import { Settings, Trash } from 'lucide-react'
-import { redirect } from '@/libs/utils'
-import type { accountingOperationsProps } from '@/types'
+import type { accountingOperationsProps, FormStatusProps } from '@/types'
 
 export default function OperationAction({
   withdrawAction
 }: {
   withdrawAction: accountingOperationsProps
 }) {
-  const [formStatus, setFormStatus] = useState({
-    isSubmitting: false,
-    isSubmittingDone: false
-  })
+  const { formStatus, setFormStatus } = useContext<FormStatusProps>(FormStatusContext)
 
   const toggleWithdrawActionsStatus = async (
     operationId: string,
@@ -66,7 +63,7 @@ export default function OperationAction({
           }
         })
       }
-      setTimeout(() => redirect('/dashboard/money-operations'), DEFAULT_DURATION)
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -81,7 +78,8 @@ export default function OperationAction({
         }
       })
       console.error('Error =>', error)
-      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
+    } finally {
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: false })
     }
   }
 

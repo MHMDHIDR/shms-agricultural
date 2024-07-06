@@ -43,7 +43,8 @@ export default function FeedbackForm({
       label: label ?? 'featureRequest',
       feedback,
       name,
-      email
+      email,
+      status: 'needsReview'
     } as ProjectPlannerAIEndpoint)
 
     //getting response from backend
@@ -92,6 +93,7 @@ export default function FeedbackForm({
           id='name'
           defaultValue={name}
           className='col-span-3'
+          disabled
           readOnly
         />
       </div>
@@ -105,6 +107,7 @@ export default function FeedbackForm({
           type='email'
           defaultValue={email ?? ''}
           className='col-span-3'
+          disabled
           readOnly
         />
       </div>
@@ -154,7 +157,7 @@ export default function FeedbackForm({
           <Button
             type='submit'
             className='ml-auto pressable w-full'
-            disabled={!feedback.trim() || !label || isSubmitting}
+            disabled={feedback.trim().length < 10 || !label || isSubmitting}
           >
             أرسل الإقتراح
           </Button>

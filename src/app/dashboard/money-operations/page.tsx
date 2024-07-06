@@ -1,3 +1,7 @@
+'use client'
+
+import { useContext, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { getUserMoneyOperations } from '@/libs/utils'
 import {
   Card,
@@ -12,14 +16,42 @@ import DashboardNav from '../dashboard-nav'
 import NotFound from '@/app/not-found'
 import { getAuth } from '@/libs/actions/auth'
 import { LoadingPage } from '@/components/custom/loading'
+import { FormStatusContext } from '@/providers/form-status'
+import type { FormStatusProps, UserLoggedInProps } from '@/types'
+import type { Users, withdraw_actions } from '@prisma/client'
 
-export default async function MoneyOperations() {
-  const { userType, loading } = await getAuth()
-  const withdrawActions = await getUserMoneyOperations()
+export default function MoneyOperations() {
+  const { data: session }: { data: UserLoggedInProps } = useSession()
+  const [userType, setUserType] = useState<Users['shms_user_account_type']>('user')
+  const [loading, setLoading] = useState(true)
+  const [withdrawActions, setWithdrawActions] = useState<withdraw_actions[]>([])
+  const { formStatus } = useContext<FormStatusProps>(FormStatusContext)
+
+  // const { userType, loading } = await getAuth()
+
+  useEffect(() => {
+    // const withdrawActions = await getUserMoneyOperations()
+    const getWithdrawActions = async () => {
+      const withdrawActions: withdraw_actions[] = await getUserMoneyOperations()
+      setWithdrawActions(withdrawActions)
+    }
+
+    getWithdrawActions()
+  }, [session, formStatus])
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const { userType, loading } = await getAuth()
+      setUserType(userType)
+      setLoading(loading)
+    }
+
+    getUserData()
+  }, [])
 
   return loading ? (
     <LoadingPage />
-  ) : userType !== 'admin' ? (
+  ) : !session && userType === 'user' ? (
     <NotFound />
   ) : (
     <Layout>

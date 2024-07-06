@@ -3,6 +3,7 @@
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import Confirm from '@/components/custom/confirm'
 import {
   Table,
@@ -30,7 +31,6 @@ import Copy from '@/components/custom/copy'
 import DashboardNav from '../dashboard-nav'
 import Layout from '@/components/custom/layout'
 import NotFound from '@/app/not-found'
-import { useSession } from 'next-auth/react'
 import { LoadingPage } from '@/components/custom/loading'
 import { getAuth } from '@/libs/actions/auth'
 import type { UserLoggedInProps } from '@/types'

@@ -490,6 +490,7 @@ export function saveColumnVisibility(visibilityState: VisibilityState) {
 export function loadColumnVisibility(): any {
   const savedVisibility =
     typeof window !== undefined ? localStorage.getItem('columnVisibility') : null
+
   return savedVisibility ? JSON.parse(savedVisibility) : {}
 }
 

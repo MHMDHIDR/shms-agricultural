@@ -64,28 +64,30 @@ export function ConfirmDialog({
           </div>
         </div>
         <DialogFooter>
-          <Button
-            type='submit'
-            className={`ml-auto select-none ${
-              isSubmittingDone ? 'cursor-not-allowed opacity-75' : ''
-            }`}
-            onClick={onClick}
-            disabled={isSubmittingDone}
-          >
-            {isSubmitting ? (
-              <>
-                <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
-                جاري الحفظ ...
-              </>
-            ) : isSubmittingDone ? (
-              <>
-                <Success className='ml-3' />
-                تم حفظ التعديلات
-              </>
-            ) : (
-              'حفــظ'
-            )}
-          </Button>
+          <DialogClose asChild>
+            <Button
+              type='submit'
+              className={`ml-auto select-none ${
+                isSubmittingDone ? 'cursor-not-allowed opacity-75' : ''
+              }`}
+              onClick={onClick}
+              disabled={isSubmittingDone}
+            >
+              {isSubmitting ? (
+                <>
+                  <ReloadIcon className='w-4 h-4 ml-3 animate-spin' />
+                  جاري الحفظ ...
+                </>
+              ) : isSubmittingDone ? (
+                <>
+                  <Success className='ml-3' />
+                  تم حفظ التعديلات
+                </>
+              ) : (
+                'حفــظ'
+              )}
+            </Button>
+          </DialogClose>
           <DialogClose asChild>
             <Button type='button' variant='secondary'>
               إغلاق

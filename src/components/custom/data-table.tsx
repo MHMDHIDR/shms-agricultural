@@ -14,7 +14,6 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -22,6 +21,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/table'
 import Copy from '@/components/custom/copy'
 import NoRecords from '@/components/custom/no-records'
+import Modal from '@/components/custom/modal'
 import {
   cn,
   formattedPrice,
@@ -44,7 +45,6 @@ import {
 import Link from 'next/link'
 import OperationAction from '@/app/dashboard/money-operations/operation-action'
 import { APP_LOGO } from '@/data/constants'
-import Modal from '@/components/custom/modal'
 import UsersActions from '@/app/dashboard/users/users-actions'
 import type { accountingOperationsProps } from '@/types'
 import type { Users, Stocks } from '@prisma/client'
@@ -64,7 +64,9 @@ export default function OperationsTable({
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+    loadColumnVisibility()
+  )
   const [rowSelection, setRowSelection] = useState({})
   const [filtering, setFiltering] = useState('')
 
@@ -117,6 +119,8 @@ export default function OperationsTable({
     'userDeleted'
   ]
 
+  const columnsVisibilityIds = ['shms_sn', 'id', 'shms_user_id', 'shms_withdraw_id']
+
   return (
     <div className='w-full rtl'>
       <div className='flex items-center py-4'>
@@ -142,6 +146,7 @@ export default function OperationsTable({
                     column.toggleVisibility(!!value)
                     saveColumnVisibility(columnVisibility)
                   }}
+                  disabled={columnsVisibilityIds.includes(column.id)}
                 >
                   {replaceString(column.id)}
                 </DropdownMenuCheckboxItem>

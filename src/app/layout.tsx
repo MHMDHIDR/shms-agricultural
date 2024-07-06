@@ -4,9 +4,10 @@ import { cn } from '@/libs/utils'
 import { getServerSession } from 'next-auth'
 import { Cairo as FontSans } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
-import { FileUploadProvider } from '@/providers/file-upload'
-import { ThemeProvider } from '@/providers/theme'
 import SessionProvider from '@/providers/session'
+import { ThemeProvider } from '@/providers/theme'
+import { FileUploadProvider } from '@/providers/file-upload'
+import { FormStatusProvider } from '@/providers/form-status'
 import type { Metadata } from 'next'
 import './globals.css'
 import CookieConsent from '@/components/custom/cookie-consent'
@@ -83,21 +84,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SessionProvider session={session}>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
             <FileUploadProvider>
-              <main>
-                <NextTopLoader
-                  color='#2376EB'
-                  // initialPosition={0.08}
-                  // crawlSpeed={200}
-                  // height={3}
-                  // crawl={true}
-                  // showSpinner={false}
-                  zIndex={1600}
-                  showAtBottom={false}
-                />
-                <CookieConsent />
-                {children}
-              </main>
-              <Toaster />
+              <FormStatusProvider>
+                <main>
+                  <NextTopLoader
+                    color='#2376EB'
+                    // initialPosition={0.08}
+                    // crawlSpeed={200}
+                    // height={3}
+                    // crawl={true}
+                    // showSpinner={false}
+                    zIndex={1600}
+                    showAtBottom={false}
+                  />
+                  <CookieConsent />
+                  {children}
+                </main>
+                <Toaster />
+              </FormStatusProvider>
             </FileUploadProvider>
           </ThemeProvider>
         </SessionProvider>

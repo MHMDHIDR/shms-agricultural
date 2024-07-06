@@ -8,12 +8,13 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { ConfirmDialog } from '@/components/custom/confirm-dialog'
 import { API_URL, DEFAULT_DURATION } from '@/data/constants'
-import { redirect } from '@/libs/utils'
 import { toast } from 'sonner'
 import { Error, Success } from '@/components/icons/status'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import { FormStatusContext } from '@/providers/form-status'
 import type { Users } from '@prisma/client'
+import type { FormStatusProps } from '@/types'
 
 export default function UsersActions({ user, id }: { user: Users[]; id: Users['id'] }) {
   const [userStockLimit, setUserStockLimit] = useState<Users['shms_user_stock_limit']>(1)
@@ -23,10 +24,7 @@ export default function UsersActions({ user, id }: { user: Users[]; id: Users['i
     useState<Users['shms_user_withdrawable_balance']>(0)
   const [filteredUser, setFilteredUser] = useState<Users>()
 
-  const [formStatus, setFormStatus] = useState({
-    isSubmitting: false,
-    isSubmittingDone: false
-  })
+  const { formStatus, setFormStatus } = useContext<FormStatusProps>(FormStatusContext)
 
   useEffect(() => {
     if (id) {
@@ -79,6 +77,8 @@ export default function UsersActions({ user, id }: { user: Users[]; id: Users['i
           }
         })
       }
+
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -92,8 +92,9 @@ export default function UsersActions({ user, id }: { user: Users[]; id: Users['i
           textAlign: 'justify'
         }
       })
-      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
       console.error('Error =>', error)
+    } finally {
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: false })
     }
   }
 
@@ -102,6 +103,7 @@ export default function UsersActions({ user, id }: { user: Users[]; id: Users['i
     status: Users['shms_user_account_status']
   ) => {
     try {
+      setFormStatus({ ...formStatus, isSubmitting: true })
       const { data }: { data: Users } = await axios.patch(
         `${API_URL}/users/toggleStatus/${id}`,
         { status }
@@ -136,7 +138,7 @@ export default function UsersActions({ user, id }: { user: Users[]; id: Users['i
         })
       }
 
-      redirect('/dashboard/users')
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -151,6 +153,8 @@ export default function UsersActions({ user, id }: { user: Users[]; id: Users['i
         }
       })
       console.error('Error =>', error)
+    } finally {
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: false })
     }
   }
 
@@ -204,8 +208,7 @@ export default function UsersActions({ user, id }: { user: Users[]; id: Users['i
           }
         })
       }
-
-      redirect('/dashboard/users')
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
     } catch (error) {
       toast('حدث خطأ ما', {
         icon: <Error className='w-6 h-6 ml-3' />,
@@ -221,7 +224,7 @@ export default function UsersActions({ user, id }: { user: Users[]; id: Users['i
       })
       console.error('Error =>', error)
     } finally {
-      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: true })
+      setFormStatus({ ...formStatus, isSubmitting: false, isSubmittingDone: false })
     }
   }
 

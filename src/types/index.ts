@@ -70,6 +70,19 @@ export type FileUploadProps = {
   onFileRemove(fileUrl: string, fileName: string): void
 }
 
+export type FormStatusProps = {
+  formStatus: {
+    isSubmitting: boolean
+    isSubmittingDone: boolean
+  }
+  setFormStatus: React.Dispatch<
+    React.SetStateAction<{
+      isSubmitting: boolean
+      isSubmittingDone: boolean
+    }>
+  >
+}
+
 export type FileUploadComponentProps = {
   data: {
     projectId?: string
@@ -266,6 +279,7 @@ export type ProjectPlannerAIEndpoint = {
   name?: string
   email?: string
   label: ProjectPlannerAILabel
+  status?: ProjectPlannerAIStatus
 }
 
 enum ProjectPlannerAILabel {
@@ -275,4 +289,10 @@ enum ProjectPlannerAILabel {
   complaint = 'complaint',
   featureRequest = 'featureRequest',
   other = 'other'
+}
+
+enum ProjectPlannerAIStatus {
+  needsReview = 'needsReview',
+  workItemCreated = 'workItemCreated',
+  closed = 'closed'
 }

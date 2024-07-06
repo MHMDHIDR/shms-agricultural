@@ -1,5 +1,9 @@
 'use client'
 
+import { useContext, useEffect, useState } from 'react'
+import axios from 'axios'
+import { useSession } from 'next-auth/react'
+import { FormStatusContext } from '@/providers/form-status'
 import {
   Card,
   CardContent,
@@ -8,16 +12,13 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { API_URL } from '@/data/constants'
-import axios from 'axios'
-import { useEffect, useState } from 'react'
 import Layout from '@/components/custom/layout'
 import DashboardNav from '../dashboard-nav'
 import DataTable from '@/components/custom/data-table'
-import { useSession } from 'next-auth/react'
 import NotFound from '@/app/not-found'
 import { LoadingPage } from '@/components/custom/loading'
 import { getAuth } from '@/libs/actions/auth'
-import type { UserLoggedInProps } from '@/types'
+import type { FormStatusProps, UserLoggedInProps } from '@/types'
 import type { Users } from '@prisma/client'
 
 export default function Users() {
@@ -25,6 +26,7 @@ export default function Users() {
   const [users, setUsers] = useState<Users[]>([])
   const [userType, setUserType] = useState<Users['shms_user_account_type']>('user')
   const [loading, setLoading] = useState(true)
+  const { formStatus } = useContext<FormStatusProps>(FormStatusContext)
 
   useEffect(() => {
     const getUserData = async () => {
@@ -40,7 +42,7 @@ export default function Users() {
     }
 
     getUserData()
-  }, [session])
+  }, [session, formStatus])
 
   return loading ? (
     <LoadingPage />
