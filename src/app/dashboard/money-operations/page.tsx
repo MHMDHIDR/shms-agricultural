@@ -27,10 +27,7 @@ export default function MoneyOperations() {
   const [withdrawActions, setWithdrawActions] = useState<withdraw_actions[]>([])
   const { formStatus } = useContext<FormStatusProps>(FormStatusContext)
 
-  // const { userType, loading } = await getAuth()
-
   useEffect(() => {
-    // const withdrawActions = await getUserMoneyOperations()
     const getWithdrawActions = async () => {
       const withdrawActions: withdraw_actions[] = await getUserMoneyOperations()
       setWithdrawActions(withdrawActions)

@@ -38,7 +38,7 @@ export default async function WithdrawOperations() {
             </strong>
           </CardTitle>
           <CardDescription>
-            هنا يمكنك مشاهدة جميع عمليات السحب والإيداع التي تمت على حسابك
+            هنا يمكنك مشاهدة جميع عمليات السحب والإيداع التي تمت في حسابك
           </CardDescription>
           <TabsList className='bg-transparent'>
             <TabsTrigger className='pressable ml-auto' value='new_withdraw'>
