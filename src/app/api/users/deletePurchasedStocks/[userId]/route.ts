@@ -1,5 +1,3 @@
-// src/app/api/users/deletePurchasedStocks/[userId]/route.ts :
-
 import client from '@/../prisma/prismadb'
 import type { Stocks } from '@prisma/client'
 

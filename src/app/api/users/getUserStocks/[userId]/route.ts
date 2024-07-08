@@ -8,9 +8,12 @@ export async function GET(
 
   // If user is found, check if his/her account is active or blocked
   try {
-    // Check for user by using his/her email or Phoneephone number
-    const user = await client.users.findUnique({
-      where: { id: userId }
+    // Check for user by using their ID and ensuring they are not deleted
+    const user = await client.users.findFirst({
+      where: {
+        id: userId,
+        shms_user_is_deleted: false
+      }
     })
 
     if (!user) {

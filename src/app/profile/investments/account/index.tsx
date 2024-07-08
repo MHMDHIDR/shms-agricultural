@@ -1,8 +1,8 @@
-import { Card, CardContent } from '@/components/ui/card'
+import Link from 'next/link'
 import { getAuth } from '@/libs/actions/auth'
 import { getUser } from '@/libs/utils'
-import Link from 'next/link'
-import Balance from './_Balance'
+import Balance from './balance'
+import { Card, CardContent } from '@/components/ui/card'
 import type { Users } from '@prisma/client'
 
 export default async function Account({ userId }: { userId?: string }) {

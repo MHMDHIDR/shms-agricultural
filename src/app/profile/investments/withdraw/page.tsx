@@ -1,10 +1,10 @@
+import NotFound from '@/app/not-found'
+import { getAuth } from '@/libs/actions/auth'
 import Layout from '@/components/custom/layout'
 import { LoadingPage } from '@/components/custom/loading'
-import NotFound from '@/app/not-found'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import NewWithdraw from './_NewWithdraw'
-import WithdrawOperations from './_WithdrawOperations'
-import { getAuth } from '@/libs/actions/auth'
+import NewWithdraw from './new-withdraw'
+import WithdrawOperations from './withdraw-operations'
 
 export default async function WithDrawPage() {
   const { userType, loading } = await getAuth()

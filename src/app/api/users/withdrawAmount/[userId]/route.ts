@@ -1,8 +1,8 @@
 import email from '@/libs/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import client from '@/../prisma/prismadb'
 import { ObjectId } from 'mongodb'
-import { Users } from '@prisma/client'
+import client from '@/../prisma/prismadb'
+import type { Users } from '@prisma/client'
 
 export async function POST(
   req: Request,
@@ -26,30 +26,33 @@ export async function POST(
     )
   }
 
-  // Check if user exists
-  const userExists = await client.users.findUnique({ where: { id: userId } })
-
-  if (!userExists) {
-    return new Response(
-      JSON.stringify({ userWithdrawnBalance: 0, message: 'المستخدم غير موجود!' }),
-      { status: 404 }
-    )
-  }
-
-  if (withdrawAmount > userExists.shms_user_withdrawable_balance) {
-    return new Response(
-      JSON.stringify({
-        userWithdrawnBalance: 0,
-        message: 'الرصيد المطلوب سحبه أكبر من الرصيد المتاح!'
-      }),
-      { status: 400 }
-    )
-  }
-
   try {
+    // Check if user exists and is not deleted
+    const userExists = await client.users.findFirst({
+      where: { id: userId, shms_user_is_deleted: false }
+    })
+
+    // If user does not exist or is deleted
+    if (!userExists) {
+      return new Response(
+        JSON.stringify({ userWithdrawnBalance: 0, message: 'المستخدم غير موجود!' }),
+        { status: 404 }
+      )
+    }
+
+    if (withdrawAmount > userExists.shms_user_withdrawable_balance) {
+      return new Response(
+        JSON.stringify({
+          userWithdrawnBalance: 0,
+          message: 'الرصيد المطلوب سحبه أكبر من الرصيد المتاح!'
+        }),
+        { status: 400 }
+      )
+    }
+
     const referenceCode = new ObjectId().toHexString()
 
-    // create new user
+    // Create withdrawal action record
     await client.withdraw_actions.create({
       data: {
         id: referenceCode,
@@ -58,19 +61,16 @@ export async function POST(
       }
     })
 
-    /**
-     * Update user balance, subtract the withdraw amount and later on
-     * if the admin rejects or deletes the withdraw
-     * in this case we will add the amount back to the user balance
-     */
+    // Update user balance, subtract the withdraw amount
     const currentBalance = userExists.shms_user_withdrawable_balance
     const userNewBalance = currentBalance - withdrawAmount
+
     await client.users.update({
       where: { id: userId },
       data: { shms_user_withdrawable_balance: userNewBalance }
     })
 
-    //send the user an email with a link to activate his/her account
+    // Send email notification to the user
     const buttonLink = APP_URL + `/profile/investments/withdraw`
 
     const emailData = {
@@ -92,8 +92,9 @@ export async function POST(
       }
     }
 
-    const data = await email(emailData)
-    if (data?.id) {
+    const emailResponse = await email(emailData)
+
+    if (emailResponse?.id) {
       return new Response(
         JSON.stringify({
           userWithdrawnBalance: 1,
@@ -101,13 +102,21 @@ export async function POST(
         }),
         { status: 201 }
       )
+    } else {
+      return new Response(
+        JSON.stringify({
+          userWithdrawnBalance: 0,
+          message: `عفواً! لم يتم إرسال طلب السحب، حدث خطأ ما!`
+        }),
+        { status: 500 }
+      )
     }
   } catch (error) {
     console.error(error)
     return new Response(
       JSON.stringify({
         userWithdrawnBalance: 0,
-        message: `عفواً! لم يتم إرسال طلب السحب، حدث خطأ ما! `
+        message: `عفواً! لم يتم إرسال طلب السحب، حدث خطأ ما! ${error}`
       }),
       { status: 500 }
     )

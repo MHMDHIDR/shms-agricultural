@@ -13,12 +13,19 @@ export async function POST(req: Request) {
     )
   }
 
-  // If user is found, check if his/her account is active or blocked
   try {
-    // Check for user by using his/her email or Phoneephone number
+    // Check for user by using his/her email or phone number, and ensure the user is not deleted
     const user = await client.users.findFirst({
       where: {
-        OR: [{ shms_email: email ?? emailOrPhone }, { shms_phone: phone ?? emailOrPhone }]
+        AND: [
+          {
+            OR: [
+              { shms_email: email ?? emailOrPhone },
+              { shms_phone: phone ?? emailOrPhone }
+            ]
+          },
+          { shms_user_is_deleted: false } // Only consider non-deleted users
+        ]
       }
     })
 

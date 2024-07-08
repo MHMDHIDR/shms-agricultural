@@ -86,6 +86,7 @@ model Users {
   shms_user_account_status       UserStatus         @default(active)
   shms_user_reset_token          String?
   shms_user_reset_token_expires  DateTime?
+  shms_user_is_deleted           Boolean            @default(false)
   message                        String?
   loggedIn                       Int?
   userAdded                      Int?

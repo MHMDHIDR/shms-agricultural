@@ -1,5 +1,3 @@
-// src/app/api/users/updatePurchasedStocks/[userId]/route.ts :
-
 import client from '@/../prisma/prismadb'
 import type { Stocks } from '@prisma/client'
 
@@ -13,18 +11,15 @@ export async function PATCH(
   const {
     stocks,
     dateOfPurchase
-  }: {
-    stocks: Stocks['stocks']
-    dateOfPurchase: Stocks['createdAt']
-  } = body
+  }: { stocks: Stocks['stocks']; dateOfPurchase: Stocks['createdAt'] } = body
 
   try {
     // Ensure dateOfPurchase is in the correct format
     const purchaseDate = new Date(dateOfPurchase)
 
     // Fetch user details
-    const user = await client.users.findUnique({
-      where: { id: userId }
+    const user = await client.users.findFirst({
+      where: { id: userId, shms_user_is_deleted: false } // Ensure user is not marked as deleted
     })
 
     if (!user) {
@@ -77,6 +72,16 @@ export async function PATCH(
       where: { id: projectStocksToUpdate }
     })
 
+    if (!projectDetails) {
+      return new Response(
+        JSON.stringify({
+          userUpdated: 0,
+          message: 'لم يتم العثور على المشروع المتعلق بهذا السهم!'
+        }),
+        { status: 404 }
+      )
+    }
+
     // Calculate the difference between the new and old stock values
     const oldStocks =
       prevStockValue.find(stock => stock.id === projectStocksToUpdate)?.stocks || 0
@@ -85,7 +90,7 @@ export async function PATCH(
     const stocksDifference = newStocks - oldStocks
 
     // Update the project's shms_project_available_stocks accordingly
-    let updatedAvailableStocks = projectDetails?.shms_project_available_stocks ?? 0
+    let updatedAvailableStocks = projectDetails.shms_project_available_stocks
 
     if (stocksDifference > 0) {
       updatedAvailableStocks -= stocksDifference
@@ -99,28 +104,29 @@ export async function PATCH(
       data: { shms_project_available_stocks: updatedAvailableStocks }
     })
 
-    // if userUpdated is updated successfully then return userUpdated as 1
+    // Check if user was updated successfully
     if (userUpdated) {
       return new Response(
         JSON.stringify({ userUpdated: 1, message: 'تم تحديث أسهم المستثمر بنجاح!' }),
         { status: 200 }
       )
+    } else {
+      return new Response(
+        JSON.stringify({
+          userUpdated: 0,
+          message: 'عفواً، لم يتم تحديث أسهم المستثمر بنجاح!'
+        }),
+        { status: 400 }
+      )
     }
-
-    return new Response(
-      JSON.stringify({
-        userUpdated: userUpdated,
-        message: 'عفواً، لم يتم تحديث أسهم المستثمر بنجاح!'
-      }),
-      { status: 400 }
-    )
   } catch (error) {
     console.error(error)
-
     return new Response(
       JSON.stringify({
         userUpdated: 0,
-        message: `عفواً، حدثت مشكلة غير متوقعة، حاول مرة أخرى لاحقاً! ${error}`
+        message: `عفواً، حدثت مشكلة غير متوقعة، حاول مرة أخرى لاحقاً! ${
+          error instanceof Error ? error.message : JSON.stringify(error)
+        }`
       }),
       { status: 500 }
     )

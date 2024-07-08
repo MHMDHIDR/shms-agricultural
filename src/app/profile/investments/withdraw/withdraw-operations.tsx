@@ -19,8 +19,8 @@ import {
 } from '@/components/ui/card'
 import Copy from '@/components/custom/copy'
 import NoRecords from '@/components/custom/no-records'
-import type { withdraw_actions } from '@prisma/client'
 import { Plus } from 'lucide-react'
+import type { withdraw_actions } from '@prisma/client'
 
 export const revalidate = 10
 export default async function WithdrawOperations() {

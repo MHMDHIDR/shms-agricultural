@@ -29,18 +29,17 @@ export async function DELETE(
         await client.projects.updateMany({
           where: { id: stock.id },
           data: {
-            shms_project_available_stocks: {
-              // Return stocks to the project
-              increment: stock.stocks
-            }
+            // Return stocks to the project
+            shms_project_available_stocks: { increment: stock.stocks }
           }
         })
       }
     }
 
-    // Delete the user
-    const userDeleted = await client.users.delete({
-      where: { id: userId }
+    // Delete the user // instead of .delete({ where: { id: userId } }) set shms_user_is_deleted in Users schema to true
+    const userDeleted = await client.users.update({
+      where: { id: userId },
+      data: { shms_user_is_deleted: true }
     })
 
     if (userDeleted) {

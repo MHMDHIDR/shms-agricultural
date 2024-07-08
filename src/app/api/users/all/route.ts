@@ -14,18 +14,24 @@ export async function GET(req: NextRequest) {
         NOT: {
           shms_user_stocks: {
             isEmpty: true
-          }
+          },
+          shms_user_is_deleted: true
         }
       }
     })
   } else if (userId) {
     users = await client.users.findMany({
       where: {
-        id: userId
+        id: userId,
+        shms_user_is_deleted: false
       }
     })
   } else {
-    users = await client.users.findMany()
+    users = await client.users.findMany({
+      where: {
+        shms_user_is_deleted: false
+      }
+    })
   }
 
   // Reorder properties to match the schema

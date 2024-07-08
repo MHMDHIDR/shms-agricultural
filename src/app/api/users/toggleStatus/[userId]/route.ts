@@ -14,17 +14,20 @@ export async function PATCH(
     return new Response(
       JSON.stringify({
         userUpdated: 0,
-        message: 'Invalid status provided. Please provide "active" or "inactive".'
+        message:
+          'Invalid status provided. Please provide "active", "pending", or "block".'
       }),
       { status: 400 }
     )
   }
 
   try {
-    // Check if user exists
-    const user = await client.users.findUnique({ where: { id: userId } })
+    // Check if user exists and is not deleted
+    const user = await client.users.findFirst({
+      where: { id: userId, shms_user_is_deleted: false }
+    })
 
-    // If user does not exist
+    // If user does not exist or is marked as deleted
     if (!user) {
       return new Response(
         JSON.stringify({ userUpdated: 0, message: 'عفواً لم يتم العثور على الحساب!' }),
@@ -37,7 +40,7 @@ export async function PATCH(
       where: { id: userId },
       data: {
         shms_user_account_status: status,
-        ...(status === 'active' && { shms_user_reset_token_expires: null })
+        ...(status === 'active' && { shms_user_reset_token_expires: null }) // Clear reset token expiration if activating
       }
     })
 

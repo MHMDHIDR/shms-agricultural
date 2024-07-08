@@ -1,7 +1,7 @@
 import client from '@/../prisma/prismadb'
 import email from '@/libs/actions/email'
 import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
-import { Users } from '@prisma/client'
+import type { Users } from '@prisma/client'
 
 export async function PATCH(req: Request) {
   const body = await req.json()
@@ -12,10 +12,14 @@ export async function PATCH(req: Request) {
   }
 
   try {
-    // Check if user exists
-    // where id is equal to userId or shms_user_reset_token is equal to userId
+    // Check if user exists and is not deleted
     const user = await client.users.findFirst({
-      where: { OR: [{ id: userId }, { shms_user_reset_token: userId }] }
+      where: {
+        AND: [
+          { shms_user_is_deleted: false },
+          { OR: [{ id: userId }, { shms_user_reset_token: userId }] }
+        ]
+      }
     })
 
     if (!user) {
@@ -45,8 +49,7 @@ export async function PATCH(req: Request) {
     } else {
       // Activate user
       await client.users.update({
-        // where id is equal to userId or shms_user_reset_token is equal to userId
-        where: { id: user.id },
+        where: { id: user.id, shms_user_is_deleted: false },
         data: {
           shms_user_account_status: 'active',
           shms_user_reset_token_expires: null,

@@ -1,6 +1,6 @@
 import client from '@/../prisma/prismadb'
-import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import email from '@/libs/actions/email'
+import { ADMIN_EMAIL, APP_URL } from '@/data/constants'
 import { ObjectId } from 'mongodb'
 
 export async function POST(req: Request) {
@@ -8,9 +8,12 @@ export async function POST(req: Request) {
   const { email: userResetEmail } = body
 
   try {
-    // Check for user by using his/her email or Phoneephone number
-    const user = await client.users.findUnique({
-      where: { shms_email: userResetEmail }
+    // Check for user by using their email and making sure they are not deleted
+    const user = await client.users.findFirst({
+      where: {
+        shms_email: userResetEmail,
+        shms_user_is_deleted: false
+      }
     })
 
     if (!user) {
@@ -48,14 +51,14 @@ export async function POST(req: Request) {
         const userCanResetPasswordUntil = new Date(Date.now() + 3600000).toISOString()
 
         await client.users.update({
-          where: { id: user.id },
+          where: { id: user.id, shms_user_is_deleted: false },
           data: {
             shms_user_reset_token: userResetPasswordToken,
             shms_user_reset_token_expires: userCanResetPasswordUntil
           }
         })
 
-        //send the user an email with a link to reset his/her password
+        // Send the user an email with a link to reset their password
         const buttonLink = APP_URL + `/auth/reset-password/${userResetPasswordToken}`
 
         const emailData = {
@@ -68,7 +71,7 @@ export async function POST(req: Request) {
           }
         }
 
-        // try to send the email
+        // Try to send the email
         try {
           const data = await email(emailData)
           if (data?.id) {
@@ -89,7 +92,7 @@ export async function POST(req: Request) {
         } catch (error) {
           return new Response(
             JSON.stringify({
-              message: `Ooops!, something went wrong!: ${error} `,
+              message: `Ooops!, something went wrong!: ${error}`,
               forgotPassSent: 0
             })
           )
