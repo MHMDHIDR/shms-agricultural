@@ -107,6 +107,7 @@ export default function OperationsTable({
     'shms_user_account_type',
     'shms_user_reset_token',
     'shms_user_reset_token_expires',
+    'shms_user_is_deleted',
     'message',
     'loggedIn',
     'userAdded',
