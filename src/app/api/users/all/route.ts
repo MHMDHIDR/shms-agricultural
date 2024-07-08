@@ -11,12 +11,8 @@ export async function GET(req: NextRequest) {
   if (role === 'investor') {
     users = await client.users.findMany({
       where: {
-        NOT: {
-          shms_user_stocks: {
-            isEmpty: true
-          },
-          shms_user_is_deleted: true
-        }
+        NOT: { shms_user_stocks: { isEmpty: true } },
+        shms_user_is_deleted: false
       }
     })
   } else if (userId) {
