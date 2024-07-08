@@ -55,6 +55,7 @@ export async function GET(req: NextRequest) {
     shms_user_account_status: user.shms_user_account_status,
     shms_user_reset_token: user.shms_user_reset_token,
     shms_user_reset_token_expires: user.shms_user_reset_token_expires,
+    shms_user_is_deleted: user.shms_user_is_deleted,
     message: user.message,
     loggedIn: user.loggedIn,
     userAdded: user.userAdded,
