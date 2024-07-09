@@ -279,6 +279,7 @@ export default function ProfilePage() {
                         <Input
                           id='email'
                           onChange={e => setEmail(e.target.value)}
+                          type='email'
                           defaultValue={localUser?.userEmail ?? currentEmail}
                         />
                       </div>

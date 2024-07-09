@@ -24,7 +24,7 @@ export default async function Account({ userId }: { userId?: string }) {
 
       <Card className='w-full p-10 rtl md:w-fit'>
         <CardContent className='flex flex-col items-center justify-center text-center'>
-          <h1 className='font-bold'>{shms_fullname}</h1>
+          <h1 className={`font-bold ${!userId ? 'pt-0' : 'pt-10'}`}>{shms_fullname}</h1>
           {!userId ? (
             <Link
               href='/profile'

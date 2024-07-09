@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef, useCallback, useEffect, useState, MutableRefObject } from 'react'
 import Divider from '@/components/custom/divider'
 import {
   FacebookIcon,
@@ -12,7 +13,6 @@ import { APP_LOGO, APP_TITLE, APP_URL, SHMS_EMAIL } from '@/data/constants'
 import { getProjectDate } from '@/libs/utils'
 import { generatePDFProps } from '@/types'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { useRef, useCallback, useEffect, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import Image from 'next/image'
 
@@ -32,6 +32,7 @@ export default function Contract({ dataToShow }: { dataToShow: generatePDFProps 
       }, 2000)
     })
   }, [setIsLoadingPDF])
+
   const reactToPrintContent = useCallback(() => componentRef.current, [])
 
   const handlePrint = useReactToPrint({
@@ -72,7 +73,7 @@ const Invoice = ({
   forwardedRef
 }: {
   dataToShow: generatePDFProps
-  forwardedRef: any
+  forwardedRef: MutableRefObject<null>
 }) => {
   const {
     investorName,

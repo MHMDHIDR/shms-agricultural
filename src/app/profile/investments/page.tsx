@@ -1,3 +1,5 @@
+import axios from 'axios'
+import { redirect } from 'next/navigation'
 import Divider from '@/components/custom/divider'
 import Layout from '@/components/custom/layout'
 import NoRecords from '@/components/custom/no-records'
@@ -13,10 +15,8 @@ import {
 import { API_URL } from '@/data/constants'
 import { getAuth } from '@/libs/actions/auth'
 import { formattedPrice, getProject, getProjectDate } from '@/libs/utils'
-import axios from 'axios'
 import Contract from './show-pdf'
 import Account from '@/app/profile/investments/account'
-import { redirect } from 'next/navigation'
 import type { InverstorProjectData } from '@/types'
 import type { Users, Stocks } from '@prisma/client'
 

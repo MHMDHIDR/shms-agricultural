@@ -5,7 +5,8 @@ export { default } from 'next-auth/middleware'
 const allowedOrigins = [
   'https://www.shmsagricultural.com',
   'https://shmsagricultural.com',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'http://172.20.10.2:3000'
 ]
 
 export function middleware(request: Request) {
