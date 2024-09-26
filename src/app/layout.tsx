@@ -1,18 +1,19 @@
-import { Toaster } from '@/components/ui/sonner'
-import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
-import { cn } from '@/libs/utils'
 import { getServerSession } from 'next-auth'
 import { Cairo as FontSans } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
+import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
 import NextTopLoader from 'nextjs-toploader'
+import { cn } from '@/libs/utils'
+import CookieConsent from '@/components/custom/cookie-consent'
+import { Toaster } from '@/components/ui/sonner'
 import SessionProvider from '@/providers/session'
 import { ThemeProvider } from '@/providers/theme'
 import { FileUploadProvider } from '@/providers/file-upload'
 import { FormStatusProvider } from '@/providers/form-status'
-import type { Metadata } from 'next'
 import './globals.css'
-import CookieConsent from '@/components/custom/cookie-consent'
+import type { Metadata } from 'next'
 
-export const fontSans = FontSans({ subsets: ['arabic'], variable: '--font-sans' })
+const fontSans = FontSans({ subsets: ['arabic'], variable: '--font-sans' })
 
 export const metadata: Metadata = { title: APP_TITLE, description: APP_DESCRIPTION }
 
@@ -98,6 +99,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   />
                   <CookieConsent />
                   {children}
+                  <Analytics />
                 </main>
                 <Toaster />
               </FormStatusProvider>
