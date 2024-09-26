@@ -16,7 +16,7 @@ async function email({ name, subject, from, to, msg }: emailMethodProps) {
       SHMS_EMAIL ?? 'info@shmsagricultural.com'
     }>`,
     subject,
-    reply_to: from ?? ADMIN_EMAIL,
+    replyTo: from ?? ADMIN_EMAIL,
     react: EmailTemplate({
       title: msg.title ?? '',
       msg: msg.msg ?? '',
