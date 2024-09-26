@@ -13,7 +13,7 @@ async function email({ name, subject, from, to, msg }: emailMethodProps) {
   const { data, error: cause }: CreateEmailResponse = await resend.emails.send({
     to,
     from: `"${name ?? 'شمس للخدمات الزراعية | SHMS Agriculture'}" <${
-      'info@shmsagricultural.com' ?? SHMS_EMAIL
+      SHMS_EMAIL ?? 'info@shmsagricultural.com'
     }>`,
     subject,
     reply_to: from ?? ADMIN_EMAIL,
