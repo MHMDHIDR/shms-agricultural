@@ -509,7 +509,7 @@ export async function handleSignOut() {
 }
 
 /**
- * Images is a function that returns an array of images in this format /slider/slider-$NUMBER_OF_IMAGE.wepb
+ * Images is a function that returns an array of images in this format /slider/slider-$NUMBER_OF_IMAGE.webp
  * I will pass the number of images to the function and it will return the array of images
  * @param NUMBER_OF_IMAGES the number of images to be returned
  * @returns imagesArray the array of images
@@ -517,7 +517,7 @@ export async function handleSignOut() {
 export function images(NUMBER_OF_IMAGES: number): string[] {
   let imagesArray = []
   for (let i = 1; i <= NUMBER_OF_IMAGES; i++) {
-    imagesArray.push(`/slider/slider-0${i}.wepb`)
+    imagesArray.push(`/slider/slider-0${i}.webp`)
   }
   return imagesArray
 }
