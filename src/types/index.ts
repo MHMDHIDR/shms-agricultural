@@ -113,22 +113,6 @@ export type uploadFileToS3Props = {
   projectId?: string | undefined
 }
 
-export type uploadToS3DataProps = {
-  data: {
-    map(arg0: ({ fields, url }: any, idx: number) => Promise<void>): unknown
-    fields: {
-      'Content-Type': string
-      'PolicyX-Amz-Algorithm': string
-      'X-Amz-Credential': string
-      'X-Amz-Date': string
-      'X-Amz-Signature': string
-      bucket: string
-      key: string
-    }
-    url: string
-  }[]
-}
-
 // User Email
 export type emailMethodProps = {
   name?: string

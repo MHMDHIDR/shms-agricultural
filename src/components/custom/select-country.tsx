@@ -14,18 +14,27 @@ import { cn } from '@/libs/utils'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
 
-export default function SelectCountry({
-  nationality,
-  setNationality,
-  placeholder = 'إختر الجنسية ...',
-  className = ''
-}: {
+type SelectCountryProps = {
   nationality?: string
   setNationality: (value: string) => void
   placeholder?: string
   className?: string
-}) {
+}
+
+// Mark the component as a Client Component
+const SelectCountry = ({
+  nationality,
+  setNationality,
+  placeholder = 'إختر الجنسية ...',
+  className = ''
+}: SelectCountryProps) => {
   const [open, setOpen] = useState(false)
+
+  // Create a memoized handler for the selection
+  const handleSelect = (currentValue: string) => {
+    setNationality(currentValue === nationality ? '' : currentValue)
+    setOpen(false)
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -54,10 +63,7 @@ export default function SelectCountry({
               <CommandItem
                 key={countryName.code}
                 value={countryName.label}
-                onSelect={currentValue => {
-                  setNationality(currentValue === nationality ? '' : currentValue)
-                  setOpen(false)
-                }}
+                onSelect={() => handleSelect(countryName.label)}
               >
                 {countryName.label}
                 <CheckIcon
@@ -74,3 +80,5 @@ export default function SelectCountry({
     </Popover>
   )
 }
+
+export default SelectCountry
