@@ -11,12 +11,11 @@ export async function POST(
   if (!userId) throw new Error('User ID is required')
 
   const body = await req.json()
-  let { withdrawAmount }: { withdrawAmount: Users['shms_user_withdrawable_balance'] } =
-    body
+  let { totalCredits }: { totalCredits: Users['shms_user_credits'] } = body
 
-  withdrawAmount = parseInt(String(withdrawAmount))
+  totalCredits = parseInt(String(totalCredits))
 
-  if (!withdrawAmount) {
+  if (!totalCredits) {
     return new Response(
       JSON.stringify({
         userWithdrawnBalance: 0,
@@ -40,7 +39,7 @@ export async function POST(
       )
     }
 
-    if (withdrawAmount > userExists.shms_user_withdrawable_balance) {
+    if (totalCredits > userExists.shms_user_credits) {
       return new Response(
         JSON.stringify({
           userWithdrawnBalance: 0,
@@ -56,18 +55,18 @@ export async function POST(
     await client.withdraw_actions.create({
       data: {
         id: referenceCode,
-        shms_withdraw_amount: withdrawAmount,
+        shms_withdraw_amount: totalCredits,
         shms_user_id: userId
       }
     })
 
     // Update user balance, subtract the withdraw amount
-    const currentBalance = userExists.shms_user_withdrawable_balance
-    const userNewBalance = currentBalance - withdrawAmount
+    const currentBalance = userExists.shms_user_credits
+    const userNewBalance = currentBalance - totalCredits
 
     await client.users.update({
       where: { id: userId },
-      data: { shms_user_withdrawable_balance: userNewBalance }
+      data: { shms_user_credits: userNewBalance }
     })
 
     // Send email notification to the user
@@ -84,7 +83,7 @@ export async function POST(
 
           شكراً لإرسال طلب سحب الرصيد من شمس.
 
-          مبلغ السحب: ${withdrawAmount} ريال قطري فقط.
+          مبلغ السحب: ${totalCredits} ريال قطري فقط.
 
           بمجرد مراجعة طلبك من قبلنا، سيتم إشعارك بحالة الطلب.`,
         buttonLink,

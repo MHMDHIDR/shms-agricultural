@@ -18,8 +18,7 @@ export const getAuth: getAuthProps = async (): Promise<getAuthType> => {
     userEmail: '',
     userPhone: '',
     userStockLimit: 0,
-    withdrawableAmount: 0,
-    totalAmount: 0,
+    totalCredits: 0,
     loading: true
   }
 
@@ -34,8 +33,7 @@ export const getAuth: getAuthProps = async (): Promise<getAuthType> => {
       authData.userEmail = user?.token?.user.shms_email ?? ''
       authData.userPhone = user?.token?.user.shms_phone ?? ''
       authData.userStockLimit = user?.token?.user.shms_user_stock_limit ?? 0
-      authData.totalAmount = user?.token?.user.shms_user_total_balance ?? 0
-      authData.withdrawableAmount = user?.token?.user.shms_user_withdrawable_balance ?? 0
+      authData.totalCredits = user?.token?.user.shms_user_credits ?? 0
     }
     authData.loading = false
   } catch (error) {

@@ -30,12 +30,6 @@ export async function PATCH(
       case 'stockLimit':
         updateField = 'shms_user_stock_limit'
         break
-      case 'totalBalance':
-        updateField = 'shms_user_total_balance'
-        break
-      case 'withdrawableBalance':
-        updateField = 'shms_user_withdrawable_balance'
-        break
       default:
         return new Response(
           JSON.stringify({

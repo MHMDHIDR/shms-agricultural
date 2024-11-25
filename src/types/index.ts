@@ -12,8 +12,7 @@ export type getAuthType = {
   userEmail?: Users['shms_email']
   userPhone?: Users['shms_phone']
   userStockLimit?: Users['shms_user_stock_limit']
-  withdrawableAmount?: Users['shms_user_withdrawable_balance']
-  totalAmount?: Users['shms_user_total_balance']
+  totalCredits?: Users['shms_user_credits']
   loading: boolean
 }
 

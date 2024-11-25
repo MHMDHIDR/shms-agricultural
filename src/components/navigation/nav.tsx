@@ -88,11 +88,9 @@ export default function Nav() {
         const { userId, userStockLimit, userName, userEmail, userPhone, userType } =
           (await getAuth()) as getAuthType
 
-        const { shms_user_total_balance, shms_user_withdrawable_balance } =
-          ((await getUser(userId)) as Users) ?? {
-            shms_user_total_balance: 0,
-            shms_user_withdrawable_balance: 0
-          }
+        const { shms_user_credits } = ((await getUser(userId)) as Users) ?? {
+          shms_user_credits: 0
+        }
 
         localStorage.setItem(
           'shms_user_data',
@@ -103,8 +101,7 @@ export default function Nav() {
             userEmail,
             userPhone,
             userType,
-            totalAmount: shms_user_total_balance,
-            withdrawableAmount: shms_user_withdrawable_balance
+            totalCredits: shms_user_credits
           })
         )
       }

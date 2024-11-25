@@ -381,95 +381,69 @@ export const replaceString = (string: string) => {
   switch (string) {
     case 'shms_sn': {
       return 'الرقم التسلسلي'
-      break
     }
     case 'shms_withdraw_id': {
       return 'الرقم المرجعي للعملية'
-      break
     }
     case 'shms_user_id': {
       return 'الرقم المرجعي للمستثمر'
-      break
     }
     case 'shms_id': {
       return 'الرقم المرجعي'
-      break
     }
     case 'shms_action_type': {
       return 'نوع العملية'
-      break
     }
     case 'shms_fullname': {
       return 'اسم المستثمر'
-      break
     }
     case 'shms_password': {
       return 'كلمة المرور'
-      break
     }
     case 'shms_date_of_birth': {
       return 'تاريخ الميلاد'
-      break
     }
     case 'shms_doc': {
       return 'صورة المستند'
-      break
     }
     case 'shms_user_stocks': {
       return 'عدد الأسهم'
-      break
     }
     case 'shms_user_stock_limit': {
       return 'الحد الأعلى للأسهم'
-      break
     }
-    case 'shms_user_total_balance': {
-      return 'الرصيد الكلي للمستثمر'
-      break
-    }
-    case 'shms_user_withdrawable_balance': {
-      return 'الرصيد القابل للسحب'
-      break
+    case 'shms_user_credits': {
+      return 'الرصيد'
     }
     case 'shms_user_account_type': {
       return 'نوع الحساب'
-      break
     }
     case 'shms_user_account_status': {
       return 'حالة الحساب'
-      break
     }
     case 'shms_nationality': {
       return 'الجنسية'
-      break
     }
     case 'shms_phone': {
       return 'رقم الجوال'
-      break
     }
     case 'shms_email': {
       return 'البريد الالكتروني'
-      break
     }
     case 'shms_address': {
       return 'العنوان'
-      break
     }
     case 'shms_created_at': {
       return 'تاريخ الإنشاء'
-      break
     }
     case 'shms_withdraw_amount': {
       return 'المبلغ المراد سحبه'
-      break
     }
     case 'accounting_operation_status': {
       return 'حالة الطلب'
-      break
     }
     default: {
       return string
-      break
     }
   }
 }

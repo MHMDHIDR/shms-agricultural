@@ -18,12 +18,12 @@ import type { getAuthType } from '@/types'
 import type { Users } from '@prisma/client'
 
 export default function NewWithdraw() {
-  const { userId, withdrawableAmount }: getAuthType =
+  const { userId, totalCredits }: getAuthType =
     typeof window !== 'undefined' &&
     JSON.parse(String(localStorage.getItem('shms_user_data')))
 
   const [withdrawAmountLimit, setWithdrawAmountLimit] = useState<
-    getAuthType['withdrawableAmount'] | null
+    getAuthType['totalCredits'] | null
   >(null)
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [formStatus, setFormStatus] = useState({
@@ -33,8 +33,8 @@ export default function NewWithdraw() {
   const { replace } = useRouter()
 
   useEffect(() => {
-    setWithdrawAmountLimit(withdrawableAmount)
-  }, [withdrawableAmount])
+    setWithdrawAmountLimit(totalCredits)
+  }, [totalCredits])
 
   // Errors States
   const [withdrawAmountError, setWithdrawAmountError] = useState('')

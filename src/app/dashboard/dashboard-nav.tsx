@@ -6,6 +6,7 @@ import {
   AlignRight,
   DollarSignIcon,
   HomeIcon,
+  Link2Icon,
   PercentIcon,
   Tractor,
   Users2
@@ -100,6 +101,17 @@ export default function Dashboard() {
           >
             <PercentIcon className='w-5 h-5' />
             نسب الأرباح
+          </Link>
+          <Link
+            href='/dashboard/social-links'
+            className={`flex items-center gap-4 px-2.5 ${
+              currentPath === '/dashboard/social-links'
+                ? 'text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <Link2Icon className='w-5 h-5' />
+            صفحات التواصل الاجتماعي
           </Link>
         </nav>
       </SheetContent>

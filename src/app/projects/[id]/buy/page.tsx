@@ -134,7 +134,9 @@ export default function BuyStocks({
 
       const {
         data: { newPercentage, isValid }
-      } = await axios.get(`${API_URL}/projects/checkPercentageCode/${percentageCode}`)
+      } = await axios.post(`${API_URL}/projects/checkPercentageCode/${percentageCode}`, {
+        projectId
+      })
 
       // make sure to view the response from the data
       if (isValid) {

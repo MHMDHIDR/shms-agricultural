@@ -15,6 +15,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'dev-shms-uploads.s3.eu-west-2.amazonaws.com',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
         hostname: 'source.unsplash.com',
         pathname: '/**'
       },

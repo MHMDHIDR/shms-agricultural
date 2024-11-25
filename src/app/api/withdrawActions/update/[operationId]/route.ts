@@ -58,7 +58,7 @@ export async function PATCH(
           data: { accounting_operation_status }
         })
 
-    const currentBalance = userExists.shms_user_withdrawable_balance
+    const currentBalance = userExists.shms_user_credits
     let userNewBalance = 0
 
     if (
@@ -90,7 +90,7 @@ export async function PATCH(
 
     await client.users.update({
       where: { id: userExists.id },
-      data: { shms_user_withdrawable_balance: userNewBalance }
+      data: { shms_user_credits: userNewBalance }
     })
 
     //send the user an email with a link to activate his/her account

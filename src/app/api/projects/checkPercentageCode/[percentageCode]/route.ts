@@ -1,15 +1,18 @@
 import client from '@/../prisma/prismadb'
+import { Projects } from '@prisma/client'
 
-export async function GET(
-  _req: Request,
+export async function POST(
+  req: Request,
   { params: { percentageCode } }: { params: { percentageCode: string } }
 ) {
-  if (!percentageCode) throw new Error('Project ID is required')
+  if (!percentageCode) throw new Error('Percentage ID is required')
+  const body = await req.json()
+  const { projectId }: { projectId: Projects['id'] } = body
 
   try {
     if (!percentageCode) {
       return new Response(
-        JSON.stringify({ project: null, message: 'عفواً لم يتم العثور على المشروع!' }),
+        JSON.stringify({ project: null, message: 'عفواً رمز زيادة النسبة غير فعال!' }),
         { status: 404 }
       )
     }
@@ -22,9 +25,14 @@ export async function GET(
     // Return project
     return !project || !project.id
       ? new Response(
+          JSON.stringify({ isValid: false, message: 'عفواً الرمز المدخل غير صالح' }),
+          { status: 404 }
+        )
+      : projectId !== project.id
+      ? new Response(
           JSON.stringify({
             isValid: false,
-            message: 'عفواً الرمز المدخل غير صالح'
+            message: 'عفواً الرمز المدخل غير فعال مع المشروع المحدد'
           }),
           { status: 404 }
         )

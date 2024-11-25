@@ -35,12 +35,9 @@ export async function PATCH(req: Request) {
       )
     }
 
-    // if paymentMethod === 'balance' then check if the user has enough balance
+    // if paymentMethod === 'balance' then check if the user has enough credits
     if (paymentMethod === 'balance') {
-      if (
-        user.shms_user_withdrawable_balance <
-        stocks * project.shms_project_stock_price
-      ) {
+      if (user.shms_user_credits < stocks * project.shms_project_stock_price) {
         return new Response(
           JSON.stringify({
             stocksPurchased: 0,
@@ -52,13 +49,10 @@ export async function PATCH(req: Request) {
     }
 
     const userPrevStocks = getUserPrevStocks(user)
-    const userPrevWithdrawableBalance = getUserPrevWithdrawableBalance(user)
-    const userPrevTotalBalance = getUserPrevTotalBalance(user)
+    const userCredits = getUserCredits(user)
     const projectAvailableStocks = getProjectStocks(project)
-    const newWithdrawableBalance =
-      Number(userPrevWithdrawableBalance) - stocks * project.shms_project_stock_price
-    const newTotalBalance =
-      Number(userPrevTotalBalance) + stocks * project.shms_project_stock_price
+    const newCreditsBalance =
+      Number(userCredits) - stocks * project.shms_project_stock_price
 
     // Construct the new user stocks array based on the condition
     const newUserStocks =
@@ -88,20 +82,13 @@ export async function PATCH(req: Request) {
       where: { id: userId },
       data: {
         shms_user_stocks: newUserStocks,
-        ...(paymentMethod === 'balance'
-          ? {
-              shms_user_withdrawable_balance: newWithdrawableBalance,
-              shms_user_total_balance: newTotalBalance
-            }
-          : {})
+        ...(paymentMethod === 'balance' ? { shms_user_credits: newCreditsBalance } : {})
       }
     })
 
     await client.projects.update({
       where: { id },
-      data: {
-        shms_project_available_stocks: projectAvailableStocks - stocks
-      }
+      data: { shms_project_available_stocks: projectAvailableStocks - stocks }
     })
 
     //send the user an email with a link to activate his/her account
@@ -148,7 +135,7 @@ export async function PATCH(req: Request) {
         JSON.stringify({
           stocksPurchased: 1,
           message: `تم تأكيد عملية الشراء بنجاح وإرسال بريد الكتروني بالتفاصيل
-         سيتم التواصل معك من فريق 
+         سيتم التواصل معك من فريق
          ${APP_TITLE}
          لتأكيد العملية ولإتمام باقي الإجراءات`
         }),
@@ -181,22 +168,10 @@ function getUserPrevStocks(user: Users) {
   return user.shms_user_stocks
 }
 
-function getUserPrevWithdrawableBalance(user: Users) {
-  if (
-    !user ||
-    !user.shms_user_withdrawable_balance ||
-    user.shms_user_withdrawable_balance === 0
-  )
-    return null
+function getUserCredits(user: Users) {
+  if (!user || !user.shms_user_credits) return 0
 
-  return user.shms_user_withdrawable_balance
-}
-
-function getUserPrevTotalBalance(user: Users) {
-  if (!user || !user.shms_user_total_balance || user.shms_user_total_balance === 0)
-    return null
-
-  return user.shms_user_total_balance
+  return user.shms_user_credits
 }
 
 function getProjectStocks(project: Projects) {

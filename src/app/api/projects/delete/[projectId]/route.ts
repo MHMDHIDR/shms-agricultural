@@ -4,7 +4,7 @@ export async function DELETE(
   _request: Request,
   { params: { projectId } }: { params: { projectId: string } }
 ) {
-  if (!projectId) throw new Error('User ID is required')
+  if (!projectId) throw new Error('Project ID is required')
 
   try {
     // Check if project exists
@@ -21,7 +21,23 @@ export async function DELETE(
       )
     }
 
-    // delete project
+    // find the users where the project is in their stocks by checking each object inside shms_user_stocks array and filter the object out (delete it)
+    const users = await client.users.findMany({
+      where: {
+        shms_user_stocks: { some: { id: projectId } }
+      }
+    })
+
+    // Delete the project stock from each user shms_user_stocks array by filtering it out
+    for (const user of users) {
+      const userStocks = user.shms_user_stocks.filter(stock => stock.id !== projectId)
+      await client.users.update({
+        where: { id: user.id },
+        data: { shms_user_stocks: { set: userStocks } }
+      })
+    }
+
+    // Delete the project
     const deleteProject = await client.projects.delete({ where: { id: projectId } })
     const projectDeleted = deleteProject.id === projectId ? 1 : 0
 

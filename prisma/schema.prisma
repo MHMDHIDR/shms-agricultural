@@ -24,11 +24,13 @@ enum ProjectStatus {
 }
 
 type Stocks {
-  id             String
-  stocks         Int
-  newPercentage  Int
-  percentageCode String
-  createdAt      DateTime
+  id               String
+  stocks           Int
+  newPercentage    Int
+  percentageCode   String
+  createdAt        DateTime
+  capitalDeposited Boolean  @default(false)
+  profitsDeposited Boolean  @default(false)
 }
 
 type ProjectImages {
@@ -67,37 +69,36 @@ model Projects {
 }
 
 model Users {
-  id                             String             @id @default(auto()) @map("_id") @db.ObjectId
-  shms_sn                        Int                @default(0)
-  shms_fullname                  String
-  shms_nationality               String
-  shms_date_of_birth             DateTime
-  shms_address                   String             @default("لم يتم إدخال العنوان")
-  shms_email                     String             @unique
-  shms_password                  String
-  shms_phone                     String
-  shms_doc                       String
-  shms_user_stocks               Stocks[]
-  shms_user_stock_limit          Int                @default(20)
-  shms_user_total_balance        Int                @default(0)
-  shms_user_withdrawable_balance Int                @default(0)
-  shms_created_at                DateTime           @default(now())
-  shms_user_account_type         UserType           @default(user)
-  shms_user_account_status       UserStatus         @default(active)
-  shms_user_reset_token          String?
-  shms_user_reset_token_expires  DateTime?
-  shms_user_is_deleted           Boolean            @default(false)
-  message                        String?
-  loggedIn                       Int?
-  userAdded                      Int?
-  userUpdated                    Int?
-  userActivated                  Int?
-  userWithdrawnBalance           Int?
-  forgotPassSent                 Int?
-  newPassSet                     Int?
-  resetEmail                     Int?
-  userDeleted                    Int?
-  withdraw_actions               withdraw_actions[] @relation("UserWithdrawActions")
+  id                            String             @id @default(auto()) @map("_id") @db.ObjectId
+  shms_sn                       Int                @default(0)
+  shms_fullname                 String
+  shms_nationality              String
+  shms_date_of_birth            DateTime
+  shms_address                  String             @default("لم يتم إدخال العنوان")
+  shms_email                    String             @unique
+  shms_password                 String
+  shms_phone                    String
+  shms_doc                      String
+  shms_user_stocks              Stocks[]
+  shms_user_stock_limit         Int                @default(20)
+  shms_user_credits             Int                @default(0)
+  shms_created_at               DateTime           @default(now())
+  shms_user_account_type        UserType           @default(user)
+  shms_user_account_status      UserStatus         @default(active)
+  shms_user_reset_token         String?
+  shms_user_reset_token_expires DateTime?
+  shms_user_is_deleted          Boolean            @default(false)
+  message                       String?
+  loggedIn                      Int?
+  userAdded                     Int?
+  userUpdated                   Int?
+  userActivated                 Int?
+  userWithdrawnBalance          Int?
+  forgotPassSent                Int?
+  newPassSet                    Int?
+  resetEmail                    Int?
+  userDeleted                   Int?
+  withdraw_actions              withdraw_actions[] @relation("UserWithdrawActions")
 
   @@map("users")
 }
@@ -115,4 +116,19 @@ model withdraw_actions {
   user                        Users    @relation(fields: [shms_user_id], references: [id], name: "UserWithdrawActions") // Child side
 
   @@map("withdraw_actions")
+}
+
+enum SocialType {
+  facebook
+  x
+  instagram
+  youtube
+}
+
+model SocialLinks {
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  shms_social_link String
+  shms_social_type SocialType
+
+  @@map("social_links")
 }

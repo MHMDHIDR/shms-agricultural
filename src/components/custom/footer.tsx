@@ -1,3 +1,5 @@
+'use client'
+
 import Divider from '@/components/custom/divider'
 import {
   FacebookIcon,
@@ -5,46 +7,52 @@ import {
   TwitterIcon,
   YouTubeIcon
 } from '@/components/icons/socials'
-import { APP_TITLE } from '@/data/constants'
+import { API_URL, APP_TITLE } from '@/data/constants'
+import { SocialLinks } from '@prisma/client'
+import axios, { AxiosResponse } from 'axios'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 export default function Footer() {
+  const [socialLinks, setSocialLinks] = useState<SocialLinks[]>([])
+
+  useEffect(() => {
+    const fetchSocialLinks = async () => {
+      try {
+        const response: AxiosResponse<any, SocialLinks> = await axios.get(
+          `${API_URL}/socialLinks`
+        )
+        setSocialLinks(response.data)
+      } catch (error) {
+        console.error('Error fetching social links:', error)
+      }
+    }
+    fetchSocialLinks()
+  }, [])
+
   return (
     <footer className='w-screen mt-20'>
       <Divider />
       <section className='flex items-center justify-center w-full h-12 rtl gap-x-20'>
-        <Link
-          className='opacity-60 hover:opacity-90 hover:-translate-y-1 transition'
-          href='https://facebook.com'
-          target='_blank'
-          aria-label='صفحتنا على الفيسبوك'
-        >
-          <FacebookIcon className='w-5 h-5 md:w-6 md:h-6' />
-        </Link>
-        <Link
-          className='opacity-60 hover:opacity-90 hover:-translate-y-1 transition'
-          href='https://instagram.com/shmsagri'
-          target='_blank'
-          aria-label='صفحتنا على الانستغرام'
-        >
-          <InstagramIcon className='w-5 h-5 md:w-6 md:h-6' />
-        </Link>
-        <Link
-          className='opacity-60 hover:opacity-90 hover:-translate-y-1 transition'
-          href='https://youtube.com'
-          target='_blank'
-          aria-label='قناتنا على اليوتيوب'
-        >
-          <YouTubeIcon className='w-5 h-5 md:w-6 md:h-6' />
-        </Link>
-        <Link
-          className='opacity-60 hover:opacity-90 hover:-translate-y-1 transition'
-          href='https://twitter.com'
-          target='_blank'
-          aria-label='حسابنا على تويتر'
-        >
-          <TwitterIcon className='w-5 h-5 md:w-6 md:h-6' />
-        </Link>
+        {socialLinks.map(link => (
+          <Link
+            key={link.id}
+            href={link.shms_social_link}
+            target='_blank'
+            className='opacity-60 hover:opacity-90 hover:-translate-y-1 transition'
+            aria-label={`صفحتنا على ${link.shms_social_type}`}
+          >
+            {link.shms_social_type === 'facebook' ? (
+              <FacebookIcon className='w-5 h-5 md:w-6 md:h-6' />
+            ) : link.shms_social_type === 'instagram' ? (
+              <InstagramIcon className='w-5 h-5 md:w-6 md:h-6' />
+            ) : link.shms_social_type === 'youtube' ? (
+              <YouTubeIcon className='w-5 h-5 md:w-6 md:h-6' />
+            ) : (
+              <TwitterIcon className='w-5 h-5 md:w-6 md:h-6' />
+            )}
+          </Link>
+        ))}
       </section>
       <section className='flex items-center justify-center w-full h-12 text-sm rtl gap-x-3'>
         <Link

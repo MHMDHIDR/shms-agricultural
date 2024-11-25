@@ -22,13 +22,7 @@ export async function GET(
       })
     }
 
-    return new Response(
-      JSON.stringify({
-        totalAmount: user.shms_user_total_balance,
-        withdrawableAmount: user.shms_user_withdrawable_balance,
-        shms_user_stocks: user.shms_user_stock_limit
-      })
-    )
+    return new Response(JSON.stringify({ shms_user_stocks: user.shms_user_stock_limit }))
   } catch (error) {
     console.error(error)
     throw new Error('Error during authorization')
