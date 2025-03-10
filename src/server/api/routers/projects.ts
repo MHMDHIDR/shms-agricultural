@@ -166,7 +166,7 @@ export const projectRouter = createTRPCRouter({
           project: result.project,
           purchaseDetails: {
             ...input,
-            createdAt: new Date().toISOString(),
+            createdAt: new Date(),
           },
         })
       } catch (error) {
@@ -573,7 +573,7 @@ export const projectRouter = createTRPCRouter({
         totalPayment: z.number(),
         totalProfit: z.number(),
         totalReturn: z.number(),
-        createdAt: z.string(),
+        createdAt: z.date(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -583,41 +583,26 @@ export const projectRouter = createTRPCRouter({
         throw new Error("User not authenticated")
       }
 
+      const [project, user] = await Promise.all([
+        ctx.db.projects.findUnique({ where: { id: input.projectId } }),
+        ctx.db.user.findUnique({ where: { id: userId } }),
+      ])
+
+      if (!project || !user) {
+        throw new Error("Project or user not found")
+      }
+
       try {
-        const [project, user] = await Promise.all([
-          ctx.db.projects.findUnique({ where: { id: input.projectId } }),
-          ctx.db.user.findUnique({ where: { id: userId } }),
-        ])
+        await sendPurchaseConfirmationEmail({
+          user,
+          project,
+          purchaseDetails: input,
+        })
 
-        if (!project || !user) {
-          throw new Error("Project or user not found")
-        }
-
-        // Return success immediately and send email in the background
-        // This prevents the client from waiting for the PDF generation
-        setTimeout(() => {
-          // Use void to indicate we're intentionally ignoring the promise
-          void (async () => {
-            try {
-              await sendPurchaseConfirmationEmail({
-                user,
-                project,
-                purchaseDetails: input,
-              })
-              console.log("Contract email sent successfully in background")
-            } catch (error) {
-              console.error("Failed to send contract email in background:", error)
-            }
-          })()
-        }, 0)
-
-        return {
-          success: true,
-          message: "تم إرسال طلب العقد بنجاح. سيصلك على البريد الإلكتروني قريباً",
-        }
+        return { success: true }
       } catch (error) {
-        console.error("Error in sendPurchaseContract:", error)
-        throw new Error("Failed to process contract request")
+        console.error("Failed to send contract email:", error)
+        throw new Error("Failed to send contract email")
       }
     }),
 

@@ -14,7 +14,6 @@ import { Resend } from "resend"
 import { env } from "@/env"
 import { ADMIN_EMAIL, APP_CURRENCY, APP_TITLE } from "@/lib/constants"
 import { generatePurchasePDF } from "@/lib/generate-purchase-pdf"
-import type { PurchaseDetails } from "@/lib/generate-purchase-pdf"
 import type { Projects, User } from "@prisma/client"
 import type { CreateEmailResponse } from "resend"
 
@@ -23,7 +22,14 @@ const baseUrl = env.NEXT_PUBLIC_APP_URL
 type PurchaseConfirmationEmailProps = {
   user: User
   project: Projects
-  purchaseDetails: PurchaseDetails
+  purchaseDetails: {
+    stocks: number
+    newPercentage: number
+    totalPayment: number
+    totalProfit: number
+    totalReturn: number
+    createdAt: Date
+  }
 }
 
 export const PurchaseConfirmationEmail = ({
@@ -105,46 +111,23 @@ export const sendPurchaseConfirmationEmail = async ({
   project,
   purchaseDetails,
 }: PurchaseConfirmationEmailProps): Promise<CreateEmailResponse> => {
-  try {
-    // Prepare the email content
-    const emailContent = {
-      from: `${APP_TITLE} <${ADMIN_EMAIL}>`,
-      to: user.email,
-      subject: `${APP_TITLE} | تأكيد شراء الأسهم`,
-      react: PurchaseConfirmationEmail({
-        user,
-        project,
-        purchaseDetails,
-      }),
-    }
+  // Generate PDF
+  const pdfBuffer = await generatePurchasePDF(user, project, purchaseDetails)
 
-    // Try to generate PDF
-    try {
-      // Set a timeout for the PDF generation - increased to 2 minutes
-      const pdfPromise = generatePurchasePDF(user, project, purchaseDetails)
-      const timeoutPromise = new Promise<Buffer>((_, reject) => {
-        setTimeout(() => reject(new Error("PDF generation timeout")), 120000) // 120 seconds timeout (2 minutes)
-      })
-
-      const pdfBuffer = await Promise.race([pdfPromise, timeoutPromise])
-
-      // If PDF generation succeeds, add attachment
-      return RESEND.emails.send({
-        ...emailContent,
-        attachments: [
-          {
-            filename: `${project.projectName}-contract-${user.name}.pdf`,
-            content: pdfBuffer,
-          },
-        ],
-      })
-    } catch (error) {
-      // If PDF generation fails, send email without attachment
-      console.error("Error generating PDF, sending email without attachment:", error)
-      return RESEND.emails.send(emailContent)
-    }
-  } catch (error) {
-    console.error("Failed to send purchase confirmation email:", error)
-    throw new Error("Failed to send purchase confirmation email")
-  }
+  return RESEND.emails.send({
+    from: `${APP_TITLE} <${ADMIN_EMAIL}>`,
+    to: user.email,
+    subject: `${APP_TITLE} | تأكيد شراء الأسهم`,
+    react: PurchaseConfirmationEmail({
+      user,
+      project,
+      purchaseDetails,
+    }),
+    attachments: [
+      {
+        filename: `${project.projectName}-contract-${user.name}.pdf`,
+        content: pdfBuffer,
+      },
+    ],
+  })
 }
