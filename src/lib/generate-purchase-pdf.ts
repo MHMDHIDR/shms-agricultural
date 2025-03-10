@@ -4,13 +4,13 @@ import { APP_CURRENCY, APP_TITLE } from "./constants"
 import { formatDate } from "./format-date"
 import type { Projects, User } from "@prisma/client"
 
-type PurchaseDetails = {
+export type PurchaseDetails = {
   stocks: number
   newPercentage: number
   totalPayment: number
   totalProfit: number
   totalReturn: number
-  createdAt: Date
+  createdAt: string
 }
 
 export async function generatePurchasePDF(
@@ -97,7 +97,7 @@ export async function generatePurchasePDF(
         </tr>
         <tr>
           <td>تاريخ الشراء</td>
-          <td>${formatDate({ date: purchaseDetails.createdAt.toISOString(), isFullTimestamp: true })}</td>
+          <td>${formatDate({ date: purchaseDetails.createdAt, isFullTimestamp: true })}</td>
         </tr>
       </table>
 

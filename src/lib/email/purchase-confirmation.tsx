@@ -13,7 +13,7 @@ import * as React from "react"
 import { Resend } from "resend"
 import { env } from "@/env"
 import { ADMIN_EMAIL, APP_CURRENCY, APP_TITLE } from "@/lib/constants"
-import { generatePurchasePDF } from "@/lib/generate-purchase-pdf"
+import { generatePurchasePDF, PurchaseDetails } from "@/lib/generate-purchase-pdf"
 import type { Projects, User } from "@prisma/client"
 import type { CreateEmailResponse } from "resend"
 
@@ -22,14 +22,7 @@ const baseUrl = env.NEXT_PUBLIC_APP_URL
 type PurchaseConfirmationEmailProps = {
   user: User
   project: Projects
-  purchaseDetails: {
-    stocks: number
-    newPercentage: number
-    totalPayment: number
-    totalProfit: number
-    totalReturn: number
-    createdAt: Date
-  }
+  purchaseDetails: PurchaseDetails
 }
 
 export const PurchaseConfirmationEmail = ({

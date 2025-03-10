@@ -166,7 +166,7 @@ export const projectRouter = createTRPCRouter({
           project: result.project,
           purchaseDetails: {
             ...input,
-            createdAt: new Date(),
+            createdAt: new Date().toISOString(),
           },
         })
       } catch (error) {
@@ -573,7 +573,7 @@ export const projectRouter = createTRPCRouter({
         totalPayment: z.number(),
         totalProfit: z.number(),
         totalReturn: z.number(),
-        createdAt: z.date(),
+        createdAt: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

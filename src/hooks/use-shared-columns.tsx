@@ -1178,7 +1178,7 @@ export function useSharedColumns<T extends BaseEntity>({
             totalReturn:
               stock.stocks * stock.project.projectStockPrice +
               stock.project.projectStockProfits * stock.stocks * (1 + stock.newPercentage / 100),
-            createdAt: stock.createdAt,
+            createdAt: stock.createdAt.toISOString(),
           })
         }
 
