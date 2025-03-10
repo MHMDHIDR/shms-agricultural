@@ -1,4 +1,3 @@
-import puppeteer from "puppeteer-core"
 import { env } from "@/env"
 import { APP_CURRENCY, APP_TITLE } from "./constants"
 import { formatDate } from "./format-date"
@@ -18,13 +17,6 @@ export async function generatePurchasePDF(
   project: Projects,
   purchaseDetails: PurchaseDetails,
 ): Promise<Buffer> {
-  const browser = await puppeteer.connect({
-    browserWSEndpoint: `wss://chrome.browserless.io?token=${env.BROWSERLESS_API_KEY}`,
-  })
-
-  const page = await browser.newPage()
-  await page.setViewport({ width: 1920, height: 1080 })
-
   const content = `
     <!DOCTYPE html>
     <html dir="rtl">
@@ -112,18 +104,33 @@ export async function generatePurchasePDF(
     </html>
   `
 
-  await page.setContent(content)
-  const pdf = await page.pdf({
-    format: "A4",
-    printBackground: true,
-    margin: {
-      top: "20px",
-      right: "20px",
-      bottom: "20px",
-      left: "20px",
+  // Use the REST API instead of WebSocket connection
+  const url = `https://chrome.browserless.io/pdf?token=${env.BROWSERLESS_API_KEY}`
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      html: content,
+      options: {
+        format: "A4",
+        printBackground: true,
+        margin: {
+          top: "20px",
+          right: "20px",
+          bottom: "20px",
+          left: "20px",
+        },
+      },
+    }),
   })
 
-  await browser.close()
-  return Buffer.from(pdf)
+  if (!response.ok) {
+    throw new Error(`Failed to generate PDF: ${response.statusText}`)
+  }
+
+  const buffer = await response.arrayBuffer()
+  return Buffer.from(buffer)
 }
