@@ -20,8 +20,8 @@ export async function generatePurchasePDF(
 ): Promise<Buffer> {
   let browser = null
   try {
-    // Set a connection timeout in the URL
-    const browserWSEndpoint = `wss://chrome.browserless.io?token=${env.BROWSERLESS_API_KEY}&timeout=60000`
+    // Set a connection timeout in the URL with a longer timeout for production
+    const browserWSEndpoint = `wss://chrome.browserless.io?token=${env.BROWSERLESS_API_KEY}&timeout=120000`
 
     browser = await puppeteer.connect({
       browserWSEndpoint,
@@ -30,18 +30,21 @@ export async function generatePurchasePDF(
     const page = await browser.newPage()
     await page.setViewport({ width: 1920, height: 1080 })
 
-    // Set a navigation timeout
-    page.setDefaultNavigationTimeout(30000)
+    // Set a longer navigation timeout
+    page.setDefaultNavigationTimeout(60000)
 
+    // Optimize page for PDF generation
+    await page.emulateMediaType("screen")
+
+    // Simplified content with fewer external resources
     const content = `
       <!DOCTYPE html>
       <html dir="rtl">
       <head>
         <meta charset="UTF-8">
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic&display=swap');
           body {
-            font-family: 'Noto Naskh Arabic', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             padding: 40px;
             direction: rtl;
           }
@@ -120,9 +123,10 @@ export async function generatePurchasePDF(
       </html>
     `
 
-    await page.setContent(content, { timeout: 30000 })
+    // Set a longer timeout for content loading
+    await page.setContent(content, { timeout: 60000 })
 
-    // Set a timeout for PDF generation
+    // Set a longer timeout for PDF generation and optimize for size
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
@@ -132,7 +136,7 @@ export async function generatePurchasePDF(
         bottom: "20px",
         left: "20px",
       },
-      timeout: 60000,
+      timeout: 120000,
     })
 
     return Buffer.from(pdf)

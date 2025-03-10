@@ -106,32 +106,22 @@ export const sendPurchaseConfirmationEmail = async ({
   purchaseDetails,
 }: PurchaseConfirmationEmailProps): Promise<CreateEmailResponse> => {
   try {
-    // Generate PDF with a timeout
-    let pdfBuffer: Buffer
+    // Generate PDF with a longer timeout for production
+    let pdfBuffer: Buffer | null = null
     try {
-      // Set a timeout for the PDF generation
+      // Set a timeout for the PDF generation - increased to 2 minutes
       const pdfPromise = generatePurchasePDF(user, project, purchaseDetails)
       const timeoutPromise = new Promise<Buffer>((_, reject) => {
-        setTimeout(() => reject(new Error("PDF generation timeout")), 60000) // 60 seconds timeout
+        setTimeout(() => reject(new Error("PDF generation timeout")), 120000) // 120 seconds timeout (2 minutes)
       })
 
       pdfBuffer = await Promise.race([pdfPromise, timeoutPromise])
     } catch (error) {
       console.error("Error generating PDF, sending email without attachment:", error)
-      // Send email without attachment if PDF generation fails
-      return RESEND.emails.send({
-        from: `${APP_TITLE} <${ADMIN_EMAIL}>`,
-        to: user.email,
-        subject: `${APP_TITLE} | تأكيد شراء الأسهم`,
-        react: PurchaseConfirmationEmail({
-          user,
-          project,
-          purchaseDetails,
-        }),
-      })
+      pdfBuffer = null // Ensure pdfBuffer is null if generation fails
     }
 
-    // Send email with attachment
+    // Send email with or without attachment based on PDF generation success
     return RESEND.emails.send({
       from: `${APP_TITLE} <${ADMIN_EMAIL}>`,
       to: user.email,
@@ -141,12 +131,14 @@ export const sendPurchaseConfirmationEmail = async ({
         project,
         purchaseDetails,
       }),
-      attachments: [
-        {
-          filename: `${project.projectName}-contract-${user.name}.pdf`,
-          content: pdfBuffer,
-        },
-      ],
+      ...(pdfBuffer && {
+        attachments: [
+          {
+            filename: `${project.projectName}-contract-${user.name}.pdf`,
+            content: pdfBuffer,
+          },
+        ],
+      }),
     })
   } catch (error) {
     console.error("Failed to send purchase confirmation email:", error)
