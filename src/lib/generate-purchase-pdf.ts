@@ -142,8 +142,8 @@ export async function generatePurchasePDF(
     return Buffer.from(pdf)
   } catch (error) {
     console.error("Error generating PDF:", error)
-    // Return a simple fallback PDF if generation fails
-    return createFallbackPDF(user, project, purchaseDetails)
+    // Instead of using fallback PDF, just throw the error to be handled by the caller
+    throw error
   } finally {
     if (browser) {
       try {
@@ -153,66 +153,4 @@ export async function generatePurchasePDF(
       }
     }
   }
-}
-
-// Create a simple fallback PDF without using Puppeteer
-function createFallbackPDF(
-  user: User,
-  project: Projects,
-  purchaseDetails: PurchaseDetails,
-): Buffer {
-  // This is a very simple PDF content
-  const pdfContent = `
-%PDF-1.4
-1 0 obj
-<< /Type /Catalog /Pages 2 0 R >>
-endobj
-2 0 obj
-<< /Type /Pages /Kids [3 0 R] /Count 1 >>
-endobj
-3 0 obj
-<< /Type /Page /Parent 2 0 R /Resources 4 0 R /MediaBox [0 0 595 842] /Contents 5 0 R >>
-endobj
-4 0 obj
-<< /Font << /F1 6 0 R >> >>
-endobj
-5 0 obj
-<< /Length 271 >>
-stream
-BT
-/F1 12 Tf
-50 800 Td
-(${APP_TITLE} - Purchase Contract) Tj
-0 -20 Td
-(Investor: ${user.name}) Tj
-0 -20 Td
-(Project: ${project.projectName}) Tj
-0 -20 Td
-(Stocks: ${purchaseDetails.stocks}) Tj
-0 -20 Td
-(Total Payment: ${purchaseDetails.totalPayment} ${APP_CURRENCY}) Tj
-0 -20 Td
-(Total Return: ${purchaseDetails.totalReturn} ${APP_CURRENCY}) Tj
-ET
-endstream
-endobj
-6 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
-endobj
-xref
-0 7
-0000000000 65535 f
-0000000009 00000 n
-0000000058 00000 n
-0000000115 00000 n
-0000000214 00000 n
-0000000259 00000 n
-0000000582 00000 n
-trailer
-<< /Size 7 /Root 1 0 R >>
-startxref
-649
-%%EOF
-  `
-  return Buffer.from(pdfContent)
 }

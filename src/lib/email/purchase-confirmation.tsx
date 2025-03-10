@@ -106,23 +106,8 @@ export const sendPurchaseConfirmationEmail = async ({
   purchaseDetails,
 }: PurchaseConfirmationEmailProps): Promise<CreateEmailResponse> => {
   try {
-    // Generate PDF with a longer timeout for production
-    let pdfBuffer: Buffer | null = null
-    try {
-      // Set a timeout for the PDF generation - increased to 2 minutes
-      const pdfPromise = generatePurchasePDF(user, project, purchaseDetails)
-      const timeoutPromise = new Promise<Buffer>((_, reject) => {
-        setTimeout(() => reject(new Error("PDF generation timeout")), 120000) // 120 seconds timeout (2 minutes)
-      })
-
-      pdfBuffer = await Promise.race([pdfPromise, timeoutPromise])
-    } catch (error) {
-      console.error("Error generating PDF, sending email without attachment:", error)
-      pdfBuffer = null // Ensure pdfBuffer is null if generation fails
-    }
-
-    // Send email with or without attachment based on PDF generation success
-    return RESEND.emails.send({
+    // Prepare the email content
+    const emailContent = {
       from: `${APP_TITLE} <${ADMIN_EMAIL}>`,
       to: user.email,
       subject: `${APP_TITLE} | تأكيد شراء الأسهم`,
@@ -131,15 +116,33 @@ export const sendPurchaseConfirmationEmail = async ({
         project,
         purchaseDetails,
       }),
-      ...(pdfBuffer && {
+    }
+
+    // Try to generate PDF
+    try {
+      // Set a timeout for the PDF generation - increased to 2 minutes
+      const pdfPromise = generatePurchasePDF(user, project, purchaseDetails)
+      const timeoutPromise = new Promise<Buffer>((_, reject) => {
+        setTimeout(() => reject(new Error("PDF generation timeout")), 120000) // 120 seconds timeout (2 minutes)
+      })
+
+      const pdfBuffer = await Promise.race([pdfPromise, timeoutPromise])
+
+      // If PDF generation succeeds, add attachment
+      return RESEND.emails.send({
+        ...emailContent,
         attachments: [
           {
             filename: `${project.projectName}-contract-${user.name}.pdf`,
             content: pdfBuffer,
           },
         ],
-      }),
-    })
+      })
+    } catch (error) {
+      // If PDF generation fails, send email without attachment
+      console.error("Error generating PDF, sending email without attachment:", error)
+      return RESEND.emails.send(emailContent)
+    }
   } catch (error) {
     console.error("Failed to send purchase confirmation email:", error)
     throw new Error("Failed to send purchase confirmation email")
