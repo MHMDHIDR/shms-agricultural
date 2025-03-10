@@ -583,26 +583,41 @@ export const projectRouter = createTRPCRouter({
         throw new Error("User not authenticated")
       }
 
-      const [project, user] = await Promise.all([
-        ctx.db.projects.findUnique({ where: { id: input.projectId } }),
-        ctx.db.user.findUnique({ where: { id: userId } }),
-      ])
-
-      if (!project || !user) {
-        throw new Error("Project or user not found")
-      }
-
       try {
-        await sendPurchaseConfirmationEmail({
-          user,
-          project,
-          purchaseDetails: input,
-        })
+        const [project, user] = await Promise.all([
+          ctx.db.projects.findUnique({ where: { id: input.projectId } }),
+          ctx.db.user.findUnique({ where: { id: userId } }),
+        ])
 
-        return { success: true }
+        if (!project || !user) {
+          throw new Error("Project or user not found")
+        }
+
+        // Return success immediately and send email in the background
+        // This prevents the client from waiting for the PDF generation
+        setTimeout(() => {
+          // Use void to indicate we're intentionally ignoring the promise
+          void (async () => {
+            try {
+              await sendPurchaseConfirmationEmail({
+                user,
+                project,
+                purchaseDetails: input,
+              })
+              console.log("Contract email sent successfully in background")
+            } catch (error) {
+              console.error("Failed to send contract email in background:", error)
+            }
+          })()
+        }, 0)
+
+        return {
+          success: true,
+          message: "تم إرسال طلب العقد بنجاح. سيصلك على البريد الإلكتروني قريباً",
+        }
       } catch (error) {
-        console.error("Failed to send contract email:", error)
-        throw new Error("Failed to send contract email")
+        console.error("Error in sendPurchaseContract:", error)
+        throw new Error("Failed to process contract request")
       }
     }),
 
