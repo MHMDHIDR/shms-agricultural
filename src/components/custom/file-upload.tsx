@@ -1,222 +1,239 @@
-import { useContext } from 'react'
-import Confirm from '@/components/custom/confirm'
-import { Error, Success } from '@/components/icons/status'
-import { Button } from '@/components/ui/button'
-import { Card, CardDescription } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import {
-  API_URL,
-  APP_LOGO_sm,
-  APP_TITLE,
-  DEFAULT_DURATION,
-  FILE_UPLOAD_IMG_SIZE
-} from '@/data/constants'
-import { FileUploadContext } from '@/providers/file-upload'
-import axios from 'axios'
-import Image from 'next/image'
-import { toast } from 'sonner'
-import type { FileUploadComponentProps, FileUploadProps, imgsProps } from '@/types'
-import type { Projects } from '@prisma/client'
+import { File, X } from "lucide-react"
+import Image from "next/image"
+import React, { useCallback, useState } from "react"
+import { useDropzone } from "react-dropzone"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { ConfirmationDialog } from "./confirmation-dialog"
 
-const FileUpload = ({
-  data,
-  ignoreRequired = false,
-  id,
-  setIsRefetching
-}: FileUploadComponentProps) => {
-  const { file, fileURLs, onFileRemove, onFileAdd } =
-    useContext<FileUploadProps>(FileUploadContext)
+export type UploadedFile = {
+  imgDisplayName: string
+  imgDisplayPath: string
+}
 
-  const handleDeleteProjectImg = async (
-    e: React.MouseEvent<HTMLButtonElement>
-  ): Promise<void> => {
-    const AWS_URI_END = `amazonaws.com`
-    const { id: imageDisplayPath } = e.target as HTMLButtonElement
-    const imageId = imageDisplayPath.split(AWS_URI_END)[1] as string
-    const { shmsProjectImages } = e.currentTarget.dataset as { shmsProjectImages: string }
-    const projectId = imageId.split('-SHMS-')[1]
-    const imgToDelete = imageId.split(`${projectId}/`)[1]
+type FileUploadProps = {
+  onFilesSelected: (files: Array<File>) => void
+  disabled?: boolean
+  accept?: Record<string, string[]> | string
+  maxFiles?: number
+  className?: string
+  isPreviewHidden?: boolean
+  multiple?: boolean
+  uploadedFiles?: UploadedFile[]
+  fileType?: "image" | "studyCase"
+  onDeleteUploadedFile?: (file: UploadedFile) => Promise<void>
+}
 
-    // remove the deleted image using imageId from shmsProjectImages array
-    // and return the new array without the deleted image
-    const shms_project_images: imgsProps[] = JSON.parse(shmsProjectImages).filter(
-      (img: imgsProps) => img.imgDisplayName !== imgToDelete
-    )
+function isImageFile(path: string) {
+  // First try with regex
+  const hasImageExtension = /\.(jpg|jpeg|png|webp|gif)$/i.test(path)
+  if (hasImageExtension) return true
 
-    try {
-      // delete user document from s3 bucket
-      const {
-        data: { docDeleted }
-      }: { data: { docDeleted: boolean } } = await axios.delete(
-        decodeURI(`${API_URL}/deleteFromS3/${imageId.split(`${projectId}/`)[1]}`),
-        { data: { imageId: imageId.slice(1) } }
-      )
-
-      // update the project images array in the database
-      const { data }: { data: Projects } = await axios.patch(
-        `${API_URL}/projects/edit/${projectId}`,
-        { shms_project_images, updateImg: true }
-      )
-
-      // make sure to view the response from the data
-      if (data.projectUpdated === 1 && docDeleted) {
-        toast('تم حذف صورة المشروع بنجاح 👍🏼', {
-          icon: <Success className='w-6 h-6 ml-3' />,
-          position: 'bottom-center',
-          className: 'text-right select-none rtl',
-          duration: DEFAULT_DURATION,
-          style: {
-            backgroundColor: '#F0FAF0',
-            color: '#367E18',
-            border: '1px solid #367E18',
-            gap: '1.5rem',
-            textAlign: 'justify'
-          }
-        })
-
-        setIsRefetching && setIsRefetching(true)
-      } else {
-        toast('حدث خطأ ما', {
-          icon: <Error className='w-6 h-6 ml-3' />,
-          position: 'bottom-center',
-          className: 'text-right select-none rtl',
-          style: {
-            backgroundColor: '#FFF0F0',
-            color: '#BE2A2A',
-            border: '1px solid #BE2A2A',
-            gap: '1.5rem',
-            textAlign: 'justify'
-          }
-        })
-      }
-    } catch (error) {
-      toast('حدث خطأ ما', {
-        icon: <Error className='w-6 h-6 ml-3' />,
-        position: 'bottom-center',
-        className: 'text-right select-none rtl',
-        style: {
-          backgroundColor: '#FFF0F0',
-          color: '#BE2A2A',
-          border: '1px solid #BE2A2A',
-          gap: '1.5rem',
-          textAlign: 'justify'
-        }
-      })
-      console.error('Error =>', error)
-    }
-  }
-
+  // If regex fails, try checking if the URL contains image-related keywords
+  const lowerPath = path.toLowerCase()
   return (
-    <>
-      {
-        //if there's no image in Preview (fileURLs) AND no images in the data base
-        data.defaultImg.length === 0 ||
-        (fileURLs.length === 0 && data.defaultImg[0]?.imgDisplayName === APP_TITLE) ? (
-          <div
-            className={`flex col-span-full items-center gap-y-3 max-h-44 h-44 place-content-center`}
-          >
-            <Image
-              priority={true}
-              src={APP_LOGO_sm}
-              alt={APP_TITLE}
-              height={FILE_UPLOAD_IMG_SIZE}
-              width={FILE_UPLOAD_IMG_SIZE}
-              className='object-cover w-32 h-32 p-1 border border-gray-400 min-h-fit dark:border-gray-300 rounded-xl'
-            />
-          </div>
-        ) : //if there's image in Preview (fileURLs)
-        fileURLs.length > 0 ? (
-          fileURLs.map((fileURL: string, index: number) => (
-            <div
-              key={fileURL}
-              className={`flex items-center flex-col gap-y-3 max-h-44 h-44 place-content-center`}
-            >
-              <Image
-                src={fileURL}
-                alt={data?.imgName ?? APP_TITLE}
-                height={FILE_UPLOAD_IMG_SIZE}
-                width={FILE_UPLOAD_IMG_SIZE}
-                className={`object-cover p-1 border border-gray-400 max-w-[7rem] w-32 min-h-fit h-32 dark:border-gray-300 rounded-xl`}
-              />
-              <Button
-                type='button'
-                variant={'destructive'}
-                onClick={() => onFileRemove(fileURL, file[index]?.name ?? '')}
-              >
-                حذف
-              </Button>
-            </div>
-          ))
-        ) : data.defaultImg.length > 0 &&
-          data.defaultImg[0]?.imgDisplayName !== APP_TITLE ? (
-          //if there're existing images in the data base
-          data.defaultImg.map(
-            ({ imgDisplayName, imgDisplayPath }: imgsProps, idx: number) => (
-              <div
-                className={`flex flex-col items-center gap-y-3 max-h-44 h-44 place-content-center`}
-                key={data.projectId! + idx}
-              >
-                <Image
-                  src={imgDisplayPath ?? APP_LOGO_sm}
-                  alt={imgDisplayName ?? APP_TITLE}
-                  height={FILE_UPLOAD_IMG_SIZE}
-                  width={FILE_UPLOAD_IMG_SIZE}
-                  priority={true}
-                  className='object-cover w-32 h-32 p-1 border border-gray-400 min-h-fit dark:border-gray-300 rounded-xl'
-                />
-                <Confirm
-                  imageId={imgDisplayPath}
-                  shmsProjectImages={JSON.stringify(data.defaultImg)}
-                  variant={'destructive'}
-                  onClick={handleDeleteProjectImg}
-                  message='هل أنت متأكد من حذف هذه الصورة؟'
-                >
-                  حذف
-                </Confirm>
-              </div>
-            )
-          )
-        ) : (
-          <Card className='col-span-full bg-destructive'>
-            <CardDescription className='flex items-center justify-center py-4 text-lg font-bold text-white select-none'>
-              <Error className='w-8 h-8 ml-4' />
-              هنالك خلل في عرض صور لهذا المشروع 😕
-            </CardDescription>
-          </Card>
-        )
-      }
-
-      {/* Label and Input */}
-      <Label
-        htmlFor='projectImg'
-        className={`grid col-span-full h-fit place-items-center justify-center gap-5 p-3 overflow-y-auto border border-gray-200 hover:bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-700 hover:dark:bg-gray-600 transition-colors duration-300`}
-      >
-        {id && fileURLs.length > 0 && (
-          <p className='text-center text-green-700 dark:text-green-400'>
-            لا تنسى الضغط على زر حفظ التعديلات في أسفل النموذج لحفظ{' '}
-            <strong>الصور الجديدة</strong>
-          </p>
-        )}
-
-        <Button className='pointer-events-none'>
-          تم إختيار
-          <span className='px-4 text-lg font-bold text-white'>{file.length ?? 0}</span>
-          {file.length > 1 ? 'صور' : 'صورة'}
-        </Button>
-
-        <input
-          type='file'
-          name='projectImg'
-          id='projectImg'
-          className='hidden p-3 text-lg text-white bg-green-800 cursor-pointer transition-colors rounded-xl hover:bg-green-700'
-          accept='image/*'
-          onChange={onFileAdd}
-          multiple
-          required={!ignoreRequired}
-        />
-      </Label>
-    </>
+    lowerPath.includes("/images/") ||
+    lowerPath.includes("/img/") ||
+    lowerPath.includes("image") ||
+    lowerPath.includes(".jpg") ||
+    lowerPath.includes(".jpeg") ||
+    lowerPath.includes(".png") ||
+    lowerPath.includes(".webp") ||
+    lowerPath.includes(".gif")
   )
 }
 
-export default FileUpload
+export function FileUpload({
+  onFilesSelected,
+  disabled = false,
+  accept,
+  maxFiles,
+  className,
+  isPreviewHidden = false,
+  multiple = false,
+  uploadedFiles = [],
+  fileType,
+  onDeleteUploadedFile,
+}: FileUploadProps) {
+  const [previews, setPreviews] = useState<Array<{ url: string; name: string }>>([])
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [fileToDelete, setFileToDelete] = useState<UploadedFile | null>(null)
+
+  const clearPreviews = () => {
+    previews.forEach(preview => URL.revokeObjectURL(preview.url))
+    setPreviews([])
+    onFilesSelected([])
+  }
+
+  const removePreview = (index: number) => {
+    setPreviews(prev => {
+      const newPreviews = [...prev]
+      URL.revokeObjectURL(newPreviews[index]!.url)
+      newPreviews.splice(index, 1)
+      return newPreviews
+    })
+  }
+
+  const handleDeleteUploadedFile = async () => {
+    if (fileToDelete && onDeleteUploadedFile) {
+      await onDeleteUploadedFile(fileToDelete)
+      setFileToDelete(null)
+    }
+    setDeleteDialogOpen(false)
+  }
+
+  const onDrop = useCallback(
+    (acceptedFiles: Array<File>) => {
+      // Clear previous previews if not multiple
+      if (!multiple) {
+        previews.forEach(preview => URL.revokeObjectURL(preview.url))
+        setPreviews([])
+      }
+
+      const newPreviews = acceptedFiles.map(file => ({
+        url: file.type.startsWith("image/") ? URL.createObjectURL(file) : "",
+        name: file.name,
+      }))
+
+      setPreviews(prev => (multiple ? [...prev, ...newPreviews] : newPreviews))
+      onFilesSelected(acceptedFiles)
+    },
+    [multiple, onFilesSelected, previews],
+  )
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept:
+      typeof accept === "string"
+        ? { [accept]: [] }
+        : (accept ?? { "image/*": [".jpeg", ".jpg", ".png", ".webp"] }),
+    maxFiles: maxFiles ?? (multiple ? undefined : 1),
+    disabled,
+    multiple,
+  })
+
+  return (
+    <div className={cn("space-y-4", className)}>
+      <div
+        {...getRootProps()}
+        className={`relative rounded-lg border-2 border-dashed p-4 text-center ${isDragActive ? "border-primary bg-primary/10" : "border-gray-300"} ${disabled ? "cursor-not-allowed opacity-50" : "hover:border-primary cursor-pointer"}`}
+      >
+        <input id="fileUploadInput" {...getInputProps()} />
+        {isDragActive ? (
+          <p>اسحب الملفات هنا...</p>
+        ) : (
+          <p>
+            {multiple
+              ? "اسحب وأفلت الملفات هنا، أو انقر للاختيار"
+              : "اسحب وأفلت الملف هنا، أو انقر للاختيار"}
+          </p>
+        )}
+        <small className="text-primary/75 text-xs">
+          {accept ? (
+            <p className="flex flex-col items-center justify-center gap-1">
+              <span>يمكنك تحميل ملفات من نوع</span>
+              <strong dir="ltr">{Object.values(accept).join(", ")}</strong>
+            </p>
+          ) : (
+            "يمكنك تحميل أي نوع من الملفات"
+          )}
+        </small>
+      </div>
+
+      {!isPreviewHidden && (uploadedFiles.length > 0 || previews.length > 0) && (
+        <div className="flex flex-wrap gap-3">
+          {/* Render uploaded files */}
+          {uploadedFiles.map(file => (
+            <div
+              key={file.imgDisplayPath}
+              className="relative flex flex-wrap items-center gap-2.5 rounded-lg border p-1"
+            >
+              {isImageFile(file.imgDisplayPath) ? (
+                <Image
+                  src={file.imgDisplayPath}
+                  alt={file.imgDisplayName}
+                  className="min-h-12 max-h-12 min-w-12 max-w-12 rounded-lg object-cover"
+                  width={48}
+                  height={48}
+                />
+              ) : (
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100">
+                  <File className="h-8 w-8 text-gray-400" />
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={e => {
+                  e.stopPropagation()
+                  setFileToDelete(file)
+                  setDeleteDialogOpen(true)
+                }}
+                className="absolute top-0 right-0 cursor-pointer rounded-full bg-red-400 p-1 hover:bg-red-600"
+              >
+                <X className="h-4 w-4 text-white" />
+              </button>
+            </div>
+          ))}
+
+          {/* Render preview files */}
+          {previews.map((preview, index) => (
+            <div
+              key={preview.url || preview.name}
+              className="relative flex flex-wrap items-center gap-2.5 rounded-lg border p-2"
+            >
+              {preview.url ? (
+                <Image
+                  src={preview.url}
+                  alt={preview.name}
+                  className="min-h-12 max-h-12 min-w-12 max-w-12 rounded-lg object-cover"
+                  width={48}
+                  height={48}
+                />
+              ) : (
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100">
+                  <File className="h-8 w-8 text-gray-400" />
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={e => {
+                  e.stopPropagation()
+                  removePreview(index)
+                }}
+                className="absolute top-0 right-0 cursor-pointer rounded-full bg-blue-400 p-1 hover:bg-blue-600"
+              >
+                <X className="h-4 w-4 text-white" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!isPreviewHidden && previews.length > 0 && (
+        <Button
+          type="button"
+          variant="destructive"
+          onClick={e => {
+            e.stopPropagation()
+            clearPreviews()
+          }}
+          className="w-fit px-4 py-2 text-sm cursor-pointer"
+        >
+          مسح الكل
+        </Button>
+      )}
+
+      <ConfirmationDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="تأكيد الحذف"
+        description={`هل أنت متأكد أنك تريد حذف ${fileType === "studyCase" ? "ملف دراسة الجدوى" : "هذه الصورة"}؟`}
+        buttonText="حذف"
+        buttonClass="bg-red-500 hover:bg-red-600"
+        onConfirm={handleDeleteUploadedFile}
+      />
+    </div>
+  )
+}

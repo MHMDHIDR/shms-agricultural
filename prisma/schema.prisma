@@ -1,134 +1,194 @@
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 enum UserType {
-  admin
-  user
+    admin
+    user
 }
 
 enum UserStatus {
-  active
-  block
-  pending
+    active
+    block
+    pending
 }
 
 enum ProjectStatus {
-  pending
-  active
+    pending
+    active
+}
+
+enum UserTheme {
+    light
+    dark
+}
+
+enum AccountingOperationStatus {
+    pending
+    completed
+    rejected
 }
 
 type Stocks {
-  id               String
-  stocks           Int
-  newPercentage    Int
-  percentageCode   String
-  createdAt        DateTime
-  capitalDeposited Boolean  @default(false)
-  profitsDeposited Boolean  @default(false)
+    id               String   @db.ObjectId
+    stocks           Int
+    newPercentage    Int
+    percentageCode   String
+    createdAt        DateTime
+    capitalDeposited Boolean  @default(false)
+    profitsDeposited Boolean  @default(false)
 }
 
 type ProjectImages {
-  imgDisplayName String
-  imgDisplayPath String
+    imgDisplayName String
+    imgDisplayPath String
 }
 
 model Projects {
-  id                                   String          @id @default(auto()) @map("_id") @db.ObjectId
-  shms_project_images                  ProjectImages[]
-  shms_project_study_case              ProjectImages[]
-  shms_project_study_case_visibility   Boolean         @default(false)
-  shms_project_name                    String
-  shms_project_location                String
-  shms_project_start_date              DateTime
-  shms_project_end_date                DateTime
-  shms_project_invest_date             DateTime
-  shms_project_profits_collect_date    DateTime
-  shms_project_available_stocks        Int
-  shms_project_total_stocks            Int
-  shms_project_stock_price             Int
-  shms_project_special_percentage      Int?
-  shms_project_special_percentage_code String?
-  shms_project_stock_profits           Int
-  shms_project_description             String
-  shms_project_terms                   String?
-  updateImg                            Boolean?
-  updatePercentage                     Boolean?
-  projectAdded                         Int?
-  projectDeleted                       Int?
-  projectUpdated                       Int?
-  message                              String?
-  shms_project_status                  ProjectStatus   @default(pending)
+    id                           String          @id @default(auto()) @map("_id") @db.ObjectId
+    projectImages                ProjectImages[]
+    projectStudyCase             ProjectImages[]
+    projectStudyCaseVisibility   Boolean         @default(false)
+    projectName                  String
+    projectLocation              String
+    projectStartDate             DateTime
+    projectEndDate               DateTime
+    projectInvestDate            DateTime
+    projectProfitsCollectDate    DateTime
+    createdAt                    DateTime        @default(now())
+    updatedAt                    DateTime        @updatedAt
+    projectAvailableStocks       Int
+    projectTotalStocks           Int
+    projectStockPrice            Int
+    projectSpecialPercentage     Int?
+    projectSpecialPercentageCode String?
+    projectStockProfits          Int
+    projectDescription           String
+    projectTerms                 String
+    updateImg                    Boolean?
+    projectAdded                 Int?
+    projectDeleted               Int?
+    projectUpdated               Int?
+    message                      String?
+    projectStatus                ProjectStatus   @default(pending)
 
-  @@map("projects")
+    @@map("projects")
 }
 
-model Users {
-  id                            String             @id @default(auto()) @map("_id") @db.ObjectId
-  shms_sn                       Int                @default(0)
-  shms_fullname                 String
-  shms_nationality              String
-  shms_date_of_birth            DateTime
-  shms_address                  String             @default("لم يتم إدخال العنوان")
-  shms_email                    String             @unique
-  shms_password                 String
-  shms_phone                    String
-  shms_doc                      String
-  shms_user_stocks              Stocks[]
-  shms_user_stock_limit         Int                @default(20)
-  shms_user_credits             Int                @default(0)
-  shms_created_at               DateTime           @default(now())
-  shms_user_account_type        UserType           @default(user)
-  shms_user_account_status      UserStatus         @default(active)
-  shms_user_reset_token         String?
-  shms_user_reset_token_expires DateTime?
-  shms_user_is_deleted          Boolean            @default(false)
-  message                       String?
-  loggedIn                      Int?
-  userAdded                     Int?
-  userUpdated                   Int?
-  userActivated                 Int?
-  userWithdrawnBalance          Int?
-  forgotPassSent                Int?
-  newPassSet                    Int?
-  resetEmail                    Int?
-  userDeleted                   Int?
-  withdraw_actions              withdraw_actions[] @relation("UserWithdrawActions")
+model User {
+    id                String             @id @default(auto()) @map("_id") @db.ObjectId
+    sn                Int                @default(0)
+    name              String
+    nationality       String
+    dateOfBirth       DateTime
+    address           String             @default("لم يتم إدخال العنوان")
+    email             String             @unique
+    emailVerified     DateTime?
+    image             String?
+    accounts          Account[]
+    sessions          Session[]
+    password          String
+    phone             String             @unique
+    doc               String
+    stocks            Stocks[]
+    stockLimit        Int                @default(20)
+    credits           Int                @default(0)
+    role              UserType           @default(user)
+    theme             UserTheme          @default(light)
+    accountStatus     UserStatus         @default(active)
+    resetToken        String?
+    resetTokenExpires DateTime?
+    isDeleted         Boolean            @default(false)
+    createdAt         DateTime           @default(now())
+    updatedAt         DateTime           @updatedAt
+    withdrawActions   withdraw_actions[] @relation("UserWithdrawActions")
 
-  @@map("users")
+    @@map("User")
+}
+
+model Account {
+    id                String  @id @default(auto()) @map("_id") @db.ObjectId
+    userId            String  @db.ObjectId
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? @db.String
+    access_token      String? @db.String
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String? @db.String
+    session_state     String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    sessionToken String   @unique
+    userId       String   @db.ObjectId
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+    id         String   @id @default(auto()) @map("_id") @db.ObjectId
+    identifier String
+    token      String
+    expires    DateTime
+
+    @@unique([identifier, token])
 }
 
 model withdraw_actions {
-  id                          String   @id @default(auto()) @map("_id") @db.ObjectId
-  shms_created_at             DateTime @default(now())
-  shms_user_id                String   @db.ObjectId
-  shms_withdraw_amount        Int      @default(0)
-  shms_action_type            String   @default("withdraw")
-  accounting_operation_status String   @default("pending")
-  message                     String?
-  withdrawAdded               Int?
-  withdrawUpdated             Int?
-  user                        Users    @relation(fields: [shms_user_id], references: [id], name: "UserWithdrawActions") // Child side
+    id                          String                    @id @default(auto()) @map("_id") @db.ObjectId
+    created_at                  DateTime                  @default(now())
+    user_id                     String                    @db.ObjectId
+    withdraw_amount             Int                       @default(0)
+    action_type                 String                    @default("withdraw")
+    accounting_operation_status AccountingOperationStatus @default(pending)
+    message                     String?
+    withdrawAdded               Int?
+    withdrawUpdated             Int?
+    user                        User                      @relation(fields: [user_id], references: [id], name: "UserWithdrawActions") // Child side
 
-  @@map("withdraw_actions")
+    @@map("withdraw_actions")
 }
 
 enum SocialType {
-  facebook
-  x
-  instagram
-  youtube
+    facebook
+    x
+    instagram
+    youtube
 }
 
 model SocialLinks {
-  id               String     @id @default(auto()) @map("_id") @db.ObjectId
-  shms_social_link String
-  shms_social_type SocialType
+    id         String     @id @default(auto()) @map("_id") @db.ObjectId
+    socialLink String
+    socialType SocialType
 
-  @@map("social_links")
+    @@map("social_links")
+}
+
+model Faq {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    question  String
+    answer    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("faqs")
 }

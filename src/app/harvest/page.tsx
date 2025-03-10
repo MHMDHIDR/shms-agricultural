@@ -1,95 +1,78 @@
-import Layout from '@/components/custom/layout'
-import { Button } from '@/components/ui/button'
-import { APP_DESCRIPTION, APP_TITLE } from '@/data/constants'
-import { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
+import Image from "next/image"
+import Link from "next/link"
+import { ContactWhatsAppWidget } from "@/components/custom/contact-whatsapp-widget"
+import { Button } from "@/components/ui/button"
+import { APP_DESCRIPTION, APP_TITLE } from "@/lib/constants"
+import { getBlurPlaceholder } from "@/lib/optimize-image"
+import { services } from "@/schemas/contact"
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: `الحصـــــــــاد | ${APP_TITLE}
-}`,
-  description: APP_DESCRIPTION
+  title: `الحصـــــــــاد | ${APP_TITLE}`,
+  description: APP_DESCRIPTION,
 }
 
-export default function Harvest() {
+// Force static generation
+export const dynamic = "force-static"
+export const revalidate = false
+export const fetchCache = "force-cache"
+export const runtime = "nodejs"
+
+export default async function Harvest() {
+  const imagePath = "/our-services/harvest.webp"
+  const blurImage = await getBlurPlaceholder({ imageSrc: imagePath })
+
+  const serviceIndex = 2
+
   return (
-    <Layout>
-      <main className='flex flex-col items-center justify-between min-h-screen'>
-        <h1 className='mt-10 mb-2 text-2xl'>موسم الحصاد</h1>
+    <main className="flex min-h-full flex-col items-center -mb-22">
+      <ContactWhatsAppWidget />
+      <h1 className="mt-10 text-2xl select-none">موسم الحصاد</h1>
 
-        <div dir='rtl' style={{ marginTop: 10, justifyContent: 'center' }}>
-          <div style={{ margin: 50, display: 'flex', justifyContent: 'center' }}>
+      <div className="flex w-full flex-col items-center">
+        <div className="relative mt-12 w-full min-w-screen">
+          <div className="relative flex min-h-[38rem] items-center">
             <Image
-              src='https://banassa.info/wp-content/uploads/2020/09/1-117.jpg'
-              width={500}
-              height={500}
-              style={{
-                borderRadius: 15,
-                width: '100%',
-                maxHeight: 500,
-                boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)'
-              }}
-              alt='موسم الحصاد'
-              className='shadow-lg'
+              src={imagePath}
+              width={1200}
+              height={800}
+              alt="موسم الحصاد"
+              className="absolute h-full w-full object-cover"
+              placeholder="blur"
+              blurDataURL={blurImage ?? undefined}
+              priority
             />
-          </div>
-          <div className='px-20 mx-5 text-right'>
-            <p style={{ fontSize: 20 }}>
-              يعتبر الحصاد إحدى المراحل الحاسمة في عملية الزراعة، حيث يتم فيها جني
-              المحاصيل الناضجة وجمعها بعد جهد وعناء عملية الزراعة. يشمل الحصاد عدة خطوات
-              وتقنيات يجب مراعاتها لضمان الحصول على محاصيل ذات جودة عالية وإتمام عملية
-              الإنتاج بنجاح. في هذا المقال، سنستعرض الخطوات الأساسية والتقنيات الفعّالة
-              لمرحلة الحصاد.
-            </p>
-            <h3 style={{ fontSize: 30, fontWeight: 'bold' }}>
-              1. تحديد موعد الحصاد المناسب
-            </h3>
-            <p style={{ fontSize: 20 }}>
-              يعتمد موعد الحصاد على نوع المحصول وظروف الطقس والمناخ. يجب تحديد موعد الحصاد
-              بعناية لضمان نضج المحاصيل بشكل كامل وتجنب جنيها قبل أو بعد الوقت المناسب.
-            </p>
-            <h3 style={{ fontSize: 30, fontWeight: 'bold' }}>
-              2. استخدام الأدوات والمعدات المناسبة
-            </h3>
-            <p style={{ fontSize: 20 }}>
-              يجب استخدام الأدوات والمعدات المناسبة لكل نوع من المحاصيل المزروعة. من ضمن
-              هذه الأدوات: المناجل، الحصّادات الآلية، وأدوات القطاف المخصصة لبعض الثمار.
-            </p>
-            <h3 style={{ fontSize: 30, fontWeight: 'bold' }}>3. جني المحاصيل بعناية</h3>
-            <p style={{ fontSize: 20 }}>
-              يجب جني المحاصيل بعناية لضمان عدم تلفها أو فقدها. يجب التحكم في سرعة العمل
-              وتوجيه الأدوات بحذر لتجنب الإصابة بالمحاصيل القريبة غير الناضجة.
-            </p>
-            <h3 style={{ fontSize: 30, fontWeight: 'bold' }}>4. التخزين السليم</h3>
-            <p style={{ fontSize: 20 }}>
-              بعد الحصاد، يجب تخزين المحاصيل بطريقة تحافظ على جودتها وتمنع تلفها. يجب
-              مراعاة الظروف المناخية المناسبة لكل نوع من المحاصيل وتوفير التهوية والرطوبة
-              المناسبة.
-            </p>
-            <h3 style={{ fontSize: 30, fontWeight: 'bold' }}>5. التجهيز للتسويق</h3>
-            <p style={{ fontSize: 20 }}>
-              يجب التجهيز لعملية التسويق للمحاصيل بعد الحصاد، بما في ذلك تحضير العبوات
-              اللازمة وتوفير وسائل النقل اللازمة لنقل المحاصيل إلى الأسواق.
-            </p>
-            <h3 style={{ fontSize: 30, fontWeight: 'bold' }}>6. الحفاظ على السلامة</h3>
-            <p style={{ fontSize: 20 }}>
-              يجب الحرص على السلامة خلال عملية الحصاد، بما في ذلك استخدام الأدوات بحذر
-              واتباع إجراءات السلامة المعتمدة.
-            </p>
-            <h3 style={{ fontSize: 30, fontWeight: 'bold' }}>7. الاستفادة من المخلفات</h3>
-            <p style={{ fontSize: 20 }}>
-              يمكن استخدام المخلفات الناتجة عن عملية الحصاد في عدة طرق مفيدة، مثل تحويلها
-              إلى سماد عضوي أو استخدامها في إنتاج الطاقة البيولوجية.
-            </p>
-          </div>
 
-          <Link className='mt-8 text-xl' href='/contact'>
-            <Button variant={'pressable'} className='mt-10 mr-24'>
-              طلب الخــدمة
-            </Button>
-          </Link>
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+
+            <div className="relative py-12">
+              <div className="flex flex-col items-center justify-center gap-y-7">
+                <div className="flex flex-col gap-6 md:flex-row md:gap-8">
+                  <p className="px-5 text-right text-lg leading-10 text-white md:w-1/2 md:px-10 md:leading-12">
+                    في المرحلة الأخيرة من العملية الزراعية، يتم تنفيذ الحصاد بمشاركة فريق عمل يتراوح
+                    عدده بين 10 إلى 50 فردًا، وذلك وفقًا لمساحة الأرض المزروعة. يُقسم الفريق إلى
+                    مجموعات متخصصة في الحصاد، النقل، والتعبئة، حيث تُستخدم الأدوات اليدوية كجزء
+                    أساسي من العملية، إلى جانب الاعتماد على الآليات الحديثة في عمليات التعبئة
+                    والحصاد لتحسين الكفاءة وتقليل الجهد اليدوي.
+                  </p>
+
+                  <p className="px-5 text-right text-lg leading-10 text-white md:w-1/2 md:px-10 md:leading-12">
+                    على الرغم من اتباع أساليب متطورة، يبقى هناك معدل فاقد يتراوح بين 5% إلى 8% نتيجة
+                    التأخير في الحصاد أو النقل وسوء التخزين. لا يمكن تحديد الإنتاج بدقة مطلقة، إلا
+                    أنه يمكن تحسين التقديرات باستخدام تقنيات حديثة مثل جمع عينات عشوائية من المزرعة
+                    أو مراجعة بيانات الإنتاج السابقة، مما يحقق دقة تقديرية تتراوح بين 86% و90%.
+                  </p>
+                </div>
+                <Link className="my-5 text-xl" href={`/contact?service=${services[serviceIndex]}`}>
+                  <Button variant={"pressable"} className="px-12">
+                    طلب الخــدمة
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
-    </Layout>
+      </div>
+    </main>
   )
 }

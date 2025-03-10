@@ -1,62 +1,67 @@
-'use client'
+"use client"
 
-import { Button } from '@/components/ui/button'
+import { Check, ListCollapse } from "lucide-react"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem
-} from '@/components/ui/command'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { countryNames } from '@/data/list-of-countries'
-import { cn } from '@/libs/utils'
-import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
-import { useState } from 'react'
+  CommandItem,
+} from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { countryNames } from "@/lib/list-of-countries"
+import { cn } from "@/lib/utils"
 
 type SelectCountryProps = {
-  nationality?: string
+  nationality: string
   setNationality: (value: string) => void
   placeholder?: string
   className?: string
+  disabled?: boolean
 }
 
 // Mark the component as a Client Component
 const SelectCountry = ({
   nationality,
   setNationality,
-  placeholder = 'إختر الجنسية ...',
-  className = ''
+  placeholder = "إختر الجنسية ...",
+  className = "",
+  disabled = false,
 }: SelectCountryProps) => {
   const [open, setOpen] = useState(false)
 
   // Create a memoized handler for the selection
   const handleSelect = (currentValue: string) => {
-    setNationality(currentValue === nationality ? '' : currentValue)
+    setNationality(currentValue === nationality ? "" : currentValue)
     setOpen(false)
   }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger disabled={disabled} asChild>
         <Button
-          variant='outline'
-          role='combobox'
+          variant="outline"
+          role="combobox"
           aria-expanded={open}
-          className={cn(`w-[200px] justify-between`, className)}
+          disabled={disabled}
+          className={cn(
+            `w-full cursor-pointer justify-between ${disabled && "cursor-not-allowed"}`,
+            className,
+          )}
         >
-          {nationality
-            ? countryNames.find(countryName => countryName.label === nationality)?.label
-            : placeholder}
-          <CaretSortIcon className='w-4 h-4 ml-2 opacity-50 shrink-0' />
+          {countryNames.find(countryName => countryName.label.includes(nationality))?.label ??
+            placeholder}
+          <ListCollapse className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className='w-full p-0 overflow-y-auto max-h-64 md:max-h-96 rtl'
+        className="rtl max-h-60 w-full max-w-56 overflow-y-auto p-0 md:max-h-96"
         avoidCollisions={false}
       >
         <Command>
-          <CommandInput placeholder='إبحث عن الجنسية' className='px-4 h-9' />
+          <CommandInput placeholder="إبحث عن الجنسية" className="h-9 px-4" />
           <CommandEmpty>عفواً لم يتم العثور على البلد</CommandEmpty>
           <CommandGroup>
             {countryNames.map(countryName => (
@@ -64,12 +69,13 @@ const SelectCountry = ({
                 key={countryName.code}
                 value={countryName.label}
                 onSelect={() => handleSelect(countryName.label)}
+                className="cursor-pointer"
               >
                 {countryName.label}
-                <CheckIcon
+                <Check
                   className={cn(
-                    'ml-auto h-4 w-4',
-                    nationality === countryName.label ? 'opacity-100' : 'opacity-0'
+                    "ml-auto h-4 w-4",
+                    nationality === countryName.label ? "opacity-100" : "opacity-0",
                   )}
                 />
               </CommandItem>

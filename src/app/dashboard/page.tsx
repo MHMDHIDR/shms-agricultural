@@ -1,259 +1,116 @@
-import Link from 'next/link'
-import Divider from '@/components/custom/divider'
-import Modal from '@/components/custom/modal'
-import NoRecords from '@/components/custom/no-records'
+import Link from "next/link"
+import { Metric } from "@/components/custom/icons"
+import { InvestmentChart } from "@/components/custom/investment-chart"
+import NoRecords from "@/components/custom/no-records"
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
-  CardTitle
-} from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
-import { API_URL, APP_LOGO } from '@/data/constants'
-import { arabicDate, formattedPrice, getProject } from '@/libs/utils'
-import axios from 'axios'
-import { Suspense } from 'react'
-import PurchesedStocks from './investors/purchesed-stocks'
-import Layout from '@/components/custom/layout'
-import DashboardNav from './dashboard-nav'
-import NotFound from '@/app/not-found'
-import { getAuth } from '@/libs/actions/auth'
-import { LoadingPage } from '@/components/custom/loading'
-import type { Stocks, Users } from '@prisma/client'
+  CardTitle,
+} from "@/components/ui/card"
+import { calculateInvestmentMetrics } from "@/lib/calculate-investment-metrics"
+import { api } from "@/trpc/server"
+import { UserStocksTable } from "./user-stocks-table"
+import type { StockMetrics } from "@/lib/calculate-investment-metrics"
 
-export default async function DashboardInvestors() {
-  const { userType, loading } = await getAuth()
-  const {
-    data: users
-  }: {
-    data: Users[]
-  } = await axios.get(`${API_URL}/users/all?role=investor`)
-
-  const fetchUserProjectDetails = async (userStocks: Stocks[]) => {
-    const promises = userStocks.map(async (item: Stocks) => {
-      const project = await getProject(item.id)
+export default async function Dashboard() {
+  const user = await api.user.getUserInfo({ select: { credits: true, stocks: true } })
+  const stocksWithProjects = await Promise.all(
+    (user?.stocks ?? []).map(async stock => {
+      const project = await api.projects.getProjectById({ projectId: stock.id })
       return {
-        projectStockPrice: project?.shms_project_stock_price || 0,
-        stocks: item.stocks
+        ...stock,
+        project: {
+          projectName: project?.projectName ?? "Loading...",
+          projectStockPrice: project?.projectStockPrice ?? 0,
+          projectStockProfits: project?.projectStockProfits ?? 0,
+          projectProfitsCollectDate: project?.projectProfitsCollectDate ?? new Date(),
+        },
       }
-    })
-    return Promise.all(promises)
-  }
-
-  const usersWithProjectDetails = await Promise.all(
-    users.map(async (user: Users) => {
-      const userStocks: Stocks[] = user.shms_user_stocks || []
-      const projectsDetails = await fetchUserProjectDetails(userStocks)
-
-      return { ...user, projectsDetails }
-    })
+    }),
   )
 
-  // Inside the totalInvestment calculation, add console logs to check projectStockPrice and stocks values
-  const totalInvestment = usersWithProjectDetails.reduce((total, user) => {
-    const userInvestment = user.projectsDetails.reduce((userTotal, project) => {
-      // Add a check to ensure project.stocks is defined and numeric
-      const stocks = typeof project.stocks === 'number' ? project.stocks : 0
+  // Convert user stocks to StockMetrics format for the chart
+  const stockMetrics: StockMetrics[] = stocksWithProjects.map(stock => ({
+    stockId: stock.id,
+    purchaseDate: stock.createdAt,
+    profitCollectDate: stock.project.projectProfitsCollectDate,
+    numberOfStocks: stock.stocks,
+    stockPrice: stock.project.projectStockPrice,
+    profitPerStock: stock.project.projectStockProfits,
+    specialPercentage: stock.newPercentage,
+  }))
 
-      const projectInvestment = project.projectStockPrice * stocks
-      return userTotal + projectInvestment
-    }, 0)
-    return total + userInvestment
-  }, 0)
+  // Find the earliest purchase date and latest profit collection date
+  const dates = stockMetrics.reduce(
+    (acc, stock) => {
+      if (stock.purchaseDate < acc.startDate) {
+        acc.startDate = stock.purchaseDate
+      }
+      if (stock.profitCollectDate > acc.endDate) {
+        acc.endDate = stock.profitCollectDate
+      }
+      return acc
+    },
+    {
+      startDate: new Date(),
+      endDate: new Date(0),
+    },
+  )
 
-  return loading ? (
-    <LoadingPage />
-  ) : userType !== 'admin' ? (
-    <NotFound />
-  ) : (
-    <Layout>
-      <h1 className='mt-20 mb-10 text-2xl font-bold text-center'>لوحة التحكم</h1>
-      <DashboardNav />
+  // Calculate investment metrics for the chart
+  const investmentData = calculateInvestmentMetrics(stockMetrics, dates.startDate, dates.endDate)
 
-      <section className='container mx-auto'>
-        <div className='flex flex-wrap justify-center gap-2.5 my-4'>
-          <Card className='w-full select-none font-bold text-center md:w-[350px]'>
+  return (
+    <section className="grid grid-cols-1 md:grid-cols-3 grid-rows-[auto_1fr] gap-x-0 gap-y-4 md:gap-4 select-none px-2 md:px-9 pt-14">
+      <Card className="w-full col-span-1 flex flex-col justify-between">
+        <CardHeader className="text-center">
+          <CardTitle>رصيد الحساب</CardTitle>
+          <CardDescription>رصيدك الحالي القابل للسحب</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="relative mx-auto h-fit w-fit">
+            <Metric amount={user?.credits ?? 0} />
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <Link href={"/dashboard/withdrawals"} className="pressable w-full">
+            سحب الرصيد
+          </Link>
+        </CardFooter>
+      </Card>
+
+      <div className="w-full col-span-2">
+        {!user?.stocks?.length ? (
+          <Card>
             <CardHeader>
-              <CardTitle>عدد المساهمين</CardTitle>
-              <CardDescription className='pt-4 text-2xl'>
-                <strong>{users.length}</strong>
+              <CardTitle>الأسهم الخاصة بي</CardTitle>
+              <CardDescription>
+                لا توجد أسهم لعرض الربح، يرجى التوجه إلى صفحة إدارة الأسهم لتحميل الأسهم
               </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className='w-full select-none font-bold text-center md:w-[300px]'>
-            <CardHeader>
-              <CardTitle>مجموع المبالغ المستثمرة</CardTitle>
-              <CardDescription className='pt-4 text-2xl'>
-                <strong>{formattedPrice(totalInvestment)}</strong>
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className='w-full select-none font-bold text-center md:w-[300px]'>
-            <CardHeader>
-              <CardTitle>عدد الاسهم</CardTitle>
-              <CardDescription className='pt-4 text-2xl'>
-                <strong>
-                  {usersWithProjectDetails
-                    .map(user => user.projectsDetails)
-                    .flat()
-                    .reduce(
-                      (acc, cur) =>
-                        acc + (typeof cur.stocks === 'number' ? cur.stocks : 0),
-                      0
-                    )}
-                </strong>
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
-
-        <div className='flex w-full'>
-          <Card className='min-w-full md:w-[300px] rtl'>
-            <CardHeader>
-              <CardTitle>المستثمرين</CardTitle>
-              {
-                <CardDescription className='pt-2 text-l'>
-                  <small>
-                    <strong>لديك {users.length} مستثمر</strong>
-                  </small>
-                </CardDescription>
-              }
             </CardHeader>
             <CardContent>
-              {!users || users.length === 0 ? (
-                <NoRecords msg='لم يتم العثور على مستثمرين في الوقت الحالي!' />
-              ) : (
-                <Table className='min-w-full overflow-x-auto divide-y divide-gray-200'>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className='pt-10 font-bold text-center select-none min-w-56'>
-                        الاسم
-                      </TableHead>
-                      <TableHead className='font-bold text-center select-none'>
-                        تفاصيل الأســــهــــم
-                        <Divider />
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead className='text-center border border-gray-200 select-none min-w-56'>
-                                اسم المشروع
-                              </TableHead>
-                              <TableHead className='text-center border border-gray-200 select-none min-w-28'>
-                                عدد الاسهم
-                              </TableHead>
-                              <TableHead className='text-center border border-gray-200 select-none min-w-36'>
-                                نسبة زيادة الأرباح
-                              </TableHead>
-                              <TableHead className='text-center border border-gray-200 select-none min-w-28'>
-                                إجمالي الدفع
-                              </TableHead>
-                              <TableHead className='text-center border border-gray-200 select-none min-w-64'>
-                                تاريخ الشراء
-                              </TableHead>
-                              <TableHead className='text-center border border-gray-200 select-none min-w-40'>
-                                تعديل الأسهم
-                              </TableHead>
-                            </TableRow>
-                          </TableHeader>
-                        </Table>
-                      </TableHead>
-                      <TableHead className='pt-10 font-bold text-center select-none'>
-                        المستند الشخصي
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {users.map(user => (
-                      <TableRow key={user.id}>
-                        <TableCell className='text-center min-w-32'>
-                          <Link href={`/dashboard/users/${user.id}`}>
-                            {user.shms_fullname}
-                          </Link>
-                        </TableCell>
-                        <TableCell className='text-center'>
-                          <Suspense
-                            fallback={
-                              <div className='flex flex-col gap-y-1.5'>
-                                <Skeleton className='w-full h-4' />
-                                <Skeleton className='w-full h-4' />
-                              </div>
-                            }
-                          >
-                            {user.shms_user_stocks.map(async (item: Stocks) => {
-                              const project = await getProject(item.id)
-                              if (!project) {
-                                return null // Exit early if project is null
-                              }
-
-                              const projectName = project.shms_project_name
-                              const projectStockPrice = project.shms_project_stock_price
-
-                              return (
-                                <div key={item.id}>
-                                  <Table>
-                                    <TableBody>
-                                      <TableRow>
-                                        <TableCell className='text-center min-w-56'>
-                                          {projectName}
-                                        </TableCell>
-                                        <TableCell className='text-center min-w-28'>
-                                          {item.stocks}
-                                        </TableCell>
-                                        <TableCell className='text-center min-w-36'>
-                                          {item.newPercentage}
-                                        </TableCell>
-                                        <TableCell className='text-center min-w-28'>
-                                          {formattedPrice(
-                                            item.stocks * projectStockPrice
-                                          )}
-                                        </TableCell>
-                                        <TableCell className='text-center min-w-64'>
-                                          {arabicDate(item.createdAt)}
-                                        </TableCell>
-                                        <TableCell className='text-center min-w-40'>
-                                          <PurchesedStocks
-                                            purchesedStocks={{ item, userId: user.id }}
-                                          >
-                                            تعديل الأسهم
-                                          </PurchesedStocks>
-                                        </TableCell>
-                                      </TableRow>
-                                    </TableBody>
-                                  </Table>
-                                </div>
-                              )
-                            })}
-                          </Suspense>
-                        </TableCell>
-                        <TableCell className='text-center'>
-                          <Modal
-                            title={`صورة المستند لــ ${user.shms_fullname}`}
-                            document={user.shms_doc ?? APP_LOGO}
-                            className='font-bold dark:text-white'
-                          >
-                            عرض المستند
-                          </Modal>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
+              <NoRecords msg="لا توجد أسهم لعرض الربح" className="max-h-40 max-w-40" />
             </CardContent>
           </Card>
-        </div>
-      </section>
-    </Layout>
+        ) : (
+          <InvestmentChart data={investmentData} profitCollectDate={dates.endDate} />
+        )}
+      </div>
+
+      <div className="col-span-full">
+        <Card>
+          <CardHeader className="text-center">
+            <CardTitle>الأسهم الخاصة بي</CardTitle>
+            <CardDescription>جميع الأسهم التي تمتلكها في المشاريع الزراعية</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <UserStocksTable stocks={stocksWithProjects} />
+          </CardContent>
+        </Card>
+      </div>
+    </section>
   )
 }

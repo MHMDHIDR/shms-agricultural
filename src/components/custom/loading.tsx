@@ -1,26 +1,27 @@
-import { cn } from '@/libs/utils'
-import { ShmsIcon } from '../icons/socials'
-import { Skeleton } from '../ui/skeleton'
+import { Skeleton } from "@/components/ui/skeleton"
+import { cn } from "@/lib/utils"
 
-export const LoadingPage = () => (
-  <div
-    className='fixed inset-0 flex items-center justify-center w-screen h-screen bg-lime-200 dark:bg-lime-900 z-[100000]
-    [--hue:223]
-    [--bg:hsl(var(--hue),_10%,_90%)]
-    [--fg:hsl(var(--hue),_10%,_10%)]
-    [--primary:hsl(var(--hue),_90%,_55%)] dark:[--primary:hsl(var(--hue),_50%,_75%)]
-    [--trans-dur:0.3s]
-  '
-  >
-    <ShmsIcon className='w-20 h-20 animate-bounce' />
-  </div>
-)
-
-export const LoadingCard = ({ className }: { className?: string }) => (
-  <div className='space-y-2'>
-    <Skeleton className={cn(`w-full h-12`, className)} />
-    <Skeleton className={cn(`w-full h-12`, className)} />
-    <Skeleton className={cn(`w-full h-12`, className)} />
-    <Skeleton className={cn(`w-full h-12`, className)} />
-  </div>
-)
+export function LoadingCard({
+  className,
+  renderedSkeletons = 4,
+  layout = "vertical",
+}: {
+  className?: string
+  /**
+   *  Number of loading skeletons to render
+   */
+  renderedSkeletons?: number
+  layout?: "horizontal" | "vertical"
+}) {
+  return (
+    <div className={cn(`flex gap-2.5`, layout === "vertical" ? "flex-col" : "flex-row")}>
+      {renderedSkeletons ? (
+        Array.from({ length: renderedSkeletons }).map((_, index) => (
+          <Skeleton key={index} className={cn(`h-12 w-full`, className)} />
+        ))
+      ) : (
+        <Skeleton className={cn(`h-12 w-full`, className)} />
+      )}
+    </div>
+  )
+}
