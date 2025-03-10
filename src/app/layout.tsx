@@ -4,7 +4,7 @@ import { Noto_Kufi_Arabic } from "next/font/google"
 import Footer from "@/components/custom/footer"
 import { Nav } from "@/components/custom/nav"
 import { NavigateTop } from "@/components/custom/navigate-top"
-import { APP_DESCRIPTION, APP_TITLE } from "@/lib/constants"
+import { APP_DESCRIPTION, APP_LOGO, APP_TITLE } from "@/lib/constants"
 import { Providers } from "@/providers"
 import { ThemeProvider } from "@/providers/theme-provider"
 import { auth } from "@/server/auth"
@@ -15,6 +15,27 @@ export const metadata: Metadata = {
   authors: [{ name: "Mohammed Ibrahim", url: "https://mohammedhaydar.com" }],
   description: APP_DESCRIPTION,
   icons: [{ rel: "icon", url: "/favicon.ico" }],
+  openGraph: {
+    type: "website",
+    title: APP_TITLE,
+    description: APP_DESCRIPTION,
+    siteName: "شمس للخدمات الزراعية",
+    url: "https://shmsagricultural.com",
+    images: [
+      {
+        url: APP_LOGO,
+        width: 1200,
+        height: 630,
+        alt: "شمس للخدمات الزراعية",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: APP_TITLE,
+    description: APP_DESCRIPTION,
+    images: [APP_LOGO],
+  },
 }
 
 export const viewport: Viewport = {
