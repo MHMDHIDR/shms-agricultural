@@ -118,11 +118,7 @@ export const sendPurchaseConfirmationEmail = async ({
     from: `${APP_TITLE} <${ADMIN_EMAIL}>`,
     to: user.email,
     subject: `${APP_TITLE} | تأكيد شراء الأسهم`,
-    react: PurchaseConfirmationEmail({
-      user,
-      project,
-      purchaseDetails,
-    }),
+    react: PurchaseConfirmationEmail({ user, project, purchaseDetails }),
     attachments: [
       {
         filename: `${project.projectName}-contract-${user.name}.pdf`,

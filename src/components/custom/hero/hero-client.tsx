@@ -136,7 +136,7 @@ export function HeroClient({
             </div>
             <div className="flex flex-1 flex-col gap-3 p-6 text-center">
               <strong className="text-primary text-2xl font-medium lg:text-4xl">
-                +{userSatisfactionCount}
+                %{userSatisfactionCount}
               </strong>
               <div className="text-gray-200 lg:text-lg">رضاء المستخدمين</div>
             </div>

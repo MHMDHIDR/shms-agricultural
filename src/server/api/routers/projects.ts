@@ -576,7 +576,7 @@ export const projectRouter = createTRPCRouter({
         createdAt: z.date(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input: purchaseDetails }) => {
       const userId = ctx.session?.user?.id
 
       if (!userId) {
@@ -584,7 +584,7 @@ export const projectRouter = createTRPCRouter({
       }
 
       const [project, user] = await Promise.all([
-        ctx.db.projects.findUnique({ where: { id: input.projectId } }),
+        ctx.db.projects.findUnique({ where: { id: purchaseDetails.projectId } }),
         ctx.db.user.findUnique({ where: { id: userId } }),
       ])
 
@@ -593,11 +593,7 @@ export const projectRouter = createTRPCRouter({
       }
 
       try {
-        await sendPurchaseConfirmationEmail({
-          user,
-          project,
-          purchaseDetails: input,
-        })
+        await sendPurchaseConfirmationEmail({ user, project, purchaseDetails })
 
         return { success: true }
       } catch (error) {
