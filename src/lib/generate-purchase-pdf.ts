@@ -117,7 +117,7 @@ export async function generatePurchasePDF(
             font-size: 24px;
             font-weight: bolder;
             color: #007ee6;
-            margin-right: 20px;
+            margin-right: 0;
           }
 
           table {
@@ -158,8 +158,8 @@ export async function generatePurchasePDF(
 
           .stamp {
             position: absolute;
-            top: -60px;
-            right: 20px;
+            top: -80px;
+            right: 60px;
             width: 150px;
             height: 150px;
             display: flex;
