@@ -60,6 +60,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           src="https://analytics.technodevlabs.com/script.js"
           data-website-id="e33f6fbd-145d-4d40-a9cf-d93a5681e1f8"
         ></script>
+        <meta
+          name="google-site-verification"
+          content="3gyxn1znd1jTWuUAvgYtSk9Ne7GHP4a7kcN2ZotCMJQ"
+        />
       </head>
       <body
         className="font-noto-kufi flex min-h-screen flex-col bg-background text-slate-900 dark:text-slate-50"
