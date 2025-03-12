@@ -29,15 +29,26 @@ export function StockPurchaseForm({ project }: { project: Projects }) {
   const [newPercentage, setNewPercentage] = useState(0)
   const [showTerms, setShowTerms] = useState(false)
   const [isClient, setIsClient] = useState(false)
+  const isInvestmentDisabled = new Date() > new Date(project.projectInvestDate)
 
-  // const projectInvestmentDisabled =
-  //   project.projectAvailableStocks === 0 ||
-  //   project.projectStatus === "pending" ||
-  //   project.projectInvestDate < new Date()
-
+  // Handle redirects in useEffect
   useEffect(() => {
+    // Check for investment date
+    if (isInvestmentDisabled) {
+      router.replace(`/projects/${project.id}?step=info`)
+      return
+    }
+
+    // Check for authentication
+    if (status === "unauthenticated") {
+      const currentPath = `/projects/${project.id}?step=purchase`
+      const signInUrl = `/signin?callbackUrl=${encodeURIComponent(currentPath)}`
+      window.location.href = signInUrl
+      return
+    }
+
     setIsClient(true)
-  }, [])
+  }, [isInvestmentDisabled, project.id, router, status])
 
   const { data: userData, isLoading: isLoadingUser } = api.user.getUserById.useQuery(
     { id: session?.user?.id ?? "" },
@@ -51,21 +62,15 @@ export function StockPurchaseForm({ project }: { project: Projects }) {
       },
     })
 
-  // Handle project investment disabled state
-  // useEffect(() => {
-  //   if (projectInvestmentDisabled) {
-  //     router.replace(`/projects`)
-  //   }
-  // }, [projectInvestmentDisabled, router])
-
   // Show loading state during initial client-side render
   if (!isClient || status === "loading" || isLoadingUser) {
     return <LoadingCard renderedSkeletons={8} className="h-28" />
   }
 
-  // if (projectInvestmentDisabled) {
-  //   return null
-  // }
+  // Handle missing user data
+  if (!userData) {
+    return null
+  }
 
   // Calculate available stocks using userData instead of session
   const purchasedStocksForProject =
@@ -84,18 +89,6 @@ export function StockPurchaseForm({ project }: { project: Projects }) {
   const totalProfit = baseProfit + bonusProfit
   const totalPayment = selectedStocks * project.projectStockPrice
   const totalReturn = totalPayment + totalProfit
-
-  if (status === "unauthenticated") {
-    const currentPath = `/projects/${project.id}?step=purchase`
-    const signInUrl = `/signin?callbackUrl=${encodeURIComponent(currentPath)}`
-    window.location.href = signInUrl
-    return null
-  }
-
-  // Handle missing user data
-  if (!userData) {
-    return null
-  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

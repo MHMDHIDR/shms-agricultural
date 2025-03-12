@@ -27,17 +27,34 @@ export function PurchaseConfirmation({ project }: { project: Projects }) {
   const [purchaseData, setPurchaseData] = useState<PurchaseData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const toast = useToast()
-
-  // const projectInvestmentDisabled =
-  //   project.projectAvailableStocks === 0 ||
-  //   project.projectStatus === "pending" ||
-  //   project.projectInvestDate < new Date()
+  const isInvestmentDisabled = new Date() > new Date(project.projectInvestDate)
 
   // Fetch user data
   const { data: userData, isLoading: isLoadingUser } = api.user.getUserById.useQuery(
     { id: session?.user?.id ?? "" },
     { enabled: !!session?.user?.id },
   )
+
+  // Handle redirects in useEffect
+  useEffect(() => {
+    // Check for investment date
+    if (isInvestmentDisabled) {
+      router.replace(`/projects/${project.id}?step=info`)
+      return
+    }
+
+    // Check for purchase data
+    const savedData = localStorage.getItem("purchase_data")
+    if (!savedData) {
+      router.push(`/projects/${project.id}?step=purchase`)
+      return
+    }
+
+    // Parse and set purchase data
+    const parsedData = JSON.parse(savedData) as PurchaseData
+    setPurchaseData(parsedData)
+    setIsLoading(false)
+  }, [isInvestmentDisabled, project.id, router])
 
   const { mutate: confirmPurchase, isPending } = api.projects.confirmPurchase.useMutation({
     onSuccess: () => {
@@ -50,31 +67,9 @@ export function PurchaseConfirmation({ project }: { project: Projects }) {
     },
   })
 
-  useEffect(() => {
-    const savedData = localStorage.getItem("purchase_data")
-    if (!savedData) {
-      router.push(`/projects/${project.id}?step=purchase`)
-      return
-    }
-
-    const parsedData = JSON.parse(savedData) as PurchaseData
-    setPurchaseData(parsedData)
-    setIsLoading(false)
-  }, [project.id, router])
-
-  // useEffect(() => {
-  //   if (projectInvestmentDisabled) {
-  //     router.replace(`/projects`)
-  //   }
-  // }, [projectInvestmentDisabled, router])
-
   if (isLoading || isLoadingUser || !purchaseData) {
     return <LoadingCard renderedSkeletons={10} />
   }
-
-  // if (projectInvestmentDisabled) {
-  //   return null
-  // }
 
   return (
     <div className="max-w-2xl mx-auto space-y-8 select-none">

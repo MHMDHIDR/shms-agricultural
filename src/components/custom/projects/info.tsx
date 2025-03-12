@@ -71,6 +71,8 @@ export function Info({ project }: { project: Projects & { projectDuration: strin
     router.push(`/projects/${project.id}?step=purchase`)
   }
 
+  const isInvestmentDisabled = new Date() > new Date(project.projectInvestDate)
+
   const handleStudyCaseClick = () => {
     if (project.projectStudyCaseVisibility && project.projectStudyCase?.[0]?.imgDisplayPath) {
       if (!isMobile) {
@@ -197,8 +199,13 @@ export function Info({ project }: { project: Projects & { projectDuration: strin
           <p className="md:text-xl text-lg font-extrabold leading-loose text-muted-foreground mb-4">
             إبدأ ببناء المستقبل، استثمر في هذا المشروع الآن
           </p>
-          <Button variant="pressable" className="w-fit" onClick={handleStartInvestment}>
-            إبدأ الاستثمار
+          <Button
+            variant="pressable"
+            className="w-fit"
+            onClick={handleStartInvestment}
+            disabled={isInvestmentDisabled}
+          >
+            {isInvestmentDisabled ? "انتهت فترة الاستثمار" : "إبدأ الاستثمار"}
           </Button>
         </div>
       </div>

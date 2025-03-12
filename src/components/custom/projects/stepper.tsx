@@ -4,7 +4,7 @@ import clsx from "clsx"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import React from "react"
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Stepper,
@@ -51,22 +51,33 @@ const steps = [
 export function ProjectStepper({
   project,
   currentStep,
-  projectId,
 }: {
   project: Projects
   currentStep: string
-  projectId: string
 }) {
+  const router = useRouter()
   const { data: session } = useSession()
   const sessionRole = session?.user?.role
-
-  const router = useRouter()
   const stepIndex = steps.findIndex(s => s.id === currentStep)
   const purchaseData = typeof window !== "undefined" ? localStorage.getItem("purchase_data") : null
+  const isInvestmentDisabled = new Date() > new Date(project.projectInvestDate)
+  const isMobile = useIsMobile()
+
+  // Handle redirects in useEffect
+  useEffect(() => {
+    if ((currentStep === "purchase" || currentStep === "confirm") && isInvestmentDisabled) {
+      router.replace(`/projects/${project.id}?step=info`)
+    }
+  }, [currentStep, isInvestmentDisabled, project.id, router])
 
   const canAccessStep = (stepToCheck: string) => {
     const stepIdx = steps.findIndex(step => step.id === stepToCheck)
     const currentIdx = steps.findIndex(step => step.id === currentStep)
+
+    // Check if investment date has passed for purchase and confirm steps
+    if ((stepToCheck === "purchase" || stepToCheck === "confirm") && isInvestmentDisabled) {
+      return false
+    }
 
     // Can always go back
     if (stepIdx < currentIdx) return true
@@ -83,18 +94,18 @@ export function ProjectStepper({
     return true
   }
 
-  const isMobile = useIsMobile()
+  const handleStepChange = (index: number) => {
+    const step = steps[index]
+    if (step && canAccessStep(step.id)) {
+      router.push(`/projects/${project.id}?step=${step.id}`)
+    }
+  }
 
   return (
     <div className="space-y-8 w-full">
       <Stepper
         value={stepIndex}
-        onValueChange={index => {
-          const step = steps[index]
-          if (step && canAccessStep(step.id)) {
-            router.push(`/projects/${projectId}?step=${step.id}`)
-          }
-        }}
+        onValueChange={handleStepChange}
         className={clsx(
           "gap-x-2 w-full items-center mx-auto",
           isMobile ? "flex-col" : "justify-center",
