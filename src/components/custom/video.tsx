@@ -36,7 +36,6 @@ export default function Video({
     }
 
     const handleError = () => {
-      console.error("Video failed to load")
       if (timeoutId) clearTimeout(timeoutId)
     }
 
