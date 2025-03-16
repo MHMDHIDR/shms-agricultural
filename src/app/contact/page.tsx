@@ -51,7 +51,12 @@ export default function Contact() {
               <p className="text-sm md:text-base text-muted-foreground">
                 نحن متاحون يوميًا في كل الأوقات.
               </p>
-              <Link href={`tel:${ADMIN_PHONE}`} className="font-semibold hover:underline" dir="ltr">
+              <Link
+                href={`https://wa.me/${ADMIN_PHONE.replace("+", "")}?text=السلام عليكم`}
+                target="_blank"
+                className="font-semibold hover:underline"
+                dir="ltr"
+              >
                 {ADMIN_PHONE}
               </Link>
             </div>

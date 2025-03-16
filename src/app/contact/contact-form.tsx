@@ -92,17 +92,17 @@ export function ContactForm() {
             render={({ field }) => (
               <Select onValueChange={field.onChange} defaultValue={service ?? field.value} required>
                 <SelectTrigger
-                  className="w-full bg-gray-100 dark:bg-gray-800"
+                  className="w-full bg-gray-100 dark:bg-gray-800 cursor-pointer"
                   id="subject"
                   dir="auto"
                 >
                   <SelectValue placeholder="اختر نوع الخدمة" />
                 </SelectTrigger>
-                <SelectContent dir="auto" className="select-none">
+                <SelectContent dir="auto" className="select-none" avoidCollisions={false}>
                   <SelectGroup>
                     <SelectLabel>اختر نوع الخدمة</SelectLabel>
                     {services.map(service => (
-                      <SelectItem key={service} value={service}>
+                      <SelectItem key={service} value={service} className="cursor-pointer">
                         {service}
                       </SelectItem>
                     ))}
@@ -134,7 +134,7 @@ export function ContactForm() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
         <div className="md:col-span-1" />
         <div className="md:col-span-2">
-          <Button type="submit" disabled={isSubmitting} className="w-full">
+          <Button type="submit" disabled={isSubmitting} className="w-full cursor-pointer">
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
