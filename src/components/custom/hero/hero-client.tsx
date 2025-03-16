@@ -3,6 +3,7 @@
 import { NutIcon, TreePineIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import VISION_HERO from "@/../public/vision-hero.webp"
 import Video from "@/components/custom/video"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -48,13 +49,16 @@ export function HeroClient({
             <div className="bg-secondary relative mx-auto h-[16rem] w-[16rem] rounded-full shadow-2xl transition-transform duration-300 hover:-translate-y-2 md:mx-0 md:mt-0 md:h-[21.25rem] md:w-[21.25rem] lg:h-[25rem] lg:w-[25rem]">
               <div className="absolute inset-0 overflow-hidden rounded-full">
                 <Image
-                  src="/vision-hero.webp"
-                  alt="Hero"
+                  src={VISION_HERO}
+                  alt="Hero image showing agricultural investment opportunities"
                   className="h-full w-full object-cover"
-                  width={500}
-                  height={500}
-                  quality={20}
+                  width={800}
+                  height={800}
+                  quality={75}
                   priority
+                  sizes="(max-width: 768px) 16rem, (max-width: 1024px) 21.25rem, 25rem"
+                  placeholder="blur"
+                  blurDataURL={VISION_HERO.blurDataURL}
                 />
               </div>
               <div className="absolute bottom-0 z-10 flex max-w-fit flex-col items-center justify-center rounded-full bg-white px-6 py-1 shadow-md">
