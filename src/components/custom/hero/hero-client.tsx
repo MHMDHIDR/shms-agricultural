@@ -52,11 +52,11 @@ export function HeroClient({
                   src={VISION_HERO}
                   alt="Hero image showing agricultural investment opportunities"
                   className="h-full w-full object-cover"
-                  width={800}
-                  height={800}
-                  quality={75}
+                  width={400}
+                  height={400}
+                  quality={60}
                   priority
-                  sizes="(max-width: 768px) 16rem, (max-width: 1024px) 21.25rem, 25rem"
+                  sizes="(max-width: 768px) 256px, (max-width: 1024px) 340px, 400px"
                   placeholder="blur"
                   blurDataURL={VISION_HERO.blurDataURL}
                 />
