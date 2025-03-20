@@ -55,6 +55,7 @@ export function HeroClient({
                   width={400}
                   height={400}
                   quality={60}
+                  loading="eager"
                   priority
                   sizes="(max-width: 768px) 256px, (max-width: 1024px) 340px, 400px"
                   placeholder="blur"
