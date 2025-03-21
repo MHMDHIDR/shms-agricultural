@@ -77,11 +77,11 @@ export function HeroClient({
                       {image ? (
                         <Image
                           src={image ?? APP_LOGO_SVG}
-                          alt={`Investor ${name}`}
+                          alt={`المستثمر ${name}`}
                           width={32}
                           height={32}
                           className="h-full w-full object-contain bg-amber-100"
-                          title={`Investor ${name}`}
+                          title={`المستثمر ${name}`}
                           quality={20}
                           loading="lazy"
                         />
