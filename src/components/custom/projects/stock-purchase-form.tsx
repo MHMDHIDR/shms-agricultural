@@ -146,7 +146,7 @@ export function StockPurchaseForm({ project }: { project: Projects }) {
               />
             </SelectTrigger>
             <SelectContent avoidCollisions={false}>
-              {Array.from({ length: maxPurchaseAmount }, (_, i) => (
+              {new Array(maxPurchaseAmount).fill(null).map((_, i) => (
                 <SelectItem className="font-bold" key={i + 1} value={String(i + 1)}>
                   {i + 1}
                 </SelectItem>
