@@ -16,9 +16,9 @@ export function LoadingCard({
   return (
     <div className={cn(`flex gap-2.5`, layout === "vertical" ? "flex-col" : "flex-row")}>
       {renderedSkeletons ? (
-        new Array(renderedSkeletons)
-          .fill(null)
-          .map((_, index) => <Skeleton key={index} className={cn(`h-12 w-full`, className)} />)
+        Array.from({ length: renderedSkeletons }).map((_, index) => (
+          <Skeleton key={index} className={cn(`h-12 w-full`, className)} />
+        ))
       ) : (
         <Skeleton className={cn(`h-12 w-full`, className)} />
       )}
