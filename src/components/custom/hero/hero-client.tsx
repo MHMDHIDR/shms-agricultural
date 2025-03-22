@@ -52,8 +52,8 @@ export function HeroClient({
                   src={VISION_HERO}
                   alt="Hero image showing agricultural investment opportunities"
                   className="h-full w-full object-cover"
-                  width={400}
-                  height={400}
+                  width={256}
+                  height={256}
                   quality={60}
                   loading="eager"
                   priority
