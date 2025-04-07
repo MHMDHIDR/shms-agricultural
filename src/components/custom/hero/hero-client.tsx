@@ -12,29 +12,6 @@ import { APP_DESCRIPTION } from "@/lib/constants"
 
 // import { APP_LOGO_SVG } from "@/lib/constants"
 
-const HeroVideo = () => (
-  <div className="relative h-full w-full">
-    <video
-      src={
-        "https://new-shms.s3.eu-west-2.amazonaws.com/hero.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIA2ZH4GVJKVPPQSSV5%2F20250407%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250407T080315Z&X-Amz-Expires=300&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEOD%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMiJHMEUCIQDLOf%2BTOOUrzlT%2FRKDyusjFK%2FeYnKyTCUu2CIDm6vBymgIgAlqSos3nlBjWTWg3XeoGDTaj3ibrMV0XabmHv0GfYXEq7AIIWRAAGgw3NDE0MTA3Nzc2ODUiDE%2BPXnoHWDmWFQnY7CrJAje8%2B9PMHq03i9%2Fdia2MHLiCqksN1p4YML3V3IsDlwdgV%2F0tdjoG5C%2FTHHV3zUucY3KGDIXwYbg%2BQ0bjWRjN6d6xfejhYM3m4Ee7mOxaKy7fiDCJXv9Yc%2FF77KrChbTyWTdiWcl6mWqiM%2Fivj2VLvyJ1EwpqVKzqKgUlcDKfUEr%2FXAUf5QwPDl%2FxeZzf1ST31CkDY1v6ODP%2F8B558yLgdU4T22NgHGn5QvjDRK28Ysc0Tj6DNPWEa3KnMDqWoXkISb0CrPruJKPUylyGfoSw%2Fbz4%2BtJBdiq1ZNaSJunPhlwnwO%2B670FUx0Bc8ePrxpWnIJnuuTWCalOn95%2Bg6NCB68%2BGTcqZhlHdPA9R6Mv1aUOnwIJTwRvJCLF5WtMJIaGATM%2FNL0cufwTxDVbEon3ifU1m5bOHe4pk%2FEvsZAyrhdzel9mWBCkWmGB2ML2Fzr8GOrMC0BbyfCaOkTaFaAHyP4gPKgwGW%2BmaE5pxXLHYqc1tb2i%2FMNRf5UazQkuMOMcXT3E6caKbIDftBUDdH77v%2BOd6V48pCoTqNFKiRCFtIPofXKUryMBjac3Pd5jb3XWeJ8%2Bi6CKkXAKvuDcBEcefO%2BgksCk77D%2BiwCgMJ1kY7clcO2ENe9QYIBfI%2BVXsiUxVBE%2F9i6aoYl8slzPGaJE93Ja%2FjSQdixqHz58Lb9f0nFLphv9pM3Yq7a%2B1GJJFH8gWeZN9D%2Bq5%2BmglQuCRyiaoV%2BWW4IPNAvPfPJPgaFbXdXIoUKVmkWDQKGAWHXNCbBUmZSj5TAo5z0lxMTYaUiryRqFqp1JdhFz6BsKcENA3Lsn9SrBDxn4UEX81AjiRrbMCz0WMXhv8JIwJ73twDdBvLJjag62f6w%3D%3D&X-Amz-Signature=c9776fd435964ba7b20d46c655053fd87bb77af4035edf2e650923dcb9627647&X-Amz-SignedHeaders=host&response-content-disposition=inline"
-      }
-      className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 opacity-100`}
-      autoPlay={true}
-      loop={true}
-      muted={true}
-      playsInline
-      preload="metadata"
-      poster="/hero.webp"
-    >
-      <track label="thumbnails" default kind="metadata" />
-      <track kind="metadata" label="cuepoints" />
-      <track kind="chapters" label="chapters" />
-      <track kind="captions" label="captions" />
-    </video>
-    <p className="sr-only">Hero video for {APP_DESCRIPTION}</p>
-  </div>
-)
-
 type HeroClientProps = {
   yearInIndustry: number
   farmingProjects: number
@@ -66,7 +43,24 @@ export function HeroClient({
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 z-10 bg-black/70" />
         <Suspense fallback={<div className="absolute inset-0 bg-black/70" />}>
-          <HeroVideo />
+          <div className="relative h-full w-full">
+            <video
+              src="/hero.mp4"
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 opacity-100`}
+              autoPlay={true}
+              loop={true}
+              muted={true}
+              playsInline
+              preload="metadata"
+              poster="/hero.webp"
+            >
+              <track label="thumbnails" default kind="metadata" />
+              <track kind="metadata" label="cuepoints" />
+              <track kind="chapters" label="chapters" />
+              <track kind="captions" label="captions" />
+            </video>
+            <p className="sr-only">Hero video for {APP_DESCRIPTION}</p>
+          </div>
         </Suspense>
       </div>
 
