@@ -8,7 +8,7 @@ export const useCountUp = (end: number, duration = 2000) => {
     const startValue = 0
 
     const step = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp
+      startTimestamp ??= timestamp
       const progress = Math.min((timestamp - startTimestamp) / duration, 1)
 
       const easeOutQuad = 1 - Math.pow(1 - progress, 2)
