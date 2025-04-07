@@ -5,6 +5,8 @@ import { StartNowCTA } from "@/components/custom/our-services/start-now-cta"
 import OurValues from "@/components/custom/our-values"
 import { HydrateClient } from "@/trpc/server"
 
+export const revalidate = 3600
+
 export default function Home() {
   return (
     <HydrateClient>
