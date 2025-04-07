@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache"
 import { getBlurPlaceholder } from "@/lib/optimize-image"
 import { createCaller } from "@/server/api/root"
 import { createTRPCContext } from "@/server/api/trpc"
@@ -5,9 +6,20 @@ import { auth } from "@/server/auth"
 import { HeroClient } from "./hero-client"
 
 export default async function Hero() {
-  const context = await createTRPCContext({ headers: new Headers() })
-  const caller = createCaller(context)
-  const usersData = await caller.user.getAll()
+  const getUsersData = unstable_cache(
+    async () => {
+      const context = await createTRPCContext({ headers: new Headers() })
+      const caller = createCaller(context)
+      return caller.user.getAll()
+    },
+    ["users-data"],
+    {
+      revalidate: 3600,
+      tags: ["users"],
+    },
+  )
+
+  const usersData = await getUsersData()
 
   // Get auth session for CTA
   const session = await auth()

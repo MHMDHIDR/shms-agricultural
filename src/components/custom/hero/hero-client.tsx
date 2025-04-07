@@ -4,11 +4,12 @@ import { NutIcon, TreePineIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import VISION_HERO from "@/../public/vision-hero.webp"
-import Video from "@/components/custom/video"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+// import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useCountUp } from "@/hooks/use-count-up"
-import { APP_LOGO_SVG } from "@/lib/constants"
+import { APP_DESCRIPTION } from "@/lib/constants"
+
+// import { APP_LOGO_SVG } from "@/lib/constants"
 
 type HeroClientProps = {
   yearInIndustry: number
@@ -26,7 +27,7 @@ export function HeroClient({
   farmingProjects,
   userSatisfaction,
   totalUsers,
-  topInvestors,
+  // topInvestors,
   mainHeadline,
   subHeadline,
   isAuthenticated,
@@ -40,7 +41,25 @@ export function HeroClient({
     <section className="bg-background relative overflow-hidden py-12 select-none md:py-32">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 z-10 bg-black/70" />
-        <Video src="/hero.mp4" />
+        <div className="relative h-full w-full">
+          <video
+            src={
+              "https://new-shms.s3.eu-west-2.amazonaws.com/hero.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIA2ZH4GVJK35TLI3P2%2F20250407%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250407T074837Z&X-Amz-Expires=300&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEOD%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMiJHMEUCICby3nXKQINo83CaccPgNLihjzzrGbIMsd5%2FGMfZ6btMAiEAyK6oTJgY9t8mukRJKsU26nINGVNxhleUR2ZHeX73CdYq7AIIWRAAGgw3NDE0MTA3Nzc2ODUiDAILys8JcmJ30m7lEyrJAjhyout3fgNMHFidfFsfIGWyck5TVi%2F%2B04zZ4dp%2FhraIM7KW0WvcVQRWTRWKhZ%2BA%2Be%2FJar%2BCqomHbSqm8Z2uszQbr7tH8kO26guWtSqzJXKPWX4dVrlKroyhbciV8KnbkTWDL%2Bf1RcoP9ytFr2KUXKVgQZ79J9UtqxdpIVDkOk4b9wKGXBYomKH11gPi515fLXDhJ%2BgkcViNh%2FM%2FaJxggZ7Sc8cm%2BRjQ9CUJmaDmzxsJXETQ44LgmRE9rIglryg1Cuzu3OwHl3%2BZOIwuidbYD1ELDKOu1Ka89FKNwi59zoTOSF%2FGebUP2Fk3pRSSga5KyY459JANAdfHurzp7jERFJCVTofcundkNPRmAHMDn%2BDU2xAH3Zv%2Fd5vvxEdKJ2M73oRhSj2cuF3I8hcnt6AC%2BEPPm563BLLzAK6SOMXrfOlDVemLEkZ9iEozML2Fzr8GOrMC952%2BpeLnMPme13VaUQsNC1%2Fs9hgjIWmEN6WS8zAaD8rR7gBWiU5cQ%2FwP%2FkLvcZb9FNf8WZyWM%2BS9n%2FuW03ZxAVyJKoaOfsv7Zt2fiOpecFxuoDFGV3mTghv8SjWSQWsF2okrU9S%2FwsxISMnc41JeMmmj949PqVXeqSKjZnlXKJpANWf8WlzkSRI%2BqwFG4H9pQsfdSLklXWjQYlZi1oCd%2B2I2sywc6l2fEd3GoFnPldVog0E8ZSr0n79KEyGJ65XYfTX4Qg7qM%2B8XPhT5H4ilISlC88Ea1qZkQ1DgmNtcWTCX2%2FazSsx2UPWSOzmhO5f3%2FicAfBSdFdCiNGZUplp4nw0OjvBxOHKf0m%2FhoRegCWY9uLFxZc6jq%2Fr%2FzoKApiQpcLKH6opmD09xdpAL1lwxQ6jJWg%3D%3D&X-Amz-Signature=a874e0fca779bc7c4d44f58eb6fe02ad2a8f1bc1d657448f3ea3ca205191518b&X-Amz-SignedHeaders=host&response-content-disposition=inline"
+            }
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 opacity-100`}
+            autoPlay={true}
+            loop={true}
+            muted={true}
+            playsInline
+            preload="auto"
+          >
+            <track label="thumbnails" default kind="metadata" />
+            <track kind="metadata" label="cuepoints" />
+            <track kind="chapters" label="chapters" />
+            <track kind="captions" label="captions" />
+          </video>
+          <p className="sr-only">Hero video for {APP_DESCRIPTION}</p>
+        </div>
       </div>
 
       <div className="relative z-20 container mx-auto md:max-w-[70rem]">
@@ -68,7 +87,7 @@ export function HeroClient({
                   <strong className="mx-1">+{totalUsersCount}</strong>
                   مستثمرين المستقبل
                 </div>
-                <div className="flex -space-x-2" dir="ltr">
+                {/* <div className="flex -space-x-2" dir="ltr">
                   {topInvestors.map(({ name, image }, index) => (
                     <Avatar
                       key={index}
@@ -95,7 +114,7 @@ export function HeroClient({
                       )}
                     </Avatar>
                   ))}
-                </div>
+                </div> */}
               </div>
               <div className="bg-primary absolute top-0 right-0 flex h-[6.25rem] w-[6.25rem] rotate-12 rounded-3xl border-8 border-white lg:h-[6.875rem] lg:w-[6.875rem]">
                 <TreePineIcon className="m-auto h-[2.5rem] w-[2.5rem] stroke-white lg:h-[3.125rem] lg:w-[3.125rem]" />
