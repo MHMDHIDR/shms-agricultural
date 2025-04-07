@@ -81,7 +81,7 @@ export function HeroClient({
                   className="h-full w-full object-cover"
                   width={400}
                   height={400}
-                  quality={75}
+                  quality={65}
                   loading="eager"
                   priority
                   sizes="(max-width: 768px) 256px, (max-width: 1024px) 340px, 400px"
