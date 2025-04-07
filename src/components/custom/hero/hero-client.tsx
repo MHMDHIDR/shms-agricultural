@@ -5,12 +5,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { Suspense } from "react"
 import VISION_HERO from "@/../public/vision-hero.webp"
-// import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useCountUp } from "@/hooks/use-count-up"
-import { APP_DESCRIPTION } from "@/lib/constants"
-
-// import { APP_LOGO_SVG } from "@/lib/constants"
+import { APP_DESCRIPTION, APP_LOGO_SVG } from "@/lib/constants"
 
 type HeroClientProps = {
   yearInIndustry: number
@@ -28,7 +26,7 @@ export function HeroClient({
   farmingProjects,
   userSatisfaction,
   totalUsers,
-  // topInvestors,
+  topInvestors,
   mainHeadline,
   subHeadline,
   isAuthenticated,
@@ -72,10 +70,10 @@ export function HeroClient({
                 <Image
                   src={VISION_HERO}
                   alt="Hero image showing agricultural investment opportunities"
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover object-bottom-right"
                   width={400}
                   height={400}
-                  quality={65}
+                  quality={70}
                   loading="eager"
                   priority
                   sizes="(max-width: 768px) 256px, (max-width: 1024px) 340px, 400px"
@@ -89,7 +87,7 @@ export function HeroClient({
                   <strong className="mx-1">+{totalUsersCount}</strong>
                   مستثمرين المستقبل
                 </div>
-                {/* <div className="flex -space-x-2" dir="ltr">
+                <div className="flex -space-x-2" dir="ltr">
                   {topInvestors.map(({ name, image }, index) => (
                     <Avatar
                       key={index}
@@ -116,7 +114,7 @@ export function HeroClient({
                       )}
                     </Avatar>
                   ))}
-                </div> */}
+                </div>
               </div>
               <div className="bg-primary absolute top-0 right-0 flex h-[6.25rem] w-[6.25rem] rotate-12 rounded-3xl border-8 border-white lg:h-[6.875rem] lg:w-[6.875rem]">
                 <TreePineIcon className="m-auto h-[2.5rem] w-[2.5rem] stroke-white lg:h-[3.125rem] lg:w-[3.125rem]" />
