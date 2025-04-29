@@ -11,7 +11,7 @@ export const dynamic = "force-static"
 
 export default function CookiesPolicyPage() {
   return (
-    <main className="rtl flex min-h-screen flex-col justify-start p-24">
+    <main className="rtl flex min-h-screen flex-col gap-y-10 p-2.5 md:p-16">
       <h1 className="text-xl font-bold select-none">سياسة استخدام ملفات تعريف الارتباط</h1>
       <section className="mt-10 leading-loose md:text-justify">
         <p>مرحبًا بك في سياسة استخدام ملفات تعريف الارتباط لموقعنا.</p>
