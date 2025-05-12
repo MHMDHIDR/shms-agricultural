@@ -32,7 +32,7 @@ import type { Session } from "next-auth"
 
 export function Nav({ user }: { user: Session["user"] | undefined }) {
   const { data: session } = useSession()
-  const currentUser = session?.user ?? user
+  const currentUser = user ?? session?.user
   const [isSigningOut, setIsSigningOut] = useState(false)
 
   const [scrolled, setScrolled] = useState(false)
@@ -108,7 +108,7 @@ export function Nav({ user }: { user: Session["user"] | undefined }) {
           </NavigationMenu>
         </div>
 
-        {user ? (
+        {currentUser ? (
           <DropdownMenu dir="rtl">
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="inline-flex justify-between px-0 cursor-pointer">

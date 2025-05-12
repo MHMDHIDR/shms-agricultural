@@ -1,6 +1,9 @@
 import Image from "next/image"
 import Link from "next/link"
 
+export const dynamic = "force-static"
+export const revalidate = 86400
+
 export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-linear-to-b from-background to-muted p-4">

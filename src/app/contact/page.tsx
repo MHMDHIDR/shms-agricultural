@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   description: APP_DESCRIPTION,
 }
 
+export const dynamic = "force-static"
+export const revalidate = 86400
+
 export default function Contact() {
   return (
     <section className="min-h-screen w-full py-16 px-4 md:px-6">

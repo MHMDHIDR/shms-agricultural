@@ -11,11 +11,8 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 }
 
-// Force static generation
 export const dynamic = "force-static"
-export const revalidate = false
-export const fetchCache = "force-cache"
-export const runtime = "nodejs"
+export const revalidate = 86400
 
 export default async function page() {
   return (

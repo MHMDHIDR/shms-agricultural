@@ -12,11 +12,8 @@ export const metadata: Metadata = {
   description: APP_DESCRIPTION,
 }
 
-// Force static generation
 export const dynamic = "force-static"
-export const revalidate = false
-export const fetchCache = "force-cache"
-export const runtime = "nodejs"
+export const revalidate = 86400
 
 export default async function Harvest() {
   const imagePath = "/our-services/harvest.webp"
