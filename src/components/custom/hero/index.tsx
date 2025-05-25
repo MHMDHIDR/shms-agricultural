@@ -36,11 +36,7 @@ export default async function Hero() {
   const investorsPromises = TOP_INVESTORS.map(async user => {
     const blurDataURL = user.image ? await getBlurPlaceholder({ imageSrc: user.image }) : null
 
-    return {
-      name: user.name?.slice(0, 2) ?? "مستثمر".slice(0, 2),
-      image: user.image,
-      blurDataURL,
-    }
+    return { name: user.name ?? "مستثمر", image: user.image, blurDataURL }
   })
   const topInvestors = await Promise.all(investorsPromises)
 

@@ -1,10 +1,5 @@
-"use client"
-
-import clsx from "clsx"
 import { LayoutDashboard, MenuIcon, Settings, User2 } from "lucide-react"
-import { useSession } from "next-auth/react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
 import { ShmsIcon } from "@/components/custom/icons"
 import { AvatarFallback, AvatarImage, Avatar as AvatarWrapper } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -16,7 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { handleSignout } from "@/components/ui/nav-user/actions"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -28,26 +22,11 @@ import {
 import { APP_LOGO_SVG, APP_TITLE } from "@/lib/constants"
 import { fallbackUsername, truncateUsername } from "@/lib/fallback-username"
 import { cn } from "@/lib/utils"
+import NavWrapper from "./nav-wrapper"
+import { SignOutButton } from "./signout-button"
 import type { Session } from "next-auth"
 
 export function Nav({ user }: { user: Session["user"] | undefined }) {
-  const { data: session } = useSession()
-  const currentUser = user ?? session?.user
-  const [isSigningOut, setIsSigningOut] = useState(false)
-
-  const [scrolled, setScrolled] = useState(false)
-  const SCROLL_THRESHOLD = 150
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const isScrolled = window.scrollY > SCROLL_THRESHOLD
-      setScrolled(isScrolled)
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
   const menuItems = [
     {
       title: "المشاريع الاستثمارية",
@@ -67,29 +46,12 @@ export function Nav({ user }: { user: Session["user"] | undefined }) {
     },
   ]
 
-  const handleSignoutClick = async () => {
-    setIsSigningOut(true)
-    await handleSignout()
-  }
-
   return (
-    <nav
-      className={clsx(
-        "sticky top-0 z-50 min-w-full shadow-md backdrop-blur-md transition-all duration-200",
-        "dark:bg-background/55 bg-white/55",
-        { "h-12": scrolled, "h-16": !scrolled },
-      )}
-      dir="ltr"
-    >
+    <NavWrapper>
       <div className="container mx-auto flex h-full items-center justify-between px-2.5 text-black select-none dark:text-white">
         <div className="flex items-center">
           <Link href="/">
-            <ShmsIcon
-              className={clsx("transition-all duration-200", {
-                "h-8 w-20": scrolled,
-                "h-11 w-24": !scrolled,
-              })}
-            />
+            <ShmsIcon className="transition-all duration-200 size-14" />
           </Link>
         </div>
         <div className="hidden sm:block">
@@ -108,12 +70,12 @@ export function Nav({ user }: { user: Session["user"] | undefined }) {
           </NavigationMenu>
         </div>
 
-        {currentUser ? (
+        {user ? (
           <DropdownMenu dir="rtl">
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="inline-flex justify-between px-0 cursor-pointer">
-                <Avatar user={currentUser} className="rounded-md rounded-r-none h-8.5 w-8.5" />
-                <span className="pr-2">{truncateUsername(currentUser?.name ?? "User")}</span>
+                <Avatar user={user} className="rounded-md rounded-r-none h-8.5 w-8.5" />
+                <span className="pr-2">{truncateUsername(user?.name ?? "User")}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-44 space-y-2 text-right">
@@ -125,7 +87,7 @@ export function Nav({ user }: { user: Session["user"] | undefined }) {
                 <User2 className="h-5 w-5" />
                 الحساب
               </DropdownLinkItem>
-              {currentUser?.role === "admin" && (
+              {user?.role === "admin" && (
                 <DropdownLinkItem href="/admin">
                   <Settings className="h-5 w-5" />
                   الإدارة
@@ -133,14 +95,7 @@ export function Nav({ user }: { user: Session["user"] | undefined }) {
               )}
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Button
-                  variant="destructive"
-                  className="w-full cursor-pointer"
-                  onClick={handleSignoutClick}
-                  disabled={isSigningOut}
-                >
-                  {isSigningOut ? "جاري تسجيل الخروج..." : "تسجيل الخروج"}
-                </Button>
+                <SignOutButton />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -182,7 +137,7 @@ export function Nav({ user }: { user: Session["user"] | undefined }) {
           </NavigationMenu>
         </div>
       </div>
-    </nav>
+    </NavWrapper>
   )
 }
 

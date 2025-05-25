@@ -1,11 +1,12 @@
 "use client"
 
+import clsx from "clsx"
 import { NutIcon, TreePineIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { Suspense } from "react"
+import { Suspense, useCallback } from "react"
 import VISION_HERO from "@/../public/vision-hero.webp"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useCountUp } from "@/hooks/use-count-up"
 import { APP_DESCRIPTION, APP_LOGO_SVG } from "@/lib/constants"
@@ -15,7 +16,7 @@ type HeroClientProps = {
   farmingProjects: number
   userSatisfaction: number
   totalUsers: number
-  topInvestors: { name: string; image: string | null; blurDataURL: string | null }[]
+  topInvestors: { name: string | null; image: string | null; blurDataURL: string | null }[]
   mainHeadline: string
   subHeadline: string
   isAuthenticated: boolean
@@ -35,6 +36,29 @@ export function HeroClient({
   const yearInIndustryCount = useCountUp(yearInIndustry)
   const farmingProjectsCount = useCountUp(farmingProjects)
   const userSatisfactionCount = useCountUp(userSatisfaction)
+
+  const randomAvatarBgColors = [
+    "bg-amber-100",
+    "bg-blue-100",
+    "bg-green-100",
+    "bg-purple-100",
+    "bg-yellow-100",
+    "bg-pink-100",
+    "bg-teal-100",
+    "bg-cyan-100",
+    "bg-lime-100",
+  ] as const
+
+  const getBackgroundColor = useCallback((name: string): string => {
+    // Create a deterministic hash from the name
+    const hash = name.split("").reduce((acc, char) => {
+      return char.charCodeAt(0) + ((acc << 5) - acc)
+    }, 0)
+
+    // Use the hash to select a color
+    const index = Math.abs(hash) % randomAvatarBgColors.length
+    return randomAvatarBgColors[index] ?? randomAvatarBgColors[0]
+  }, [])
 
   return (
     <section className="bg-background relative overflow-hidden py-12 select-none md:py-32">
@@ -93,25 +117,21 @@ export function HeroClient({
                       key={index}
                       className="bg-primary h-8 w-8 rounded-full border-2 border-white shadow-xs"
                     >
-                      {image ? (
+                      {
                         <Image
-                          src={image ?? APP_LOGO_SVG}
-                          alt={`المستثمر ${name}`}
+                          src={image || APP_LOGO_SVG}
+                          alt={`المستثمر ${name ?? "مستثمر"}`}
                           width={32}
                           height={32}
-                          className="h-full w-full object-contain bg-amber-100"
-                          title={`المستثمر ${name}`}
+                          className={clsx("h-full w-full object-contain", {
+                            [getBackgroundColor(name ?? "مستثمر")]: !image,
+                            "bg-background": image !== null,
+                          })}
+                          title={`المستثمر ${name ?? "مستثمر"}`}
                           quality={20}
                           loading="lazy"
                         />
-                      ) : (
-                        <AvatarFallback
-                          className="text-foreground text-xs dark:text-white"
-                          title={`Investor ${name}`}
-                        >
-                          {name}
-                        </AvatarFallback>
-                      )}
+                      }
                     </Avatar>
                   ))}
                 </div>
