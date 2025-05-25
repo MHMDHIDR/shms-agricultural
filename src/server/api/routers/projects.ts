@@ -8,17 +8,23 @@ import { createCaller } from "@/server/api/root"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc"
 
 export const projectRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    const session = ctx.session
-    const role = session?.user?.role
+  getAll: publicProcedure
+    .input(z.object({ isActive: z.boolean() }).optional())
+    .query(async ({ ctx, input }) => {
+      const session = ctx.session
+      const role = session?.user?.role
 
-    const [projects, count] = await Promise.all([
-      ctx.db.projects.findMany(),
-      ctx.db.projects.count(),
-    ])
+      const [projects, count] = await Promise.all([
+        input?.isActive
+          ? ctx.db.projects.findMany({ where: { projectStatus: "active" } })
+          : ctx.db.projects.findMany(),
+        input?.isActive
+          ? ctx.db.projects.count({ where: { projectStatus: "active" } })
+          : ctx.db.projects.count(),
+      ])
 
-    return { projects, count, role }
-  }),
+      return { projects, count, role }
+    }),
 
   getProjectById: publicProcedure
     .input(z.object({ projectId: z.string() }))

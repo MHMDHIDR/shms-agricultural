@@ -18,7 +18,7 @@ export default async function ProjectsPage() {
   const session = await auth()
   const sessionRole = session?.user?.role
 
-  const { projects, count, role } = await api.projects.getAll()
+  const { projects, count, role } = await api.projects.getAll({ isActive: true })
   const { count: investorsCount } = await api.user.getInvestors()
 
   return (
