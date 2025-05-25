@@ -49,16 +49,19 @@ export function HeroClient({
     "bg-lime-100",
   ] as const
 
-  const getBackgroundColor = useCallback((name: string): string => {
-    // Create a deterministic hash from the name
-    const hash = name.split("").reduce((acc, char) => {
-      return char.charCodeAt(0) + ((acc << 5) - acc)
-    }, 0)
+  const getBackgroundColor = useCallback(
+    (name: string): string => {
+      // Create a deterministic hash from the name
+      const hash = name.split("").reduce((acc, char) => {
+        return char.charCodeAt(0) + ((acc << 5) - acc)
+      }, 0)
 
-    // Use the hash to select a color
-    const index = Math.abs(hash) % randomAvatarBgColors.length
-    return randomAvatarBgColors[index] ?? randomAvatarBgColors[0]
-  }, [])
+      // Use the hash to select a color
+      const index = Math.abs(hash) % randomAvatarBgColors.length
+      return randomAvatarBgColors[index] ?? randomAvatarBgColors[0]
+    },
+    [randomAvatarBgColors],
+  )
 
   return (
     <section className="bg-background relative overflow-hidden py-12 select-none md:py-32">
@@ -119,7 +122,7 @@ export function HeroClient({
                     >
                       {
                         <Image
-                          src={image || APP_LOGO_SVG}
+                          src={image || APP_LOGO_SVG} // we are using || if you want to fallback on any falsy value (e.g. empty string, null, undefined, false, 0).
                           alt={`المستثمر ${name ?? "مستثمر"}`}
                           width={32}
                           height={32}
