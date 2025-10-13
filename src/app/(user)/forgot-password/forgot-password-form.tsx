@@ -24,7 +24,7 @@ const resetPasswordSchema = signupSchema.pick({ email: true })
 
 export type resetPasswordFormValues = z.infer<typeof resetPasswordSchema>
 
-export function SignInForm() {
+export function ForgotPasswordForm() {
   const toast = useToast()
   const router = useRouter()
 

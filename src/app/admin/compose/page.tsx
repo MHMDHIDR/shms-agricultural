@@ -56,7 +56,7 @@ export default function ComposeNewsletterPage() {
             إنشاء نشرة بريدية جديدة
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-3">
           <Suspense
             fallback={
               <div className="space-y-4">

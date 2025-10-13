@@ -241,7 +241,7 @@ export function EmailEditor({ emailList }: EmailEditorProps) {
   }
 
   return (
-    <div className="flex flex-col gap-6 rtl">
+    <div className="flex flex-col gap-3 rtl">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex-1 w-full space-y-4">
           <div>
@@ -267,7 +267,7 @@ export function EmailEditor({ emailList }: EmailEditorProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center max-sm:flex-wrap gap-2">
           <Dialog open={isRecipientsDialogOpen} onOpenChange={setIsRecipientsDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" className="min-w-[120px]">
@@ -377,7 +377,7 @@ export function EmailEditor({ emailList }: EmailEditorProps) {
           <FileUpload
             onFilesSelected={handlePdfFilesSelected}
             disabled={isSending || isPreview}
-            accept=".pdf"
+            accept="pdf"
             multiple
           />
         </div>

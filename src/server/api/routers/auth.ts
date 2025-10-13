@@ -85,7 +85,7 @@ export const authRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const caller = createCaller(ctx)
       const user = await ctx.db.user.findUnique({
-        where: { email: input.email },
+        where: { email: input.email.trim().toLowerCase() },
       })
       const successMsg = "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني 🎉"
 

@@ -132,7 +132,8 @@ export function FileUpload({
           {accept ? (
             <p className="flex flex-col items-center justify-center gap-1">
               <span>يمكنك تحميل ملفات من نوع</span>
-              <strong dir="ltr">{Object.values(accept).join(", ")}</strong>
+              {/* <strong dir="ltr">{Object.values(accept).join(", ")}</strong> */}
+              <strong dir="ltr">{accept.toString()}</strong>
             </p>
           ) : (
             "يمكنك تحميل أي نوع من الملفات"
