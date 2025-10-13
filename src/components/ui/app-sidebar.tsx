@@ -9,6 +9,7 @@ import {
   Home,
   Landmark,
   Link2Icon,
+  MailIcon,
   PercentIcon,
   Plus,
   Settings2,
@@ -121,6 +122,11 @@ export function AppSidebar({
         title: "نسب الأرباح",
         url: "/admin/profits-percentage",
         icon: PercentIcon,
+      },
+      {
+        title: "النشرة البريدية",
+        url: "/admin/compose",
+        icon: MailIcon,
       },
       {
         title: "إحصائيات الزوار",
