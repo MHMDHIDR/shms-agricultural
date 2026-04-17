@@ -1,6 +1,5 @@
 "use server"
 
-import { AuthError } from "next-auth"
 import { signIn } from "@/server/auth"
 import { api } from "@/trpc/server"
 import type { SignInFormValues } from "@/schemas/signin"
@@ -29,8 +28,9 @@ export async function signInAction(values: SignInFormValues) {
   } catch (error) {
     console.error("Sign in error:", error)
 
-    if (error instanceof AuthError) {
-      switch (error.type) {
+    if (error instanceof Error && "type" in error) {
+      const authError = error as Error & { type: string }
+      switch (authError.type) {
         case "CredentialsSignin":
           return { error: "كلمة المرور غير صحيحة" }
         default:

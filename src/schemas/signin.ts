@@ -3,7 +3,7 @@ import { z } from "zod"
 
 export const signInSchema = z.object({
   emailOrPhone: z
-    .string({ required_error: "البريد الالكتروني او رقم الهاتف مطلوب" })
+    .string({ error: "البريد الالكتروني او رقم الهاتف مطلوب" })
     .min(1, "البريد الالكتروني او رقم الهاتف مطلوب")
     .refine(
       value => {
@@ -19,7 +19,7 @@ export const signInSchema = z.object({
       { message: "الرجاء ادخال بريد الكتروني او رقم الهاتف صحيح" },
     ),
   password: z
-    .string({ required_error: "كلمة المرور مطلوبة" })
+    .string({ error: "كلمة المرور مطلوبة" })
     .min(1, "كلمة المرور مطلوبة")
     .min(5, "كلمة المرور يجب ان تكون اكثر من 5 حروف")
     .max(32, "كلمة المرور يجب ان تكون اقل من 32 حرف"),

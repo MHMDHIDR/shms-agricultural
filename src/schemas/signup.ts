@@ -15,12 +15,9 @@ export const signupSchema = z.object({
     },
   ),
   nationality: z.string().min(2, "الرجاء اختيار الجنسية"),
-  dateOfBirth: z.date({
-    required_error: "تاريخ الميلاد مطلوب",
-    invalid_type_error: "تاريخ الميلاد غير صالح",
-  }),
+  dateOfBirth: z.date({ error: "تاريخ الميلاد مطلوب" }),
   address: z
-    .string({ required_error: "يجب إدخال العنوان لنستطيع التواصل معك" })
+    .string({ error: "يجب إدخال العنوان لنستطيع التواصل معك" })
     .min(2, "العنوان يجب أن يكون أكثر من حرفين"),
   password: z
     .string()
@@ -43,5 +40,5 @@ export const updatePublicSchema = z.object({
   doc: z.string().optional(),
 })
 
-export type SignupInput = z.infer<typeof signupSchema>
+export type SignupInput = z.input<typeof signupSchema>
 export type UpdatePublicInput = z.infer<typeof updatePublicSchema>

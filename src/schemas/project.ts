@@ -5,16 +5,16 @@ const baseProjectSchema = z.object({
   projectName: z.string().min(3, "اسم المشروع يجب أن يكون 3 أحرف على الأقل"),
   projectLocation: z.string().min(3, "موقع المشروع يجب أن يكون 3 أحرف على الأقل"),
   projectStartDate: z.date({
-    required_error: "تاريخ بداية المشروع مطلوب",
+    error: "تاريخ بداية المشروع مطلوب",
   }),
   projectEndDate: z.date({
-    required_error: "تاريخ نهاية المشروع مطلوب",
+    error: "تاريخ نهاية المشروع مطلوب",
   }),
   projectInvestDate: z.date({
-    required_error: "تاريخ نهاية الاستثمار مطلوب",
+    error: "تاريخ نهاية الاستثمار مطلوب",
   }),
   projectProfitsCollectDate: z.date({
-    required_error: "تاريخ جمع الأرباح مطلوب",
+    error: "تاريخ جمع الأرباح مطلوب",
   }),
   projectStatus: z.enum(["pending", "active"]),
   projectTotalStocks: z.number().min(1, "إجمالي عدد الأسهم يجب أن يكون أكبر من 0"),

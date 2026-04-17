@@ -1,4 +1,9 @@
-import { Facebook, Instagram, Twitter, Youtube } from "lucide-react"
+import {
+  IconBrandFacebook,
+  IconBrandInstagram,
+  IconBrandX,
+  IconBrandYoutube,
+} from "@tabler/icons-react"
 import Image from "next/image"
 import Link from "next/link"
 import Divider from "@/components/custom/divider"
@@ -34,16 +39,16 @@ const footerSections = [
 export default async function Footer() {
   const socialLinks = await api.socialLinks.getSocialLinks()
   const IconMap = {
-    facebook: <Facebook className="size-6" />,
-    instagram: <Instagram className="size-6" />,
-    twitter: <Twitter className="size-6" />,
-    youtube: <Youtube className="size-6" />,
+    facebook: <IconBrandFacebook className="size-6" />,
+    instagram: <IconBrandInstagram className="size-6" />,
+    twitter: <IconBrandX className="size-6" />,
+    youtube: <IconBrandYoutube className="size-6" />,
   }
 
   return (
     <FooterWrapper>
       <footer className="mt-20 bg-slate-50 select-none dark:bg-slate-900 shadow-inner shadow-slate-300 dark:shadow-slate-800">
-        <div className="container mx-auto overflow-clip px-4 py-5 md:max-w-[70rem] md:px-0">
+        <div className="container mx-auto overflow-clip px-4 py-5 md:max-w-280 md:px-0">
           <div className="flex flex-col items-center justify-between gap-10 text-center lg:flex-row lg:text-right">
             <div className="flex w-full max-w-96 shrink flex-col items-center justify-between gap-6 lg:items-start">
               <div>

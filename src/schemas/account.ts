@@ -15,15 +15,12 @@ export const accountFormSchema = z.object({
     },
   ),
   nationality: z.string().min(2, "الجنسية يجب أن تكون أكثر من حرفين"),
-  dateOfBirth: z.date({
-    required_error: "تاريخ الميلاد مطلوب",
-    invalid_type_error: "تاريخ الميلاد غير صالح",
-  }),
+  dateOfBirth: z.date({ error: "تاريخ الميلاد مطلوب" }),
   address: z
-    .string({ required_error: "يجب إدخال العنوان لنستطيع التواصل معك" })
+    .string({ error: "يجب إدخال العنوان لنستطيع التواصل معك" })
     .min(2, "العنوان يجب أن يكون أكثر من حرفين"),
   theme: z.enum(["light", "dark"], {
-    required_error: "يجب اختيار وضع السمة",
+    error: "يجب اختيار وضع السمة",
   }),
   image: z.union([z.string().url("رابط الصورة غير صالح"), z.string().length(0)]).optional(),
   doc: z.union([z.string().url("رابط المستند غير صالح"), z.string().length(0)]).optional(),

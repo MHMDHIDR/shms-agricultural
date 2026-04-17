@@ -1,6 +1,12 @@
 "use client"
 
-import { FacebookIcon, InstagramIcon, Loader2, TwitterIcon, YoutubeIcon } from "lucide-react"
+import {
+  IconBrandFacebook,
+  IconBrandInstagram,
+  IconBrandX,
+  IconBrandYoutube,
+} from "@tabler/icons-react"
+import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -76,13 +82,13 @@ export default function SocialLinksForm() {
                     <SelectItem key={type} value={type} className="cursor-pointer">
                       <span className="flex items-center gap-x-2">
                         {type === "facebook" ? (
-                          <FacebookIcon className="h-4 w-4 rounded-md" />
+                          <IconBrandFacebook className="h-4 w-4 rounded-md" />
                         ) : type === "instagram" ? (
-                          <InstagramIcon className="h-4 w-4 rounded-md" />
+                          <IconBrandInstagram className="h-4 w-4 rounded-md" />
                         ) : type === "youtube" ? (
-                          <YoutubeIcon className="h-4 w-4 rounded-md" />
+                          <IconBrandYoutube className="h-4 w-4 rounded-md" />
                         ) : (
-                          <TwitterIcon className="h-4 w-4 rounded-md" />
+                          <IconBrandX className="h-4 w-4 rounded-md" />
                         )}
                         {type}
                       </span>
