@@ -27,10 +27,10 @@ const UploadInputSchema = z.object({
 })
 
 const s3Client = new S3Client({
-  region: env.AWS_REGION,
+  region: env.S3_REGION,
   credentials: {
-    accessKeyId: env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: env.AWS_SECRET,
+    accessKeyId: env.S3_ACCESS_KEY_ID,
+    secretAccessKey: env.S3_SECRET_ACCESS_KEY,
   },
 })
 
@@ -49,7 +49,7 @@ export const S3Router = createTRPCRouter({
 
         if (entityId.includes("user-image/")) {
           const listObjectsParams = {
-            Bucket: env.AWS_BUCKET_NAME,
+            Bucket: env.S3_BUCKET_NAME,
             Prefix: entityId,
           }
           const listCommand = new ListObjectsCommand(listObjectsParams)
@@ -57,7 +57,7 @@ export const S3Router = createTRPCRouter({
 
           if (Contents) {
             const deleteObjectsParams = {
-              Bucket: env.AWS_BUCKET_NAME,
+              Bucket: env.S3_BUCKET_NAME,
               Delete: { Objects: Contents.map(({ Key }) => ({ Key })) },
             }
             const deleteCommand = new DeleteObjectsCommand(deleteObjectsParams)
@@ -66,7 +66,7 @@ export const S3Router = createTRPCRouter({
         }
 
         const putObjectParams = {
-          Bucket: env.AWS_BUCKET_NAME,
+          Bucket: env.S3_BUCKET_NAME,
           Key: uniqueFileName,
           ContentType: file.type,
         }
@@ -106,7 +106,7 @@ export const S3Router = createTRPCRouter({
 
       // Generate a GET URL for the uploaded file
       const getObjectParams = {
-        Bucket: env.AWS_BUCKET_NAME,
+        Bucket: env.S3_BUCKET_NAME,
         Key: fileName,
       }
       const getCommand = new GetObjectCommand(getObjectParams)
@@ -131,11 +131,11 @@ export const S3Router = createTRPCRouter({
       const { fileName } = input
 
       const deleteObjectParams = {
-        Bucket: env.AWS_BUCKET_NAME,
+        Bucket: env.S3_BUCKET_NAME,
         Key: fileName,
       }
       const deleteCommand = new DeleteObjectsCommand({
-        Bucket: env.AWS_BUCKET_NAME,
+        Bucket: env.S3_BUCKET_NAME,
         Delete: { Objects: [deleteObjectParams] },
       })
       await s3Client.send(deleteCommand)
