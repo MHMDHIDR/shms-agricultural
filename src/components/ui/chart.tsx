@@ -36,7 +36,7 @@ export const ChartContainer = React.forwardRef<HTMLDivElement, ChartContainerPro
 ChartContainer.displayName = "ChartContainer"
 
 interface ChartTooltipProps {
-  content: ContentType<number, string>
+  content: ContentType<any, any>
   cursor?: boolean | object
   isAnimationActive?: boolean
   wrapperStyle?: React.CSSProperties

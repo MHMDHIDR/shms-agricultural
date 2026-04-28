@@ -13,7 +13,7 @@ type NoItemsProps = {
   button?: React.ReactNode
 }
 
-export default function NoRecords({ msg, links, button, className }: NoItemsProps): JSX.Element {
+export default function NoRecords({ msg, links, button, className }: NoItemsProps) {
   return (
     <div className="my-5 flex flex-col items-center justify-center gap-6">
       <div

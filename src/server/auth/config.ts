@@ -1,6 +1,7 @@
 import { randomBytes } from "crypto"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { compare } from "bcryptjs"
+import { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { cookies } from "next/headers"
 import { getBlurPlaceholder } from "@/lib/optimize-image"
@@ -8,11 +9,20 @@ import { signInSchema } from "@/schemas/signin"
 import { db } from "@/server/db"
 import type { AdapterSession, AdapterUser } from "@auth/core/adapters"
 import type { User as UserTable, UserTheme } from "@prisma/client"
-import type { NextAuthConfig, Session, User } from "next-auth"
+import type { Account, DefaultSession, Session, User } from "next-auth"
 import type { JWT } from "next-auth/jwt"
 
 /* eslint-disable no-unused-vars */
 declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user: {
+      id: string
+      role: UserTable["role"]
+      theme: UserTheme
+      blurImageDataURL: string | null
+    } & DefaultSession["user"]
+  }
+
   interface User {
     role: UserTable["role"]
     theme: UserTheme
@@ -129,7 +139,7 @@ export const authConfig = {
       }
 
       if (user) {
-        token.id = user.id
+        token.id = user.id as string
         token.role = user.role
         token.theme = user.theme
         token.name = user.name
@@ -142,7 +152,7 @@ export const authConfig = {
       }
       return token
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       const blurImage = session.user?.image
         ? await getBlurPlaceholder({ imageSrc: session.user.image })
         : null
@@ -162,7 +172,7 @@ export const authConfig = {
     },
   },
   events: {
-    async signIn({ user, account }) {
+    async signIn({ user, account }: { user: User | AdapterUser; account?: Account | null }) {
       if (user.id && account?.providerAccountId) {
         const SESSION_EXPIRATION_DAYS = 24 * 60 * 60 * 1000 * 30
         const sessionToken = randomBytes(32).toString("hex")
