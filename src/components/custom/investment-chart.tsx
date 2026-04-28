@@ -338,7 +338,12 @@ export function InvestmentChart({ data, profitCollectDate, MAX_POINTS = 7 }: Inv
                   offset={12}
                   className="fill-foreground"
                   fontSize={12}
-                  formatter={(value: number) => `${value.toLocaleString("ar-QA")} ${APP_CURRENCY}`}
+                  formatter={(value: any) => {
+                    if (typeof value === "number") {
+                      return `${value.toLocaleString("ar-QA")} ${APP_CURRENCY}`
+                    }
+                    return value ? `${value} ${APP_CURRENCY}` : ""
+                  }}
                 />
               </Line>
             </LineChart>

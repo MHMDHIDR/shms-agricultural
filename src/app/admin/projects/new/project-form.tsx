@@ -558,7 +558,7 @@ export function ProjectForm({ isEditing = false, project }: ProjectFormProps) {
                       عرض التعليمات
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="ltr text-wrap max-w-full overflow-y-auto overflow-x-hidden break-words">
+                  <DialogContent className="ltr text-wrap max-w-full overflow-y-auto overflow-x-hidden wrap-break-word">
                     <DialogHeader className="text-center!">
                       <DialogTitle>شروط المشروع</DialogTitle>
                       <DialogDescription>الرجاء قراءة تعليمات استخدام markdown</DialogDescription>
