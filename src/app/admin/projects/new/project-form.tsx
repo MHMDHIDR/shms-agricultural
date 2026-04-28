@@ -63,10 +63,10 @@ export function ProjectForm({ isEditing = false, project }: ProjectFormProps) {
     onSuccess: () => router.refresh(),
   })
 
-  type FormInput = typeof isEditing extends true ? UpdateProjectInput : ProjectInput
+  type FormInput = ProjectInput
 
   const form = useForm<FormInput>({
-    resolver: zodResolver(isEditing ? updateProjectSchema : projectSchema),
+    resolver: zodResolver(isEditing ? updateProjectSchema : projectSchema) as any,
     defaultValues:
       isEditing && project
         ? {
